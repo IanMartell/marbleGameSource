@@ -1850,7 +1850,7 @@ void ATestHud::BuildLevel()
 	int adjustmentAppliedToCulminatingIntersectionPair;
 	FVector2D culminatingIntersectionPos;
 	int culminatingIntersectionOrientation;
-	int correctedCurrentTurnDist;
+	int correctedCurrentTurnDist;//the reason your track building is overlooking the intersection justment is your not accounting for the adjustment when laying down the track. this probably has a shifting effect on that entire portion of track 
 
 	for (int currentGroupIndex = 0; currentGroupIndex < listOfHolePositionGroupings.Num(); currentGroupIndex++)
 	{
