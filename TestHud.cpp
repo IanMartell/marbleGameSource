@@ -433,7 +433,7 @@ void ATestHud::GenerateTrackShape()
 	// grouping holes in sets of 2, 4, or 8
 	while (numberOfHoles > cumulativeGroupingCoverage)
 	{
-		switch (FMath::RandRange((int32)0, (int32)2))
+		switch (2/*FMath::RandRange((int32)0, (int32)2)*/)
 		{
 		case 0 :
 			listOfHolePositionGroupings.Add(2);
@@ -1699,32 +1699,25 @@ void ATestHud::GenerateTrackShape()
 
 							break;
 						case 2:
-							if (differenceInPairPosition.X > 0)
+							if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
 							{
-								firstOfPairIsAboveSecondArr.Add(1);
-								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
-								firstOfPairIntersectionPos.X += extentOfAdjustment;
-								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
-								intersectionAjustmentWeights.Add(1);
-							}
-							else if (differenceInPairPosition.Y > -1)
-							{
-								firstOfPairIsAboveSecondArr.Add(0);
-								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
-								if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
+								if (differenceInPairPosition.X > 0)
 								{
+									firstOfPairIsAboveSecondArr.Add(1);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+									firstOfPairIntersectionPos.X += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+								}
+								else if (differenceInPairPosition.Y > -1)
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
 									secondOfPairIntersectionPos.X += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
 								}
 								else
-								{
-									secondOfPairIntersectionPos.Y -= extentOfAdjustment;
-								}
-								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
-								intersectionAjustmentWeights.Add(2);
-							}
-							else
-							{
-								if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
 								{
 									if (FMath::RandRange(0, 1))
 									{//second of pair gets adjustment
@@ -1740,12 +1733,47 @@ void ATestHud::GenerateTrackShape()
 										intersectionAjustmentWeights.Add(1);
 										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
 									}
+
+									if (differenceInPairPosition.X > 0)
+									{
+										firstOfPairIsAboveSecondArr.Add(1);
+										firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+									}
+									else if (differenceInPairPosition.Y > -1)
+									{
+										firstOfPairIsAboveSecondArr.Add(0);
+										firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+									}
+									else
+									{
+										firstOfPairIsAboveSecondArr.Add(0);
+										firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+									}
+								}
+							}
+							else
+							{
+								if (differenceInPairPosition.X > -1)
+								{
+									firstOfPairIsAboveSecondArr.Add(1);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+									firstOfPairIntersectionPos.X += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+								}
+								else if (differenceInPairPosition.Y > -1)
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+									secondOfPairIntersectionPos.Y -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
 								}
 								else
 								{
 									if (differenceInPairPositionAbsolute.X < 2 || differenceInPairPositionAbsolute.Y < 2)
 									{
-										if (differenceInPairPosition.X < -1 && differenceInPairPositionAbsolute.Y <= differenceInPairPositionAbsolute.X)
+										if (differenceInPairPosition.X < -1)
 										{//second of pair gets adjustment
 											secondOfPairIntersectionPos.Y -= extentOfAdjustment;
 											vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
@@ -1783,7 +1811,7 @@ void ATestHud::GenerateTrackShape()
 									}
 								}
 
-								if (differenceInPairPosition.X > 0)
+								if (differenceInPairPosition.X > -1)
 								{
 									firstOfPairIsAboveSecondArr.Add(1);
 									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
@@ -1802,32 +1830,25 @@ void ATestHud::GenerateTrackShape()
 
 							break;
 						case 3:
-							if (differenceInPairPosition.Y < 0)
+							if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
 							{
-								firstOfPairIsAboveSecondArr.Add(1);
-								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
-								firstOfPairIntersectionPos.Y -= extentOfAdjustment;
-								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
-								intersectionAjustmentWeights.Add(1);
-							}
-							else if (differenceInPairPosition.X > -1)
-							{
-								firstOfPairIsAboveSecondArr.Add(0);
-								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
-								if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
+								if (differenceInPairPosition.Y < 0)
 								{
+									firstOfPairIsAboveSecondArr.Add(1);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+									firstOfPairIntersectionPos.Y -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+								}
+								else if (differenceInPairPosition.X > -1)
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
 									secondOfPairIntersectionPos.Y -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
 								}
 								else
-								{
-									secondOfPairIntersectionPos.X -= extentOfAdjustment;
-								}
-								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
-								intersectionAjustmentWeights.Add(2);
-							}
-							else
-							{
-								if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
 								{
 									if (FMath::RandRange(0, 1))
 									{//second of pair gets adjustment
@@ -1843,12 +1864,47 @@ void ATestHud::GenerateTrackShape()
 										intersectionAjustmentWeights.Add(1);
 										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
 									}
+
+									if (differenceInPairPosition.Y < 0)
+									{
+										firstOfPairIsAboveSecondArr.Add(1);
+										firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+									}
+									else if (differenceInPairPosition.X > -1)
+									{
+										firstOfPairIsAboveSecondArr.Add(0);
+										firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+									}
+									else
+									{
+										firstOfPairIsAboveSecondArr.Add(0);
+										firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+									}
+								}
+							}
+							else
+							{
+								if (differenceInPairPosition.Y < 1)
+								{
+									firstOfPairIsAboveSecondArr.Add(1);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+									firstOfPairIntersectionPos.Y -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+								}
+								else if (differenceInPairPosition.X > -1)
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+									secondOfPairIntersectionPos.X -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
 								}
 								else
 								{
 									if (differenceInPairPositionAbsolute.X < 2 || differenceInPairPositionAbsolute.Y < 2)
 									{
-										if (differenceInPairPosition.Y > 1 && differenceInPairPositionAbsolute.X <= differenceInPairPositionAbsolute.Y)
+										if (differenceInPairPosition.Y > 1)
 										{//second of pair gets adjustment
 											secondOfPairIntersectionPos.X -= extentOfAdjustment;
 											vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
@@ -1886,7 +1942,7 @@ void ATestHud::GenerateTrackShape()
 									}
 								}
 
-								if (differenceInPairPosition.Y < 0)
+								if (differenceInPairPosition.Y < 1)
 								{
 									firstOfPairIsAboveSecondArr.Add(1);
 									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
@@ -1905,32 +1961,25 @@ void ATestHud::GenerateTrackShape()
 
 							break;
 						case 4:
-							if (differenceInPairPosition.X < 0)
+							if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
 							{
-								firstOfPairIsAboveSecondArr.Add(1);
-								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
-								firstOfPairIntersectionPos.X -= extentOfAdjustment;
-								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
-								intersectionAjustmentWeights.Add(1);
-							}
-							else if (differenceInPairPosition.Y < 1)
-							{
-								firstOfPairIsAboveSecondArr.Add(0);
-								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
-								if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
+								if (differenceInPairPosition.X < 0)
 								{
+									firstOfPairIsAboveSecondArr.Add(1);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+									firstOfPairIntersectionPos.X -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+								}
+								else if (differenceInPairPosition.Y < 1)
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
 									secondOfPairIntersectionPos.X -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
 								}
 								else
-								{
-									secondOfPairIntersectionPos.Y += extentOfAdjustment;
-								}
-								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
-								intersectionAjustmentWeights.Add(2);
-							}
-							else
-							{
-								if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
 								{
 									if (FMath::RandRange(0, 1))
 									{//second of pair gets adjustment
@@ -1946,12 +1995,47 @@ void ATestHud::GenerateTrackShape()
 										intersectionAjustmentWeights.Add(1);
 										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
 									}
+
+									if (differenceInPairPosition.X < 0)
+									{
+										firstOfPairIsAboveSecondArr.Add(1);
+										firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+									}
+									else if (differenceInPairPosition.Y < 1)
+									{
+										firstOfPairIsAboveSecondArr.Add(0);
+										firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+									}
+									else
+									{
+										firstOfPairIsAboveSecondArr.Add(0);
+										firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+									}
+								}
+							}
+							else
+							{
+								if (differenceInPairPosition.X < 1)
+								{
+									firstOfPairIsAboveSecondArr.Add(1);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+									firstOfPairIntersectionPos.X -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+								}
+								else if (differenceInPairPosition.Y < 1)
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+									secondOfPairIntersectionPos.Y += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
 								}
 								else
 								{
 									if (differenceInPairPositionAbsolute.X < 2 || differenceInPairPositionAbsolute.Y < 2)
 									{
-										if (differenceInPairPosition.X > 1 && differenceInPairPositionAbsolute.Y <= differenceInPairPositionAbsolute.X)
+										if (differenceInPairPosition.X > 1)
 										{//second of pair gets adjustment
 											secondOfPairIntersectionPos.Y += extentOfAdjustment;
 											vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
@@ -1989,7 +2073,7 @@ void ATestHud::GenerateTrackShape()
 									}
 								}
 
-								if (differenceInPairPosition.X < 0)
+								if (differenceInPairPosition.X < 1)
 								{
 									firstOfPairIsAboveSecondArr.Add(1);
 									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
@@ -2153,27 +2237,27 @@ void ATestHud::BuildLevel()
 		{//since I will be determining the hole positions 
 			topLevelIndex = currentLevelIndex;
 
-			/*GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current level index: " + FString::FromInt(currentLevelIndex));
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current level index: " + FString::FromInt(currentLevelIndex));
 
 			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of holeAndIntersectionPositions current level current group: " + FString::FromInt(holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex].Num()) + " | size of ArrOfTrackDir: " + FString::FromInt(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex].Num()) + " | size of firstOfPairIsAboveSecondAllPairs current level current group: " + FString::FromInt(firstOfPairIsAboveSecondAllPairs[currentLevelIndex][currentGroupIndex].Num()) + " | size of firstOfPairIsEvenWithOrLeftOfSecondAllPairs current level current group: " + FString::FromInt(firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex][currentGroupIndex].Num()));
 
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of holeAndIntersectionPositions next level current group: " + FString::FromInt(holeAndIntersectionPositions[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of ArrOfTrackDir at next level: " + FString::FromInt(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of intersectionOrientations next level current group: " + FString::FromInt(intersectionOrientationsPerGroupPerLevel[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of adjustmentAppliedToCulminatingIntersection next level current group: " + FString::FromInt(adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex].Num()));*/
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of holeAndIntersectionPositions next level current group: " + FString::FromInt(holeAndIntersectionPositions[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of ArrOfTrackDir at next level: " + FString::FromInt(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of intersectionOrientations next level current group: " + FString::FromInt(intersectionOrientationsPerGroupPerLevel[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of adjustmentAppliedToCulminatingIntersection next level current group: " + FString::FromInt(adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex].Num()));
 
 			for (int currentFirstOfPairIndex = 0; currentFirstOfPairIndex < holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex].Num(); currentFirstOfPairIndex += 2)
 			{
 				//what would happen if there were 7 holes in terms of how the adjustment is handled? I need to check in the intersection adjustment section of the generate track function. currently I think everything would run properly. if the 7nth hole's "promoted" intersection got an adjustment it should just run as if the promoted intersection were a standard intersection
 
-				//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "index " + FString::FromInt(currentFirstOfPairIndex) + " of holeAndIntersectionPositions: " + holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex].ToString() + " | quantity of turn distances for current pair: " + FString::FromInt(turnAndIntersectionDistancesPerPair[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num()) + " | quantity of turn directions for current pair: " + FString::FromInt(directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num()));
+				GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "index " + FString::FromInt(currentFirstOfPairIndex) + " of holeAndIntersectionPositions: " + holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex].ToString() + " | quantity of turn distances for current pair: " + FString::FromInt(turnAndIntersectionDistancesPerPair[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num()) + " | quantity of turn directions for current pair: " + FString::FromInt(directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num()) + " | current firstOfPairIsAboveSecond: " + FString::FromInt(firstOfPairIsAboveSecondAllPairs[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2]) + " | current firstOfPairIsLeftSecond: " + FString::FromInt(firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2]));
 
 				currentFirstOfPairPosition = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex];
 				currentFirstOfPairDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex];
 				currentPairTurnDistances = turnAndIntersectionDistancesPerPair[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2];
 				currentPairTurnDirections = directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2];
 
-				/*for (int a = 0; a < directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num(); a++)
+				for (int a = 0; a < directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num(); a++)
 				{
 					GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "turn direction and distance at index " + FString::FromInt(a) + ": " + FString::FromInt(directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2][a]) + ", " + FString::FromInt(turnAndIntersectionDistancesPerPair[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2][a]));
-				}*/
+				}
 
 				previousTurnOrIntersectionPosition = currentFirstOfPairPosition;
 
@@ -2201,12 +2285,13 @@ void ATestHud::BuildLevel()
 					{// I will need to check if adjustment is for intersections of pair facing opposite directions both here and below where intersection adjustment track is layed
 						if (currentIntersectionAdjustmentTracker == 2)
 						{ // this will mean there is in adjustment to intersections of pair facing opposite directions
-							previousTurnOrIntersectionPosition.Y += 1;
+							previousTurnOrIntersectionPosition.X -= 1;
 						}
 						else
 						{
 							previousTurnOrIntersectionPosition.Y += extentOfAdjustment;
-							GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "is adjusting one axis of a vector2D changing it into an int: " + previousTurnOrIntersectionPosition.ToString());
+							GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "the track is being adjusted to suite the adjustment applied to the first of the pair");
+
 						}
 					}
 
@@ -2359,8 +2444,6 @@ void ATestHud::BuildLevel()
 								{
 									secondOfPairPos = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 									differenceInPairPos = culminatingIntersectionPos - secondOfPairPos;
-
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "WORKS BIIIIIIIIIIIIIIIIIIIIIIIIIIIIII | difference in pair position: " + differenceInPairPos.ToString() + " | culminatingIntersection position: " + culminatingIntersectionPos.ToString() + " | secondOfPair position: " + secondOfPairPos.ToString());
 
 									if (differenceInPairPos.Y > 1)
 									{
@@ -2632,20 +2715,20 @@ void ATestHud::BuildLevel()
 											secondOfPairPos = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 											differenceInPairPos = culminatingIntersectionPos - secondOfPairPos;//im changing this from currentFirstOfPairPosition minus second to culminatingIntersectionPos minus second 
 
-											if (secondOfPairDir != currentFirstOfPairDir)// I probably dont need to check this because if current pair turn distances is odd second of pair dir shouldnt equal first 
+											//if (secondOfPairDir != currentFirstOfPairDir)// I probably dont need to check this because if current pair turn distances is odd second of pair dir shouldnt equal first 
+											//{
+											if (/*currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment &&*/ differenceInPairPos.X > 1)
 											{
-												if (currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.X > 1)
+												for (int a = 1; a < differenceInPairPos.X; a++)
 												{
-													for (int a = 1; a < differenceInPairPos.X; a++)
-													{
-														newTrackPos = secondOfPairPos + FVector2D(a, 0);
+													newTrackPos = secondOfPairPos + FVector2D(a, 0);
 
-														convertedTrackPos.X = newTrackPos.X - 1;
-														convertedTrackPos.Y = 15 - newTrackPos.Y;
-														trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-													}
+													convertedTrackPos.X = newTrackPos.X - 1;
+													convertedTrackPos.Y = 15 - newTrackPos.Y;
+													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 												}
-												else if (currentFirstOfPairDir != currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.Y < -1)
+											}
+												/*else if (currentFirstOfPairDir != currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.Y < -1)
 												{
 													for (int a = -1; a > differenceInPairPos.Y; a--)
 													{
@@ -2655,8 +2738,8 @@ void ATestHud::BuildLevel()
 														convertedTrackPos.Y = 15 - newTrackPos.Y;
 														trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 													}
-												}
-											}
+												}*/
+											//}
 										}
 									}
 								}
@@ -2780,6 +2863,10 @@ void ATestHud::BuildLevel()
 								}
 							}
 						}
+						else
+						{
+							intersectionAdjustmentTrackerArr[currentFirstOfPairIndex / 2] = 0;
+						}
 					}
 					else
 					{
@@ -2792,11 +2879,12 @@ void ATestHud::BuildLevel()
 					{
 						if (currentIntersectionAdjustmentTracker == 2)
 						{ // this will mean there is in adjustment to intersections of pair facing opposite directions
-							previousTurnOrIntersectionPosition.X += 1;
+							previousTurnOrIntersectionPosition.Y += 1;
 						}
 						else
 						{
 							previousTurnOrIntersectionPosition.X += extentOfAdjustment;
+							GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "the track is being adjusted to suite the adjustment applied to the first of the pair");
 						}
 					}
 
@@ -2949,8 +3037,6 @@ void ATestHud::BuildLevel()
 								{
 									secondOfPairPos = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 									differenceInPairPos = culminatingIntersectionPos - secondOfPairPos;
-
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "WORKS BIIIIIIIIIIIIIIIIIIIIIIIIIIIIII | difference in pair position: " + differenceInPairPos.ToString() + " | culminatingIntersection position: " + culminatingIntersectionPos.ToString() + " | secondOfPair position: " + secondOfPairPos.ToString());
 
 									if (differenceInPairPos.X > 1)
 									{
@@ -3221,20 +3307,20 @@ void ATestHud::BuildLevel()
 											secondOfPairPos = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 											differenceInPairPos = culminatingIntersectionPos - secondOfPairPos;//im changing this from currentFirstOfPairPosition minus second to culminatingIntersectionPos minus second 
 
-											if (secondOfPairDir != currentFirstOfPairDir)
+											//if (secondOfPairDir != currentFirstOfPairDir)
+											//{
+											if (/*currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment &&*/ differenceInPairPos.Y < -1)
 											{
-												if (currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.Y < -1)
+												for (int a = -1; a > differenceInPairPos.Y; a--)
 												{
-													for (int a = -1; a > differenceInPairPos.Y; a--)
-													{
-														newTrackPos = secondOfPairPos + FVector2D(0, a);
+													newTrackPos = secondOfPairPos + FVector2D(0, a);
 
-														convertedTrackPos.X = newTrackPos.X - 1;
-														convertedTrackPos.Y = 15 - newTrackPos.Y;
-														trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-													}
+													convertedTrackPos.X = newTrackPos.X - 1;
+													convertedTrackPos.Y = 15 - newTrackPos.Y;
+													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 												}
-												else if (currentFirstOfPairDir != currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.X < -1)
+											}
+												/*else if (currentFirstOfPairDir != currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.X < -1)
 												{
 													for (int a = -1; a > differenceInPairPos.X; a--)
 													{
@@ -3244,8 +3330,8 @@ void ATestHud::BuildLevel()
 														convertedTrackPos.Y = 15 - newTrackPos.Y;
 														trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 													}
-												}
-											}
+												}*/
+											//}
 										}
 									}
 								}
@@ -3370,6 +3456,10 @@ void ATestHud::BuildLevel()
 								}
 							}
 						}
+						else
+						{
+							intersectionAdjustmentTrackerArr[currentFirstOfPairIndex / 2] = 0;
+						}
 					}
 					else
 					{
@@ -3382,11 +3472,12 @@ void ATestHud::BuildLevel()
 					{
 						if (currentIntersectionAdjustmentTracker == 2)
 						{ // this will mean there is in adjustment to intersections of pair facing opposite directions
-							previousTurnOrIntersectionPosition.Y -= 1;
+							previousTurnOrIntersectionPosition.X += 1;
 						}
 						else
 						{
 							previousTurnOrIntersectionPosition.Y -= extentOfAdjustment;
+							GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "the track is being adjusted to suite the adjustment applied to the first of the pair");
 						}
 					}
 
@@ -3539,8 +3630,6 @@ void ATestHud::BuildLevel()
 								{
 									secondOfPairPos = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 									differenceInPairPos = culminatingIntersectionPos - secondOfPairPos;
-
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "WORKS BIIIIIIIIIIIIIIIIIIIIIIIIIIIIII | difference in pair position: " + differenceInPairPos.ToString() + " | culminatingIntersection position: " + culminatingIntersectionPos.ToString() + " | secondOfPair position: " + secondOfPairPos.ToString());
 
 									if (differenceInPairPos.Y < -1)
 									{
@@ -3811,20 +3900,20 @@ void ATestHud::BuildLevel()
 											secondOfPairPos = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 											differenceInPairPos = culminatingIntersectionPos - secondOfPairPos;//im changing this from currentFirstOfPairPosition minus second to culminatingIntersectionPos minus second 
 
-											if (secondOfPairDir != currentFirstOfPairDir)
+											//if (secondOfPairDir != currentFirstOfPairDir)
+											//{
+											if (/*currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment &&*/ differenceInPairPos.X < -1)
 											{
-												if (currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.X < -1)
+												for (int a = -1; a > differenceInPairPos.X; a--)
 												{
-													for (int a = -1; a > differenceInPairPos.X; a--)
-													{
-														newTrackPos = secondOfPairPos + FVector2D(a, 0);
+													newTrackPos = secondOfPairPos + FVector2D(a, 0);
 
-														convertedTrackPos.X = newTrackPos.X - 1;
-														convertedTrackPos.Y = 15 - newTrackPos.Y;
-														trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-													}
+													convertedTrackPos.X = newTrackPos.X - 1;
+													convertedTrackPos.Y = 15 - newTrackPos.Y;
+													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 												}
-												else if (currentFirstOfPairDir != currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.Y > 1)
+											}
+												/*else if (currentFirstOfPairDir != currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.Y > 1)
 												{
 													for (int a = 1; a < differenceInPairPos.Y; a++)
 													{
@@ -3834,8 +3923,8 @@ void ATestHud::BuildLevel()
 														convertedTrackPos.Y = 15 - newTrackPos.Y;
 														trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 													}
-												}
-											}
+												}*/
+											//}
 										}
 									}
 								}
@@ -3959,6 +4048,10 @@ void ATestHud::BuildLevel()
 								}
 							}
 						}
+						else
+						{
+							intersectionAdjustmentTrackerArr[currentFirstOfPairIndex / 2] = 0;
+						}
 						
 					}
 					else
@@ -3972,11 +4065,12 @@ void ATestHud::BuildLevel()
 					{
 						if (currentIntersectionAdjustmentTracker == 2)
 						{ // this will mean there is in adjustment to intersections of pair facing opposite directions
-							previousTurnOrIntersectionPosition.X -= 1;
+							previousTurnOrIntersectionPosition.Y -= 1;
 						}
 						else
 						{
 							previousTurnOrIntersectionPosition.X -= extentOfAdjustment;
+							GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "the track is being adjusted to suite the adjustment applied to the first of the pair");
 						}
 					}
 
@@ -4129,8 +4223,6 @@ void ATestHud::BuildLevel()
 								{
 									secondOfPairPos = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 									differenceInPairPos = culminatingIntersectionPos - secondOfPairPos;
-
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "WORKS BIIIIIIIIIIIIIIIIIIIIIIIIIIIIII | difference in pair position: " + differenceInPairPos.ToString() + " | culminatingIntersection position: " + culminatingIntersectionPos.ToString() + " | secondOfPair position: " + secondOfPairPos.ToString());
 
 									if (differenceInPairPos.X < -1)
 									{
@@ -4401,20 +4493,20 @@ void ATestHud::BuildLevel()
 											secondOfPairPos = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 											differenceInPairPos = culminatingIntersectionPos - secondOfPairPos;//im changing this from currentFirstOfPairPosition minus second to culminatingIntersectionPos minus second 
 
-											if (secondOfPairDir != currentFirstOfPairDir)
+											//if (secondOfPairDir != currentFirstOfPairDir)//I shouldnt need this this must be true if currentPairTurnDistances == 1
+											//{
+											if (/* currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment &&*/ differenceInPairPos.Y > 1)
 											{
-												if (currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.Y > 1)
+												for (int a = 1; a < differenceInPairPos.Y; a++)
 												{
-													for (int a = 1; a < differenceInPairPos.Y; a++)
-													{
-														newTrackPos = secondOfPairPos + FVector2D(0, a);
+													newTrackPos = secondOfPairPos + FVector2D(0, a);
 
-														convertedTrackPos.X = newTrackPos.X - 1;
-														convertedTrackPos.Y = 15 - newTrackPos.Y;
-														trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-													}
+													convertedTrackPos.X = newTrackPos.X - 1;
+													convertedTrackPos.Y = 15 - newTrackPos.Y;
+													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 												}
-												else if (currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.X > 1)
+											}
+												/*else if (currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.X > 1)
 												{
 													for (int a = 1; a < differenceInPairPos.X; a++)
 													{
@@ -4424,8 +4516,8 @@ void ATestHud::BuildLevel()
 														convertedTrackPos.Y = 15 - newTrackPos.Y;
 														trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 													}
-												}
-											}
+												}*/
+											//}
 										}
 									}
 								}
@@ -4548,6 +4640,10 @@ void ATestHud::BuildLevel()
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (culminatingIntersectionDir % 2);
 								}
 							}
+						}
+						else
+						{
+							intersectionAdjustmentTrackerArr[currentFirstOfPairIndex / 2] = 0;
 						}
 					}
 					else
