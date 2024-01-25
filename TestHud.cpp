@@ -257,6 +257,20 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 	}
 
 	GenerateLevel();
+
+	for (int a = 0; a < regenerateLevel.Num(); a++)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED " + FString::FromInt(a) + " TIME(S)");
+		HouseKeeping();
+
+		if (a > 9)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "INFINITE LOOP TRIGGERED");
+			return;
+		}
+
+		GenerateLevel();
+	}
 }
 
 //the cherno says variables created at runtime do get garbage collected when the scope is breached, but javidx9 says pointers initiliazed at runtime certainly don't. so do I need to collect my own garbage?
@@ -709,7 +723,7 @@ void ATestHud::GenerateTrackShape()
 
 				if ( currentLevelIndex == 0)
 				{
-					GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "pair " + FString::FromInt(a-1) + " | turns: " + FString::FromInt(availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[a - 1]) + " | difference in pair position: " + differenceInPairPosition.ToString() + " | horizontal distance: " + FString::FromInt(horizontalDistancesBetweenHolesOrIntersections[horizontalDistancesBetweenHolesOrIntersections.Num() - 1]) + ", verticle distance: " + FString::FromInt(verticleDistancesBetweenHolesOrIntersections[verticleDistancesBetweenHolesOrIntersections.Num() - 1]));
+					//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "pair " + FString::FromInt(a-1) + " | turns: " + FString::FromInt(availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[a - 1]) + " | difference in pair position: " + differenceInPairPosition.ToString() + " | horizontal distance: " + FString::FromInt(horizontalDistancesBetweenHolesOrIntersections[horizontalDistancesBetweenHolesOrIntersections.Num() - 1]) + ", verticle distance: " + FString::FromInt(verticleDistancesBetweenHolesOrIntersections[verticleDistancesBetweenHolesOrIntersections.Num() - 1]));
 				}
 				//for pairs starting on different sides have you decided how to determine which direction their intersection will face? yes they will take the direction of whichever side they are closest to unless firstOfPairIsAboveSecond or firstOfPairIsEvenWithOrLeftOfSecond
 			}
@@ -719,9 +733,9 @@ void ATestHud::GenerateTrackShape()
 			
 			if (currentGroupIndex == listOfHolePositionGroupings.Num() - 1 && currentLevelIndex == 0)
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, (FString)"size of this group and level's availableTurnsArr: " + FString::FromInt(availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num()) + " | FMath randrange test: " + FString::FromInt(FMath::RandRange(3, 1)));
+				//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, (FString)"size of this group and level's availableTurnsArr: " + FString::FromInt(availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num()) + " | FMath randrange test: " + FString::FromInt(FMath::RandRange(3, 1)));
 			}
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of availableTurnsPerPairBlock : " + FString::FromInt(availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num()) + " | first value of availableTurnsPerPairBlock : " + FString::FromInt(availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[0]) + " | size of pair orientation arrs firstOfPairAboveSecond first: " + FString::FromInt(firstOfPairIsAboveSecondArr.Num()) + " " + FString::FromInt(firstOfPairIsEvenWithOrLeftOfSecondArr.Num()) + " | length of horizontal and verticle distance arrays: " + FString::FromInt(horizontalAndVerticleDistancesBetweenHolesOrIntersections[0].Num()) + " " + FString::FromInt(horizontalAndVerticleDistancesBetweenHolesOrIntersections[1].Num()));
+			//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of availableTurnsPerPairBlock : " + FString::FromInt(availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num()) + " | first value of availableTurnsPerPairBlock : " + FString::FromInt(availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[0]) + " | size of pair orientation arrs firstOfPairAboveSecond first: " + FString::FromInt(firstOfPairIsAboveSecondArr.Num()) + " " + FString::FromInt(firstOfPairIsEvenWithOrLeftOfSecondArr.Num()) + " | length of horizontal and verticle distance arrays: " + FString::FromInt(horizontalAndVerticleDistancesBetweenHolesOrIntersections[0].Num()) + " " + FString::FromInt(horizontalAndVerticleDistancesBetweenHolesOrIntersections[1].Num()));
 
 			//using the availableTurnsPerPair list to assign which of the turns given to each pair becomes the intersection. for pairs of holes that start on the same side of the grid for the even indexed holes if the even indexed hole is below the odd indexed hole the intersection will be placed at the last turn or any odd indexed turn. for cases in which the even indexed hole is above the odd the intersection will be placed at the first turn or any even indexed turn. for pairs of holes starting on different sides of the track the intersection can be placed at any left turn but it should alternate based on where the last turn was placed?..
 			//I will need to generate new logic for if firstOfpair is left of second, for if firstOfPair is even with second, and also for both of those things if first of pair is above second
@@ -1141,7 +1155,7 @@ void ATestHud::GenerateTrackShape()
 				currentFirstOfPairIsAboveSecond = firstOfPairIsAboveSecondArr[currentIntersection];
 				currentFirstOfPairIsEvenWithOrLeftOfSecond = firstOfPairIsEvenWithOrLeftOfSecondArr[currentIntersection];
 
-				GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "currentIntersection of culminatingIntersections: " + FString::FromInt(currentIntersection));
+				//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "currentIntersection of culminatingIntersections: " + FString::FromInt(currentIntersection));
 
 				if (pairStartsOnSameSide[currentIntersection])
 				{
@@ -1437,10 +1451,10 @@ void ATestHud::GenerateTrackShape()
 				//make sure this unpaired hole does not get an adjustment in the following code bracket. it shouldnt but just watch out
 			}
 
-			for (int a = 0; a < vector2DStorArrOne.Num(); a++)
+			/*for (int a = 0; a < vector2DStorArrOne.Num(); a++)
 			{
 				GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "vector2dStorArr index " + FString::FromInt(a) + ": " + vector2DStorArrOne[a].ToString());
-			}
+			}*/
 
 			// this is where everything gets placed into permanent storage. remember this needs to get moved above the intersection adjustment section
 			holeAndIntersectionPositions[currentLevelIndex + 1][currentGroupIndex] = vector2DStorArrOne;
@@ -2239,25 +2253,25 @@ void ATestHud::BuildLevel()
 
 			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current level index: " + FString::FromInt(currentLevelIndex));
 
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of holeAndIntersectionPositions current level current group: " + FString::FromInt(holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex].Num()) + " | size of ArrOfTrackDir: " + FString::FromInt(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex].Num()) + " | size of firstOfPairIsAboveSecondAllPairs current level current group: " + FString::FromInt(firstOfPairIsAboveSecondAllPairs[currentLevelIndex][currentGroupIndex].Num()) + " | size of firstOfPairIsEvenWithOrLeftOfSecondAllPairs current level current group: " + FString::FromInt(firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex][currentGroupIndex].Num()));
+			/*GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of holeAndIntersectionPositions current level current group: " + FString::FromInt(holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex].Num()) + " | size of ArrOfTrackDir: " + FString::FromInt(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex].Num()) + " | size of firstOfPairIsAboveSecondAllPairs current level current group: " + FString::FromInt(firstOfPairIsAboveSecondAllPairs[currentLevelIndex][currentGroupIndex].Num()) + " | size of firstOfPairIsEvenWithOrLeftOfSecondAllPairs current level current group: " + FString::FromInt(firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex][currentGroupIndex].Num()));
 
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of holeAndIntersectionPositions next level current group: " + FString::FromInt(holeAndIntersectionPositions[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of ArrOfTrackDir at next level: " + FString::FromInt(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of intersectionOrientations next level current group: " + FString::FromInt(intersectionOrientationsPerGroupPerLevel[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of adjustmentAppliedToCulminatingIntersection next level current group: " + FString::FromInt(adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex].Num()));
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of holeAndIntersectionPositions next level current group: " + FString::FromInt(holeAndIntersectionPositions[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of ArrOfTrackDir at next level: " + FString::FromInt(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of intersectionOrientations next level current group: " + FString::FromInt(intersectionOrientationsPerGroupPerLevel[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of adjustmentAppliedToCulminatingIntersection next level current group: " + FString::FromInt(adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex].Num()));*/
 
 			for (int currentFirstOfPairIndex = 0; currentFirstOfPairIndex < holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex].Num(); currentFirstOfPairIndex += 2)
 			{
 				//what would happen if there were 7 holes in terms of how the adjustment is handled? I need to check in the intersection adjustment section of the generate track function. currently I think everything would run properly. if the 7nth hole's "promoted" intersection got an adjustment it should just run as if the promoted intersection were a standard intersection
 
-				GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "index " + FString::FromInt(currentFirstOfPairIndex) + " of holeAndIntersectionPositions: " + holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex].ToString() + " | quantity of turn distances for current pair: " + FString::FromInt(turnAndIntersectionDistancesPerPair[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num()) + " | quantity of turn directions for current pair: " + FString::FromInt(directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num()) + " | current firstOfPairIsAboveSecond: " + FString::FromInt(firstOfPairIsAboveSecondAllPairs[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2]) + " | current firstOfPairIsLeftSecond: " + FString::FromInt(firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2]));
+				//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "index " + FString::FromInt(currentFirstOfPairIndex) + " of holeAndIntersectionPositions: " + holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex].ToString() + " | quantity of turn distances for current pair: " + FString::FromInt(turnAndIntersectionDistancesPerPair[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num()) + " | quantity of turn directions for current pair: " + FString::FromInt(directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num()) + " | current firstOfPairIsAboveSecond: " + FString::FromInt(firstOfPairIsAboveSecondAllPairs[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2]) + " | current firstOfPairIsLeftSecond: " + FString::FromInt(firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2]));
 
 				currentFirstOfPairPosition = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex];
 				currentFirstOfPairDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex];
 				currentPairTurnDistances = turnAndIntersectionDistancesPerPair[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2];
 				currentPairTurnDirections = directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2];
 
-				for (int a = 0; a < directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num(); a++)
+				/*for (int a = 0; a < directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num(); a++)
 				{
 					GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "turn direction and distance at index " + FString::FromInt(a) + ": " + FString::FromInt(directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2][a]) + ", " + FString::FromInt(turnAndIntersectionDistancesPerPair[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2][a]));
-				}
+				}*/
 
 				previousTurnOrIntersectionPosition = currentFirstOfPairPosition;
 
@@ -2290,8 +2304,6 @@ void ATestHud::BuildLevel()
 						else
 						{
 							previousTurnOrIntersectionPosition.Y += extentOfAdjustment;
-							GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "the track is being adjusted to suite the adjustment applied to the first of the pair");
-
 						}
 					}
 
@@ -2311,6 +2323,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(0, correctedCurrentTurnDist);
@@ -2366,13 +2383,13 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
-
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 
 								break;
 							case 1:
@@ -2383,6 +2400,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//is this really the best way to do this??//:>:P
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(correctedCurrentTurnDist, 0);
@@ -2439,6 +2461,11 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								if (currentIntersectionAdjustmentTracker == 1 && currentPairTurnDistances.Num() == 2)//this proves its possible for there to be remaining verticle distance when pairStartsOnSameSide, firstOfPairIsRightOfAndEvenWithOrBelowSecond, and firstOfPairGetsAdjustment
 								{
@@ -2454,16 +2481,17 @@ void ATestHud::BuildLevel()
 											convertedTrackPos.X = newTrackPos.X - 1;
 											convertedTrackPos.Y = 15 - newTrackPos.Y;
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+											tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+											if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+											{
+												GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+											}
 										}
 									}
 								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 								break;
 							default:
 								break;
@@ -2486,6 +2514,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(0, correctedCurrentTurnDist);
@@ -2541,13 +2574,13 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
-
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 
 								break;
 							case 1:
@@ -2558,6 +2591,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//is this really the best way to do this??//:>:P
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(correctedCurrentTurnDist, 0);
@@ -2621,13 +2659,14 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 								break;
 							default:
 								break;
@@ -2650,12 +2689,23 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(0, correctedCurrentTurnDist);
 
 								convertedTrackPos.X = newTrackPos.X - 1;
 								convertedTrackPos.Y = 15 - newTrackPos.Y;
+
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								if (currentPairTurnDirections[currentTurnIndex] == 1)
 								{
@@ -2714,6 +2764,11 @@ void ATestHud::BuildLevel()
 											secondOfPairDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 											secondOfPairPos = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 											differenceInPairPos = culminatingIntersectionPos - secondOfPairPos;//im changing this from currentFirstOfPairPosition minus second to culminatingIntersectionPos minus second 
+											if (currentIntersectionAdjustmentTracker == 0 && currentLevelIndex > 0)
+											{
+												differenceInPairPos.X -= extentOfAdjustment;
+												secondOfPairPos.X += extentOfAdjustment;
+											}
 
 											//if (secondOfPairDir != currentFirstOfPairDir)// I probably dont need to check this because if current pair turn distances is odd second of pair dir shouldnt equal first 
 											//{
@@ -2726,6 +2781,11 @@ void ATestHud::BuildLevel()
 													convertedTrackPos.X = newTrackPos.X - 1;
 													convertedTrackPos.Y = 15 - newTrackPos.Y;
 													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+													tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+													if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+													{
+														GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+													}
 												}
 											}
 												/*else if (currentFirstOfPairDir != currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.Y < -1)
@@ -2755,6 +2815,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//is this really the best way to do this??//:>:P
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(correctedCurrentTurnDist, 0);
@@ -2810,6 +2875,11 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -2821,51 +2891,60 @@ void ATestHud::BuildLevel()
 					}
 
 					//here, if the current culminating intersection gets an adjustment, we lay the track to span the adjustment now
-					if (adjustmentAppliedToCulminatingIntersectionPair != 0)//can this be in this scope or does it need to move up into the next? I think it can..
-					{
-						if (adjustmentAppliedToCulminatingIntersectionPair % 2 == 1 - ((currentFirstOfPairIndex / 2) % 2))
-						{// this means: if current culminating intersection does get adjustment
-							if (adjustmentAppliedToCulminatingIntersectionPair == 3)
-							{
-								intersectionAdjustmentTrackerArr[currentFirstOfPairIndex / 2] = 2;
+					if (adjustmentAppliedToCulminatingIntersectionPair != 0 && adjustmentAppliedToCulminatingIntersectionPair % 2 == 1 - ((currentFirstOfPairIndex / 2) % 2))//can this be in this scope or does it need to move up into the next? I think it can..
+					{// this means: if current culminating intersection does get adjustment
+						
+						if (adjustmentAppliedToCulminatingIntersectionPair == 3)
+						{
+							intersectionAdjustmentTrackerArr[currentFirstOfPairIndex / 2] = 2;
 
-								switch (culminatingIntersectionDir)
-								{//this would need to have a case 3 if it's possible for this to occur twice in a row
-								case 1 :
-									newTrackPos = culminatingIntersectionPos + FVector2D(0, 1);
+							switch (culminatingIntersectionDir)
+							{//this would need to have a case 3 if it's possible for this to occur twice in a row
+							case 1 :
+								newTrackPos = culminatingIntersectionPos + FVector2D(0, 1);
 
-									convertedTrackPos.X = newTrackPos.X - 1;
-									convertedTrackPos.Y = 15 - newTrackPos.Y;
-									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
-									break;
-								case 2 :
-									newTrackPos = culminatingIntersectionPos + FVector2D(1, 0);
-
-									convertedTrackPos.X = newTrackPos.X - 1;
-									convertedTrackPos.Y = 15 - newTrackPos.Y;
-									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
-									break;
-								default:
-									break;
-								}
-							}
-							else
-							{
-								intersectionAdjustmentTrackerArr[currentFirstOfPairIndex / 2] = 1;
-
-								for (int a = 1; a <= extentOfAdjustment; a++)
+								convertedTrackPos.X = newTrackPos.X - 1;
+								convertedTrackPos.Y = 15 - newTrackPos.Y;
+								trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
 								{
-									newTrackPos = culminatingIntersectionPos + FVector2D(a * (1 - (culminatingIntersectionDir % 2)), a * (culminatingIntersectionDir % 2));
-
-									convertedTrackPos.X = newTrackPos.X - 1;
-									convertedTrackPos.Y = 15 - newTrackPos.Y;
-									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (culminatingIntersectionDir % 2);
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
 								}
+								break;
+							case 2 :// I dont think this case can actually occur because if culminatingIntersectionDir == 2 adjustmentAppliedToCulminatingIntersection cannot equal 3
+								newTrackPos = culminatingIntersectionPos + FVector2D(1, 0);
+
+								convertedTrackPos.X = newTrackPos.X - 1;
+								convertedTrackPos.Y = 15 - newTrackPos.Y;
+								trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
+								break;
+							default:
+								break;
 							}
 						}
 						else
 						{
-							intersectionAdjustmentTrackerArr[currentFirstOfPairIndex / 2] = 0;
+							intersectionAdjustmentTrackerArr[currentFirstOfPairIndex / 2] = 1;
+
+							for (int a = 1; a <= extentOfAdjustment; a++)
+							{
+								newTrackPos = culminatingIntersectionPos + FVector2D(a * (1 - (culminatingIntersectionDir % 2)), a * (culminatingIntersectionDir % 2));
+
+								convertedTrackPos.X = newTrackPos.X - 1;
+								convertedTrackPos.Y = 15 - newTrackPos.Y;
+								trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (culminatingIntersectionDir % 2);
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
+							}
 						}
 					}
 					else
@@ -2884,7 +2963,6 @@ void ATestHud::BuildLevel()
 						else
 						{
 							previousTurnOrIntersectionPosition.X += extentOfAdjustment;
-							GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "the track is being adjusted to suite the adjustment applied to the first of the pair");
 						}
 					}
 
@@ -2904,6 +2982,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(correctedCurrentTurnDist, 0);
@@ -2959,13 +3042,13 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
-
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 
 								break;
 							case 1:
@@ -2976,6 +3059,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//is this really the best way to do this??//:>:P
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(0, correctedCurrentTurnDist);
@@ -3032,6 +3120,11 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								if (currentIntersectionAdjustmentTracker == 1 && currentPairTurnDistances.Num() == 2)
 								{
@@ -3047,16 +3140,17 @@ void ATestHud::BuildLevel()
 											convertedTrackPos.X = newTrackPos.X - 1;
 											convertedTrackPos.Y = 15 - newTrackPos.Y;
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+											tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+											if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+											{
+												GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+											}
 										}
 									}
 								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 								break;
 							default:
 								break;
@@ -3079,6 +3173,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(correctedCurrentTurnDist, 0);
@@ -3134,13 +3233,13 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
-
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 
 								break;
 							case 1:
@@ -3151,6 +3250,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//is this really the best way to do this??//:>:P
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(0, correctedCurrentTurnDist);
@@ -3214,13 +3318,14 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 								break;
 							default:
 								break;
@@ -3243,12 +3348,23 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(correctedCurrentTurnDist, 0);
 
 								convertedTrackPos.X = newTrackPos.X - 1;
 								convertedTrackPos.Y = 15 - newTrackPos.Y;
+
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								if (currentPairTurnDirections[currentTurnIndex] == 1)
 								{
@@ -3306,10 +3422,13 @@ void ATestHud::BuildLevel()
 											secondOfPairDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 											secondOfPairPos = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 											differenceInPairPos = culminatingIntersectionPos - secondOfPairPos;//im changing this from currentFirstOfPairPosition minus second to culminatingIntersectionPos minus second 
+											if (currentIntersectionAdjustmentTracker == 0 && currentLevelIndex > 0)
+											{
+												differenceInPairPos.Y += extentOfAdjustment;
+												secondOfPairPos.Y -= extentOfAdjustment;
+											}
 
-											//if (secondOfPairDir != currentFirstOfPairDir)
-											//{
-											if (/*currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment &&*/ differenceInPairPos.Y < -1)
+											if (differenceInPairPos.Y < -1)
 											{
 												for (int a = -1; a > differenceInPairPos.Y; a--)
 												{
@@ -3318,20 +3437,13 @@ void ATestHud::BuildLevel()
 													convertedTrackPos.X = newTrackPos.X - 1;
 													convertedTrackPos.Y = 15 - newTrackPos.Y;
 													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+													tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+													if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+													{
+														GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+													}
 												}
 											}
-												/*else if (currentFirstOfPairDir != currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.X < -1)
-												{
-													for (int a = -1; a > differenceInPairPos.X; a--)
-													{
-														newTrackPos = secondOfPairPos + FVector2D(a, 0);
-
-														convertedTrackPos.X = newTrackPos.X - 1;
-														convertedTrackPos.Y = 15 - newTrackPos.Y;
-														trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-													}
-												}*/
-											//}
 										}
 									}
 								}
@@ -3347,6 +3459,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//is this really the best way to do this??//:>:P
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(0, correctedCurrentTurnDist);
@@ -3402,6 +3519,11 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -3430,6 +3552,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 									break;
 								case 3:
 									newTrackPos = culminatingIntersectionPos - FVector2D(0, 1);
@@ -3437,6 +3564,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 									break;
 								default:
 									break;
@@ -3453,6 +3585,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (culminatingIntersectionDir % 2);
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 							}
 						}
@@ -3477,7 +3614,6 @@ void ATestHud::BuildLevel()
 						else
 						{
 							previousTurnOrIntersectionPosition.Y -= extentOfAdjustment;
-							GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "the track is being adjusted to suite the adjustment applied to the first of the pair");
 						}
 					}
 
@@ -3497,6 +3633,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(0, correctedCurrentTurnDist);
@@ -3552,13 +3693,13 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
-
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 
 								break;
 							case 1:
@@ -3569,6 +3710,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//is this really the best way to do this??//:>:P
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(correctedCurrentTurnDist, 0);
@@ -3625,6 +3771,11 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								if (currentIntersectionAdjustmentTracker == 1 && currentPairTurnDistances.Num() == 2)
 								{
@@ -3640,16 +3791,17 @@ void ATestHud::BuildLevel()
 											convertedTrackPos.X = newTrackPos.X - 1;
 											convertedTrackPos.Y = 15 - newTrackPos.Y;
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+											tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+											if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+											{
+												GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+											}
 										}
 									}
 								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 								break;
 							default:
 								break;
@@ -3672,6 +3824,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(0, correctedCurrentTurnDist);
@@ -3727,13 +3884,13 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
-
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 
 								break;
 							case 1:
@@ -3744,6 +3901,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//is this really the best way to do this??//:>:P
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(correctedCurrentTurnDist, 0);
@@ -3807,13 +3969,14 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 								break;
 							default:
 								break;
@@ -3836,12 +3999,23 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(0, correctedCurrentTurnDist);
 
 								convertedTrackPos.X = newTrackPos.X - 1;
 								convertedTrackPos.Y = 15 - newTrackPos.Y;
+
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								if (currentPairTurnDirections[currentTurnIndex] == 1)
 								{
@@ -3899,10 +4073,13 @@ void ATestHud::BuildLevel()
 											secondOfPairDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 											secondOfPairPos = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 											differenceInPairPos = culminatingIntersectionPos - secondOfPairPos;//im changing this from currentFirstOfPairPosition minus second to culminatingIntersectionPos minus second 
+											if (currentIntersectionAdjustmentTracker == 0 && currentLevelIndex > 0)
+											{
+												differenceInPairPos.X += extentOfAdjustment;
+												secondOfPairPos.X -= extentOfAdjustment;
+											}
 
-											//if (secondOfPairDir != currentFirstOfPairDir)
-											//{
-											if (/*currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment &&*/ differenceInPairPos.X < -1)
+											if (differenceInPairPos.X < -1)
 											{
 												for (int a = -1; a > differenceInPairPos.X; a--)
 												{
@@ -3911,20 +4088,13 @@ void ATestHud::BuildLevel()
 													convertedTrackPos.X = newTrackPos.X - 1;
 													convertedTrackPos.Y = 15 - newTrackPos.Y;
 													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+													tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+													if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+													{
+														GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+													}
 												}
 											}
-												/*else if (currentFirstOfPairDir != currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.Y > 1)
-												{
-													for (int a = 1; a < differenceInPairPos.Y; a++)
-													{
-														newTrackPos = secondOfPairPos + FVector2D(0, a);
-
-														convertedTrackPos.X = newTrackPos.X - 1;
-														convertedTrackPos.Y = 15 - newTrackPos.Y;
-														trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-													}
-												}*/
-											//}
 										}
 									}
 								}
@@ -3940,6 +4110,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//is this really the best way to do this??//:>:P
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(correctedCurrentTurnDist, 0);
@@ -3995,6 +4170,11 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -4022,6 +4202,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 									break;
 								case 4:
 									newTrackPos = culminatingIntersectionPos - FVector2D(1, 0);
@@ -4029,6 +4214,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 									break;
 								default:
 									break;
@@ -4045,6 +4235,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (culminatingIntersectionDir % 2);
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 							}
 						}
@@ -4070,7 +4265,6 @@ void ATestHud::BuildLevel()
 						else
 						{
 							previousTurnOrIntersectionPosition.X -= extentOfAdjustment;
-							GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "the track is being adjusted to suite the adjustment applied to the first of the pair");
 						}
 					}
 
@@ -4090,6 +4284,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(correctedCurrentTurnDist, 0);
@@ -4145,13 +4344,13 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
-
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 
 								break;
 							case 1:
@@ -4162,6 +4361,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//is this really the best way to do this??//:>:P
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(0, correctedCurrentTurnDist);
@@ -4218,6 +4422,11 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								if (currentIntersectionAdjustmentTracker == 1 && currentPairTurnDistances.Num() == 2)
 								{
@@ -4233,16 +4442,17 @@ void ATestHud::BuildLevel()
 											convertedTrackPos.X = newTrackPos.X - 1;
 											convertedTrackPos.Y = 15 - newTrackPos.Y;
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+											tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+											if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+											{
+												GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+											}
 										}
 									}
 								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 								break;
 							default:
 								break;
@@ -4265,6 +4475,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(correctedCurrentTurnDist, 0);
@@ -4320,13 +4535,13 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
-
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 
 								break;
 							case 1:
@@ -4337,6 +4552,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//is this really the best way to do this??//:>:P
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(0, correctedCurrentTurnDist);
@@ -4400,13 +4620,14 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
-								if (currentTurnIndex == currentPairTurnDistances.Num() - 1)// actually is it even possible for there to be remaining horizontal or verticle distance with how turn distance is calculated? I dont think so..
-								{
-
-								}
 								break;
 							default:
 								break;
@@ -4429,12 +4650,23 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(correctedCurrentTurnDist, 0);
 
 								convertedTrackPos.X = newTrackPos.X - 1;
 								convertedTrackPos.Y = 15 - newTrackPos.Y;
+
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								if (currentPairTurnDirections[currentTurnIndex] == 1)
 								{
@@ -4492,10 +4724,13 @@ void ATestHud::BuildLevel()
 											secondOfPairDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 											secondOfPairPos = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
 											differenceInPairPos = culminatingIntersectionPos - secondOfPairPos;//im changing this from currentFirstOfPairPosition minus second to culminatingIntersectionPos minus second 
+											if (currentIntersectionAdjustmentTracker == 0 && currentLevelIndex > 0)
+											{
+												differenceInPairPos.Y -= extentOfAdjustment;
+												secondOfPairPos.Y += extentOfAdjustment;
+											}
 
-											//if (secondOfPairDir != currentFirstOfPairDir)//I shouldnt need this this must be true if currentPairTurnDistances == 1
-											//{
-											if (/* currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment &&*/ differenceInPairPos.Y > 1)
+											if (differenceInPairPos.Y > 1)
 											{
 												for (int a = 1; a < differenceInPairPos.Y; a++)
 												{
@@ -4504,20 +4739,13 @@ void ATestHud::BuildLevel()
 													convertedTrackPos.X = newTrackPos.X - 1;
 													convertedTrackPos.Y = 15 - newTrackPos.Y;
 													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+													tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+													if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+													{
+														GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+													}
 												}
 											}
-												/*else if (currentFirstOfPairDir == currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.X > 1)
-												{
-													for (int a = 1; a < differenceInPairPos.X; a++)
-													{
-														newTrackPos = secondOfPairPos + FVector2D(a, 0);
-
-														convertedTrackPos.X = newTrackPos.X - 1;
-														convertedTrackPos.Y = 15 - newTrackPos.Y;
-														trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-													}
-												}*/
-											//}
 										}
 									}
 								}
@@ -4533,6 +4761,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//is this really the best way to do this??//:>:P
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(0, correctedCurrentTurnDist);
@@ -4588,6 +4821,11 @@ void ATestHud::BuildLevel()
 										break;
 									}
 								}
+								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+								{
+									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -4615,6 +4853,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 									break;
 								case 1:
 									newTrackPos = culminatingIntersectionPos + FVector2D(0, 1);
@@ -4622,6 +4865,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 									break;
 								default:
 									break;
@@ -4638,6 +4886,11 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.X = newTrackPos.X - 1;
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (culminatingIntersectionDir % 2);
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
+									{
+										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
+									}
 								}
 							}
 						}
@@ -4659,9 +4912,18 @@ void ATestHud::BuildLevel()
 		}
 		topLevelIndex++;
 
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current level index: " + FString::FromInt(topLevelIndex));
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "index " + FString::FromInt(0) + " of holeAndIntersectionPositions: " + holeAndIntersectionPositions[topLevelIndex][currentGroupIndex][0].ToString());
+		/*GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current level index: " + FString::FromInt(topLevelIndex));
+		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "index " + FString::FromInt(0) + " of holeAndIntersectionPositions: " + holeAndIntersectionPositions[topLevelIndex][currentGroupIndex][0].ToString());*/
 
+	}
+
+	for (int a : tileIsTrack)
+	{
+		if (a > 1)
+		{
+			regenerateLevel.Add(1);
+			return;//I think I implimented this incorrectly it is running much more frequently then it should be FIXED
+		}
 	}
 
 	//LANDSCAPE DATA
@@ -6083,4 +6345,11 @@ void ATestHud::HouseKeeping()
 	trackArr = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	tileIsIntersection = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+
+	tileIsTrack = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+}
+
+void ATestHud::ResetRegenLevel()
+{
+	regenerateLevel.Empty();
 }
