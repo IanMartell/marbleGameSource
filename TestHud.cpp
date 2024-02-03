@@ -26,6 +26,7 @@ FVector2D GetGameViewportSize()
 ATestHud::ATestHud()
 {
 	//do I really need these fucking if statements? maybe I should try to keep them its common convention
+	//grass
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarGrass_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/grass_VMUI_1.grass_VMUI_1'"));
 	if (tempVarGrass_VMUI_1.Object != NULL)
 	{
@@ -42,6 +43,373 @@ ATestHud::ATestHud()
 	if (tempVarGrass_IS_1.Object != NULL)
 	{
 		grass_MP_1->OpenSource((UImgMediaSource*)tempVarGrass_IS_1.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarGrass_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/grass_VMUI_2.grass_VMUI_2'"));
+	if (tempVarGrass_VMUI_2.Object != NULL)
+	{
+		grass_VMUI_2 = (UMaterial*)tempVarGrass_VMUI_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarGrass_MP_2(TEXT("'/Game/Movies/mediaPlayers/grass_2_MP.grass_2_MP'"));
+	if (tempVarGrass_MP_2.Object != NULL)
+	{
+		grass_MP_2 = (UMediaPlayer*)tempVarGrass_MP_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarGrass_IS_2(TEXT("'/Game/Movies/imageSources/grass_2_IS.grass_2_IS'"));
+	if (tempVarGrass_IS_2.Object != NULL)
+	{
+		grass_MP_2->OpenSource((UImgMediaSource*)tempVarGrass_IS_2.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarGrass_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/grass_VMUI_3.grass_VMUI_3'"));
+	if (tempVarGrass_VMUI_3.Object != NULL)
+	{
+		grass_VMUI_3 = (UMaterial*)tempVarGrass_VMUI_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarGrass_MP_3(TEXT("'/Game/Movies/mediaPlayers/grass_3_MP.grass_3_MP'"));
+	if (tempVarGrass_MP_3.Object != NULL)
+	{
+		grass_MP_3 = (UMediaPlayer*)tempVarGrass_MP_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarGrass_IS_3(TEXT("'/Game/Movies/imageSources/grass_3_IS.grass_3_IS'"));
+	if (tempVarGrass_IS_3.Object != NULL)
+	{
+		grass_MP_3->OpenSource((UImgMediaSource*)tempVarGrass_IS_3.Object);
+	}
+	//ponds
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarPondHorizontal_VMUI(TEXT("'/Game/Movies/videoMaterialsForUI/pondHorizontal_VMUI.pondHorizontal_VMUI'"));
+	if (tempVarPondHorizontal_VMUI.Object != NULL)
+	{
+		pondHorizontal_VMUI = (UMaterial*)tempVarPondHorizontal_VMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarPondHorizontal_MP(TEXT("'/Game/Movies/mediaPlayers/pondHorizontal_MP.pondHorizontal_MP'"));
+	if (tempVarPondHorizontal_MP.Object != NULL)
+	{
+		pondHorizontal_MP = (UMediaPlayer*)tempVarPondHorizontal_MP.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarPondHorizontal_IS(TEXT("'/Game/Movies/imageSources/pondHorizontal_IS.pondHorizontal_IS'"));
+	if (tempVarPondHorizontal_IS.Object != NULL)
+	{
+		pondHorizontal_MP->OpenSource((UImgMediaSource*)tempVarPondHorizontal_IS.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarPondVerticleFlowingLeft_VMUI(TEXT("'/Game/Movies/videoMaterialsForUI/pondVerticleFlowingLeft_VMUI.pondVerticleFlowingLeft_VMUI'"));
+	if (tempVarPondVerticleFlowingLeft_VMUI.Object != NULL)
+	{
+		pondVerticleFlowingLeft_VMUI = (UMaterial*)tempVarPondVerticleFlowingLeft_VMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarPondVerticleFlowingLeft_MP(TEXT("'/Game/Movies/mediaPlayers/pondVerticleFlowingLeft_MP.pondVerticleFlowingLeft_MP'"));
+	if (tempVarPondVerticleFlowingLeft_MP.Object != NULL)
+	{
+		pondVerticleFlowingLeft_MP = (UMediaPlayer*)tempVarPondVerticleFlowingLeft_MP.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarPondVerticleFlowingLeft_IS(TEXT("'/Game/Movies/imageSources/pondVerticleFlowingLeft_IS.pondVerticleFlowingLeft_IS'"));
+	if (tempVarPondVerticleFlowingLeft_IS.Object != NULL)
+	{
+		pondVerticleFlowingLeft_MP->OpenSource((UImgMediaSource*)tempVarPondVerticleFlowingLeft_IS.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarPondVerticleFlowingRight_VMUI(TEXT("'/Game/Movies/videoMaterialsForUI/pondVerticleFlowingRight_VMUI.pondVerticleFlowingRight_VMUI'"));
+	if (tempVarPondVerticleFlowingRight_VMUI.Object != NULL)
+	{
+		pondVerticleFlowingRight_VMUI = (UMaterial*)tempVarPondVerticleFlowingRight_VMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarPondVerticleFlowingRight_MP(TEXT("'/Game/Movies/mediaPlayers/pondVerticleFlowingRight_MP.pondVerticleFlowingRight_MP'"));
+	if (tempVarPondVerticleFlowingRight_MP.Object != NULL)
+	{
+		pondVerticleFlowingRight_MP = (UMediaPlayer*)tempVarPondVerticleFlowingRight_MP.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarPondVerticleFlowingRight_IS(TEXT("'/Game/Movies/imageSources/pondVerticleFlowingRight_IS.pondVerticleFlowingRight_IS'"));
+	if (tempVarPondVerticleFlowingRight_IS.Object != NULL)
+	{
+		pondVerticleFlowingRight_MP->OpenSource((UImgMediaSource*)tempVarPondVerticleFlowingRight_IS.Object);
+	}
+	//river flowing down
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingDown_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingDown_VMUI_1.riverFlowingDown_VMUI_1'"));
+	if (tempVarRiverFlowingDown_VMUI_1.Object != NULL)
+	{
+		riverFlowingDown_VMUI_1 = (UMaterial*)tempVarRiverFlowingDown_VMUI_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverFlowingDown_MP_1(TEXT("'/Game/Movies/mediaPlayers/riverFlowingDown_MP_1.riverFlowingDown_MP_1'"));
+	if (tempVarRiverFlowingDown_MP_1.Object != NULL)
+	{
+		riverFlowingDown_MP_1 = (UMediaPlayer*)tempVarRiverFlowingDown_MP_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingDown_IS_1(TEXT("'/Game/Movies/imageSources/riverFlowingDown_IS_1.riverFlowingDown_IS_1'"));
+	if (tempVarRiverFlowingDown_IS_1.Object != NULL)
+	{
+		riverFlowingDown_MP_1->OpenSource((UImgMediaSource*)tempVarRiverFlowingDown_IS_1.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingDown_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingDown_VMUI_2.riverFlowingDown_VMUI_2'"));
+	if (tempVarRiverFlowingDown_VMUI_2.Object != NULL)
+	{
+		riverFlowingDown_VMUI_2 = (UMaterial*)tempVarRiverFlowingDown_VMUI_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverFlowingDown_MP_2(TEXT("'/Game/Movies/mediaPlayers/riverFlowingDown_MP_2.riverFlowingDown_MP_2'"));
+	if (tempVarRiverFlowingDown_MP_2.Object != NULL)
+	{
+		riverFlowingDown_MP_2 = (UMediaPlayer*)tempVarRiverFlowingDown_MP_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingDown_IS_2(TEXT("'/Game/Movies/imageSources/riverFlowingDown_IS_2.riverFlowingDown_IS_2'"));
+	if (tempVarRiverFlowingDown_IS_2.Object != NULL)
+	{
+		riverFlowingDown_MP_2->OpenSource((UImgMediaSource*)tempVarRiverFlowingDown_IS_2.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingDown_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingDown_VMUI_3.riverFlowingDown_VMUI_3'"));
+	if (tempVarRiverFlowingDown_VMUI_3.Object != NULL)
+	{
+		riverFlowingDown_VMUI_3 = (UMaterial*)tempVarRiverFlowingDown_VMUI_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverFlowingDown_MP_3(TEXT("'/Game/Movies/mediaPlayers/riverFlowingDown_MP_3.riverFlowingDown_MP_3'"));
+	if (tempVarRiverFlowingDown_MP_3.Object != NULL)
+	{
+		riverFlowingDown_MP_3 = (UMediaPlayer*)tempVarRiverFlowingDown_MP_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingDown_IS_3(TEXT("'/Game/Movies/imageSources/riverFlowingDown_IS_3.riverFlowingDown_IS_3'"));
+	if (tempVarRiverFlowingDown_IS_3.Object != NULL)
+	{
+		riverFlowingDown_MP_3->OpenSource((UImgMediaSource*)tempVarRiverFlowingDown_IS_3.Object);
+	}
+	//river flowing left
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingLeft_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingLeft_VMUI_1.riverFlowingLeft_VMUI_1'"));
+	if (tempVarRiverFlowingLeft_VMUI_1.Object != NULL)
+	{
+		riverFlowingLeft_VMUI_1 = (UMaterial*)tempVarRiverFlowingLeft_VMUI_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverFlowingLeft_MP_1(TEXT("'/Game/Movies/mediaPlayers/riverFlowingLeft_MP_1.riverFlowingLeft_MP_1'"));
+	if (tempVarRiverFlowingLeft_MP_1.Object != NULL)
+	{
+		riverFlowingLeft_MP_1 = (UMediaPlayer*)tempVarRiverFlowingLeft_MP_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingLeft_IS_1(TEXT("'/Game/Movies/imageSources/riverFlowingLeft_IS_1.riverFlowingLeft_IS_1'"));
+	if (tempVarRiverFlowingLeft_IS_1.Object != NULL)
+	{
+		riverFlowingLeft_MP_1->OpenSource((UImgMediaSource*)tempVarRiverFlowingLeft_IS_1.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingLeft_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingLeft_VMUI_2.riverFlowingLeft_VMUI_2'"));
+	if (tempVarRiverFlowingLeft_VMUI_2.Object != NULL)
+	{
+		riverFlowingLeft_VMUI_2 = (UMaterial*)tempVarRiverFlowingLeft_VMUI_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverFlowingLeft_MP_2(TEXT("'/Game/Movies/mediaPlayers/riverFlowingLeft_MP_2.riverFlowingLeft_MP_2'"));
+	if (tempVarRiverFlowingLeft_MP_2.Object != NULL)
+	{
+		riverFlowingLeft_MP_2 = (UMediaPlayer*)tempVarRiverFlowingLeft_MP_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingLeft_IS_2(TEXT("'/Game/Movies/imageSources/riverFlowingLeft_IS_2.riverFlowingLeft_IS_2'"));
+	if (tempVarRiverFlowingLeft_IS_2.Object != NULL)
+	{
+		riverFlowingLeft_MP_2->OpenSource((UImgMediaSource*)tempVarRiverFlowingLeft_IS_2.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingLeft_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingLeft_VMUI_3.riverFlowingLeft_VMUI_3'"));
+	if (tempVarRiverFlowingLeft_VMUI_3.Object != NULL)
+	{
+		riverFlowingLeft_VMUI_3 = (UMaterial*)tempVarRiverFlowingLeft_VMUI_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverFlowingLeft_MP_3(TEXT("'/Game/Movies/mediaPlayers/riverFlowingLeft_MP_3.riverFlowingLeft_MP_3'"));
+	if (tempVarRiverFlowingLeft_MP_3.Object != NULL)
+	{
+		riverFlowingLeft_MP_3 = (UMediaPlayer*)tempVarRiverFlowingLeft_MP_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingLeft_IS_3(TEXT("'/Game/Movies/imageSources/riverFlowingLeft_IS_3.riverFlowingLeft_IS_3'"));
+	if (tempVarRiverFlowingLeft_IS_3.Object != NULL)
+	{
+		riverFlowingLeft_MP_3->OpenSource((UImgMediaSource*)tempVarRiverFlowingLeft_IS_3.Object);
+	}
+	//river flowing right
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingRight_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingRight_VMUI_1.riverFlowingRight_VMUI_1'"));
+	if (tempVarRiverFlowingRight_VMUI_1.Object != NULL)
+	{
+		riverFlowingRight_VMUI_1 = (UMaterial*)tempVarRiverFlowingRight_VMUI_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverFlowingRight_MP_1(TEXT("'/Game/Movies/mediaPlayers/riverFlowingRight_MP_1.riverFlowingRight_MP_1'"));
+	if (tempVarRiverFlowingRight_MP_1.Object != NULL)
+	{
+		riverFlowingRight_MP_1 = (UMediaPlayer*)tempVarRiverFlowingRight_MP_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingRight_IS_1(TEXT("'/Game/Movies/imageSources/riverFlowingRight_IS_1.riverFlowingRight_IS_1'"));
+	if (tempVarRiverFlowingRight_IS_1.Object != NULL)
+	{
+		riverFlowingRight_MP_1->OpenSource((UImgMediaSource*)tempVarRiverFlowingRight_IS_1.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingRight_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingRight_VMUI_2.riverFlowingRight_VMUI_2'"));
+	if (tempVarRiverFlowingRight_VMUI_2.Object != NULL)
+	{
+		riverFlowingRight_VMUI_2 = (UMaterial*)tempVarRiverFlowingRight_VMUI_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverFlowingRight_MP_2(TEXT("'/Game/Movies/mediaPlayers/riverFlowingRight_MP_2.riverFlowingRight_MP_2'"));
+	if (tempVarRiverFlowingRight_MP_2.Object != NULL)
+	{
+		riverFlowingRight_MP_2 = (UMediaPlayer*)tempVarRiverFlowingRight_MP_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingRight_IS_2(TEXT("'/Game/Movies/imageSources/riverFlowingRight_IS_2.riverFlowingRight_IS_2'"));
+	if (tempVarRiverFlowingRight_IS_2.Object != NULL)
+	{
+		riverFlowingRight_MP_2->OpenSource((UImgMediaSource*)tempVarRiverFlowingRight_IS_2.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingRight_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingRight_VMUI_3.riverFlowingRight_VMUI_3'"));
+	if (tempVarRiverFlowingRight_VMUI_3.Object != NULL)
+	{
+		riverFlowingRight_VMUI_3 = (UMaterial*)tempVarRiverFlowingRight_VMUI_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverFlowingRight_MP_3(TEXT("'/Game/Movies/mediaPlayers/riverFlowingRight_MP_3.riverFlowingRight_MP_3'"));
+	if (tempVarRiverFlowingRight_MP_3.Object != NULL)
+	{
+		riverFlowingRight_MP_3 = (UMediaPlayer*)tempVarRiverFlowingRight_MP_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingRight_IS_3(TEXT("'/Game/Movies/imageSources/riverFlowingRight_IS_3.riverFlowingRight_IS_3'"));
+	if (tempVarRiverFlowingRight_IS_3.Object != NULL)
+	{
+		riverFlowingRight_MP_3->OpenSource((UImgMediaSource*)tempVarRiverFlowingRight_IS_3.Object);
+	}
+	//trees
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarTree_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/tree_VMUI_1.tree_VMUI_1'"));
+	if (tempVarTree_VMUI_1.Object != NULL)
+	{
+		tree_VMUI_1 = (UMaterial*)tempVarTree_VMUI_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarTree_MP_1(TEXT("'/Game/Movies/mediaPlayers/tree_MP_1.tree_MP_1'"));
+	if (tempVarTree_MP_1.Object != NULL)
+	{
+		tree_MP_1 = (UMediaPlayer*)tempVarTree_MP_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarTree_IS_1(TEXT("'/Game/Movies/imageSources/tree_IS_1.tree_IS_1'"));
+	if (tempVarTree_IS_1.Object != NULL)
+	{
+		tree_MP_1->OpenSource((UImgMediaSource*)tempVarTree_IS_1.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarTree_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/tree_VMUI_2.tree_VMUI_2'"));
+	if (tempVarTree_VMUI_2.Object != NULL)
+	{
+		tree_VMUI_2 = (UMaterial*)tempVarTree_VMUI_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarTree_MP_2(TEXT("'/Game/Movies/mediaPlayers/tree_MP_2.tree_MP_2'"));
+	if (tempVarTree_MP_2.Object != NULL)
+	{
+		tree_MP_2 = (UMediaPlayer*)tempVarTree_MP_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarTree_IS_2(TEXT("'/Game/Movies/imageSources/tree_IS_2.tree_IS_2'"));
+	if (tempVarTree_IS_2.Object != NULL)
+	{
+		tree_MP_2->OpenSource((UImgMediaSource*)tempVarTree_IS_2.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarTree_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/tree_VMUI_3.tree_VMUI_3'"));
+	if (tempVarTree_VMUI_3.Object != NULL)
+	{
+		tree_VMUI_3 = (UMaterial*)tempVarTree_VMUI_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarTree_MP_3(TEXT("'/Game/Movies/mediaPlayers/tree_MP_3.tree_MP_3'"));
+	if (tempVarTree_MP_3.Object != NULL)
+	{
+		tree_MP_3 = (UMediaPlayer*)tempVarTree_MP_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarTree_IS_3(TEXT("'/Game/Movies/imageSources/tree_IS_3.tree_IS_3'"));
+	if (tempVarTree_IS_3.Object != NULL)
+	{
+		tree_MP_3->OpenSource((UImgMediaSource*)tempVarTree_IS_3.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarTree_VMUI_4(TEXT("'/Game/Movies/videoMaterialsForUI/tree_VMUI_4.tree_VMUI_4'"));
+	if (tempVarTree_VMUI_4.Object != NULL)
+	{
+		tree_VMUI_4 = (UMaterial*)tempVarTree_VMUI_4.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarTree_MP_4(TEXT("'/Game/Movies/mediaPlayers/tree_MP_4.tree_MP_4'"));
+	if (tempVarTree_MP_4.Object != NULL)
+	{
+		tree_MP_4 = (UMediaPlayer*)tempVarTree_MP_4.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarTree_IS_4(TEXT("'/Game/Movies/imageSources/tree_IS_4.tree_IS_4'"));
+	if (tempVarTree_IS_4.Object != NULL)
+	{
+		tree_MP_4->OpenSource((UImgMediaSource*)tempVarTree_IS_4.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarTree_VMUI_5(TEXT("'/Game/Movies/videoMaterialsForUI/tree_VMUI_5.tree_VMUI_5'"));
+	if (tempVarTree_VMUI_5.Object != NULL)
+	{
+		tree_VMUI_5 = (UMaterial*)tempVarTree_VMUI_5.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarTree_MP_5(TEXT("'/Game/Movies/mediaPlayers/tree_MP_5.tree_MP_5'"));
+	if (tempVarTree_MP_5.Object != NULL)
+	{
+		tree_MP_5 = (UMediaPlayer*)tempVarTree_MP_5.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarTree_IS_5(TEXT("'/Game/Movies/imageSources/tree_IS_5.tree_IS_5'"));
+	if (tempVarTree_IS_5.Object != NULL)
+	{
+		tree_MP_5->OpenSource((UImgMediaSource*)tempVarTree_IS_5.Object);
+	}
+	//waterfall
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarWaterfall_VMUI(TEXT("'/Game/Movies/videoMaterialsForUI/waterfall_VMUI.waterfall_VMUI'"));
+	if (tempVarWaterfall_VMUI.Object != NULL)
+	{
+		waterfall_VMUI = (UMaterial*)tempVarWaterfall_VMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempWaterfall_MP(TEXT("'/Game/Movies/mediaPlayers/waterfall_MP.waterfall_MP'"));
+	if (tempWaterfall_MP.Object != NULL)
+	{
+		waterfall_MP = (UMediaPlayer*)tempWaterfall_MP.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarWaterfall_IS(TEXT("'/Game/Movies/imageSources/waterfall_IS.waterfall_IS'"));
+	if (tempVarWaterfall_IS.Object != NULL)
+	{
+		waterfall_MP->OpenSource((UImgMediaSource*)tempVarWaterfall_IS.Object);
+	}
+	//river turning
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverTurning_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/waterTurningLeftLatToLon_VMUI.waterTurningLeftLatToLon_VMUI'"));
+	if (tempVarRiverTurning_VMUI_1.Object != NULL)
+	{
+		riverTurning_VMUI_1 = (UMaterial*)tempVarRiverTurning_VMUI_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverTurning_MP_1(TEXT("'/Game/Movies/mediaPlayers/waterTurningLeftLatToLon_MP.waterTurningLeftLatToLon_MP'"));
+	if (tempVarRiverTurning_MP_1.Object != NULL)
+	{
+		riverTurning_MP_1 = (UMediaPlayer*)tempVarRiverTurning_MP_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverTurning_IS_1(TEXT("'/Game/Movies/imageSources/waterTurningLeftLatToLon_IS.waterTurningLeftLatToLon_IS'"));
+	if (tempVarRiverTurning_IS_1.Object != NULL)
+	{
+		riverTurning_MP_1->OpenSource((UImgMediaSource*)tempVarRiverTurning_IS_1.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverTurning_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/waterTurningLeftLonToLat_VMUI.waterTurningLeftLonToLat_VMUI'"));
+	if (tempVarRiverTurning_VMUI_2.Object != NULL)
+	{
+		riverTurning_VMUI_2 = (UMaterial*)tempVarRiverTurning_VMUI_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverTurning_MP_2(TEXT("'/Game/Movies/mediaPlayers/waterTurningLeftLonToLat_MP.waterTurningLeftLonToLat_MP'"));
+	if (tempVarRiverTurning_MP_2.Object != NULL)
+	{
+		riverTurning_MP_2 = (UMediaPlayer*)tempVarRiverTurning_MP_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverTurning_IS_2(TEXT("'/Game/Movies/imageSources/waterTurningLeftLonToLat_IS.waterTurningLeftLonToLat_IS'"));
+	if (tempVarRiverTurning_IS_2.Object != NULL)
+	{
+		riverTurning_MP_2->OpenSource((UImgMediaSource*)tempVarRiverTurning_IS_2.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverTurning_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/waterTurningRightLatToLon_VMUI.waterTurningRightLatToLon_VMUI'"));
+	if (tempVarRiverTurning_VMUI_3.Object != NULL)
+	{
+		riverTurning_VMUI_3 = (UMaterial*)tempVarRiverTurning_VMUI_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverTurning_MP_3(TEXT("'/Game/Movies/mediaPlayers/waterTurningRightLatToLon_MP.waterTurningRightLatToLon_MP'"));
+	if (tempVarRiverTurning_MP_3.Object != NULL)
+	{
+		riverTurning_MP_3 = (UMediaPlayer*)tempVarRiverTurning_MP_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverTurning_IS_3(TEXT("'/Game/Movies/imageSources/waterTurningRightLatToLon_IS.waterTurningRightLatToLon_IS'"));
+	if (tempVarRiverTurning_IS_3.Object != NULL)
+	{
+		riverTurning_MP_3->OpenSource((UImgMediaSource*)tempVarRiverTurning_IS_3.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverTurning_VMUI_4(TEXT("'/Game/Movies/videoMaterialsForUI/waterTurningRightLonToLat_VMUI.waterTurningRightLonToLat_VMUI'"));
+	if (tempVarRiverTurning_VMUI_4.Object != NULL)
+	{
+		riverTurning_VMUI_4 = (UMaterial*)tempVarRiverTurning_VMUI_4.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarRiverTurning_MP_4(TEXT("'/Game/Movies/mediaPlayers/waterTurningRightLonToLat_MP.waterTurningRightLonToLat_MP'"));
+	if (tempVarRiverTurning_MP_4.Object != NULL)
+	{
+		riverTurning_MP_4 = (UMediaPlayer*)tempVarRiverTurning_MP_4.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverTurning_IS_4(TEXT("'/Game/Movies/imageSources/waterTurningRightLonToLat_IS.waterTurningRightLonToLat_IS'"));
+	if (tempVarRiverTurning_IS_4.Object != NULL)
+	{
+		riverTurning_MP_4->OpenSource((UImgMediaSource*)tempVarRiverTurning_IS_4.Object);
 	}
 
 	//holes
@@ -105,7 +473,6 @@ ATestHud::ATestHud()
 	{
 		holeFromUp_MP->OpenSource((UImgMediaSource*)tempVar_holeFromUp_IS.Object);
 	}
-
 
 	//buttons or "intersections"
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromDownTurningRightZero_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromDown/one/buttonFromDownOneStraightStatic_SMUI.buttonFromDownOneStraightStatic_SMUI'"));
@@ -263,7 +630,7 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED " + FString::FromInt(a) + " TIME(S)");
 		HouseKeeping();
 
-		if (a > 9)
+		if (a > 11)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "INFINITE LOOP TRIGGERED");
 			return;
@@ -281,7 +648,7 @@ void ATestHud::GenerateHolePositions() //this function appears to function as ex
 	int firstIndexOfCurrentPortionOfViableHolePositions = 0;
 	int indexOfPreviousEvenHolePosition = 1;
 	FVector2D centerOfRotation = FVector2D(8, 8);
-	int negativeOneZeroOrOne = FMath::RandRange(-1, 1);
+	negativeOneZeroOrOne = FMath::RandRange(-1, 1);
 
 	for (int a = 0; a < 12; a++)
 	{
@@ -309,19 +676,11 @@ void ATestHud::GenerateHolePositions() //this function appears to function as ex
 		}
 	}
 
-	/*for (FVector2D a : arrOfViableHoleCoordinates)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, a.ToString());
-	}*/
-
 	for (int a = 1; a < numberOfHoles + 1; a++)
 	{
 		int evenHoleRowCorrectionFigure = pow(2 - (indexOfPreviousEvenHolePosition % 2), (a - 1) % 2);
 
 		firstIndexOfCurrentPortionOfViableHolePositionsTempVar = (arrOfViableHoleCoordinates.Num() / 2 / numberOfHoles * a + FMath::RoundHalfFromZero(((float)((arrOfViableHoleCoordinates.Num() / 2) % numberOfHoles) / (float)numberOfHoles) * a)) * 2;
-		
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, FString::FromInt(firstIndexOfCurrentPortionOfViableHolePositionsTempVar));
-		
 
 		int currentHolePositionCoordinateIndex = (FMath::RandRange(0, ( ( firstIndexOfCurrentPortionOfViableHolePositionsTempVar - firstIndexOfCurrentPortionOfViableHolePositions ) / evenHoleRowCorrectionFigure ) - 1) * evenHoleRowCorrectionFigure) + firstIndexOfCurrentPortionOfViableHolePositions;
 
@@ -336,15 +695,6 @@ void ATestHud::GenerateHolePositions() //this function appears to function as ex
 			indexOfPreviousEvenHolePosition = currentHolePositionCoordinateIndex;
 		}
 	}
-
-	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, (FString)"------------");
-
-	for (int a = 0; a < holePositions.Num(); a++)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, holePositions[a].ToString() + "  " + FString::FromInt(test[a]));
-	}
-
-	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, (FString)"------------");
 
 	if (negativeOneZeroOrOne != 0)
 	{
@@ -379,17 +729,6 @@ void ATestHud::GenerateHolePositions() //this function appears to function as ex
 	{
 		holeCoordinateOrientation = 1;
 	}
-
-	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "hole orientation format: " + FString::FromInt(negativeOneZeroOrOne));
-
-	for (FVector2D a : holePositions)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, a.ToString());
-	}
-
-	//I think this function works but needs more testing
-	//I also need to test if integers always round to floor in c++ but thats a much more complex problem here in c++ than in the bluieprint visual scripting interface so maybe later
-	
 	/*   nested TArray example
 	nestedTArr.Add({ 1, 2, 3 });
 	nestedTArr.Add({ 4, 5, 6 });
@@ -441,13 +780,12 @@ void ATestHud::GenerateTrackShape()
 	int firstOfPairIntersectionDir;
 	int secondOfPairIntersectionDir;
 	bool oneLastThing = false;
-	//int whichOfPairGetsAdjustmentTracker;
-	//int priorGroupTopLevelAdjustment;
+	int topLevelIndex;
 
 	// grouping holes in sets of 2, 4, or 8
 	while (numberOfHoles > cumulativeGroupingCoverage)
 	{
-		switch (2/*FMath::RandRange((int32)0, (int32)2)*/)
+		switch (FMath::RandRange((int32)0, (int32)2))
 		{
 		case 0 :
 			listOfHolePositionGroupings.Add(2);
@@ -472,7 +810,7 @@ void ATestHud::GenerateTrackShape()
 	//designating direction of the track leading away from the holes (its always toward the center) while grouping these designations to correspond with the holePositionGroupings, and reorganizing holePositions into holeAndIntersectionPositions while grouping them to correspond with holePositionGroupings. this is where the multi dimensional TArrays begin
 	for (int a = 0; a < listOfHolePositionGroupings.Num(); a++)
 	{
-		for (int b = 1; b < listOfHolePositionGroupings[a] + 1; b++)
+		for (int b = 0; b < listOfHolePositionGroupings[a]; b++)
 		{
 			vector2DStorArrOne.Add(holePositions[countOfLoopsOne]);
 
@@ -509,17 +847,27 @@ void ATestHud::GenerateTrackShape()
 		vector2DStorArrOne.Empty();
 
 	}
-	countOfLoopsOne = 0;
-
-	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, (FString)"------------");
-
-	for (int a = 0; a < listOfHolePositionGroupings.Num(); a++)
+	if (numberOfHoles > 12)
 	{
-		for (int b = 0; b < holeAndIntersectionPositions[0][a].Num(); b++)
+		switch (negativeOneZeroOrOne)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, holeAndIntersectionPositions[0][a][b].ToString() + " | direction of hole: " + FString::FromInt(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][a][b]) + "  " + " | current grouping: " + FString::FromInt(a));
+		case -1 :
+			arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][0][0] = 1;
+			arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][listOfHolePositionGroupings.Num() - 1][listOfHolePositionGroupings[listOfHolePositionGroupings.Num() - 1] - 1] = 3;
+			break;
+		case 0 :
+			arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][0][0] = 4;
+			arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][listOfHolePositionGroupings.Num() - 1][listOfHolePositionGroupings[listOfHolePositionGroupings.Num() - 1] - 1] = 2;
+			break;
+		case 1 :
+			arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][0][0] = 3;
+			arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][listOfHolePositionGroupings.Num() - 1][listOfHolePositionGroupings[listOfHolePositionGroupings.Num() - 1] - 1] = 1;
+			break;
+		default:
+			break;
 		}
 	}
+	countOfLoopsOne = 0;
 
 	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, (FString)"------------");
 	 
@@ -601,7 +949,7 @@ void ATestHud::GenerateTrackShape()
 					pairStartsOnSameSide.Add(1);
 
 					if (differenceInPairPositionClampedX <= differenceInPairPositionClampedY)
-					{
+					{//do I need to add logic to force the quantity of turns to be > 2 past a certain quantity of distance? maybe only past a certain quantity of holes 
 						availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Add(FMath::RandRange(firstOfPairIsEvenWithOrLeftOfSecondArr[a - 1], differenceInPairPositionClampedX) * 2 + 2);
 					}
 					else
@@ -663,7 +1011,7 @@ void ATestHud::GenerateTrackShape()
 					pairStartsOnSameSide.Add(0);
 
 					if (differenceInPairPositionClampedX <= differenceInPairPositionClampedY)
-					{
+					{//do I need to add logic to force the quantity of turns to be > 2 past a certain quantity of distance?
 						availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Add(FMath::RandRange( FMath::Clamp(firstOfPairIsAboveSecondArr[a -1] + firstOfPairIsEvenWithOrLeftOfSecondArr[a - 1], 0, 1), differenceInPairPositionClampedX) * 2 + 1);// I just took off a * 2 from the end of the first argument of the RandRange 01/17/24
 					}
 					else
@@ -775,7 +1123,14 @@ void ATestHud::GenerateTrackShape()
 					}
 					else 
 					{
-						whichOfEachPairsTurnsBecomesTheIntersection.Add((currentATPPBOCLCG* (1 - (intersectionAjustmentWeights[a] % 2))) + (intersectionAjustmentWeights[a] % 2) + (-1 + ((intersectionAjustmentWeights[a] % 2) * 2)) * FMath::RandRange(0, 1));//does this rand range need to only be zero unless #ofTurns > 2? no, Im certain
+						if (intersectionAjustmentWeights[a] == 1)
+						{// do I need to add logic to force the intersection deeper into the sequence of turns if there are 6 here? 
+							whichOfEachPairsTurnsBecomesTheIntersection.Add(1 + FMath::RandRange(0, FMath::Clamp((currentATPPBOCLCG / 2) - 1, 0, 2)) * 2);
+						}
+						else
+						{
+							whichOfEachPairsTurnsBecomesTheIntersection.Add(currentATPPBOCLCG - FMath::RandRange(0, FMath::Clamp((currentATPPBOCLCG / 2) - 1, 0, 1)));
+						}
 					}
 				}
 			}//so Ive got 3 things to do! delete this when your done. FIRST! solve the problem where intersections can be placed so close to eachother. SECOND! solve the problem where there can be remaining verticle distance when pairStartsOnSameSide, firstOfPairIsRightOfAndEvenWithOrBelowSecond, and firstOfPairGetsAdjustment. THIRD! solve the problem where I have noticed when pairStartsOnDifferentSides the logic needs to be handled as if first of pair is above second when first of pair is level with second which is not the case for when pairStartsOnSameSide
@@ -1468,6 +1823,7 @@ void ATestHud::GenerateTrackShape()
 
 			//currently intersections can still be sandwiched together because im not checking which side of the pair needs the adjustment most MAYBE SOLVED further testing required
 			// I have noticed when pairStartsOnDifferentSides the logic needs to be handled as if first of pair is above second when first of pair is level with second which is not the case for when pairStartsOnSameSide MAYBE SOLVED further testing required
+			//for all first of pair starts on different side then second in this section should I add logic to make the adjustment go to the intersection closest to its side when one intersection is considerably closer to the middle? this would need to include a check to make sure horizontal distance is greater than 1
 
 			if (vector2DStorArrOne.Num() > 1)
 			{
@@ -1601,7 +1957,7 @@ void ATestHud::GenerateTrackShape()
 								}
 								else
 								{
-									if (FMath::RandRange(0, 1))
+									if (FMath::RandRange(0, 1) && differenceInPairPosition.Y > -2)
 									{//second of pair gets adjustment
 										secondOfPairIntersectionPos.Y += extentOfAdjustment;
 										vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
@@ -1733,7 +2089,7 @@ void ATestHud::GenerateTrackShape()
 								}
 								else
 								{
-									if (FMath::RandRange(0, 1))
+									if (FMath::RandRange(0, 1) && differenceInPairPosition.X > -2)
 									{//second of pair gets adjustment
 										secondOfPairIntersectionPos.X += extentOfAdjustment;
 										vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
@@ -1864,7 +2220,7 @@ void ATestHud::GenerateTrackShape()
 								}
 								else
 								{
-									if (FMath::RandRange(0, 1))
+									if (FMath::RandRange(0, 1) && differenceInPairPosition.Y < 2)
 									{//second of pair gets adjustment
 										secondOfPairIntersectionPos.Y -= extentOfAdjustment;
 										vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
@@ -1995,7 +2351,7 @@ void ATestHud::GenerateTrackShape()
 								}
 								else
 								{
-									if (FMath::RandRange(0, 1))
+									if (FMath::RandRange(0, 1) && differenceInPairPosition.X < 2)
 									{//second of pair gets adjustment
 										secondOfPairIntersectionPos.X -= extentOfAdjustment;
 										vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
@@ -2111,48 +2467,10 @@ void ATestHud::GenerateTrackShape()
 					}
 				}
 			} 
-			
 			if (vector2DStorArrOne.Num() % 2 == 1)
 			{
 				intersectionAjustmentWeights.Add(0);
 			}//just added this lets hope it works
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of vector2DStorArr: " + FString::FromInt(vector2DStorArrOne.Num()) + "size of intersectionAdjustmentWeights: " + FString::FromInt(intersectionAjustmentWeights.Num()));
-			/*
-			else
-			{//what I am doing here means I will need to calculate a vector2DStorArr before the first level of the final grouping
-			//CHANGE ALL THIS, dont do any adjustments on final intersections of holePositionGroupings until just before the final grouping. that way you can compile every position and calculate adjustments as you have above
-				if (currentGroupIndex % 2 == 0 && currentGroupIndex == listOfHolePositionGroupings.Num() - 1)
-				{
-					//intersectionAjustmentWeights.Add(0);
-					//priorGroupTopLevelAdjustment = 0;
-					adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex] = { 0 }; //this intersection will become an unpaired intersection in the 4th Level
-				}
-				else if (currentGroupIndex % 2)
-				{//this condition applies to the second of pair
-					if (priorGroupTopLevelAdjustment == 0)
-					{
-						adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex] = { 1 };
-						//priorGroupTopLevelAdjustment = 1;
-					}
-					else
-					{
-						adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex] = { 0 };
-					}
-				}
-				else
-				{// this condition applies to the first of pair
-					if (FMath::RandRange(0, 19) > 9)
-					{
-						adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex] = { 1 };
-						priorGroupTopLevelAdjustment = 1;
-					}
-					else
-					{
-						adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex] = { 0 };
-						priorGroupTopLevelAdjustment = 0;
-					}
-				}
-			}*/
 
 			adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex] = intersectionAjustmentWeights;
 			firstOfPairIsAboveSecondAllPairs[currentLevelIndex + 1][currentGroupIndex] = firstOfPairIsAboveSecondArr;
@@ -2166,9 +2484,6 @@ void ATestHud::GenerateTrackShape()
 			horizontalDistancesBetweenHolesOrIntersections.Empty();
 			verticleDistancesBetweenHolesOrIntersections.Empty();
 
-			//firstOfPairIsAboveSecondArr.Empty();
-			//firstOfPairIsEvenWithOrLeftOfSecondArr.Empty();
-
 			availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Empty();
 
 			whichOfEachPairsTurnsBecomesTheIntersection.Empty();
@@ -2180,6 +2495,2232 @@ void ATestHud::GenerateTrackShape()
 
 			intersectionOrientationStorArr.Empty();
 		}
+	}
+
+	//here all of the resulting intersections from the foundational groupings are being reorganized into one final group on the 4th level
+	vector2DStorArrOne.Empty();
+	intersectionDirStorArr.Empty();
+
+	for (int currentGroupIndex = 0; currentGroupIndex < listOfHolePositionGroupings.Num(); currentGroupIndex++)
+	{
+		topLevelIndex = FMath::Clamp(FMath::RoundHalfFromZero((float)listOfHolePositionGroupings[currentGroupIndex] / 2.0f), 1, 3);
+		vector2DStorArrOne.Add(holeAndIntersectionPositions[topLevelIndex][currentGroupIndex][0]);
+		intersectionDirStorArr.Add(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[topLevelIndex][currentGroupIndex][0]);
+	}
+	holeAndIntersectionPositions[4][0] = vector2DStorArrOne;
+	arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[4][0] = intersectionDirStorArr;
+	currentGroupSize = vector2DStorArrOne.Num();
+
+	//final group of intersections gets adjusted, and firstOfPairIsAboveSecond and firstOfPairIsEvenWithOrLeftOfSecond are calculated
+	intersectionAjustmentWeights.Empty();
+	firstOfPairIsAboveSecondArr.Empty();
+	firstOfPairIsEvenWithOrLeftOfSecondArr.Empty();
+
+	if (vector2DStorArrOne.Num() > 1)
+	{
+		for (int currentPair = 1; currentPair <= vector2DStorArrOne.Num() / 2; currentPair++)
+		{//go through and change the below variables from arrays to single variables if it turns out you aren't using modulo to divine the appropriate index anywhere
+			firstOfPairIntersectionPos = vector2DStorArrOne[currentPair * 2 - 2];
+			secondOfPairIntersectionPos = vector2DStorArrOne[currentPair * 2 - 1];
+			firstOfPairIntersectionDir = intersectionDirStorArr[currentPair * 2 - 2];
+			secondOfPairIntersectionDir = intersectionDirStorArr[currentPair * 2 - 1];
+			differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+			differenceInPairPositionAbsolute = differenceInPairPosition.GetAbs();
+
+			if (abs(firstOfPairIntersectionDir - secondOfPairIntersectionDir) == 2)
+			{//this runs when the current pair of intersections aren't just on different sides but on opposite sides. this currently only works with intersections, I have not written the solution to this problem for holes
+				intersectionDirStorArr[currentPair * 2 - 2] = FMath::Clamp((firstOfPairIntersectionDir + 1) % 5, 1, 4);
+				intersectionAjustmentWeights.Add(3);
+
+				switch (firstOfPairIntersectionDir)
+				{
+				case 1:
+					firstOfPairIntersectionPos.Y += 1;
+					vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+					differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+
+					if (differenceInPairPosition.X > -1)
+					{
+						firstOfPairIsAboveSecondArr.Add(1);
+						firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+					}
+					else if (differenceInPairPosition.Y > -1)
+					{
+						firstOfPairIsAboveSecondArr.Add(0);
+						firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+					}
+					else
+					{
+						firstOfPairIsAboveSecondArr.Add(0);
+						firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+					}
+					break;
+				case 2:
+					firstOfPairIntersectionPos.X += 1;
+					vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+					differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+
+					if (differenceInPairPosition.Y < 1)
+					{
+						firstOfPairIsAboveSecondArr.Add(1);
+						firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+					}
+					else if (differenceInPairPosition.X > -1)
+					{
+						firstOfPairIsAboveSecondArr.Add(0);
+						firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+					}
+					else
+					{
+						firstOfPairIsAboveSecondArr.Add(0);
+						firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+					}
+					break;
+				case 3:
+					firstOfPairIntersectionPos.Y -= 1;
+					vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+					differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+
+					if (differenceInPairPosition.X < 1)
+					{
+						firstOfPairIsAboveSecondArr.Add(1);
+						firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+					}
+					else if (differenceInPairPosition.Y < 1)
+					{
+						firstOfPairIsAboveSecondArr.Add(0);
+						firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+					}
+					else
+					{
+						firstOfPairIsAboveSecondArr.Add(0);
+						firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+					}
+					break;
+				case 4:
+					firstOfPairIntersectionPos.X -= 1;
+					vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+					differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+
+					if (differenceInPairPosition.Y > -1)
+					{
+						firstOfPairIsAboveSecondArr.Add(1);
+						firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+					}
+					else if (differenceInPairPosition.X < 1)
+					{
+						firstOfPairIsAboveSecondArr.Add(0);
+						firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+					}
+					else
+					{
+						firstOfPairIsAboveSecondArr.Add(0);
+						firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			else
+			{
+				switch (firstOfPairIntersectionDir)
+				{
+				case 1:
+					if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
+					{
+						if (differenceInPairPosition.Y > 0)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							firstOfPairIntersectionPos.Y += extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(1);
+						}
+						else if (differenceInPairPosition.X < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							secondOfPairIntersectionPos.Y += extentOfAdjustment;
+
+							vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(2);
+						}
+						else
+						{
+							if (FMath::RandRange(0, 1) && differenceInPairPosition.Y > -2)
+							{//second of pair gets adjustment
+								secondOfPairIntersectionPos.Y += extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(2);
+								differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+							}
+							else
+							{// first of pair gets adjustment
+								firstOfPairIntersectionPos.Y += extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(1);
+								differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+							}
+
+							if (differenceInPairPosition.Y > 0)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+							else if (differenceInPairPosition.X < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							}
+							else
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+						}
+					}
+					else
+					{
+						if (differenceInPairPosition.Y > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							firstOfPairIntersectionPos.Y += extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(1);
+						}
+						else if (differenceInPairPosition.X < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							secondOfPairIntersectionPos.X += extentOfAdjustment;
+
+							vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(2);
+						}
+						else
+						{
+							if (differenceInPairPositionAbsolute.X < 2 || differenceInPairPositionAbsolute.Y < 2)
+							{
+								if (differenceInPairPosition.Y < -1)
+								{//second of pair gets adjustment
+									secondOfPairIntersectionPos.X += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else if (differenceInPairPosition.X > 1)
+								{// first of pair gets adjustment
+									firstOfPairIntersectionPos.Y += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else
+								{//no adjustments are made. This logic is a necessity but this case should be avoided at all costs
+									intersectionAjustmentWeights.Add(0);
+								}
+							}
+							else
+							{
+								if (FMath::RandRange(0, 1))
+								{//second of pair gets adjustment
+									secondOfPairIntersectionPos.X += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else
+								{// first of pair gets adjustment
+									firstOfPairIntersectionPos.Y += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+							}
+
+							if (differenceInPairPosition.Y > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+							else if (differenceInPairPosition.X < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							}
+							else
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+						}
+					}
+
+					break;
+				case 2:
+					if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
+					{
+						if (differenceInPairPosition.X > 0)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							firstOfPairIntersectionPos.X += extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(1);
+						}
+						else if (differenceInPairPosition.Y > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							secondOfPairIntersectionPos.X += extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(2);
+						}
+						else
+						{
+							if (FMath::RandRange(0, 1) && differenceInPairPosition.X > -2)
+							{//second of pair gets adjustment
+								secondOfPairIntersectionPos.X += extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(2);
+								differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+							}
+							else
+							{// first of pair gets adjustment
+								firstOfPairIntersectionPos.X += extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(1);
+								differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+							}
+
+							if (differenceInPairPosition.X > 0)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+							else if (differenceInPairPosition.Y > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							}
+							else
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+						}
+					}
+					else
+					{
+						if (differenceInPairPosition.X > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							firstOfPairIntersectionPos.X += extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(1);
+						}
+						else if (differenceInPairPosition.Y > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							secondOfPairIntersectionPos.Y -= extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(2);
+						}
+						else
+						{
+							if (differenceInPairPositionAbsolute.X < 2 || differenceInPairPositionAbsolute.Y < 2)
+							{
+								if (differenceInPairPosition.X < -1)
+								{//second of pair gets adjustment
+									secondOfPairIntersectionPos.Y -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else if (differenceInPairPosition.Y < -1)
+								{// first of pair gets adjustment
+									firstOfPairIntersectionPos.X += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else
+								{//no adjustments are made. This logic is a necessity but this case should be avoided at all costs
+									intersectionAjustmentWeights.Add(0);
+								}
+							}
+							else
+							{
+								if (FMath::RandRange(0, 1))
+								{//second of pair gets adjustment
+									secondOfPairIntersectionPos.Y -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else
+								{// first of pair gets adjustment
+									firstOfPairIntersectionPos.X += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+							}
+						}
+
+						if (differenceInPairPosition.X > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+						else if (differenceInPairPosition.Y > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+						}
+						else
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+					}
+
+					break;
+				case 3:
+					if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
+					{
+						if (differenceInPairPosition.Y < 0)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							firstOfPairIntersectionPos.Y -= extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(1);
+						}
+						else if (differenceInPairPosition.X > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							secondOfPairIntersectionPos.Y -= extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(2);
+						}
+						else
+						{
+							if (FMath::RandRange(0, 1) && differenceInPairPosition.Y < 2)
+							{//second of pair gets adjustment
+								secondOfPairIntersectionPos.Y -= extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(2);
+								differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+							}
+							else
+							{// first of pair gets adjustment
+								firstOfPairIntersectionPos.Y -= extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(1);
+								differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+							}
+
+							if (differenceInPairPosition.Y < 0)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+							else if (differenceInPairPosition.X > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							}
+							else
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+						}
+					}
+					else
+					{
+						if (differenceInPairPosition.Y < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							firstOfPairIntersectionPos.Y -= extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(1);
+						}
+						else if (differenceInPairPosition.X > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							secondOfPairIntersectionPos.X -= extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(2);
+						}
+						else
+						{
+							if (differenceInPairPositionAbsolute.X < 2 || differenceInPairPositionAbsolute.Y < 2)
+							{
+								if (differenceInPairPosition.Y > 1)
+								{//second of pair gets adjustment
+									secondOfPairIntersectionPos.X -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else if (differenceInPairPosition.X < -1)
+								{// first of pair gets adjustment
+									firstOfPairIntersectionPos.Y -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else
+								{//no adjustments are made. This logic is a necessity but this case should be avoided at all costs
+									intersectionAjustmentWeights.Add(0);
+								}
+							}
+							else
+							{
+								if (FMath::RandRange(0, 1))
+								{//second of pair gets adjustment
+									secondOfPairIntersectionPos.X -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else
+								{// first of pair gets adjustment
+									firstOfPairIntersectionPos.Y -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+							}
+						}
+
+						if (differenceInPairPosition.Y < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+						else if (differenceInPairPosition.X > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+						}
+						else
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+					}
+
+					break;
+				case 4:
+					if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
+					{
+						if (differenceInPairPosition.X < 0)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							firstOfPairIntersectionPos.X -= extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(1);
+						}
+						else if (differenceInPairPosition.Y < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							secondOfPairIntersectionPos.X -= extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(2);
+						}
+						else
+						{
+							if (FMath::RandRange(0, 1) && differenceInPairPosition.X < 2)
+							{//second of pair gets adjustment
+								secondOfPairIntersectionPos.X -= extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(2);
+								differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+							}
+							else
+							{// first of pair gets adjustment
+								firstOfPairIntersectionPos.X -= extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(1);
+								differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+							}
+
+							if (differenceInPairPosition.X < 0)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+							else if (differenceInPairPosition.Y < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							}
+							else
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+						}
+					}
+					else
+					{
+						if (differenceInPairPosition.X < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							firstOfPairIntersectionPos.X -= extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(1);
+						}
+						else if (differenceInPairPosition.Y < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							secondOfPairIntersectionPos.Y += extentOfAdjustment;
+							vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+							intersectionAjustmentWeights.Add(2);
+						}
+						else
+						{
+							if (differenceInPairPositionAbsolute.X < 2 || differenceInPairPositionAbsolute.Y < 2)
+							{
+								if (differenceInPairPosition.X > 1)
+								{//second of pair gets adjustment
+									secondOfPairIntersectionPos.Y += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else if (differenceInPairPosition.Y > 1)
+								{// first of pair gets adjustment
+									firstOfPairIntersectionPos.X -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else
+								{//no adjustments are made. This logic is a necessity but this case should be avoided at all costs
+									intersectionAjustmentWeights.Add(0);
+								}
+							}
+							else
+							{
+								if (FMath::RandRange(0, 1))
+								{//second of pair gets adjustment
+									secondOfPairIntersectionPos.Y += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else
+								{// first of pair gets adjustment
+									firstOfPairIntersectionPos.X -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+							}
+						}
+
+						if (differenceInPairPosition.X < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+						else if (differenceInPairPosition.Y < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+						}
+						else
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+					}
+
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+	if (vector2DStorArrOne.Num() % 2 == 1)
+	{
+		intersectionAjustmentWeights.Add(0);
+	}
+
+	adjustmentsAppliedToEachIntersection[4][0] = intersectionAjustmentWeights;//does the level here need to be 5 or 4? I think 4 is correct
+	firstOfPairIsAboveSecondAllPairs[4][0] = firstOfPairIsAboveSecondArr;
+	firstOfPairIsEvenWithOrLeftOfSecondAllPairs[4][0] = firstOfPairIsEvenWithOrLeftOfSecondArr;
+
+	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "all final group 4th level intersection adjustment weights");
+	for (int a : intersectionAjustmentWeights)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, FString::FromInt(a));
+	}
+
+	if (currentGroupSize == 1)
+	{
+		currentGroupSize = 0;
+	}
+
+	for (int currentLevelIndex = 4; currentLevelIndex <= FMath::Clamp(FMath::RoundHalfFromZero((float)currentGroupSize / 2.0f), 0, 3) + 3; currentLevelIndex++)
+	{
+		if (intersectionDirStorArr.Num() % 2 == 1)
+		{
+			unpairedHoleOrIntersectionDir = intersectionDirStorArr[intersectionDirStorArr.Num() - 1];
+			unpairedHoleOrIntersectionPos = vector2DStorArrOne[vector2DStorArrOne.Num() - 1];
+		}
+		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "--");
+		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current level index: " + FString::FromInt(currentLevelIndex));
+
+		//amount of turns for each pair as well as horizontal and verticle distance between pairs are determined
+		for (int a = 1; a <= intersectionDirStorArr.Num() / 2; a++)//this won't run if there is only one element in the current group
+		{
+			currentFirstOfPairHoleDir = intersectionDirStorArr[a * 2 - 2];
+			firstOfPairHoleDirStorArr.Add(currentFirstOfPairHoleDir);
+			firstOfPairHoleOrIntersectionPosStorArr.Add(vector2DStorArrOne[a * 2 - 2]);
+
+			differenceInPairPosition = firstOfPairHoleOrIntersectionPosStorArr[a - 1] - vector2DStorArrOne[a * 2 - 1];
+			differenceInPairPositionAbsolute = differenceInPairPosition.GetAbs();
+			differenceInPairPositionClampedX = FMath::Clamp(FMath::RoundToZero((float)differenceInPairPositionAbsolute.X / 2), 0, 2);
+			differenceInPairPositionClampedY = FMath::Clamp(FMath::RoundToZero((float)differenceInPairPositionAbsolute.Y / 2), 0, 2);
+
+			currentFirstOfPairIsAboveSecond = firstOfPairIsAboveSecondArr[a - 1];
+			currentFirstOfPairIsEvenWithOrLeftOfSecond = firstOfPairIsEvenWithOrLeftOfSecondArr[a - 1];
+
+			if (currentFirstOfPairHoleDir == intersectionDirStorArr[a * 2 - 1])
+			{
+				pairStartsOnSameSide.Add(1);
+
+				if (differenceInPairPositionClampedX <= differenceInPairPositionClampedY)
+				{//do I need to add logic to force the quantity of turns to be > 2 past a certain quantity of distance? maybe only past a certain quantity of holes 
+					availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Add(FMath::RandRange(firstOfPairIsEvenWithOrLeftOfSecondArr[a - 1], differenceInPairPositionClampedX) * 2 + 2);
+				}
+				else
+				{
+					availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Add(FMath::RandRange(firstOfPairIsEvenWithOrLeftOfSecondArr[a - 1], differenceInPairPositionClampedY) * 2 + 2);
+				}
+
+				if (currentFirstOfPairIsAboveSecond)
+				{
+					switch (currentFirstOfPairHoleDir % 2)
+					{
+					case 0:
+						horizontalDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.Y);
+						verticleDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.X - 1);
+						break;
+					case 1:
+						horizontalDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.X);
+						verticleDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.Y - 1);
+						break;
+					default:
+						break;
+					}
+				}
+				else if (currentFirstOfPairIsEvenWithOrLeftOfSecond)
+				{
+					switch (currentFirstOfPairHoleDir % 2)
+					{
+					case 0:
+						horizontalDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.Y + 1);
+						verticleDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.X + 1);
+						break;
+					case 1:
+						horizontalDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.X + 1);
+						verticleDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.Y + 1);
+						break;
+					default:
+						break;
+					}
+				}
+				else
+				{
+					switch (currentFirstOfPairHoleDir % 2)
+					{
+					case 0:
+						horizontalDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.Y);
+						verticleDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.X + 1);
+						break;
+					case 1:
+						horizontalDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.X);
+						verticleDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.Y + 1);
+						break;
+					default:
+						break;
+					}
+				}
+			}
+			else
+			{
+				pairStartsOnSameSide.Add(0);
+
+				if (differenceInPairPositionClampedX <= differenceInPairPositionClampedY)
+				{//do I need to add logic to force the quantity of turns to be > 2 past a certain quantity of distance?
+					availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Add(FMath::RandRange(FMath::Clamp(firstOfPairIsAboveSecondArr[a - 1] + firstOfPairIsEvenWithOrLeftOfSecondArr[a - 1], 0, 1), differenceInPairPositionClampedX) * 2 + 1);
+				}
+				else
+				{
+					availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Add(FMath::RandRange(FMath::Clamp(firstOfPairIsAboveSecondArr[a - 1] + firstOfPairIsEvenWithOrLeftOfSecondArr[a - 1], 0, 1), differenceInPairPositionClampedY) * 2 + 1);
+				}
+
+				if (currentFirstOfPairIsAboveSecond)
+				{
+					switch (currentFirstOfPairHoleDir % 2)
+					{
+					case 0:
+						horizontalDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.Y - 1);
+						verticleDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.X); //just changed this from +1 to + nothing 01/17/24 
+						break;
+					case 1:
+						horizontalDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.X - 1);
+						verticleDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.Y); //just changed this from +1 to + nothing 01/17/24 
+						break;
+					default:
+						break;
+					}
+				}
+				else if (currentFirstOfPairIsEvenWithOrLeftOfSecond)
+				{
+					switch (currentFirstOfPairHoleDir % 2)
+					{
+					case 0:
+						horizontalDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.Y + 1);
+						verticleDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.X);
+						break;
+					case 1:
+						horizontalDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.X + 1);
+						verticleDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.Y);
+						break;
+					default:
+						break;
+					}
+				}
+				else
+				{
+					switch (currentFirstOfPairHoleDir % 2)
+					{
+					case 0:
+						horizontalDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.Y - 1);
+						verticleDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.X);
+						break;
+					case 1:
+						horizontalDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.X - 1);
+						verticleDistancesBetweenHolesOrIntersections.Add(differenceInPairPositionAbsolute.Y);
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}
+
+		horizontalAndVerticleDistancesBetweenHolesOrIntersections[0] = horizontalDistancesBetweenHolesOrIntersections;
+		horizontalAndVerticleDistancesBetweenHolesOrIntersections[1] = verticleDistancesBetweenHolesOrIntersections;
+
+		//using the availableTurnsPerPair list to assign which of the turns given to each pair becomes the intersection. for pairs of holes that start on the same side of the grid for the even indexed holes if the even indexed hole is below the odd indexed hole the intersection will be placed at the last turn or any odd indexed turn. for cases in which the even indexed hole is above the odd the intersection will be placed at the first turn or any even indexed turn. for pairs of holes starting on different sides of the track the intersection can be placed at any left turn but it should alternate based on where the last turn was placed?..
+		//I will need to generate new logic for if firstOfpair is left of second, for if firstOfPair is even with second, and also for both of those things if first of pair is above second
+		//I still need to adjust the if pairs start on same side condition to include the possibility of firstOfPairIsEvenWithOrLeftOfSecond
+		//I still need to account for the intersection adjustment weights when calculating which of turns becomes intersection when firstOfPair is not above second, and firstOfPair is not left of second.
+		for (int a = 0; a < availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num(); a++)
+		{
+			currentATPPBOCLCG = availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[a];
+
+			if (currentATPPBOCLCG % 2)
+			{//pairs starting on different sides
+				if (firstOfPairIsEvenWithOrLeftOfSecondArr[a])
+				{
+					whichOfEachPairsTurnsBecomesTheIntersection.Add(currentATPPBOCLCG - FMath::RandRange(0, FMath::DivideAndRoundDown(currentATPPBOCLCG - 2, 2)));
+				}
+				else if (firstOfPairIsAboveSecondArr[a])//this gets treated just like if the pair started on the same side ACCEPT if pairs start on same side AND first of pair is above second the resulting intersection would have to take the direction of the first of the pair.
+				{
+					whichOfEachPairsTurnsBecomesTheIntersection.Add(FMath::RandRange(1, 2));//maybe this should take into consideration whether the resulting intersection will be the first or second of its pair 
+				}
+				else
+				{
+					//Im excluding the first turn from the possibilities when theres more than one turn because that could be an issue - wait what?! how? fuck it Im just gonna pretend like I didnt see this
+					//minus when intersectionAdjustmentWeights = 2, plus when intersectionAdjustmentWeights = 1
+					//this works for both if weights and if not
+					whichOfEachPairsTurnsBecomesTheIntersection.Add((currentATPPBOCLCG * (1 - (intersectionAjustmentWeights[a] % 2))) + (intersectionAjustmentWeights[a] % 2) + (-1 + ((intersectionAjustmentWeights[a] % 2) * 2)) * FMath::RandRange(0, FMath::DivideAndRoundDown(currentATPPBOCLCG - 2, 2)) * 2);
+				}
+			}
+			else
+			{// pairs starting on the same side
+				if (firstOfPairIsAboveSecondArr[a])
+				{
+					whichOfEachPairsTurnsBecomesTheIntersection.Add(FMath::RandRange(1, currentATPPBOCLCG / 3));
+				}
+				else if (firstOfPairIsEvenWithOrLeftOfSecondArr[a])
+				{
+					whichOfEachPairsTurnsBecomesTheIntersection.Add(currentATPPBOCLCG - FMath::RandRange(0, 1));
+				}
+				else
+				{
+					if (intersectionAjustmentWeights[a] == 1)
+					{// do I need to add logic to force the intersection deeper into the sequence of turns if there are 6 here? 
+						whichOfEachPairsTurnsBecomesTheIntersection.Add(1 + FMath::RandRange(0, FMath::Clamp((currentATPPBOCLCG / 2) - 1, 0, 2)) * 2);
+					}
+					else
+					{
+						whichOfEachPairsTurnsBecomesTheIntersection.Add(currentATPPBOCLCG - FMath::RandRange(0, FMath::Clamp((currentATPPBOCLCG / 2) - 1, 0, 1)));
+					}
+				}
+			}
+		}//so Ive got 3 things to do! delete this when your done. FIRST! solve the problem where intersections can be placed so close to eachother. SECOND! solve the problem where there can be remaining verticle distance when pairStartsOnSameSide, firstOfPairIsRightOfAndEvenWithOrBelowSecond, and firstOfPairGetsAdjustment. THIRD! solve the problem where I have noticed when pairStartsOnDifferentSides the logic needs to be handled as if first of pair is above second when first of pair is level with second which is not the case for when pairStartsOnSameSide
+
+
+		//determining how far along the total quantity of verticle or horizontal distance a turn is placed given a pair's verticle and lateral positioning relevant to each other
+		for (int currentPair = 0; currentPair < availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num(); currentPair++)
+		{
+			currentATPPBOCLCG = availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[currentPair];
+			currentFirstOfPairIsAboveSecond = firstOfPairIsAboveSecondArr[currentPair];
+			currentFirstOfPairIsEvenWithOrLeftOfSecond = firstOfPairIsEvenWithOrLeftOfSecondArr[currentPair];
+
+			if (currentFirstOfPairIsAboveSecond)
+			{
+				turnDistancesFromFirstOfPairStorArr.Add(-1);//okay SO this will be zero, but this means when I actually place the track I will need to write a condition for if firstOfPairIsAboveSecond which alters first of pairs intersection position just like in the determining intersection postion section
+			}
+
+			if (currentFirstOfPairIsEvenWithOrLeftOfSecond && pairStartsOnSameSide[currentPair])
+			{
+				currentATPPBOCLCG -= 1;
+				oneLastThing = true;
+			}
+
+			relevantHorizontalAndVerticleDistances[0] = horizontalAndVerticleDistancesBetweenHolesOrIntersections[0][currentPair];
+			relevantHorizontalAndVerticleDistances[1] = horizontalAndVerticleDistancesBetweenHolesOrIntersections[1][currentPair];
+
+			amountOfTurnsPerDistance[1] = FMath::DivideAndRoundDown(currentATPPBOCLCG, 2) + (currentATPPBOCLCG % 2);
+			amountOfTurnsPerDistance[0] = FMath::DivideAndRoundDown(currentATPPBOCLCG, 2);
+
+			//this approach will actually cause a problem if a pair starts on different sides and first of pair is above second. in this case the last horizontal turn would overshoot? actually nevermind it wouldn't i dont think
+			for (int a = 1 + currentFirstOfPairIsAboveSecond; a <= currentATPPBOCLCG; a++)
+			{
+				turnDistancesFromFirstOfPairStorArr.Add((relevantHorizontalAndVerticleDistances[a % 2] / amountOfTurnsPerDistance[a % 2]) * FMath::RoundHalfFromZero((float)a / 2.0f) + FMath::RoundHalfFromZero(((float)(relevantHorizontalAndVerticleDistances[a % 2] % amountOfTurnsPerDistance[a % 2]) / (float)amountOfTurnsPerDistance[a % 2]) * FMath::RoundHalfFromZero((float)a / 2.0f)));
+			}
+
+			if (oneLastThing)
+			{
+				turnDistancesFromFirstOfPairStorArr.Add(relevantHorizontalAndVerticleDistances[0] - 1);
+				oneLastThing = false;
+			}
+
+			turnAndIntersectionDistancesPerPair[currentLevelIndex][0][currentPair] = turnDistancesFromFirstOfPairStorArr;
+			turnDistancesFromFirstOfPairStorArr.Empty();
+		}
+
+		// sets the appropriate turn directions for each turn for the track between each pair of holes or intersections. 0 for right, 1 for left. and then a 2 for the intersection?.. and a 3 for straight track
+		//still need to determine turn direction if pair starts on same side and firstOfPairIsEvenWithOrLeftOfSecond
+		for (int currentPair = 0; currentPair < availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num(); currentPair++)
+		{
+			currentATPPBOCLCG = availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[currentPair];
+
+			if (currentATPPBOCLCG % 2)
+			{//pairs starting on different sides
+				if (firstOfPairIsEvenWithOrLeftOfSecondArr[currentPair])
+				{
+					for (int b = 0; b < currentATPPBOCLCG - 1; b++)
+					{
+						turnDirectionsStorArr.Add(zeroOneAlternatingArr[b]);
+					}
+
+					turnDirectionsStorArr.Add(1);
+
+					turnDirectionsStorArr[whichOfEachPairsTurnsBecomesTheIntersection[currentPair] - 1] = 2;//is this - 1 correct? I think so..
+
+					directionsOfTurns[currentLevelIndex][0][currentPair] = turnDirectionsStorArr;
+
+					turnDirectionsStorArr.Empty();
+				}
+				else if (firstOfPairIsAboveSecondArr[currentPair])
+				{
+					turnDirectionsStorArr.Add(1);
+
+					for (int b = 0; b < currentATPPBOCLCG - 1; b++)
+					{
+						turnDirectionsStorArr.Add(oneZeroAlternatingArr[b]);
+					}
+
+					turnDirectionsStorArr[whichOfEachPairsTurnsBecomesTheIntersection[currentPair] - 1] = 2;//is this - 1 correct? I think so..
+
+					directionsOfTurns[currentLevelIndex][0][currentPair] = turnDirectionsStorArr;
+
+					turnDirectionsStorArr.Empty();
+				}
+				else
+				{
+					for (int b = 0; b < currentATPPBOCLCG; b++)
+					{
+						turnDirectionsStorArr.Add(oneZeroAlternatingArr[b]);
+					}
+
+					turnDirectionsStorArr[whichOfEachPairsTurnsBecomesTheIntersection[currentPair] - 1] = 2;//is this - 1 correct? I think so..
+
+					directionsOfTurns[currentLevelIndex][0][currentPair] = turnDirectionsStorArr;
+
+					turnDirectionsStorArr.Empty();
+				}
+			}
+			else
+			{//pairs starting on the same side
+				if (firstOfPairIsAboveSecondArr[currentPair])
+				{
+					turnDirectionsStorArr.Add(1);
+
+					for (int b = 0; b < currentATPPBOCLCG - 1; b++)
+					{
+						turnDirectionsStorArr.Add(oneZeroAlternatingArr[b]);
+					}
+
+					turnDirectionsStorArr[whichOfEachPairsTurnsBecomesTheIntersection[currentPair] - 1] = 2;//is this - 1 correct? I think so..
+
+					directionsOfTurns[currentLevelIndex][0][currentPair] = turnDirectionsStorArr;
+
+					turnDirectionsStorArr.Empty();
+				}
+				else if (firstOfPairIsEvenWithOrLeftOfSecondArr[currentPair])
+				{
+					for (int b = 0; b < currentATPPBOCLCG - 3; b++)
+					{
+						turnDirectionsStorArr.Add(zeroOneAlternatingArr[b]);
+					}
+					turnDirectionsStorArr.Append({ 1, 1, 1 });
+
+					turnDirectionsStorArr[whichOfEachPairsTurnsBecomesTheIntersection[currentPair] - 1] = 2;//is this - 1 correct? I think so..
+
+					directionsOfTurns[currentLevelIndex][0][currentPair] = turnDirectionsStorArr;
+
+					turnDirectionsStorArr.Empty();
+				}
+				else
+				{
+					for (int b = 0; b < currentATPPBOCLCG - 1; b++)
+					{
+						turnDirectionsStorArr.Add(oneZeroAlternatingArr[b]);
+					}
+
+					turnDirectionsStorArr.Add(1);
+
+					turnDirectionsStorArr[whichOfEachPairsTurnsBecomesTheIntersection[currentPair] - 1] = 2;//is this - 1 correct? I think so..
+
+					directionsOfTurns[currentLevelIndex][0][currentPair] = turnDirectionsStorArr;
+
+					turnDirectionsStorArr.Empty();
+				}
+			}
+		}
+
+		// determining the intersection location. I will also need to rework the first section of this master loop and at the very least determine firstOfPairIsAboveSecond and firstOfPairIsEvenWithOrLeftOfSecond here. As apart of determining intersection Position I will also need to "reposition" the intersections of all future pairs which you will weight to recieve an in intersection in close proximity
+		vector2DStorArrOne.Empty();
+
+		for (int currentPairIndex = 0; currentPairIndex < availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num(); currentPairIndex++)
+		{
+			turnDistancesFromFirstOfPairStorArr = turnAndIntersectionDistancesPerPair[currentLevelIndex][0][currentPairIndex];
+			currentIntersectionPos = firstOfPairHoleOrIntersectionPosStorArr[currentPairIndex];
+
+			currentTurnDistance = turnDistancesFromFirstOfPairStorArr[whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] - 1];
+
+			if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] != 1)
+			{
+				previousTurnDistance = turnDistancesFromFirstOfPairStorArr[whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] - 2];//this should be a minus 2 
+			}
+			else
+			{
+				previousTurnDistance = 0;
+			}
+
+			switch (firstOfPairHoleDirStorArr[currentPairIndex])
+			{
+			case 1:
+				if (firstOfPairIsAboveSecondArr[currentPairIndex])
+				{
+					if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
+					{
+						currentIntersectionPos.X -= previousTurnDistance;
+						currentIntersectionPos.Y -= currentTurnDistance;
+					}
+					else
+					{
+						currentIntersectionPos.X -= currentTurnDistance;
+						currentIntersectionPos.Y -= previousTurnDistance;
+					}
+
+					vector2DStorArrOne.Add(currentIntersectionPos);
+				}
+				else if (firstOfPairIsEvenWithOrLeftOfSecondArr[currentPairIndex])
+				{
+					if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
+					{
+						currentIntersectionPos.X += previousTurnDistance;
+						currentIntersectionPos.Y += currentTurnDistance;
+					}
+					else
+					{
+						currentIntersectionPos.X += currentTurnDistance;
+						currentIntersectionPos.Y += previousTurnDistance;
+					}
+
+					vector2DStorArrOne.Add(currentIntersectionPos);
+				}
+				else
+				{
+					if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
+					{
+						currentIntersectionPos.X -= previousTurnDistance;
+						currentIntersectionPos.Y += currentTurnDistance;
+					}
+					else
+					{
+						currentIntersectionPos.X -= currentTurnDistance;
+						currentIntersectionPos.Y += previousTurnDistance;
+					}
+
+					vector2DStorArrOne.Add(currentIntersectionPos);
+				}
+
+				break;
+			case 2:
+				if (firstOfPairIsAboveSecondArr[currentPairIndex])
+				{
+					if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
+					{
+						currentIntersectionPos.X -= currentTurnDistance;
+						currentIntersectionPos.Y += previousTurnDistance;
+					}
+					else
+					{
+						currentIntersectionPos.X -= previousTurnDistance;
+						currentIntersectionPos.Y += currentTurnDistance;
+					}
+
+					vector2DStorArrOne.Add(currentIntersectionPos);
+				}
+				else if (firstOfPairIsEvenWithOrLeftOfSecondArr[currentPairIndex])
+				{
+					if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
+					{
+						currentIntersectionPos.X += currentTurnDistance;
+						currentIntersectionPos.Y -= previousTurnDistance;
+					}
+					else
+					{
+						currentIntersectionPos.X += previousTurnDistance;
+						currentIntersectionPos.Y -= currentTurnDistance;
+					}
+
+					vector2DStorArrOne.Add(currentIntersectionPos);
+				}
+				else
+				{
+					if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
+					{
+						currentIntersectionPos.X += currentTurnDistance;
+						currentIntersectionPos.Y += previousTurnDistance;
+					}
+					else
+					{
+						currentIntersectionPos.X += previousTurnDistance;
+						currentIntersectionPos.Y += currentTurnDistance;
+					}
+
+					vector2DStorArrOne.Add(currentIntersectionPos);
+				}
+
+				break;
+			case 3:
+				if (firstOfPairIsAboveSecondArr[currentPairIndex])
+				{
+					if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
+					{
+						currentIntersectionPos.X += previousTurnDistance;
+						currentIntersectionPos.Y += currentTurnDistance;
+					}
+					else
+					{
+						currentIntersectionPos.X += currentTurnDistance;
+						currentIntersectionPos.Y += previousTurnDistance;
+					}
+
+					vector2DStorArrOne.Add(currentIntersectionPos);
+				}
+				else if (firstOfPairIsEvenWithOrLeftOfSecondArr[currentPairIndex])
+				{
+					if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
+					{
+						currentIntersectionPos.X -= previousTurnDistance;
+						currentIntersectionPos.Y -= currentTurnDistance;
+					}
+					else
+					{
+						currentIntersectionPos.X -= currentTurnDistance;
+						currentIntersectionPos.Y -= previousTurnDistance;
+					}
+
+					vector2DStorArrOne.Add(currentIntersectionPos);
+				}
+				else
+				{
+					if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
+					{
+						currentIntersectionPos.X += previousTurnDistance;
+						currentIntersectionPos.Y -= currentTurnDistance;
+					}
+					else
+					{
+						currentIntersectionPos.X += currentTurnDistance;
+						currentIntersectionPos.Y -= previousTurnDistance;
+					}
+
+					vector2DStorArrOne.Add(currentIntersectionPos);
+				}
+
+				break;
+			case 4:
+				if (firstOfPairIsAboveSecondArr[currentPairIndex])
+				{
+					if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
+					{
+						currentIntersectionPos.X += currentTurnDistance;
+						currentIntersectionPos.Y -= previousTurnDistance;
+					}
+					else
+					{
+						currentIntersectionPos.X += previousTurnDistance;
+						currentIntersectionPos.Y -= currentTurnDistance;
+					}
+
+					vector2DStorArrOne.Add(currentIntersectionPos);
+				}
+				else if (firstOfPairIsEvenWithOrLeftOfSecondArr[currentPairIndex])
+				{
+					if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
+					{
+						currentIntersectionPos.X -= currentTurnDistance;
+						currentIntersectionPos.Y += previousTurnDistance;
+					}
+					else
+					{
+						currentIntersectionPos.X -= previousTurnDistance;
+						currentIntersectionPos.Y += currentTurnDistance;
+					}
+
+					vector2DStorArrOne.Add(currentIntersectionPos);
+				}
+				else
+				{
+					if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
+					{
+						currentIntersectionPos.X -= currentTurnDistance;
+						currentIntersectionPos.Y -= previousTurnDistance;
+					}
+					else
+					{
+						currentIntersectionPos.X -= previousTurnDistance;
+						currentIntersectionPos.Y -= currentTurnDistance;
+					}
+
+					vector2DStorArrOne.Add(currentIntersectionPos);
+				}
+
+				break;
+			default:
+				break;
+			}
+		}
+		turnDistancesFromFirstOfPairStorArr.Empty();
+		intersectionDirStorArr.Empty();
+
+		//calculating newly generated intersection's directions and orientations
+		for (int currentIntersection = 0; currentIntersection < vector2DStorArrOne.Num(); currentIntersection++)
+		{
+			currentFirstOfPairIsAboveSecond = firstOfPairIsAboveSecondArr[currentIntersection];
+			currentFirstOfPairIsEvenWithOrLeftOfSecond = firstOfPairIsEvenWithOrLeftOfSecondArr[currentIntersection];
+
+			if (pairStartsOnSameSide[currentIntersection])
+			{
+				intersectionDirStorArr.Add(firstOfPairHoleDirStorArr[currentIntersection]);
+
+				if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] % 2)
+				{
+					intersectionOrientationStorArr.Add(1);
+				}
+				else
+				{
+					intersectionOrientationStorArr.Add(0);
+				}
+			}
+			else
+			{
+				switch (firstOfPairHoleDirStorArr[currentIntersection])
+				{
+				case 1:
+					if (currentFirstOfPairIsEvenWithOrLeftOfSecond)
+					{
+						if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] == availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[currentIntersection])
+						{
+							if (vector2DStorArrOne[currentIntersection].X <= vector2DStorArrOne[currentIntersection].Y)
+							{
+								intersectionDirStorArr.Add(2);
+								intersectionOrientationStorArr.Add(0);
+							}
+							else
+							{
+								intersectionDirStorArr.Add(1);
+								intersectionOrientationStorArr.Add(1);
+							}
+						}
+						else
+						{
+							intersectionDirStorArr.Add(2);
+							intersectionOrientationStorArr.Add(1);
+						}
+
+					}
+					else if (currentFirstOfPairIsAboveSecond)
+					{
+						if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] == 1)
+						{
+							if (vector2DStorArrOne[currentIntersection].X <= vector2DStorArrOne[currentIntersection].Y)
+							{
+								intersectionDirStorArr.Add(2);
+								intersectionOrientationStorArr.Add(0);
+							}
+							else
+							{
+								intersectionDirStorArr.Add(1);
+								intersectionOrientationStorArr.Add(1);
+							}
+						}
+						else
+						{
+							intersectionDirStorArr.Add(1);
+							intersectionOrientationStorArr.Add(0);
+						}
+					}
+					else
+					{
+						if (vector2DStorArrOne[currentIntersection].X <= vector2DStorArrOne[currentIntersection].Y)
+						{
+							intersectionDirStorArr.Add(2);
+							intersectionOrientationStorArr.Add(0);
+						}
+						else
+						{
+							intersectionDirStorArr.Add(1);
+							intersectionOrientationStorArr.Add(1);
+						}
+					}
+					break;
+				case 2:
+					if (currentFirstOfPairIsEvenWithOrLeftOfSecond)
+					{
+						if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] == availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[currentIntersection])
+						{
+							if (16 - vector2DStorArrOne[currentIntersection].Y <= vector2DStorArrOne[currentIntersection].X)
+							{
+								intersectionDirStorArr.Add(3);
+								intersectionOrientationStorArr.Add(0);
+							}
+							else
+							{
+								intersectionDirStorArr.Add(2);
+								intersectionOrientationStorArr.Add(1);
+							}
+						}
+						else
+						{
+							intersectionDirStorArr.Add(3);
+							intersectionOrientationStorArr.Add(1);
+						}
+
+					}
+					else if (currentFirstOfPairIsAboveSecond)
+					{
+						if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] == 1)
+						{
+							if (16 - vector2DStorArrOne[currentIntersection].Y <= vector2DStorArrOne[currentIntersection].X)
+							{
+								intersectionDirStorArr.Add(3);
+								intersectionOrientationStorArr.Add(0);
+							}
+							else
+							{
+								intersectionDirStorArr.Add(2);
+								intersectionOrientationStorArr.Add(1);
+							}
+						}
+						else
+						{
+							intersectionDirStorArr.Add(2);
+							intersectionOrientationStorArr.Add(0);
+						}
+					}
+					else
+					{
+						if (16 - vector2DStorArrOne[currentIntersection].Y <= vector2DStorArrOne[currentIntersection].X)
+						{
+							intersectionDirStorArr.Add(3);
+							intersectionOrientationStorArr.Add(0);
+						}
+						else
+						{
+							intersectionDirStorArr.Add(2);
+							intersectionOrientationStorArr.Add(1);
+						}
+					}
+					break;
+				case 3:
+					if (currentFirstOfPairIsEvenWithOrLeftOfSecond)
+					{
+						if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] == availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[currentIntersection])
+						{
+							if (16 - vector2DStorArrOne[currentIntersection].X <= 16 - vector2DStorArrOne[currentIntersection].Y)
+							{
+								intersectionDirStorArr.Add(4);
+								intersectionOrientationStorArr.Add(0);
+							}
+							else
+							{
+								intersectionDirStorArr.Add(3);
+								intersectionOrientationStorArr.Add(1);
+							}
+						}
+						else
+						{
+							intersectionDirStorArr.Add(4);
+							intersectionOrientationStorArr.Add(1);
+						}
+
+					}
+					else if (currentFirstOfPairIsAboveSecond)
+					{
+						if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] == 1)
+						{
+							if (16 - vector2DStorArrOne[currentIntersection].X <= 16 - vector2DStorArrOne[currentIntersection].Y)
+							{
+								intersectionDirStorArr.Add(4);
+								intersectionOrientationStorArr.Add(0);
+							}
+							else
+							{
+								intersectionDirStorArr.Add(3);
+								intersectionOrientationStorArr.Add(1);
+							}
+						}
+						else
+						{
+							intersectionDirStorArr.Add(3);
+							intersectionOrientationStorArr.Add(0);
+						}
+					}
+					else
+					{
+						if (16 - vector2DStorArrOne[currentIntersection].X <= 16 - vector2DStorArrOne[currentIntersection].Y)
+						{
+							intersectionDirStorArr.Add(4);
+							intersectionOrientationStorArr.Add(0);
+						}
+						else
+						{
+							intersectionDirStorArr.Add(3);
+							intersectionOrientationStorArr.Add(1);
+						}
+					}
+					break;
+				case 4:
+					if (currentFirstOfPairIsEvenWithOrLeftOfSecond)
+					{
+						if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] == availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[currentIntersection])
+						{
+							if (vector2DStorArrOne[currentIntersection].Y <= 16 - vector2DStorArrOne[currentIntersection].X)
+							{
+								intersectionDirStorArr.Add(1);
+								intersectionOrientationStorArr.Add(0);
+							}
+							else
+							{
+								intersectionDirStorArr.Add(4);
+								intersectionOrientationStorArr.Add(1);
+							}
+						}
+						else
+						{
+							intersectionDirStorArr.Add(1);
+							intersectionOrientationStorArr.Add(1);
+						}
+
+					}
+					else if (currentFirstOfPairIsAboveSecond)
+					{
+						if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] == 1)
+						{
+							if (vector2DStorArrOne[currentIntersection].Y <= 16 - vector2DStorArrOne[currentIntersection].X)
+							{
+								intersectionDirStorArr.Add(1);
+								intersectionOrientationStorArr.Add(0);
+							}
+							else
+							{
+								intersectionDirStorArr.Add(4);
+								intersectionOrientationStorArr.Add(1);
+							}
+						}
+						else
+						{
+							intersectionDirStorArr.Add(4);
+							intersectionOrientationStorArr.Add(0);
+						}
+					}
+					else
+					{
+						if (vector2DStorArrOne[currentIntersection].Y <= 16 - vector2DStorArrOne[currentIntersection].X)
+						{
+							intersectionDirStorArr.Add(1);
+							intersectionOrientationStorArr.Add(0);
+						}
+						else
+						{
+							intersectionDirStorArr.Add(4);
+							intersectionOrientationStorArr.Add(1);
+						}
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		}
+
+		//promoting any unpaired holes or intersections into the next level
+		if (unpairedHoleOrIntersectionDir != 0)
+		{
+			turnAndIntersectionDistancesPerPair[currentLevelIndex][0][availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num()] = { 1 };
+			directionsOfTurns[currentLevelIndex][0][availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num()] = { 2 };
+
+			switch (unpairedHoleOrIntersectionDir)
+			{
+			case 1:
+				vector2DStorArrOne.Add(FVector2D(unpairedHoleOrIntersectionPos.X, unpairedHoleOrIntersectionPos.Y + 1));
+				break;
+			case 2:
+				vector2DStorArrOne.Add(FVector2D(unpairedHoleOrIntersectionPos.X + 1, unpairedHoleOrIntersectionPos.Y));
+				break;
+			case 3:
+				vector2DStorArrOne.Add(FVector2D(unpairedHoleOrIntersectionPos.X, unpairedHoleOrIntersectionPos.Y - 1));
+				break;
+			case 4:
+				vector2DStorArrOne.Add(FVector2D(unpairedHoleOrIntersectionPos.X - 1, unpairedHoleOrIntersectionPos.Y));
+				break;
+			default:
+				break;
+			}
+
+			intersectionDirStorArr.Add(unpairedHoleOrIntersectionDir);
+			intersectionOrientationStorArr.Add(2);
+
+			unpairedHoleOrIntersectionPos = FVector2D(0, 0);
+			unpairedHoleOrIntersectionDir = 0;
+
+			firstOfPairIsAboveSecondAllPairs[currentLevelIndex][0].Add(0);
+			firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex][0].Add(0);
+		}
+		for (FVector2D a : vector2DStorArrOne)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, a.ToString());
+		}
+
+		holeAndIntersectionPositions[currentLevelIndex + 1][0] = vector2DStorArrOne;
+		arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex + 1][0] = intersectionDirStorArr;
+		intersectionOrientationsPerGroupPerLevel[currentLevelIndex + 1][0] = intersectionOrientationStorArr;
+
+		//select intersection position are adjusted and firstOfPairIsAboveSecond and firstOfPairIsEvenWithOrLeftOfSecond are written. It's likely adjustingIntersectionPos will cause problems but i will need to run the code a lot to find these issues. To achieve the adjustment I am not adjusting any vector2D's in permanent storage, but tracking which of all intersections are being ajdusted, and then in temporary storage I am adjusting the vector2DStorArrOne for the purpose of calculating the proceeding track and intersections. all of this means when I build the level I will have to inlcude a distinct functionality to extend an appropriately sized portion of track from any intersection bearing a weight
+		intersectionAjustmentWeights.Empty();
+		firstOfPairIsAboveSecondArr.Empty();
+		firstOfPairIsEvenWithOrLeftOfSecondArr.Empty();
+
+		if (vector2DStorArrOne.Num() > 1)
+		{
+			for (int currentPair = 1; currentPair <= vector2DStorArrOne.Num() / 2; currentPair++)
+			{
+				firstOfPairIntersectionPos = vector2DStorArrOne[currentPair * 2 - 2];
+				secondOfPairIntersectionPos = vector2DStorArrOne[currentPair * 2 - 1];
+				firstOfPairIntersectionDir = intersectionDirStorArr[currentPair * 2 - 2];
+				secondOfPairIntersectionDir = intersectionDirStorArr[currentPair * 2 - 1];
+				differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+				differenceInPairPositionAbsolute = differenceInPairPosition.GetAbs();
+
+				if (abs(firstOfPairIntersectionDir - secondOfPairIntersectionDir) == 2)
+				{//this runs when the current pair of intersections aren't just on different sides but on opposite sides. this currently only works with intersections, I have not written the solution to this problem for holes
+					intersectionDirStorArr[currentPair * 2 - 2] = FMath::Clamp((firstOfPairIntersectionDir + 1) % 5, 1, 4);
+					intersectionAjustmentWeights.Add(3);
+
+					switch (firstOfPairIntersectionDir)
+					{
+					case 1:
+						firstOfPairIntersectionPos.Y += 1;
+						vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+						differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+
+						if (differenceInPairPosition.X > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+						else if (differenceInPairPosition.Y > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+						}
+						else
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+						break;
+					case 2:
+						firstOfPairIntersectionPos.X += 1;
+						vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+						differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+
+						if (differenceInPairPosition.Y < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+						else if (differenceInPairPosition.X > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+						}
+						else
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+						break;
+					case 3:
+						firstOfPairIntersectionPos.Y -= 1;
+						vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+						differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+
+						if (differenceInPairPosition.X < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+						else if (differenceInPairPosition.Y < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+						}
+						else
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+						break;
+					case 4:
+						firstOfPairIntersectionPos.X -= 1;
+						vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+						differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+
+						if (differenceInPairPosition.Y > -1)
+						{
+							firstOfPairIsAboveSecondArr.Add(1);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+						else if (differenceInPairPosition.X < 1)
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+						}
+						else
+						{
+							firstOfPairIsAboveSecondArr.Add(0);
+							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+						}
+						break;
+					default:
+						break;
+					}
+				}
+				else
+				{
+					switch (firstOfPairIntersectionDir)
+					{
+					case 1:
+						if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
+						{
+							if (differenceInPairPosition.Y > 0)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								firstOfPairIntersectionPos.Y += extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(1);
+							}
+							else if (differenceInPairPosition.X < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								secondOfPairIntersectionPos.Y += extentOfAdjustment;
+
+								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(2);
+							}
+							else
+							{
+								if (FMath::RandRange(0, 1) && differenceInPairPosition.Y > -2)
+								{//second of pair gets adjustment
+									secondOfPairIntersectionPos.Y += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else
+								{// first of pair gets adjustment
+									firstOfPairIntersectionPos.Y += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+
+								if (differenceInPairPosition.Y > 0)
+								{
+									firstOfPairIsAboveSecondArr.Add(1);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								}
+								else if (differenceInPairPosition.X < 1)
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								}
+								else
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								}
+							}
+						}
+						else
+						{
+							if (differenceInPairPosition.Y > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								firstOfPairIntersectionPos.Y += extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(1);
+							}
+							else if (differenceInPairPosition.X < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								secondOfPairIntersectionPos.X += extentOfAdjustment;
+
+								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(2);
+							}
+							else
+							{
+								if (differenceInPairPositionAbsolute.X < 2 || differenceInPairPositionAbsolute.Y < 2)
+								{
+									if (differenceInPairPosition.Y < -1)
+									{//second of pair gets adjustment
+										secondOfPairIntersectionPos.X += extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(2);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+									else if (differenceInPairPosition.X > 1)
+									{// first of pair gets adjustment
+										firstOfPairIntersectionPos.Y += extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(1);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+									else
+									{//no adjustments are made. This logic is a necessity but this case should be avoided at all costs
+										intersectionAjustmentWeights.Add(0);
+									}
+								}
+								else
+								{
+									if (FMath::RandRange(0, 1))
+									{//second of pair gets adjustment
+										secondOfPairIntersectionPos.X += extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(2);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+									else
+									{// first of pair gets adjustment
+										firstOfPairIntersectionPos.Y += extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(1);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+								}
+
+								if (differenceInPairPosition.Y > -1)
+								{
+									firstOfPairIsAboveSecondArr.Add(1);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								}
+								else if (differenceInPairPosition.X < 1)
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								}
+								else
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								}
+							}
+						}
+
+						break;
+					case 2:
+						if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
+						{
+							if (differenceInPairPosition.X > 0)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								firstOfPairIntersectionPos.X += extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(1);
+							}
+							else if (differenceInPairPosition.Y > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								secondOfPairIntersectionPos.X += extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(2);
+							}
+							else
+							{
+								if (FMath::RandRange(0, 1) && differenceInPairPosition.X > -2)
+								{//second of pair gets adjustment
+									secondOfPairIntersectionPos.X += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else
+								{// first of pair gets adjustment
+									firstOfPairIntersectionPos.X += extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+
+								if (differenceInPairPosition.X > 0)
+								{
+									firstOfPairIsAboveSecondArr.Add(1);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								}
+								else if (differenceInPairPosition.Y > -1)
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								}
+								else
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								}
+							}
+						}
+						else
+						{
+							if (differenceInPairPosition.X > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								firstOfPairIntersectionPos.X += extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(1);
+							}
+							else if (differenceInPairPosition.Y > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								secondOfPairIntersectionPos.Y -= extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(2);
+							}
+							else
+							{
+								if (differenceInPairPositionAbsolute.X < 2 || differenceInPairPositionAbsolute.Y < 2)
+								{
+									if (differenceInPairPosition.X < -1)
+									{//second of pair gets adjustment
+										secondOfPairIntersectionPos.Y -= extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(2);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+									else if (differenceInPairPosition.Y < -1)
+									{// first of pair gets adjustment
+										firstOfPairIntersectionPos.X += extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(1);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+									else
+									{//no adjustments are made. This logic is a necessity but this case should be avoided at all costs
+										intersectionAjustmentWeights.Add(0);
+									}
+								}
+								else
+								{
+									if (FMath::RandRange(0, 1))
+									{//second of pair gets adjustment
+										secondOfPairIntersectionPos.Y -= extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(2);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+									else
+									{// first of pair gets adjustment
+										firstOfPairIntersectionPos.X += extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(1);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+								}
+							}
+
+							if (differenceInPairPosition.X > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+							else if (differenceInPairPosition.Y > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							}
+							else
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+						}
+
+						break;
+					case 3:
+						if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
+						{
+							if (differenceInPairPosition.Y < 0)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								firstOfPairIntersectionPos.Y -= extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(1);
+							}
+							else if (differenceInPairPosition.X > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								secondOfPairIntersectionPos.Y -= extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(2);
+							}
+							else
+							{
+								if (FMath::RandRange(0, 1) && differenceInPairPosition.Y < 2)
+								{//second of pair gets adjustment
+									secondOfPairIntersectionPos.Y -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else
+								{// first of pair gets adjustment
+									firstOfPairIntersectionPos.Y -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+
+								if (differenceInPairPosition.Y < 0)
+								{
+									firstOfPairIsAboveSecondArr.Add(1);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								}
+								else if (differenceInPairPosition.X > -1)
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								}
+								else
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								}
+							}
+						}
+						else
+						{
+							if (differenceInPairPosition.Y < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								firstOfPairIntersectionPos.Y -= extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(1);
+							}
+							else if (differenceInPairPosition.X > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								secondOfPairIntersectionPos.X -= extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(2);
+							}
+							else
+							{
+								if (differenceInPairPositionAbsolute.X < 2 || differenceInPairPositionAbsolute.Y < 2)
+								{
+									if (differenceInPairPosition.Y > 1)
+									{//second of pair gets adjustment
+										secondOfPairIntersectionPos.X -= extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(2);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+									else if (differenceInPairPosition.X < -1)
+									{// first of pair gets adjustment
+										firstOfPairIntersectionPos.Y -= extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(1);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+									else
+									{//no adjustments are made. This logic is a necessity but this case should be avoided at all costs
+										intersectionAjustmentWeights.Add(0);
+									}
+								}
+								else
+								{
+									if (FMath::RandRange(0, 1))
+									{//second of pair gets adjustment
+										secondOfPairIntersectionPos.X -= extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(2);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+									else
+									{// first of pair gets adjustment
+										firstOfPairIntersectionPos.Y -= extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(1);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+								}
+							}
+
+							if (differenceInPairPosition.Y < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+							else if (differenceInPairPosition.X > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							}
+							else
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+						}
+
+						break;
+					case 4:
+						if (firstOfPairIntersectionDir == secondOfPairIntersectionDir)
+						{
+							if (differenceInPairPosition.X < 0)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								firstOfPairIntersectionPos.X -= extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(1);
+							}
+							else if (differenceInPairPosition.Y < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								secondOfPairIntersectionPos.X -= extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(2);
+							}
+							else
+							{
+								if (FMath::RandRange(0, 1) && differenceInPairPosition.X < 2)
+								{//second of pair gets adjustment
+									secondOfPairIntersectionPos.X -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(2);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+								else
+								{// first of pair gets adjustment
+									firstOfPairIntersectionPos.X -= extentOfAdjustment;
+									vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+									intersectionAjustmentWeights.Add(1);
+									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+								}
+
+								if (differenceInPairPosition.X < 0)
+								{
+									firstOfPairIsAboveSecondArr.Add(1);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								}
+								else if (differenceInPairPosition.Y < 1)
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								}
+								else
+								{
+									firstOfPairIsAboveSecondArr.Add(0);
+									firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								}
+							}
+						}
+						else
+						{
+							if (differenceInPairPosition.X < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+								firstOfPairIntersectionPos.X -= extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(1);
+							}
+							else if (differenceInPairPosition.Y < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+								secondOfPairIntersectionPos.Y += extentOfAdjustment;
+								vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+								intersectionAjustmentWeights.Add(2);
+							}
+							else
+							{
+								if (differenceInPairPositionAbsolute.X < 2 || differenceInPairPositionAbsolute.Y < 2)
+								{
+									if (differenceInPairPosition.X > 1)
+									{//second of pair gets adjustment
+										secondOfPairIntersectionPos.Y += extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(2);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+									else if (differenceInPairPosition.Y > 1)
+									{// first of pair gets adjustment
+										firstOfPairIntersectionPos.X -= extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(1);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+									else
+									{//no adjustments are made. This logic is a necessity but this case should be avoided at all costs
+										intersectionAjustmentWeights.Add(0);
+									}
+								}
+								else
+								{
+									if (FMath::RandRange(0, 1))
+									{//second of pair gets adjustment
+										secondOfPairIntersectionPos.Y += extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 1] = secondOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(2);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+									else
+									{// first of pair gets adjustment
+										firstOfPairIntersectionPos.X -= extentOfAdjustment;
+										vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
+										intersectionAjustmentWeights.Add(1);
+										differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
+									}
+								}
+							}
+
+							if (differenceInPairPosition.X < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+							else if (differenceInPairPosition.Y < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							}
+							else
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+						}
+
+						break;
+					default:
+						break;
+					}
+				}
+			}
+		}
+		if (vector2DStorArrOne.Num() % 2 == 1)
+		{
+			intersectionAjustmentWeights.Add(0);
+		}//just added this lets hope it works
+
+		adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][0] = intersectionAjustmentWeights;
+		firstOfPairIsAboveSecondAllPairs[currentLevelIndex + 1][0] = firstOfPairIsAboveSecondArr;
+		firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex + 1][0] = firstOfPairIsEvenWithOrLeftOfSecondArr;
+
+
+		// this is the pile of arrays and misc which needs to get reset between every level
+		horizontalAndVerticleDistancesBetweenHolesOrIntersections[0].Empty();
+		horizontalAndVerticleDistancesBetweenHolesOrIntersections[1].Empty();
+
+		horizontalDistancesBetweenHolesOrIntersections.Empty();
+		verticleDistancesBetweenHolesOrIntersections.Empty();
+
+		availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Empty();
+
+		whichOfEachPairsTurnsBecomesTheIntersection.Empty();
+
+		firstOfPairHoleOrIntersectionPosStorArr.Empty();
+		firstOfPairHoleDirStorArr.Empty();
+
+		pairStartsOnSameSide.Empty();
+
+		intersectionOrientationStorArr.Empty();
 	}
 }
 
@@ -2235,19 +4776,36 @@ void ATestHud::BuildLevel()
 	int currentFirstOfPairDirCorrectedForAdjustment;
 	int currentIntersectionAdjustmentTracker;
 	int topLevelIndex;
+	int finalGroupingActive = 0;
+	int adjustmentAppliedToCurrentIntersectionPair;
 
 	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "------------");
 
 	//there can be remaining verticle distance when pairStartsOnSameSide, firstOfPairIsRightOfAndEvenWithOrBelowSecond, and firstOfPairGetsAdjustment. I still need to fix this
 	//I just noticed when their facing opposite sides and the second of pair gets adjustment the adjustment goes verticle not horizontal. try to get a picture you didnt at first glance
 
-	for (int currentGroupIndex = 0; currentGroupIndex < listOfHolePositionGroupings.Num(); currentGroupIndex++)
+	for (int currentGroupIndex = 0; currentGroupIndex <= listOfHolePositionGroupings.Num(); currentGroupIndex++)
 	{
-		currentGroupSize = listOfHolePositionGroupings[currentGroupIndex];
+		if (currentGroupIndex == listOfHolePositionGroupings.Num())
+		{
+			currentGroupSize = listOfHolePositionGroupings.Num();
+			currentGroupIndex = 0;
+			finalGroupingActive = 1;
+
+			if (currentGroupSize == 1)
+			{
+				currentGroupSize = 0;
+			}
+		}
+		else
+		{
+			currentGroupSize = listOfHolePositionGroupings[currentGroupIndex];
+		}
+
 		intersectionAdjustmentTrackerArr = { 0, 0, 0, 0, 0, 0, 0, 0 };
 		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current group size: " + FString::FromInt(currentGroupSize) + " | current group index: " + FString::FromInt(currentGroupIndex));
 
-		for (int currentLevelIndex = 0; currentLevelIndex <= FMath::Clamp(FMath::RoundHalfFromZero((float)currentGroupSize / 2.0f), 1, 3) - 1; currentLevelIndex++)
+		for (int currentLevelIndex = 0 + (4 * finalGroupingActive); currentLevelIndex <= FMath::Clamp(FMath::RoundHalfFromZero((float)currentGroupSize / 2.0f), 0, 3) - 1 + (4 * finalGroupingActive); currentLevelIndex++)
 		{//since I will be determining the hole positions 
 			topLevelIndex = currentLevelIndex;
 
@@ -2256,6 +4814,285 @@ void ATestHud::BuildLevel()
 			/*GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of holeAndIntersectionPositions current level current group: " + FString::FromInt(holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex].Num()) + " | size of ArrOfTrackDir: " + FString::FromInt(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex].Num()) + " | size of firstOfPairIsAboveSecondAllPairs current level current group: " + FString::FromInt(firstOfPairIsAboveSecondAllPairs[currentLevelIndex][currentGroupIndex].Num()) + " | size of firstOfPairIsEvenWithOrLeftOfSecondAllPairs current level current group: " + FString::FromInt(firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex][currentGroupIndex].Num()));
 
 			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of holeAndIntersectionPositions next level current group: " + FString::FromInt(holeAndIntersectionPositions[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of ArrOfTrackDir at next level: " + FString::FromInt(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of intersectionOrientations next level current group: " + FString::FromInt(intersectionOrientationsPerGroupPerLevel[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of adjustmentAppliedToCulminatingIntersection next level current group: " + FString::FromInt(adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex].Num()));*/
+			if (currentLevelIndex == 4)
+			{
+				for (int currentFirstOfPairIndex = 0; currentFirstOfPairIndex < holeAndIntersectionPositions[4][0].Num(); currentFirstOfPairIndex += 2)
+				{
+					adjustmentAppliedToCurrentIntersectionPair = adjustmentsAppliedToEachIntersection[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2];
+					GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "for the 4th level of the final grouping currentGroupIndex: " + FString::FromInt(currentGroupIndex) + " | currentLevelIndex: " + FString::FromInt(currentLevelIndex) + " | adjustmentAppliedToCurrentIntersectionPair: " + FString::FromInt(adjustmentAppliedToCurrentIntersectionPair));
+
+					if (adjustmentAppliedToCurrentIntersectionPair != 0)
+					{
+						if (adjustmentAppliedToCurrentIntersectionPair % 2 == 1)
+						{
+							currentFirstOfPairPosition = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex];
+							currentFirstOfPairDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex];
+
+							switch (currentFirstOfPairDir)
+							{
+							case 1:
+								if (adjustmentAppliedToCurrentIntersectionPair == 3)
+								{
+									intersectionAdjustmentTrackerArr[currentFirstOfPairIndex] = 2;
+
+									switch (currentFirstOfPairDir)
+									{//this would need to have a case 3 if it's possible for this to occur twice in a row
+									case 1:
+										newTrackPos = currentFirstOfPairPosition + FVector2D(0, 1);
+
+										convertedTrackPos.X = newTrackPos.X - 1;
+										convertedTrackPos.Y = 15 - newTrackPos.Y;
+										trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+										tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+										break;
+									case 2:// I dont think this case can actually occur because if culminatingIntersectionDir == 2 adjustmentAppliedToCulminatingIntersection cannot equal 3
+										newTrackPos = currentFirstOfPairPosition + FVector2D(1, 0);
+
+										convertedTrackPos.X = newTrackPos.X - 1;
+										convertedTrackPos.Y = 15 - newTrackPos.Y;
+										trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+										tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+										break;
+									default:
+										break;
+									}
+								}
+								else
+								{
+									intersectionAdjustmentTrackerArr[currentFirstOfPairIndex] = 1;
+
+									for (int a = 1; a <= extentOfAdjustment; a++)
+									{
+										newTrackPos = currentFirstOfPairPosition + FVector2D(a * (1 - (currentFirstOfPairDir % 2)), a * (currentFirstOfPairDir % 2));
+
+										convertedTrackPos.X = newTrackPos.X - 1;
+										convertedTrackPos.Y = 15 - newTrackPos.Y;
+										trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (currentFirstOfPairDir % 2);
+										tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+									}
+								}
+
+								break;
+							case 2:
+								if (adjustmentAppliedToCurrentIntersectionPair == 3)
+								{
+									intersectionAdjustmentTrackerArr[currentFirstOfPairIndex] = 2;
+
+									switch (currentFirstOfPairDir)
+									{
+									case 2:
+										newTrackPos = currentFirstOfPairPosition + FVector2D(1, 0);
+
+										convertedTrackPos.X = newTrackPos.X - 1;
+										convertedTrackPos.Y = 15 - newTrackPos.Y;
+										trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+										tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+										break;
+									case 3:
+										newTrackPos = currentFirstOfPairPosition - FVector2D(0, 1);
+
+										convertedTrackPos.X = newTrackPos.X - 1;
+										convertedTrackPos.Y = 15 - newTrackPos.Y;
+										trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+										tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+										break;
+									default:
+										break;
+									}
+								}
+								else
+								{
+									intersectionAdjustmentTrackerArr[currentFirstOfPairIndex] = 1;
+
+									for (int a = 1; a <= extentOfAdjustment; a++)
+									{
+										newTrackPos = currentFirstOfPairPosition + FVector2D(a * (1 - (currentFirstOfPairDir % 2)), a * (currentFirstOfPairDir % 2) * -1);
+
+										convertedTrackPos.X = newTrackPos.X - 1;
+										convertedTrackPos.Y = 15 - newTrackPos.Y;
+										trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (currentFirstOfPairDir % 2);
+										tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+									}
+								}
+
+								break;
+							case 3:
+								if (adjustmentAppliedToCurrentIntersectionPair == 3)
+								{
+									intersectionAdjustmentTrackerArr[currentFirstOfPairIndex] = 2;
+
+									switch (currentFirstOfPairDir)
+									{
+									case 3:
+										newTrackPos = currentFirstOfPairPosition - FVector2D(0, 1);
+
+										convertedTrackPos.X = newTrackPos.X - 1;
+										convertedTrackPos.Y = 15 - newTrackPos.Y;
+										trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+										tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+										break;
+									case 4:
+										newTrackPos = currentFirstOfPairPosition - FVector2D(1, 0);
+
+										convertedTrackPos.X = newTrackPos.X - 1;
+										convertedTrackPos.Y = 15 - newTrackPos.Y;
+										trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+										tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+										break;
+									default:
+										break;
+									}
+								}
+								else
+								{
+									intersectionAdjustmentTrackerArr[currentFirstOfPairIndex] = 1;
+
+									for (int a = 1; a <= extentOfAdjustment; a++)
+									{
+										newTrackPos = currentFirstOfPairPosition + FVector2D(a * (-1 + (currentFirstOfPairDir % 2)), a * (currentFirstOfPairDir % 2) * -1);//does this -1 work here as written?
+
+										convertedTrackPos.X = newTrackPos.X - 1;
+										convertedTrackPos.Y = 15 - newTrackPos.Y;
+										trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (currentFirstOfPairDir % 2);
+										tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+									}
+								}
+									
+								break;
+							case 4:
+								if (adjustmentAppliedToCurrentIntersectionPair == 3)
+								{
+									intersectionAdjustmentTrackerArr[currentFirstOfPairIndex] = 2;
+
+									switch (currentFirstOfPairDir)
+									{
+									case 4:
+										newTrackPos = currentFirstOfPairPosition - FVector2D(1, 0);
+
+										convertedTrackPos.X = newTrackPos.X - 1;
+										convertedTrackPos.Y = 15 - newTrackPos.Y;
+										trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+										tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+										break;
+									case 1:
+										newTrackPos = currentFirstOfPairPosition + FVector2D(0, 1);
+
+										convertedTrackPos.X = newTrackPos.X - 1;
+										convertedTrackPos.Y = 15 - newTrackPos.Y;
+										trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+										tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+										break;
+									default:
+										break;
+									}
+								}
+								else
+								{
+									intersectionAdjustmentTrackerArr[currentFirstOfPairIndex] = 1;
+
+									for (int a = 1; a <= extentOfAdjustment; a++)
+									{
+										newTrackPos = currentFirstOfPairPosition + FVector2D(a * (-1 + (currentFirstOfPairDir % 2)), a * (currentFirstOfPairDir % 2));//does this -1 work here as written?
+
+										convertedTrackPos.X = newTrackPos.X - 1;
+										convertedTrackPos.Y = 15 - newTrackPos.Y;
+										trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (currentFirstOfPairDir % 2);
+										tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+									}
+								}
+									
+								break;
+							default:
+								break;
+							}
+						}
+						else
+						{
+							currentFirstOfPairPosition = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
+							currentFirstOfPairDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex + 1];
+
+							switch (currentFirstOfPairDir)
+							{
+							case 1:
+								intersectionAdjustmentTrackerArr[currentFirstOfPairIndex + 1] = 1;
+
+								for (int a = 1; a <= extentOfAdjustment; a++)
+								{
+									newTrackPos = currentFirstOfPairPosition + FVector2D(a * (1 - (currentFirstOfPairDir % 2)), a * (currentFirstOfPairDir % 2));
+
+									convertedTrackPos.X = newTrackPos.X - 1;
+									convertedTrackPos.Y = 15 - newTrackPos.Y;
+									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (currentFirstOfPairDir % 2);
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+								}
+
+								break;
+							case 2:
+								intersectionAdjustmentTrackerArr[currentFirstOfPairIndex + 1] = 1;
+
+								for (int a = 1; a <= extentOfAdjustment; a++)
+								{
+									newTrackPos = currentFirstOfPairPosition + FVector2D(a * (1 - (currentFirstOfPairDir % 2)), a * (currentFirstOfPairDir % 2) * -1);
+
+									convertedTrackPos.X = newTrackPos.X - 1;
+									convertedTrackPos.Y = 15 - newTrackPos.Y;
+									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (currentFirstOfPairDir % 2);
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+								}
+
+								break;
+							case 3:
+								intersectionAdjustmentTrackerArr[currentFirstOfPairIndex + 1] = 1;
+
+								for (int a = 1; a <= extentOfAdjustment; a++)
+								{
+									newTrackPos = currentFirstOfPairPosition + FVector2D(a * (-1 + (currentFirstOfPairDir % 2)), a * (currentFirstOfPairDir % 2) * -1);//does this -1 work here as written?
+
+									convertedTrackPos.X = newTrackPos.X - 1;
+									convertedTrackPos.Y = 15 - newTrackPos.Y;
+									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (currentFirstOfPairDir % 2);
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+								}
+								
+
+								break;
+							case 4:
+								intersectionAdjustmentTrackerArr[currentFirstOfPairIndex + 1] = 1;
+
+								for (int a = 1; a <= extentOfAdjustment; a++)
+								{
+									newTrackPos = currentFirstOfPairPosition + FVector2D(a * (-1 + (currentFirstOfPairDir % 2)), a * (currentFirstOfPairDir % 2));//does this -1 work here as written?
+
+									convertedTrackPos.X = newTrackPos.X - 1;
+									convertedTrackPos.Y = 15 - newTrackPos.Y;
+									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (currentFirstOfPairDir % 2);
+									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+								}
+
+								break;
+							default:
+								break;
+							}
+						}
+					}
+				}
+			}
 
 			for (int currentFirstOfPairIndex = 0; currentFirstOfPairIndex < holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex].Num(); currentFirstOfPairIndex += 2)
 			{
@@ -2324,10 +5161,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(0, correctedCurrentTurnDist);
@@ -2384,10 +5217,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -2401,10 +5230,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//is this really the best way to do this??//:>:P
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(correctedCurrentTurnDist, 0);
@@ -2462,10 +5287,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								if (currentIntersectionAdjustmentTracker == 1 && currentPairTurnDistances.Num() == 2)//this proves its possible for there to be remaining verticle distance when pairStartsOnSameSide, firstOfPairIsRightOfAndEvenWithOrBelowSecond, and firstOfPairGetsAdjustment
 								{
@@ -2482,10 +5303,6 @@ void ATestHud::BuildLevel()
 											convertedTrackPos.Y = 15 - newTrackPos.Y;
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 											tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-											if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-											{
-												GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-											}
 										}
 									}
 								}
@@ -2515,10 +5332,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(0, correctedCurrentTurnDist);
@@ -2575,10 +5388,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -2592,10 +5401,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//is this really the best way to do this??//:>:P
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(correctedCurrentTurnDist, 0);
@@ -2660,10 +5465,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -2690,10 +5491,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(0, correctedCurrentTurnDist);
@@ -2702,10 +5499,6 @@ void ATestHud::BuildLevel()
 								convertedTrackPos.Y = 15 - newTrackPos.Y;
 
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								if (currentPairTurnDirections[currentTurnIndex] == 1)
 								{
@@ -2782,10 +5575,6 @@ void ATestHud::BuildLevel()
 													convertedTrackPos.Y = 15 - newTrackPos.Y;
 													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 													tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-													if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-													{
-														GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-													}
 												}
 											}
 												/*else if (currentFirstOfPairDir != currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.Y < -1)
@@ -2816,10 +5605,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//is this really the best way to do this??//:>:P
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(correctedCurrentTurnDist, 0);
@@ -2876,10 +5661,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -2907,10 +5688,6 @@ void ATestHud::BuildLevel()
 								convertedTrackPos.Y = 15 - newTrackPos.Y;
 								trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 								break;
 							case 2 :// I dont think this case can actually occur because if culminatingIntersectionDir == 2 adjustmentAppliedToCulminatingIntersection cannot equal 3
 								newTrackPos = culminatingIntersectionPos + FVector2D(1, 0);
@@ -2919,10 +5696,6 @@ void ATestHud::BuildLevel()
 								convertedTrackPos.Y = 15 - newTrackPos.Y;
 								trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 								break;
 							default:
 								break;
@@ -2940,10 +5713,6 @@ void ATestHud::BuildLevel()
 								convertedTrackPos.Y = 15 - newTrackPos.Y;
 								trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (culminatingIntersectionDir % 2);
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 							}
 						}
 					}
@@ -2983,10 +5752,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(correctedCurrentTurnDist, 0);
@@ -3043,10 +5808,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -3060,10 +5821,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//is this really the best way to do this??//:>:P
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(0, correctedCurrentTurnDist);
@@ -3121,10 +5878,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								if (currentIntersectionAdjustmentTracker == 1 && currentPairTurnDistances.Num() == 2)
 								{
@@ -3141,10 +5894,6 @@ void ATestHud::BuildLevel()
 											convertedTrackPos.Y = 15 - newTrackPos.Y;
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 											tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-											if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-											{
-												GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-											}
 										}
 									}
 								}
@@ -3174,10 +5923,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(correctedCurrentTurnDist, 0);
@@ -3234,10 +5979,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -3251,10 +5992,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//is this really the best way to do this??//:>:P
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(0, correctedCurrentTurnDist);
@@ -3319,10 +6056,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -3349,10 +6082,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(correctedCurrentTurnDist, 0);
@@ -3361,10 +6090,6 @@ void ATestHud::BuildLevel()
 								convertedTrackPos.Y = 15 - newTrackPos.Y;
 
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								if (currentPairTurnDirections[currentTurnIndex] == 1)
 								{
@@ -3438,10 +6163,6 @@ void ATestHud::BuildLevel()
 													convertedTrackPos.Y = 15 - newTrackPos.Y;
 													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 													tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-													if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-													{
-														GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-													}
 												}
 											}
 										}
@@ -3460,10 +6181,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//is this really the best way to do this??//:>:P
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(0, correctedCurrentTurnDist);
@@ -3520,10 +6237,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -3553,10 +6266,7 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
+
 									break;
 								case 3:
 									newTrackPos = culminatingIntersectionPos - FVector2D(0, 1);
@@ -3565,10 +6275,7 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
+
 									break;
 								default:
 									break;
@@ -3586,10 +6293,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (culminatingIntersectionDir % 2);
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 							}
 						}
@@ -3634,10 +6337,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(0, correctedCurrentTurnDist);
@@ -3694,10 +6393,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -3711,10 +6406,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//is this really the best way to do this??//:>:P
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(correctedCurrentTurnDist, 0);
@@ -3772,10 +6463,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								if (currentIntersectionAdjustmentTracker == 1 && currentPairTurnDistances.Num() == 2)
 								{
@@ -3792,10 +6479,6 @@ void ATestHud::BuildLevel()
 											convertedTrackPos.Y = 15 - newTrackPos.Y;
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 											tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-											if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-											{
-												GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-											}
 										}
 									}
 								}
@@ -3825,10 +6508,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(0, correctedCurrentTurnDist);
@@ -3885,10 +6564,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -3902,10 +6577,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//is this really the best way to do this??//:>:P
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(correctedCurrentTurnDist, 0);
@@ -3970,10 +6641,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -4000,10 +6667,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(0, correctedCurrentTurnDist);
@@ -4012,10 +6675,6 @@ void ATestHud::BuildLevel()
 								convertedTrackPos.Y = 15 - newTrackPos.Y;
 
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								if (currentPairTurnDirections[currentTurnIndex] == 1)
 								{
@@ -4089,10 +6748,6 @@ void ATestHud::BuildLevel()
 													convertedTrackPos.Y = 15 - newTrackPos.Y;
 													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 													tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-													if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-													{
-														GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-													}
 												}
 											}
 										}
@@ -4111,10 +6766,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//is this really the best way to do this??//:>:P
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(correctedCurrentTurnDist, 0);
@@ -4171,10 +6822,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -4203,10 +6850,7 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
+
 									break;
 								case 4:
 									newTrackPos = culminatingIntersectionPos - FVector2D(1, 0);
@@ -4215,10 +6859,7 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
+
 									break;
 								default:
 									break;
@@ -4236,10 +6877,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (culminatingIntersectionDir % 2);
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 							}
 						}
@@ -4285,10 +6922,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(correctedCurrentTurnDist, 0);
@@ -4345,10 +6978,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -4362,10 +6991,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//is this really the best way to do this??//:>:P
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(0, correctedCurrentTurnDist);
@@ -4423,10 +7048,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								if (currentIntersectionAdjustmentTracker == 1 && currentPairTurnDistances.Num() == 2)
 								{
@@ -4443,10 +7064,6 @@ void ATestHud::BuildLevel()
 											convertedTrackPos.Y = 15 - newTrackPos.Y;
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 											tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-											if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-											{
-												GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-											}
 										}
 									}
 								}
@@ -4476,10 +7093,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(correctedCurrentTurnDist, 0);
@@ -4536,10 +7149,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -4553,10 +7162,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//is this really the best way to do this??//:>:P
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition + FVector2D(0, correctedCurrentTurnDist);
@@ -4621,10 +7226,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -4651,10 +7252,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(correctedCurrentTurnDist, 0);
@@ -4663,10 +7260,6 @@ void ATestHud::BuildLevel()
 								convertedTrackPos.Y = 15 - newTrackPos.Y;
 
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								if (currentPairTurnDirections[currentTurnIndex] == 1)
 								{
@@ -4740,10 +7333,6 @@ void ATestHud::BuildLevel()
 													convertedTrackPos.Y = 15 - newTrackPos.Y;
 													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 													tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-													if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-													{
-														GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-													}
 												}
 											}
 										}
@@ -4762,10 +7351,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//is this really the best way to do this??//:>:P
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 
 								newTrackPos = previousTurnOrIntersectionPosition - FVector2D(0, correctedCurrentTurnDist);
@@ -4822,10 +7407,6 @@ void ATestHud::BuildLevel()
 									}
 								}
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-								if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-								{
-									GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-								}
 
 								previousTurnOrIntersectionPosition = newTrackPos;
 
@@ -4854,10 +7435,7 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
+
 									break;
 								case 1:
 									newTrackPos = culminatingIntersectionPos + FVector2D(0, 1);
@@ -4866,10 +7444,7 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
+
 									break;
 								default:
 									break;
@@ -4887,10 +7462,6 @@ void ATestHud::BuildLevel()
 									convertedTrackPos.Y = 15 - newTrackPos.Y;
 									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2 - (culminatingIntersectionDir % 2);
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-									if (tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] > 1)
-									{
-										GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED AT newTrackPos: " + newTrackPos.ToString());
-									}
 								}
 							}
 						}
@@ -4915,18 +7486,1310 @@ void ATestHud::BuildLevel()
 		/*GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current level index: " + FString::FromInt(topLevelIndex));
 		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "index " + FString::FromInt(0) + " of holeAndIntersectionPositions: " + holeAndIntersectionPositions[topLevelIndex][currentGroupIndex][0].ToString());*/
 
-	}
-
-	for (int a : tileIsTrack)
-	{
-		if (a > 1)
+		if (finalGroupingActive)
 		{
-			regenerateLevel.Add(1);
-			return;//I think I implimented this incorrectly it is running much more frequently then it should be FIXED
+			currentGroupIndex = listOfHolePositionGroupings.Num() + 1;
 		}
 	}
 
+	//setting track between the final intersection and the edge of the board
+	FVector2d finalIntersectionPos;
+	int finalIntersectionDir;
+	int distanceToEdgeOfBoard;
+	int endOfSides = 8 + FMath::Clamp((numberOfHoles - 4) / 2, 0, 6);
+	bool canAddFlare = false;
+	int directionOfFlare;
+	int extentOfFlare;
+	int remainingDistanceAfterFlare;
+
+	if (listOfHolePositionGroupings.Num() == 1)
+	{
+		finalIntersectionPos = holeAndIntersectionPositions[4][0][0];
+		finalIntersectionDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[4][0][0];
+	}
+	else
+	{
+		finalIntersectionPos = holeAndIntersectionPositions[FMath::Clamp(FMath::RoundHalfFromZero((float)listOfHolePositionGroupings.Num() / 2.0f), 1, 3) + 4][0][0];
+		finalIntersectionDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[FMath::Clamp(FMath::RoundHalfFromZero((float)listOfHolePositionGroupings.Num() / 2.0f), 1, 3) + 4][0][0];
+	}
+
+	if (15 - endOfSides > 2 && 14 > finalIntersectionPos.X && finalIntersectionPos.X > 2 && 14 > finalIntersectionPos.Y && finalIntersectionPos.Y > 2)
+	{
+		if (FMath::RandRange(0, 29) > 9)
+		{
+			canAddFlare = true;
+		}
+	}
+
+	switch (negativeOneZeroOrOne)
+	{
+	case -1 :
+		switch (finalIntersectionDir)
+		{
+		case 1:
+			finalIntersectionPos.Y += 1;
+			newTrackPos = finalIntersectionPos;
+			distanceToEdgeOfBoard = 15 - finalIntersectionPos.X;
+
+			if (canAddFlare)
+			{
+				if (FMath::RandRange(0, 19) > 9)
+				{
+					if (newTrackPos.Y < 13)
+					{
+						directionOfFlare = 1;
+					}
+					else
+					{
+						directionOfFlare = 3;
+					}
+				}
+				else
+				{
+					if (newTrackPos.Y > 3)
+					{
+						directionOfFlare = 3;
+					}
+					else
+					{
+						directionOfFlare = 1;
+					}
+				}
+
+				if (endOfSides >= newTrackPos.X)
+				{
+					distanceToEdgeOfBoard = endOfSides - newTrackPos.X + 1 + FMath::RandRange(0, 12 - endOfSides);
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
+				}
+				else
+				{
+					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.X));
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
+				}
+			}
+
+			convertedTrackPos.X = newTrackPos.X - 1;
+			convertedTrackPos.Y = 15 - newTrackPos.Y;
+			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+			{
+				newTrackPos = finalIntersectionPos + FVector2D(a, 0);
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+			}
+
+			if (canAddFlare)
+			{
+				switch (directionOfFlare)
+				{
+				case 1:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+
+					newTrackPos.X += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.Y += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.X += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				case 3:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+
+					newTrackPos.X += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.Y -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.Y -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.X += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			break;
+		case 2:
+			newTrackPos = finalIntersectionPos;
+			distanceToEdgeOfBoard = 15 - finalIntersectionPos.X;
+
+			if (canAddFlare)
+			{
+				if (FMath::RandRange(0, 19) > 9)
+				{
+					if (newTrackPos.Y < 13)
+					{
+						directionOfFlare = 1;
+					}
+					else
+					{
+						directionOfFlare = 3;
+					}
+				}
+				else
+				{
+					if (newTrackPos.Y > 3)
+					{
+						directionOfFlare = 3;
+					}
+					else
+					{
+						directionOfFlare = 1;
+					}
+				}
+
+				if (endOfSides >= newTrackPos.X)
+				{
+					distanceToEdgeOfBoard = endOfSides - newTrackPos.X + 1 + FMath::RandRange(0, 12 - endOfSides);
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
+				}
+				else
+				{
+					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.X));
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
+				}
+			}
+
+			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+			{
+				newTrackPos = finalIntersectionPos + FVector2D(a, 0);
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+			}
+
+			if (canAddFlare)
+			{
+				switch (directionOfFlare)
+				{
+				case 1:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+
+					newTrackPos.X += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.Y += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.X += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				case 3:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+
+					newTrackPos.X += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.Y -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.Y -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.X += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			break;
+		case 3:
+			finalIntersectionPos.Y -= 1;
+			newTrackPos = finalIntersectionPos;
+			distanceToEdgeOfBoard = 15 - finalIntersectionPos.X;
+
+			if (canAddFlare)
+			{
+				if (FMath::RandRange(0, 19) > 9)
+				{
+					if (newTrackPos.Y < 13)
+					{
+						directionOfFlare = 1;
+					}
+					else
+					{
+						directionOfFlare = 3;
+					}
+				}
+				else
+				{
+					if (newTrackPos.Y > 3)
+					{
+						directionOfFlare = 3;
+					}
+					else
+					{
+						directionOfFlare = 1;
+					}
+				}
+
+				if (endOfSides >= newTrackPos.X)
+				{
+					distanceToEdgeOfBoard = endOfSides - newTrackPos.X + 1 + FMath::RandRange(0, 12 - endOfSides);
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
+				}
+				else
+				{
+					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.X));
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
+				}
+			}
+
+			convertedTrackPos.X = newTrackPos.X - 1;
+			convertedTrackPos.Y = 15 - newTrackPos.Y;
+			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+			{
+				newTrackPos = finalIntersectionPos + FVector2D(a, 0);
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+			}
+
+			if (canAddFlare)
+			{
+				switch (directionOfFlare)
+				{
+				case 1:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+
+					newTrackPos.X += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.Y += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.X += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				case 3:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+
+					newTrackPos.X += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.Y -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.Y -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.X += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			break;
+		}
+
+		break;
+	case 0 :
+		switch (finalIntersectionDir)
+		{
+		case 1:
+			newTrackPos = finalIntersectionPos;
+			distanceToEdgeOfBoard = 15 - finalIntersectionPos.Y;
+
+			if (canAddFlare)
+			{
+				if (FMath::RandRange(0, 19) > 9)
+				{
+					if (newTrackPos.X > 3)
+					{
+						directionOfFlare = 4;
+					}
+					else
+					{
+						directionOfFlare = 2;
+					}
+				}
+				else
+				{
+					if (newTrackPos.X < 13)
+					{
+						directionOfFlare = 2;
+					}
+					else
+					{
+						directionOfFlare = 4;
+					}
+				}
+
+				if (endOfSides >= newTrackPos.Y)
+				{
+					distanceToEdgeOfBoard = endOfSides - newTrackPos.Y + 1 + FMath::RandRange(0, 12 - endOfSides);
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.Y);
+				}
+				else
+				{
+					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.Y));
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.Y);
+				}
+			}
+
+			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+			{
+				newTrackPos = finalIntersectionPos + FVector2D(0, a);
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+			}
+
+			if (canAddFlare)
+			{
+				switch (directionOfFlare)
+				{
+				case 2:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.X, 1, 3));
+
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.X += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.X += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.Y += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				case 4:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.X - 3, 1, 3));
+
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.X -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.X -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.Y += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			break;
+		case 2:
+			finalIntersectionPos.X += 1;
+			newTrackPos = finalIntersectionPos;
+			distanceToEdgeOfBoard = 15 - finalIntersectionPos.Y;
+
+			if (canAddFlare)
+			{
+				if (FMath::RandRange(0, 19) > 9)
+				{
+					if (newTrackPos.X > 3)
+					{
+						directionOfFlare = 4;
+					}
+					else
+					{
+						directionOfFlare = 2;
+					}
+				}
+				else
+				{
+					if (newTrackPos.X < 13)
+					{
+						directionOfFlare = 2;
+					}
+					else
+					{
+						directionOfFlare = 4;
+					}
+				}
+
+				if (endOfSides >= newTrackPos.Y)
+				{
+					distanceToEdgeOfBoard = endOfSides - newTrackPos.Y + 1 + FMath::RandRange(0, 12 - endOfSides);
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.Y);
+				}
+				else
+				{
+					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.Y));
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.Y);
+				}
+			}
+
+			convertedTrackPos.X = newTrackPos.X - 1;
+			convertedTrackPos.Y = 15 - newTrackPos.Y;
+			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+			{
+				newTrackPos = finalIntersectionPos + FVector2D(0, a);
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+			}
+
+			if (canAddFlare)
+			{
+				switch (directionOfFlare)
+				{
+				case 2:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.X, 1, 3));
+
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.X += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.X += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.Y += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				case 4:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.X - 3, 1, 3));
+
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.X -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.X -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.Y += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			break;
+		case 4:
+			finalIntersectionPos.X -= 1;
+			newTrackPos = finalIntersectionPos;
+			distanceToEdgeOfBoard = 15 - finalIntersectionPos.Y;
+
+			if (canAddFlare)
+			{
+				if (FMath::RandRange(0, 19) > 9)
+				{
+					if (newTrackPos.X > 3)
+					{
+						directionOfFlare = 4;
+					}
+					else
+					{
+						directionOfFlare = 2;
+					}
+				}
+				else
+				{
+					if (newTrackPos.X < 13)
+					{
+						directionOfFlare = 2;
+					}
+					else
+					{
+						directionOfFlare = 4;
+					}
+				}
+
+				if (endOfSides >= newTrackPos.Y)
+				{
+					distanceToEdgeOfBoard = endOfSides - newTrackPos.Y + 1 + FMath::RandRange(0, 12 - endOfSides);
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.Y);
+				}
+				else
+				{
+					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.Y));
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.Y);
+				}
+			}
+
+			convertedTrackPos.X = newTrackPos.X - 1;
+			convertedTrackPos.Y = 15 - newTrackPos.Y;
+			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+			{
+				newTrackPos = finalIntersectionPos + FVector2D(0, a);
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+			}
+
+			if (canAddFlare)
+			{
+				switch (directionOfFlare)
+				{
+				case 2:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.X, 1, 3));
+
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.X += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.X += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.Y += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				case 4:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.X - 3, 1, 3));
+
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.X -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.X -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.Y += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			break;
+		}
+
+		break;
+	case 1 :
+		switch (finalIntersectionDir)
+		{
+		case 1 :
+			finalIntersectionPos.Y += 1;
+			newTrackPos = finalIntersectionPos;
+			distanceToEdgeOfBoard = finalIntersectionPos.X - 1;
+
+			if (canAddFlare)
+			{
+				if (FMath::RandRange(0, 19) > 9)
+				{
+					if (newTrackPos.Y > 3)
+					{
+						directionOfFlare = 3;
+					}
+					else
+					{
+						directionOfFlare = 1;
+					}
+				}
+				else
+				{
+					if (newTrackPos.Y < 13)
+					{
+						directionOfFlare = 1;
+					}
+					else
+					{
+						directionOfFlare = 3;
+					}
+				}
+
+				if (endOfSides >= 16 - newTrackPos.X)
+				{
+					distanceToEdgeOfBoard = endOfSides - (16 - newTrackPos.X) + 1 + FMath::RandRange(0, 12 - endOfSides);
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + (16 - newTrackPos.X));
+				}
+				else
+				{
+					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - (16 - newTrackPos.X)));
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + (16 - newTrackPos.X));
+				}
+			}
+
+			convertedTrackPos.X = newTrackPos.X - 1;
+			convertedTrackPos.Y = 15 - newTrackPos.Y;
+			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+			{
+				newTrackPos = finalIntersectionPos - FVector2D(a, 0);
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+			}
+
+			if (canAddFlare)
+			{
+				switch (directionOfFlare)
+				{
+				case 1:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+
+					newTrackPos.X -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.Y += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.X -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				case 3:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+
+					newTrackPos.X -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.Y -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.Y -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.X -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			break;
+		case 3 :
+			finalIntersectionPos.Y -= 1;
+			newTrackPos = finalIntersectionPos;
+			distanceToEdgeOfBoard = finalIntersectionPos.X - 1;
+
+			if (canAddFlare)
+			{
+				if (FMath::RandRange(0, 19) > 9)
+				{
+					if (newTrackPos.Y > 3)
+					{
+						directionOfFlare = 3;
+					}
+					else
+					{
+						directionOfFlare = 1;
+					}
+				}
+				else
+				{
+					if (newTrackPos.Y < 13)
+					{
+						directionOfFlare = 1;
+					}
+					else
+					{
+						directionOfFlare = 3;
+					}
+				}
+
+				if (endOfSides >= 16 - newTrackPos.X)
+				{
+					distanceToEdgeOfBoard = endOfSides - (16 - newTrackPos.X) + 1 + FMath::RandRange(0, 12 - endOfSides);
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + (16 - newTrackPos.X));
+				}
+				else
+				{
+					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - (16 - newTrackPos.X)));
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + (16 - newTrackPos.X));
+				}
+			}
+
+			convertedTrackPos.X = newTrackPos.X - 1;
+			convertedTrackPos.Y = 15 - newTrackPos.Y;
+			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+			{
+				newTrackPos = finalIntersectionPos - FVector2D(a, 0);
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+			}
+
+			if (canAddFlare)
+			{
+				switch (directionOfFlare)
+				{
+				case 1:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+
+					newTrackPos.X -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.Y += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.X -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				case 3:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+
+					newTrackPos.X -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.Y -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.Y -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.X -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			break;
+		case 4 :
+			newTrackPos = finalIntersectionPos;
+			distanceToEdgeOfBoard = finalIntersectionPos.X - 1;
+
+			if (canAddFlare)
+			{
+				if (FMath::RandRange(0, 19) > 9)
+				{
+					if (newTrackPos.Y > 3)
+					{
+						directionOfFlare = 3;
+					}
+					else
+					{
+						directionOfFlare = 1;
+					}
+				}
+				else
+				{
+					if (newTrackPos.Y < 13)
+					{
+						directionOfFlare = 1;
+					}
+					else
+					{
+						directionOfFlare = 3;
+					}
+				}
+
+				if (endOfSides >= 16 - newTrackPos.X)
+				{
+					distanceToEdgeOfBoard = endOfSides - (16 - newTrackPos.X) + 1 + FMath::RandRange(0, 12 - endOfSides);
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + (16 - newTrackPos.X));
+				}
+				else
+				{
+					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - (16 - newTrackPos.X)));
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + (16 - newTrackPos.X));
+				}
+			}
+
+			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+			{
+				newTrackPos = finalIntersectionPos - FVector2D(a, 0);
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+			}
+
+			if (canAddFlare)
+			{
+				switch (directionOfFlare)
+				{
+				case 1:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+
+					newTrackPos.X -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.Y += 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.X -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				case 3:
+					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+
+					newTrackPos.X -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= extentOfFlare; a++)
+					{
+						newTrackPos.Y -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+
+					newTrackPos.Y -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+					{
+						newTrackPos.X -= 1;
+
+						convertedTrackPos.X = newTrackPos.X - 1;
+						convertedTrackPos.Y = 15 - newTrackPos.Y;
+						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			break;
+		}
+
+		break;
+	default:
+		break;
+	}
+
 	//LANDSCAPE DATA
+
+	//placing the holes
 	int currentHoleDir;
 
 	for (int currentGroupIndex = 0; currentGroupIndex < listOfHolePositionGroupings.Num(); currentGroupIndex++)
@@ -4946,19 +8809,366 @@ void ATestHud::BuildLevel()
 			{
 			case 1 :
 				landscapeArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 				break;
 			case 2 :
 				landscapeArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 				break;
 			case 3 :
 				landscapeArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 				break;
 			case 4 :
 				landscapeArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 				break;
 			default:
 				break;
 			}
+		}
+	}
+
+	//shaping the river
+	int dirOfRiver;
+	int riverStartingPos;
+	int x = 0;
+	int y = 8;
+	int startingSegment = FMath::RandRange(1, 3);
+	FVector2D newRiverPos;
+	FVector2D convertedRiverPos;
+	int indexFormatByRiverDir;
+	int pondMetric;
+	TArray<TArray< int> > pondStruct = 
+	{
+		{ 10, 7 },
+		{ 8 },
+		{ 9 }
+	};
+	int pondIndex;
+	FVector2D newPondPos;
+	int canAddPond = 1;
+	FVector2D relevantPos;
+	bool pondAdded = true;
+	bool canTurn;
+	bool canMakeRiver = true;
+	TArray <int> holePositionsRelevantVerts;
+	TArray <int> vertsToRemove;
+	TArray <int> viableStartingPositionsRiverDirTwo = { 8, 9, 10, 11, 12, 13 };
+	TArray <int> viableStartingPositionsRiverDirThree = { 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
+
+	switch (FMath::RandRange(0, 2))
+	{
+	case 0 :
+		dirOfRiver = 2;
+
+		for (FVector2D b : holePositions)
+		{
+			holePositionsRelevantVerts.Add(b.Y);
+		}
+
+		for (int b : viableStartingPositionsRiverDirTwo)
+		{
+			if (holePositionsRelevantVerts.Find(b) + 1)
+			{
+				vertsToRemove.Add(b);
+			}
+		}
+
+		for (int b : vertsToRemove)
+		{
+			viableStartingPositionsRiverDirTwo.Remove(b);
+		}
+
+		if (viableStartingPositionsRiverDirTwo.Num())
+		{
+			riverStartingPos = viableStartingPositionsRiverDirTwo[FMath::RandRange(0, viableStartingPositionsRiverDirTwo.Num() - 1)];
+		}
+		else
+		{
+			canMakeRiver = false;
+		}
+
+		newRiverPos = FVector2D(0, riverStartingPos);
+
+		indexFormatByRiverDir = 16;//abs((dirOfRiver * 3 - 10) / 2) * 3 + 10;//will this abs actually work? 
+
+		break;
+	case 1 :
+		dirOfRiver = 3;
+
+		for (FVector2D b : holePositions)
+		{
+			holePositionsRelevantVerts.Add(b.X);
+		}
+
+		for (int b : viableStartingPositionsRiverDirThree)
+		{
+			if (holePositionsRelevantVerts.Find(b) + 1)
+			{
+				vertsToRemove.Add(b);
+			}
+		}
+
+		for (int b : vertsToRemove)
+		{
+			viableStartingPositionsRiverDirThree.Remove(b);
+		}
+
+		if (viableStartingPositionsRiverDirThree.Num())
+		{
+			riverStartingPos = viableStartingPositionsRiverDirThree[FMath::RandRange(0, viableStartingPositionsRiverDirThree.Num() - 1)];
+		}
+		else
+		{
+			canMakeRiver = false;
+		}
+
+		newRiverPos = FVector2D(riverStartingPos, 16);
+
+		indexFormatByRiverDir = 10;
+		break;
+	case 2 :
+		dirOfRiver = 4;
+
+		for (FVector2D b : holePositions)
+		{
+			holePositionsRelevantVerts.Add(b.Y);
+		}
+
+		for (int b : viableStartingPositionsRiverDirTwo)
+		{
+			if (holePositionsRelevantVerts.Find(b) + 1)
+			{
+				vertsToRemove.Add(b);
+			}
+		}
+
+		for (int b : vertsToRemove)
+		{
+			viableStartingPositionsRiverDirTwo.Remove(b);
+		}
+
+		if (viableStartingPositionsRiverDirTwo.Num())
+		{
+			riverStartingPos = viableStartingPositionsRiverDirTwo[FMath::RandRange(0, viableStartingPositionsRiverDirTwo.Num() - 1)];
+		}
+		else
+		{
+			canMakeRiver = false;
+		}
+
+		newRiverPos = FVector2D(16, riverStartingPos);
+
+		indexFormatByRiverDir = 13;
+
+		break;
+	default:
+		break;
+	}
+
+	while (canMakeRiver)
+	{
+		for (int a = startingSegment; a <= 3; a++)
+		{
+			newRiverPos += FVector2D(1 * ((dirOfRiver - 3) * -1), -1 * (dirOfRiver % 2));
+			if (newRiverPos.Y < 1 || newRiverPos.X > 15 || newRiverPos.X < 1)
+			{
+				break;
+			}
+
+			convertedRiverPos.X = newRiverPos.X - 1;
+			convertedRiverPos.Y = 15 - newRiverPos.Y;
+			landscapeArr[convertedRiverPos.Y * 15 + convertedRiverPos.X] = indexFormatByRiverDir + a;
+		}
+		if (newRiverPos.Y < 1 || newRiverPos.X > 15 || newRiverPos.X < 1)
+		{
+			break; //is this break here going to be enough or should I impliment canMakeRiver = false
+		}
+		startingSegment = 1;
+
+		switch (dirOfRiver)
+		{
+		case 2:
+			if (newRiverPos.X + 1 > 13 || newRiverPos.Y - 1 < 1)
+			{
+				canAddPond -= canAddPond;
+				break;//does this break the switch or just the conditional?
+			}
+			newPondPos = newRiverPos + FVector2D(1, 1);
+			break;
+		case 3:
+			if (newRiverPos.Y - 1 < 3 || newRiverPos.X - 1 < 1 || newRiverPos.X - 1 > 13)
+			{
+				canAddPond -= canAddPond;
+				break;
+			}
+			newPondPos = newRiverPos + FVector2D(-1, -1);
+			break;
+		case 4:
+			if (newRiverPos.X - 3 < 1 || newRiverPos.Y - 1 < 1)
+			{
+				canAddPond -= canAddPond;
+				break;
+			}
+			newPondPos = newRiverPos + FVector2D(-3, 1);
+			break;
+		default:
+			break;
+		}
+
+		for (int b = 0; b < 3; b++)
+		{
+			for (int c = 0; c < 3; c++)
+			{
+				relevantPos = newPondPos + FVector2D(b, -c);
+
+				if (holePositions.Find(relevantPos) + 1)
+				{
+					canAddPond -= canAddPond;
+				}
+			}
+		}
+
+		if (FMath::RandRange(0, 6) > 3 && canAddPond)
+		{// a pond or waterfall occurs
+			pondMetric = indexFormatByRiverDir / 3 - 3;
+
+			if (pondStruct[pondMetric].Num())
+			{
+				pondIndex = FMath::RandRange(0, pondStruct[pondMetric].Num() - 1);
+
+				convertedRiverPos.X = newPondPos.X - 1;
+				convertedRiverPos.Y = 15 - newPondPos.Y;
+				pondPositionArr.Add(convertedRiverPos);
+				pondSpecifierArr.Add(pondStruct[pondMetric][pondIndex]);
+				pondStruct[pondMetric].RemoveAt(pondIndex);
+
+				newRiverPos += 3 * FVector2D(1 * ((dirOfRiver - 3) * -1), -1 * (dirOfRiver % 2));
+				x += 1;
+			}
+		}
+		canAddPond = 1;
+
+		switch (dirOfRiver)
+		{
+		case 2:
+			if (newRiverPos.X + 1 > 15)
+			{
+				break;
+			}
+
+			for (FVector2D b : holePositions)
+			{
+				if (b.X == newRiverPos.X + 1)
+				{
+					canTurn = false;
+				}
+			}
+
+			if (FMath::RandRange(x, 15) > 5 && canTurn)
+			{// a turn occurs
+				newRiverPos.X += 1;
+
+				convertedRiverPos.X = newRiverPos.X - 1;
+				convertedRiverPos.Y = 15 - newRiverPos.Y;
+				landscapeArr[convertedRiverPos.Y * 15 + convertedRiverPos.X] = 27;
+
+				dirOfRiver = 3;
+				indexFormatByRiverDir = 10;
+				x = -1;
+				startingSegment = 2;
+			}
+			break;
+		case 3:
+			if (newRiverPos.Y - 1 < 1)
+			{
+				break;
+			}
+
+			for (FVector2D b : holePositions)
+			{
+				if (b.Y == newRiverPos.Y - 1)
+				{
+					canTurn = false;
+				}
+			}
+
+			if (FMath::RandRange(x, 15) > 5 && canTurn)
+			{// a turn occurs
+				newRiverPos.Y -= 1;
+
+				convertedRiverPos.X = newRiverPos.X - 1;
+				convertedRiverPos.Y = 15 - newRiverPos.Y;
+
+				if (FMath::RandRange(0, 19) > 9)
+				{// turning towards 2
+					landscapeArr[convertedRiverPos.Y * 15 + convertedRiverPos.X] = 26;
+					dirOfRiver = 2;
+					indexFormatByRiverDir = 16;
+				}
+				else
+				{// turning towards 4
+					landscapeArr[convertedRiverPos.Y * 15 + convertedRiverPos.X] = 28;
+					dirOfRiver = 4;
+					indexFormatByRiverDir = 13;
+				}
+				x = -1;
+				startingSegment = 2;
+			}
+			break;
+		case 4:
+			if (newRiverPos.X - 1 < 1)
+			{
+				break;
+			}
+
+			for (FVector2D b : holePositions)
+			{
+				if (b.X == newRiverPos.X - 1)
+				{
+					canTurn = false;
+				}
+			}
+
+			if (FMath::RandRange(x, 15) > 5 && canTurn)
+			{// a turn occurs
+				newRiverPos.X -= 1;
+
+				convertedRiverPos.X = newRiverPos.X - 1;
+				convertedRiverPos.Y = 15 - newRiverPos.Y;
+				landscapeArr[convertedRiverPos.Y * 15 + convertedRiverPos.X] = 25;
+
+				dirOfRiver = 3;
+				indexFormatByRiverDir = 10;
+				x = -1;
+				startingSegment = 2;
+			}
+			break;
+		}
+		canTurn = true;
+		x += 1;
+	}
+
+	for (FVector2D a : pondPositionArr)
+	{
+		for (int b = 0; b < 3; b++)
+		{
+			for (int c = 0; c < 3; c++)
+			{
+				relevantPos = a + FVector2D(b, c);
+				landscapeArr[relevantPos.Y * 15 + relevantPos.X] = 29;
+			}
+		}
+	}
+
+	for (int a : tileIsTrack)
+	{
+		if (a > 1)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED ");
+			//regenerateLevel.Add(1);
+			//return;//I think I implimented this incorrectly it is running much more frequently then it should be FIXED
 		}
 	}
 
@@ -4971,9 +9181,35 @@ void ATestHud::BuildLevel()
 			.OwningHUD(this)
 			.landscapeArr(landscapeArr)
 			.trackArr(trackArr)
+			.pondSpecifierArr(pondSpecifierArr)
+			.pondPositionArr(pondPositionArr)
 			.tileIsIntersection(tileIsIntersection)
 			.playerOnePlayerController(playerOnePlayerController)
 			.grass_VMUI_1(grass_VMUI_1)
+			.grass_VMUI_2(grass_VMUI_2)
+			.grass_VMUI_3(grass_VMUI_3)
+			.pondHorizontal_VMUI(pondHorizontal_VMUI)
+			.pondVerticleFlowingLeft_VMUI(pondVerticleFlowingLeft_VMUI)
+			.pondVerticleFlowingRight_VMUI(pondVerticleFlowingRight_VMUI)
+			.riverFlowingDown_VMUI_1(riverFlowingDown_VMUI_1)
+			.riverFlowingDown_VMUI_2(riverFlowingDown_VMUI_2)
+			.riverFlowingDown_VMUI_3(riverFlowingDown_VMUI_3)
+			.riverFlowingLeft_VMUI_1(riverFlowingLeft_VMUI_1)
+			.riverFlowingLeft_VMUI_2(riverFlowingLeft_VMUI_2)
+			.riverFlowingLeft_VMUI_3(riverFlowingLeft_VMUI_3)
+			.riverFlowingRight_VMUI_1(riverFlowingRight_VMUI_1)
+			.riverFlowingRight_VMUI_2(riverFlowingRight_VMUI_2)
+			.riverFlowingRight_VMUI_3(riverFlowingRight_VMUI_3)
+			.tree_VMUI_1(tree_VMUI_1)
+			.tree_VMUI_2(tree_VMUI_2)
+			.tree_VMUI_3(tree_VMUI_3)
+			.tree_VMUI_4(tree_VMUI_4)
+			.tree_VMUI_5(tree_VMUI_5)
+			.waterfall_VMUI(waterfall_VMUI)
+			.riverTurning_VMUI_1(riverTurning_VMUI_1)
+			.riverTurning_VMUI_2(riverTurning_VMUI_2)
+			.riverTurning_VMUI_3(riverTurning_VMUI_3)
+			.riverTurning_VMUI_4(riverTurning_VMUI_4)
 			.holeFromDown_VMUI(holeFromDown_VMUI)
 			.holeFromLeft_VMUI(holeFromLeft_VMUI)
 			.holeFromRight_VMUI(holeFromRight_VMUI)
@@ -5027,6 +9263,8 @@ void ATestHud::HouseKeeping()
 	holePositions.Empty();
 	test.Empty();
 	listOfHolePositionGroupings.Empty();
+	negativeOneZeroOrOne = 0;
+	extentOfAdjustment = 1;
 
 	holeAndIntersectionPositions =
 	{

@@ -32,11 +32,63 @@ public:
 
 	SLATE_ARGUMENT(TArray<int>, trackArr)
 
+	SLATE_ARGUMENT(TArray<int>, pondSpecifierArr)
+
+	SLATE_ARGUMENT(TArray<FVector2D>, pondPositionArr)
+
 	SLATE_ARGUMENT(TArray<bool>, tileIsIntersection)
 
 	SLATE_ARGUMENT(APlayerController*, playerOnePlayerController)
 
 	SLATE_ARGUMENT(UMaterial*, grass_VMUI_1)
+
+	SLATE_ARGUMENT(UMaterial*, grass_VMUI_2)
+
+	SLATE_ARGUMENT(UMaterial*, grass_VMUI_3)
+
+	SLATE_ARGUMENT(UMaterial*, pondHorizontal_VMUI)
+
+	SLATE_ARGUMENT(UMaterial*, pondVerticleFlowingLeft_VMUI)
+
+	SLATE_ARGUMENT(UMaterial*, pondVerticleFlowingRight_VMUI)
+
+	SLATE_ARGUMENT(UMaterial*, riverFlowingDown_VMUI_1)
+
+	SLATE_ARGUMENT(UMaterial*, riverFlowingDown_VMUI_2)
+
+	SLATE_ARGUMENT(UMaterial*, riverFlowingDown_VMUI_3)
+
+	SLATE_ARGUMENT(UMaterial*, riverFlowingLeft_VMUI_1)
+
+	SLATE_ARGUMENT(UMaterial*, riverFlowingLeft_VMUI_2)
+
+	SLATE_ARGUMENT(UMaterial*, riverFlowingLeft_VMUI_3)
+
+	SLATE_ARGUMENT(UMaterial*, riverFlowingRight_VMUI_1)
+
+	SLATE_ARGUMENT(UMaterial*, riverFlowingRight_VMUI_2)
+
+	SLATE_ARGUMENT(UMaterial*, riverFlowingRight_VMUI_3)
+
+	SLATE_ARGUMENT(UMaterial*, tree_VMUI_1)
+
+	SLATE_ARGUMENT(UMaterial*, tree_VMUI_2)
+
+	SLATE_ARGUMENT(UMaterial*, tree_VMUI_3)
+
+	SLATE_ARGUMENT(UMaterial*, tree_VMUI_4)
+
+	SLATE_ARGUMENT(UMaterial*, tree_VMUI_5)
+
+	SLATE_ARGUMENT(UMaterial*, waterfall_VMUI)
+
+	SLATE_ARGUMENT(UMaterial*, riverTurning_VMUI_1)
+
+	SLATE_ARGUMENT(UMaterial*, riverTurning_VMUI_2)
+
+	SLATE_ARGUMENT(UMaterial*, riverTurning_VMUI_3)
+
+	SLATE_ARGUMENT(UMaterial*, riverTurning_VMUI_4)
 
 	SLATE_ARGUMENT(UMaterial*, holeFromDown_VMUI)
 
@@ -115,11 +167,37 @@ public:
 
 	TArray<int> landscapeArr;
 	TArray<int> trackArr;
+	TArray<int> pondSpecifierArr;
+	TArray<FVector2D> pondPositionArr;
 	TArray<bool> tileIsIntersection;
 
 	APlayerController* playerOnePlayerController;
 
 	UMaterial* grass_VMUI_1;
+	UMaterial* grass_VMUI_2;
+	UMaterial* grass_VMUI_3;
+	UMaterial* pondHorizontal_VMUI;
+	UMaterial* pondVerticleFlowingLeft_VMUI;
+	UMaterial* pondVerticleFlowingRight_VMUI;
+	UMaterial* riverFlowingDown_VMUI_1;
+	UMaterial* riverFlowingDown_VMUI_2;
+	UMaterial* riverFlowingDown_VMUI_3;
+	UMaterial* riverFlowingLeft_VMUI_1;
+	UMaterial* riverFlowingLeft_VMUI_2;
+	UMaterial* riverFlowingLeft_VMUI_3;
+	UMaterial* riverFlowingRight_VMUI_1;
+	UMaterial* riverFlowingRight_VMUI_2;
+	UMaterial* riverFlowingRight_VMUI_3;
+	UMaterial* tree_VMUI_1;
+	UMaterial* tree_VMUI_2;
+	UMaterial* tree_VMUI_3;
+	UMaterial* tree_VMUI_4;
+	UMaterial* tree_VMUI_5;
+	UMaterial* waterfall_VMUI;
+	UMaterial* riverTurning_VMUI_1;
+	UMaterial* riverTurning_VMUI_2;
+	UMaterial* riverTurning_VMUI_3;
+	UMaterial* riverTurning_VMUI_4;
 
 	UMaterial* holeFromDown_VMUI;
 	UMaterial* holeFromLeft_VMUI;
@@ -158,6 +236,30 @@ public:
 
 	//slate brushes
 	FSlateBrush* grass_SB_1;
+	FSlateBrush* grass_SB_2;
+	FSlateBrush* grass_SB_3;
+	FSlateBrush* pondHorizontal_SB;
+	FSlateBrush* pondVerticleFlowingLeft_SB;
+	FSlateBrush* pondVerticleFlowingRight_SB;
+	FSlateBrush* riverFlowingDown_SB_1;
+	FSlateBrush* riverFlowingDown_SB_2;
+	FSlateBrush* riverFlowingDown_SB_3;
+	FSlateBrush* riverFlowingLeft_SB_1;
+	FSlateBrush* riverFlowingLeft_SB_2;
+	FSlateBrush* riverFlowingLeft_SB_3;
+	FSlateBrush* riverFlowingRight_SB_1;
+	FSlateBrush* riverFlowingRight_SB_2;
+	FSlateBrush* riverFlowingRight_SB_3;
+	FSlateBrush* tree_SB_1;
+	FSlateBrush* tree_SB_2;
+	FSlateBrush* tree_SB_3;
+	FSlateBrush* tree_SB_4;
+	FSlateBrush* tree_SB_5;
+	FSlateBrush* waterfall_SB;
+	FSlateBrush* riverTurning_SB_1;
+	FSlateBrush* riverTurning_SB_2;
+	FSlateBrush* riverTurning_SB_3;
+	FSlateBrush* riverTurning_SB_4;
 
 	FSlateBrush* holeFromDown_SB;
 	FSlateBrush* holeFromLeft_SB;
@@ -235,6 +337,10 @@ public:
 	TSharedPtr< class SOverlay> marbleOverlay;
 	TSharedPtr< class FOverlaySlot> marbleOneSlot;
 	TSharedPtr< class SBox> marbleOneBox;
+
+	TSharedPtr<class SOverlay> largeTilesOverlay;
+	TSharedPtr<class SOverlay> landscapeOverlay;
+	TSharedPtr<class SOverlay> trackOverlay;
 
 	float DPIScale;
 

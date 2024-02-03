@@ -23,10 +23,58 @@ class MARBLEGAMEBLUEPRINT_API ATestHud : public AHUD
 
 public:
 	//stuff for accessing content browser assets
-	ATestHud();
+	ATestHud();//resharper? visual assist check discord
 
-	UMaterial* grass_VMUI_1;
-	UMediaPlayer* grass_MP_1;
+	UMaterial* grass_VMUI_1;// all uobject variables must be uproperty otherwise the garbage collecter will collect them
+	UMediaPlayer* grass_MP_1;//change the umaerial to material interface
+	UMaterial* grass_VMUI_2;
+	UMediaPlayer* grass_MP_2;
+	UMaterial* grass_VMUI_3;
+	UMediaPlayer* grass_MP_3;
+	UMaterial* pondHorizontal_VMUI;
+	UMediaPlayer* pondHorizontal_MP;
+	UMaterial* pondVerticleFlowingLeft_VMUI;
+	UMediaPlayer* pondVerticleFlowingLeft_MP;
+	UMaterial* pondVerticleFlowingRight_VMUI;
+	UMediaPlayer* pondVerticleFlowingRight_MP;
+	UMaterial* riverFlowingDown_VMUI_1;
+	UMediaPlayer* riverFlowingDown_MP_1;
+	UMaterial* riverFlowingDown_VMUI_2;
+	UMediaPlayer* riverFlowingDown_MP_2;
+	UMaterial* riverFlowingDown_VMUI_3;
+	UMediaPlayer* riverFlowingDown_MP_3;
+	UMaterial* riverFlowingLeft_VMUI_1;
+	UMediaPlayer* riverFlowingLeft_MP_1;
+	UMaterial* riverFlowingLeft_VMUI_2;
+	UMediaPlayer* riverFlowingLeft_MP_2;
+	UMaterial* riverFlowingLeft_VMUI_3;
+	UMediaPlayer* riverFlowingLeft_MP_3;
+	UMaterial* riverFlowingRight_VMUI_1;
+	UMediaPlayer* riverFlowingRight_MP_1;
+	UMaterial* riverFlowingRight_VMUI_2;
+	UMediaPlayer* riverFlowingRight_MP_2;
+	UMaterial* riverFlowingRight_VMUI_3;
+	UMediaPlayer* riverFlowingRight_MP_3;
+	UMaterial* tree_VMUI_1;
+	UMediaPlayer* tree_MP_1;
+	UMaterial* tree_VMUI_2;
+	UMediaPlayer* tree_MP_2;
+	UMaterial* tree_VMUI_3;
+	UMediaPlayer* tree_MP_3;
+	UMaterial* tree_VMUI_4;
+	UMediaPlayer* tree_MP_4;
+	UMaterial* tree_VMUI_5;
+	UMediaPlayer* tree_MP_5;
+	UMaterial* waterfall_VMUI;
+	UMediaPlayer* waterfall_MP;
+	UMaterial* riverTurning_VMUI_1;
+	UMediaPlayer* riverTurning_MP_1;
+	UMaterial* riverTurning_VMUI_2;
+	UMediaPlayer* riverTurning_MP_2;
+	UMaterial* riverTurning_VMUI_3;
+	UMediaPlayer* riverTurning_MP_3;
+	UMaterial* riverTurning_VMUI_4;
+	UMediaPlayer* riverTurning_MP_4;
 
 	UMaterial* holeFromDown_VMUI;
 	UMediaPlayer* holeFromDown_MP;
@@ -126,13 +174,19 @@ public:
 	TArray<FVector2D> arrOfViableHoleCoordinatesBase = { FVector2D(12, 2), FVector2D(12, 1), FVector2D(11, 2), FVector2D(11, 1), FVector2D(10, 2), FVector2D(10, 1), FVector2D(9, 2), FVector2D(9, 1), FVector2D(8, 2), FVector2D(8, 1), FVector2D(7, 2), FVector2D(7, 1), FVector2D(6, 2), FVector2D(6, 1), FVector2D(5, 2), FVector2D(5, 1), FVector2D(4, 2), FVector2D(4, 1) };
 	TArray<FVector2D> holePositions;
 
+	int negativeOneZeroOrOne;
+
 	TArray<int> test;
 	TArray<int> listOfHolePositionGroupings;
 
 	int holeCoordinateOrientation;
-	int numberOfHoles = 6;
+	int numberOfHoles = 8;
 
 	TArray<TArray<int>> nestedTArr;
+
+	int extentOfAdjustment = 2 - FMath::Clamp(numberOfHoles - 8, 0, 1);
+
+	TArray<int> regenerateLevel;
 
 	TArray<TArray<TArray<FVector2D> > > holeAndIntersectionPositions =
 	{
@@ -303,7 +357,7 @@ public:
 	};
 
 	TArray<TArray<TArray<int> > > adjustmentsAppliedToEachIntersection =
-	{
+	{// 0 is none, 1 is first of pair, 2 is second of pair, 3 signifies 1st of pair is being adjusted to correct for directions of intersections in the pair being on opposite sides
 		{
 			{ 0, 0, 0, 0 },
 			{ 0, 0, 0, 0 },
@@ -1043,7 +1097,7 @@ public:
 	};
 
 	TArray<TArray<TArray<TArray<int> > > > directionsOfTurns =
-	{//0 for right, 1 for left. and then a 2 for the intersection?.. and a 3 for straightTrack? whaat? 
+	{//0 for right, 1 for left. and then a 2 for the intersection?.. and a 3 for straightTrack? whaat? **currently im using the intersectionOrientations to determine whether or not a intersection position should be straight track, there should not be any 3s in this arr
 		{
 			{
 				{ 0, 0, 0, 0, 0, 0 },
@@ -1450,7 +1504,12 @@ public:
 
 	TArray<int> trackArr = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-	TArray<bool> tileIsIntersection = { true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+	TArray<bool> tileIsIntersection = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+
+	TArray<int> tileIsTrack = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+	TArray<FVector2D> pondPositionArr;
+	TArray<int> pondSpecifierArr;
 
 	void GenerateLevel();
 
@@ -1461,5 +1520,7 @@ public:
 	void BuildLevel();
 
 	void HouseKeeping();
+
+	void ResetRegenLevel();
 
 };
