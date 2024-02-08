@@ -85,14 +85,71 @@ public:
 	UMaterial* holeFromUp_VMUI;
 	UMediaPlayer* holeFromUp_MP;
 
+	UMaterial* flag_VMUI_1;
+	UMediaPlayer* flag_MP_1;
+	UMaterial* flag_VMUI_2;
+	UMediaPlayer* flag_MP_2;
+	UMaterial* flag_VMUI_3;
+	UMediaPlayer* flag_MP_3;
+	UMaterial* flag_VMUI_4;
+	UMediaPlayer* flag_MP_4;
+	UMaterial* flag_VMUI_5;
+	UMediaPlayer* flag_MP_5;
+	UMaterial* flag_VMUI_6;
+	UMediaPlayer* flag_MP_6;
+	UMaterial* flag_VMUI_7;
+	UMediaPlayer* flag_MP_7;
+	UMaterial* flag_VMUI_8;
+	UMediaPlayer* flag_MP_8;
+	UMaterial* flag_VMUI_9;
+	UMediaPlayer* flag_MP_9;
+	UMaterial* flag_VMUI_10;
+	UMediaPlayer* flag_MP_10;
+	UMaterial* flag_VMUI_11;
+	UMediaPlayer* flag_MP_11;
+	UMaterial* flag_VMUI_12;
+	UMediaPlayer* flag_MP_12;
+	UMaterial* flag_VMUI_13;
+	UMediaPlayer* flag_MP_13;
+	UMaterial* flag_VMUI_14;
+	UMediaPlayer* flag_MP_14;
+	UMaterial* flag_VMUI_15;
+	UMediaPlayer* flag_MP_15;
+	UMaterial* flag_VMUI_16;
+	UMediaPlayer* flag_MP_16;
+
 	UMaterial* buttonFromDownTurningRightZero_SMUI;
+	UMaterial* buttonFromDownTurningRightOne_SMUI;
+	UMaterial* buttonFromDownTurningRightTwo_SMUI;
+	UMaterial* buttonFromDownTurningRightThree_SMUI;
 	UMaterial* buttonFromDownTurningLeftZero_SMUI;
+	UMaterial* buttonFromDownTurningLeftOne_SMUI;
+	UMaterial* buttonFromDownTurningLeftTwo_SMUI;
+	UMaterial* buttonFromDownTurningLeftThree_SMUI;
 	UMaterial* buttonFromLeftTurningRightZero_SMUI;
+	UMaterial* buttonFromLeftTurningRightOne_SMUI;
+	UMaterial* buttonFromLeftTurningRightTwo_SMUI;
+	UMaterial* buttonFromLeftTurningRightThree_SMUI;
 	UMaterial* buttonFromLeftTurningLeftZero_SMUI;
+	UMaterial* buttonFromLeftTurningLeftOne_SMUI;
+	UMaterial* buttonFromLeftTurningLeftTwo_SMUI;
+	UMaterial* buttonFromLeftTurningLeftThree_SMUI;
 	UMaterial* buttonFromRightTurningRightZero_SMUI;
+	UMaterial* buttonFromRightTurningRightOne_SMUI;
+	UMaterial* buttonFromRightTurningRightTwo_SMUI;
+	UMaterial* buttonFromRightTurningRightThree_SMUI;
 	UMaterial* buttonFromRightTurningLeftZero_SMUI;
+	UMaterial* buttonFromRightTurningLeftOne_SMUI;
+	UMaterial* buttonFromRightTurningLeftTwo_SMUI;
+	UMaterial* buttonFromRightTurningLeftThree_SMUI;
 	UMaterial* buttonFromUpTurningRightZero_SMUI;
+	UMaterial* buttonFromUpTurningRightOne_SMUI;
+	UMaterial* buttonFromUpTurningRightTwo_SMUI;
+	UMaterial* buttonFromUpTurningRightThree_SMUI;
 	UMaterial* buttonFromUpTurningLeftZero_SMUI;
+	UMaterial* buttonFromUpTurningLeftOne_SMUI;
+	UMaterial* buttonFromUpTurningLeftTwo_SMUI;
+	UMaterial* buttonFromUpTurningLeftThree_SMUI;
 
 	UMaterial* verticleRail_SMUI;
 	UMaterial* horizontalRail_SMUI;
@@ -109,6 +166,15 @@ public:
 	UMaterial* marble_SMUI_5;
 	UMaterial* marble_SMUI_6;
 	UMaterial* marble_SMUI_7;
+	UMaterial* marble_SMUI_8;
+	UMaterial* marble_SMUI_9;
+	UMaterial* marble_SMUI_10;
+	UMaterial* marble_SMUI_11;
+	UMaterial* marble_SMUI_12;
+	UMaterial* marble_SMUI_13;
+	UMaterial* marble_SMUI_14;
+	UMaterial* marble_SMUI_15;
+	UMaterial* marble_SMUI_16;
 
 	UMaterial* placeholderTrash;
 	UMaterial* emptyImg_SMUI;
@@ -181,6 +247,9 @@ public:
 
 	int holeCoordinateOrientation;
 	int numberOfHoles = 8;
+
+	FVector2D startingPos;
+	int startingDir;
 
 	TArray<TArray<int>> nestedTArr;
 

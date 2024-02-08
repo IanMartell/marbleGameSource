@@ -474,46 +474,415 @@ ATestHud::ATestHud()
 		holeFromUp_MP->OpenSource((UImgMediaSource*)tempVar_holeFromUp_IS.Object);
 	}
 
+	//flags
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_1.flag_VMUI_1'"));
+	if (tempVar_flag_VMUI_1.Object != NULL)
+	{
+		flag_VMUI_1 = (UMaterial*)tempVar_flag_VMUI_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_1(TEXT("'/Game/Movies/mediaPlayers/flag_MP_1.flag_MP_1'"));
+	if (tempVar_flag_MP_1.Object != NULL)
+	{
+		flag_MP_1 = (UMediaPlayer*)tempVar_flag_MP_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_1(TEXT("'/Game/Movies/imageSources/flag_IS_1.flag_IS_1'"));
+	if (tempVar_flag_IS_1.Object != NULL)
+	{
+		flag_MP_1->OpenSource((UImgMediaSource*)tempVar_flag_IS_1.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_2.flag_VMUI_2'"));
+	if (tempVar_flag_VMUI_2.Object != NULL)
+	{
+		flag_VMUI_2 = (UMaterial*)tempVar_flag_VMUI_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_2(TEXT("'/Game/Movies/mediaPlayers/flag_MP_2.flag_MP_2'"));
+	if (tempVar_flag_MP_2.Object != NULL)
+	{
+		flag_MP_2 = (UMediaPlayer*)tempVar_flag_MP_2.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_2(TEXT("'/Game/Movies/imageSources/flag_IS_2.flag_IS_2'"));
+	if (tempVar_flag_IS_2.Object != NULL)
+	{
+		flag_MP_2->OpenSource((UImgMediaSource*)tempVar_flag_IS_2.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_3.flag_VMUI_3'"));
+	if (tempVar_flag_VMUI_3.Object != NULL)
+	{
+		flag_VMUI_3 = (UMaterial*)tempVar_flag_VMUI_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_3(TEXT("'/Game/Movies/mediaPlayers/flag_MP_3.flag_MP_3'"));
+	if (tempVar_flag_MP_3.Object != NULL)
+	{
+		flag_MP_3 = (UMediaPlayer*)tempVar_flag_MP_3.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_3(TEXT("'/Game/Movies/imageSources/flag_IS_3.flag_IS_3'"));
+	if (tempVar_flag_IS_3.Object != NULL)
+	{
+		flag_MP_3->OpenSource((UImgMediaSource*)tempVar_flag_IS_3.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_4(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_4.flag_VMUI_4'"));
+	if (tempVar_flag_VMUI_4.Object != NULL)
+	{
+		flag_VMUI_4 = (UMaterial*)tempVar_flag_VMUI_4.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_4(TEXT("'/Game/Movies/mediaPlayers/flag_MP_4.flag_MP_4'"));
+	if (tempVar_flag_MP_4.Object != NULL)
+	{
+		flag_MP_4 = (UMediaPlayer*)tempVar_flag_MP_4.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_4(TEXT("'/Game/Movies/imageSources/flag_IS_4.flag_IS_4'"));
+	if (tempVar_flag_IS_4.Object != NULL)
+	{
+		flag_MP_4->OpenSource((UImgMediaSource*)tempVar_flag_IS_4.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_5(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_5.flag_VMUI_5'"));
+	if (tempVar_flag_VMUI_5.Object != NULL)
+	{
+		flag_VMUI_5 = (UMaterial*)tempVar_flag_VMUI_5.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_5(TEXT("'/Game/Movies/mediaPlayers/flag_MP_5.flag_MP_5'"));
+	if (tempVar_flag_MP_5.Object != NULL)
+	{
+		flag_MP_5 = (UMediaPlayer*)tempVar_flag_MP_5.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_5(TEXT("'/Game/Movies/imageSources/flag_IS_5.flag_IS_5'"));
+	if (tempVar_flag_IS_5.Object != NULL)
+	{
+		flag_MP_5->OpenSource((UImgMediaSource*)tempVar_flag_IS_5.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_6(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_6.flag_VMUI_6'"));
+	if (tempVar_flag_VMUI_6.Object != NULL)
+	{
+		flag_VMUI_6 = (UMaterial*)tempVar_flag_VMUI_6.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_6(TEXT("'/Game/Movies/mediaPlayers/flag_MP_6.flag_MP_6'"));
+	if (tempVar_flag_MP_6.Object != NULL)
+	{
+		flag_MP_6 = (UMediaPlayer*)tempVar_flag_MP_6.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_6(TEXT("'/Game/Movies/imageSources/flag_IS_6.flag_IS_6'"));
+	if (tempVar_flag_IS_6.Object != NULL)
+	{
+		flag_MP_6->OpenSource((UImgMediaSource*)tempVar_flag_IS_6.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_7(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_7.flag_VMUI_7'"));
+	if (tempVar_flag_VMUI_7.Object != NULL)
+	{
+		flag_VMUI_7 = (UMaterial*)tempVar_flag_VMUI_7.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_7(TEXT("'/Game/Movies/mediaPlayers/flag_MP_7.flag_MP_7'"));
+	if (tempVar_flag_MP_7.Object != NULL)
+	{
+		flag_MP_7 = (UMediaPlayer*)tempVar_flag_MP_7.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_7(TEXT("'/Game/Movies/imageSources/flag_IS_7.flag_IS_7'"));
+	if (tempVar_flag_IS_7.Object != NULL)
+	{
+		flag_MP_7->OpenSource((UImgMediaSource*)tempVar_flag_IS_7.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_8(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_8.flag_VMUI_8'"));
+	if (tempVar_flag_VMUI_8.Object != NULL)
+	{
+		flag_VMUI_8 = (UMaterial*)tempVar_flag_VMUI_8.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_8(TEXT("'/Game/Movies/mediaPlayers/flag_MP_8.flag_MP_8'"));
+	if (tempVar_flag_MP_8.Object != NULL)
+	{
+		flag_MP_8 = (UMediaPlayer*)tempVar_flag_MP_8.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_8(TEXT("'/Game/Movies/imageSources/flag_IS_8.flag_IS_8'"));
+	if (tempVar_flag_IS_8.Object != NULL)
+	{
+		flag_MP_8->OpenSource((UImgMediaSource*)tempVar_flag_IS_8.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_9(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_9.flag_VMUI_9'"));
+	if (tempVar_flag_VMUI_9.Object != NULL)
+	{
+		flag_VMUI_9 = (UMaterial*)tempVar_flag_VMUI_9.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_9(TEXT("'/Game/Movies/mediaPlayers/flag_MP_9.flag_MP_9'"));
+	if (tempVar_flag_MP_9.Object != NULL)
+	{
+		flag_MP_9 = (UMediaPlayer*)tempVar_flag_MP_9.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_9(TEXT("'/Game/Movies/imageSources/flag_IS_9.flag_IS_9'"));
+	if (tempVar_flag_IS_9.Object != NULL)
+	{
+		flag_MP_9->OpenSource((UImgMediaSource*)tempVar_flag_IS_9.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_10(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_10.flag_VMUI_10'"));
+	if (tempVar_flag_VMUI_10.Object != NULL)
+	{
+		flag_VMUI_10 = (UMaterial*)tempVar_flag_VMUI_10.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_10(TEXT("'/Game/Movies/mediaPlayers/flag_MP_10.flag_MP_10'"));
+	if (tempVar_flag_MP_10.Object != NULL)
+	{
+		flag_MP_10 = (UMediaPlayer*)tempVar_flag_MP_10.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_10(TEXT("'/Game/Movies/imageSources/flag_IS_10.flag_IS_10'"));
+	if (tempVar_flag_IS_10.Object != NULL)
+	{
+		flag_MP_10->OpenSource((UImgMediaSource*)tempVar_flag_IS_10.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_11(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_11.flag_VMUI_11'"));
+	if (tempVar_flag_VMUI_11.Object != NULL)
+	{
+		flag_VMUI_11 = (UMaterial*)tempVar_flag_VMUI_11.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_11(TEXT("'/Game/Movies/mediaPlayers/flag_MP_11.flag_MP_11'"));
+	if (tempVar_flag_MP_11.Object != NULL)
+	{
+		flag_MP_11 = (UMediaPlayer*)tempVar_flag_MP_11.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_11(TEXT("'/Game/Movies/imageSources/flag_IS_11.flag_IS_11'"));
+	if (tempVar_flag_IS_11.Object != NULL)
+	{
+		flag_MP_11->OpenSource((UImgMediaSource*)tempVar_flag_IS_11.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_12(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_12.flag_VMUI_12'"));
+	if (tempVar_flag_VMUI_12.Object != NULL)
+	{
+		flag_VMUI_12 = (UMaterial*)tempVar_flag_VMUI_12.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_12(TEXT("'/Game/Movies/mediaPlayers/flag_MP_12.flag_MP_12'"));
+	if (tempVar_flag_MP_12.Object != NULL)
+	{
+		flag_MP_12 = (UMediaPlayer*)tempVar_flag_MP_12.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_12(TEXT("'/Game/Movies/imageSources/flag_IS_12.flag_IS_12'"));
+	if (tempVar_flag_IS_12.Object != NULL)
+	{
+		flag_MP_12->OpenSource((UImgMediaSource*)tempVar_flag_IS_12.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_13(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_13.flag_VMUI_13'"));
+	if (tempVar_flag_VMUI_13.Object != NULL)
+	{
+		flag_VMUI_13 = (UMaterial*)tempVar_flag_VMUI_13.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_13(TEXT("'/Game/Movies/mediaPlayers/flag_MP_13.flag_MP_13'"));
+	if (tempVar_flag_MP_13.Object != NULL)
+	{
+		flag_MP_13 = (UMediaPlayer*)tempVar_flag_MP_13.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_13(TEXT("'/Game/Movies/imageSources/flag_IS_13.flag_IS_13'"));
+	if (tempVar_flag_IS_13.Object != NULL)
+	{
+		flag_MP_13->OpenSource((UImgMediaSource*)tempVar_flag_IS_13.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_14(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_14.flag_VMUI_14'"));
+	if (tempVar_flag_VMUI_14.Object != NULL)
+	{
+		flag_VMUI_14 = (UMaterial*)tempVar_flag_VMUI_14.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_14(TEXT("'/Game/Movies/mediaPlayers/flag_MP_14.flag_MP_14'"));
+	if (tempVar_flag_MP_14.Object != NULL)
+	{
+		flag_MP_14 = (UMediaPlayer*)tempVar_flag_MP_14.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_14(TEXT("'/Game/Movies/imageSources/flag_IS_14.flag_IS_14'"));
+	if (tempVar_flag_IS_14.Object != NULL)
+	{
+		flag_MP_14->OpenSource((UImgMediaSource*)tempVar_flag_IS_14.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_15(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_15.flag_VMUI_15'"));
+	if (tempVar_flag_VMUI_15.Object != NULL)
+	{
+		flag_VMUI_15 = (UMaterial*)tempVar_flag_VMUI_15.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_15(TEXT("'/Game/Movies/mediaPlayers/flag_MP_15.flag_MP_15'"));
+	if (tempVar_flag_MP_15.Object != NULL)
+	{
+		flag_MP_15 = (UMediaPlayer*)tempVar_flag_MP_15.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_15(TEXT("'/Game/Movies/imageSources/flag_IS_15.flag_IS_15'"));
+	if (tempVar_flag_IS_15.Object != NULL)
+	{
+		flag_MP_15->OpenSource((UImgMediaSource*)tempVar_flag_IS_15.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_16(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_16.flag_VMUI_16'"));
+	if (tempVar_flag_VMUI_16.Object != NULL)
+	{
+		flag_VMUI_16 = (UMaterial*)tempVar_flag_VMUI_16.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_flag_MP_16(TEXT("'/Game/Movies/mediaPlayers/flag_MP_16.flag_MP_16'"));
+	if (tempVar_flag_MP_16.Object != NULL)
+	{
+		flag_MP_16 = (UMediaPlayer*)tempVar_flag_MP_16.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_16(TEXT("'/Game/Movies/imageSources/flag_IS_16.flag_IS_16'"));
+	if (tempVar_flag_IS_16.Object != NULL)
+	{
+		flag_MP_16->OpenSource((UImgMediaSource*)tempVar_flag_IS_16.Object);
+	}
+
 	//buttons or "intersections"
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromDownTurningRightZero_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromDown/one/buttonFromDownOneStraightStatic_SMUI.buttonFromDownOneStraightStatic_SMUI'"));
 	if (tempVar_buttonFromDownTurningRightZero_SMUI.Object != NULL)
 	{
 		buttonFromDownTurningRightZero_SMUI = (UMaterial*)tempVar_buttonFromDownTurningRightZero_SMUI.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromDownTurningRightOne_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromDown/one/buttonFromDownOneStraightClicked_SMUI.buttonFromDownOneStraightClicked_SMUI'"));
+	if (tempVar_buttonFromDownTurningRightOne_SMUI.Object != NULL)
+	{
+		buttonFromDownTurningRightOne_SMUI = (UMaterial*)tempVar_buttonFromDownTurningRightOne_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromDownTurningRightTwo_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromDown/one/buttonFromDownOneTurningStatic_SMUI.buttonFromDownOneTurningStatic_SMUI'"));
+	if (tempVar_buttonFromDownTurningRightTwo_SMUI.Object != NULL)
+	{
+		buttonFromDownTurningRightTwo_SMUI = (UMaterial*)tempVar_buttonFromDownTurningRightTwo_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromDownTurningRightThree_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromDown/one/buttonFromDownOneTurningClicked_SMUI.buttonFromDownOneTurningClicked_SMUI'"));
+	if (tempVar_buttonFromDownTurningRightThree_SMUI.Object != NULL)
+	{
+		buttonFromDownTurningRightThree_SMUI = (UMaterial*)tempVar_buttonFromDownTurningRightThree_SMUI.Object;
+	}
+
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromDownTurningLeftZero_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromDown/zero/buttonFromDownZeroStraightStatic_SMUI.buttonFromDownZeroStraightStatic_SMUI'"));
 	if (tempVar_buttonFromDownTurningLeftZero_SMUI.Object != NULL)
 	{
 		buttonFromDownTurningLeftZero_SMUI = (UMaterial*)tempVar_buttonFromDownTurningLeftZero_SMUI.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromDownTurningLeftOne_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromDown/zero/buttonFromDownZeroStraightClicked_SMUI.buttonFromDownZeroStraightClicked_SMUI'"));
+	if (tempVar_buttonFromDownTurningLeftOne_SMUI.Object != NULL)
+	{
+		buttonFromDownTurningLeftOne_SMUI = (UMaterial*)tempVar_buttonFromDownTurningLeftOne_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromDownTurningLeftTwo_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromDown/zero/buttonFromDownZeroTurningStatic_SMUI.buttonFromDownZeroTurningStatic_SMUI'"));
+	if (tempVar_buttonFromDownTurningLeftTwo_SMUI.Object != NULL)
+	{
+		buttonFromDownTurningLeftTwo_SMUI = (UMaterial*)tempVar_buttonFromDownTurningLeftTwo_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromDownTurningLeftThree_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromDown/zero/buttonFromDownZeroTurningClicked_SMUI.buttonFromDownZeroTurningClicked_SMUI'"));
+	if (tempVar_buttonFromDownTurningLeftThree_SMUI.Object != NULL)
+	{
+		buttonFromDownTurningLeftThree_SMUI = (UMaterial*)tempVar_buttonFromDownTurningLeftThree_SMUI.Object;
+	}
+
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromLeftTurningRightZero_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromLeft/one/buttonFromLeftOneStraightStatic_SMUI.buttonFromLeftOneStraightStatic_SMUI'"));
 	if (tempVar_buttonFromLeftTurningRightZero_SMUI.Object != NULL)
 	{
 		buttonFromLeftTurningRightZero_SMUI = (UMaterial*)tempVar_buttonFromLeftTurningRightZero_SMUI.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromLeftTurningRightOne_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromLeft/one/buttonFromLeftOneStraightClicked_SMUI.buttonFromLeftOneStraightClicked_SMUI'"));
+	if (tempVar_buttonFromLeftTurningRightOne_SMUI.Object != NULL)
+	{
+		buttonFromLeftTurningRightOne_SMUI = (UMaterial*)tempVar_buttonFromLeftTurningRightOne_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromLeftTurningRightTwo_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromLeft/one/buttonFromLeftOneTurningStatic_SMUI.buttonFromLeftOneTurningStatic_SMUI'"));
+	if (tempVar_buttonFromLeftTurningRightTwo_SMUI.Object != NULL)
+	{
+		buttonFromLeftTurningRightTwo_SMUI = (UMaterial*)tempVar_buttonFromLeftTurningRightTwo_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromLeftTurningRightThree_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromLeft/one/buttonFromLeftOneTurningClicked_SMUI.buttonFromLeftOneTurningClicked_SMUI'"));
+	if (tempVar_buttonFromLeftTurningRightThree_SMUI.Object != NULL)
+	{
+		buttonFromLeftTurningRightThree_SMUI = (UMaterial*)tempVar_buttonFromLeftTurningRightThree_SMUI.Object;
+	}
+
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromLeftTurningLeftZero_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromLeft/zero/buttonFromLeftZeroStraightStatic_SMUI.buttonFromLeftZeroStraightStatic_SMUI'"));
 	if (tempVar_buttonFromLeftTurningLeftZero_SMUI.Object != NULL)
 	{
 		buttonFromLeftTurningLeftZero_SMUI = (UMaterial*)tempVar_buttonFromLeftTurningLeftZero_SMUI.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromLeftTurningLeftOne_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromLeft/zero/buttonFromLeftZeroStraightClicked_SMUI.buttonFromLeftZeroStraightClicked_SMUI'"));
+	if (tempVar_buttonFromLeftTurningLeftOne_SMUI.Object != NULL)
+	{
+		buttonFromLeftTurningLeftOne_SMUI = (UMaterial*)tempVar_buttonFromLeftTurningLeftOne_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromLeftTurningLeftTwo_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromLeft/zero/buttonFromLeftZeroTurningStatic_SMUI.buttonFromLeftZeroTurningStatic_SMUI'"));
+	if (tempVar_buttonFromLeftTurningLeftTwo_SMUI.Object != NULL)
+	{
+		buttonFromLeftTurningLeftTwo_SMUI = (UMaterial*)tempVar_buttonFromLeftTurningLeftTwo_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromLeftTurningLeftThree_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromLeft/zero/buttonFromLeftZeroTurningClicked_SMUI.buttonFromLeftZeroTurningClicked_SMUI'"));
+	if (tempVar_buttonFromLeftTurningLeftThree_SMUI.Object != NULL)
+	{
+		buttonFromLeftTurningLeftThree_SMUI = (UMaterial*)tempVar_buttonFromLeftTurningLeftThree_SMUI.Object;
+	}
+
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromRightTurningRightZero_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromRight/one/buttonFromRightOneStraightStatic_SMUI.buttonFromRightOneStraightStatic_SMUI'"));
 	if (tempVar_buttonFromRightTurningRightZero_SMUI.Object != NULL)
 	{
 		buttonFromRightTurningRightZero_SMUI = (UMaterial*)tempVar_buttonFromRightTurningRightZero_SMUI.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromRightTurningRightOne_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromRight/one/buttonFromRightOneStraightClicked_SMUI.buttonFromRightOneStraightClicked_SMUI'"));
+	if (tempVar_buttonFromRightTurningRightOne_SMUI.Object != NULL)
+	{
+		buttonFromRightTurningRightOne_SMUI = (UMaterial*)tempVar_buttonFromRightTurningRightOne_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromRightTurningRightTwo_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromRight/one/buttonFromRightOneTurningStatic_SMUI.buttonFromRightOneTurningStatic_SMUI'"));
+	if (tempVar_buttonFromRightTurningRightTwo_SMUI.Object != NULL)
+	{
+		buttonFromRightTurningRightTwo_SMUI = (UMaterial*)tempVar_buttonFromRightTurningRightTwo_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromRightTurningRightThree_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromRight/one/buttonFromRightOneTurningClicked_SMUI.buttonFromRightOneTurningClicked_SMUI'"));
+	if (tempVar_buttonFromRightTurningRightThree_SMUI.Object != NULL)
+	{
+		buttonFromRightTurningRightThree_SMUI = (UMaterial*)tempVar_buttonFromRightTurningRightThree_SMUI.Object;
+	}
+
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromRightTurningLeftZero_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromRight/zero/buttonFromRightZeroStraightStatic_SMUI.buttonFromRightZeroStraightStatic_SMUI'"));
 	if (tempVar_buttonFromRightTurningLeftZero_SMUI.Object != NULL)
 	{
 		buttonFromRightTurningLeftZero_SMUI = (UMaterial*)tempVar_buttonFromRightTurningLeftZero_SMUI.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromRightTurningLeftOne_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromRight/zero/buttonFromRightZeroStraightClicked_SMUI.buttonFromRightZeroStraightClicked_SMUI'"));
+	if (tempVar_buttonFromRightTurningLeftOne_SMUI.Object != NULL)
+	{
+		buttonFromRightTurningLeftOne_SMUI = (UMaterial*)tempVar_buttonFromRightTurningLeftOne_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromRightTurningLeftTwo_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromRight/zero/buttonFromRightZeroTurningStatic_SMUI.buttonFromRightZeroTurningStatic_SMUI'"));
+	if (tempVar_buttonFromRightTurningLeftTwo_SMUI.Object != NULL)
+	{
+		buttonFromRightTurningLeftTwo_SMUI = (UMaterial*)tempVar_buttonFromRightTurningLeftTwo_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromRightTurningLeftThree_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromRight/zero/buttonFromRightZeroTurningClicked_SMUI.buttonFromRightZeroTurningClicked_SMUI'"));
+	if (tempVar_buttonFromRightTurningLeftThree_SMUI.Object != NULL)
+	{
+		buttonFromRightTurningLeftThree_SMUI = (UMaterial*)tempVar_buttonFromRightTurningLeftThree_SMUI.Object;
+	}
+
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromUpTurningRightZero_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/FromUp/one/buttonFromUpOneStraightStatic_SMUI.buttonFromUpOneStraightStatic_SMUI'"));
 	if (tempVar_buttonFromUpTurningRightZero_SMUI.Object != NULL)
 	{
 		buttonFromUpTurningRightZero_SMUI = (UMaterial*)tempVar_buttonFromUpTurningRightZero_SMUI.Object;
 	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromUpTurningRightOne_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/FromUp/one/buttonFromUpOneStraightClicked_SMUI.buttonFromUpOneStraightClicked_SMUI'"));
+	if (tempVar_buttonFromUpTurningRightOne_SMUI.Object != NULL)
+	{
+		buttonFromUpTurningRightOne_SMUI = (UMaterial*)tempVar_buttonFromUpTurningRightOne_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromUpTurningRightTwo_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/FromUp/one/buttonFromUpOneTurningStatic_SMUI.buttonFromUpOneTurningStatic_SMUI'"));
+	if (tempVar_buttonFromUpTurningRightTwo_SMUI.Object != NULL)
+	{
+		buttonFromUpTurningRightTwo_SMUI = (UMaterial*)tempVar_buttonFromUpTurningRightTwo_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromUpTurningRightThree_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/FromUp/one/buttonFromUpOneTurningClicked_SMUI.buttonFromUpOneTurningClicked_SMUI'"));
+	if (tempVar_buttonFromUpTurningRightThree_SMUI.Object != NULL)
+	{
+		buttonFromUpTurningRightThree_SMUI = (UMaterial*)tempVar_buttonFromUpTurningRightThree_SMUI.Object;
+	}
+
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromUpTurningLeftZero_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/FromUp/zero/buttonFromUpZeroStraightStatic_SMUI.buttonFromUpZeroStraightStatic_SMUI'"));
 	if (tempVar_buttonFromUpTurningLeftZero_SMUI.Object != NULL)
 	{
 		buttonFromUpTurningLeftZero_SMUI = (UMaterial*)tempVar_buttonFromUpTurningLeftZero_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromUpTurningLeftOne_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/FromUp/zero/buttonFromUpZeroStraightClicked_SMUI.buttonFromUpZeroStraightClicked_SMUI'"));
+	if (tempVar_buttonFromUpTurningLeftOne_SMUI.Object != NULL)
+	{
+		buttonFromUpTurningLeftOne_SMUI = (UMaterial*)tempVar_buttonFromUpTurningLeftOne_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromUpTurningLeftTwo_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/FromUp/zero/buttonFromUpZeroTurningStatic_SMUI.buttonFromUpZeroTurningStatic_SMUI'"));
+	if (tempVar_buttonFromUpTurningLeftTwo_SMUI.Object != NULL)
+	{
+		buttonFromUpTurningLeftTwo_SMUI = (UMaterial*)tempVar_buttonFromUpTurningLeftTwo_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromUpTurningLeftThree_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/FromUp/zero/buttonFromUpZeroTurningClicked_SMUI.buttonFromUpZeroTurningClicked_SMUI'"));
+	if (tempVar_buttonFromUpTurningLeftThree_SMUI.Object != NULL)
+	{
+		buttonFromUpTurningLeftThree_SMUI = (UMaterial*)tempVar_buttonFromUpTurningLeftThree_SMUI.Object;
 	}
 
 	//straight rail
@@ -585,6 +954,51 @@ ATestHud::ATestHud()
 	if (tempVar_marble_SMUI_7.Object != NULL)
 	{
 		marble_SMUI_7 = (UMaterial*)tempVar_marble_SMUI_7.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_marble_SMUI_8(TEXT("'/Game/Movies/spriteMaterialsForUI/marble_SMUI_8.marble_SMUI_8'"));
+	if (tempVar_marble_SMUI_8.Object != NULL)
+	{
+		marble_SMUI_8 = (UMaterial*)tempVar_marble_SMUI_8.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_marble_SMUI_9(TEXT("'/Game/Movies/spriteMaterialsForUI/marble_SMUI_9.marble_SMUI_9'"));
+	if (tempVar_marble_SMUI_9.Object != NULL)
+	{
+		marble_SMUI_9 = (UMaterial*)tempVar_marble_SMUI_9.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_marble_SMUI_10(TEXT("'/Game/Movies/spriteMaterialsForUI/marble_SMUI_10.marble_SMUI_10'"));
+	if (tempVar_marble_SMUI_10.Object != NULL)
+	{
+		marble_SMUI_10 = (UMaterial*)tempVar_marble_SMUI_10.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_marble_SMUI_11(TEXT("'/Game/Movies/spriteMaterialsForUI/marble_SMUI_11.marble_SMUI_11'"));
+	if (tempVar_marble_SMUI_11.Object != NULL)
+	{
+		marble_SMUI_11 = (UMaterial*)tempVar_marble_SMUI_11.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_marble_SMUI_12(TEXT("'/Game/Movies/spriteMaterialsForUI/marble_SMUI_12.marble_SMUI_12'"));
+	if (tempVar_marble_SMUI_12.Object != NULL)
+	{
+		marble_SMUI_12 = (UMaterial*)tempVar_marble_SMUI_12.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_marble_SMUI_13(TEXT("'/Game/Movies/spriteMaterialsForUI/marble_SMUI_13.marble_SMUI_13'"));
+	if (tempVar_marble_SMUI_13.Object != NULL)
+	{
+		marble_SMUI_13 = (UMaterial*)tempVar_marble_SMUI_13.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_marble_SMUI_14(TEXT("'/Game/Movies/spriteMaterialsForUI/marble_SMUI_14.marble_SMUI_14'"));
+	if (tempVar_marble_SMUI_14.Object != NULL)
+	{
+		marble_SMUI_14 = (UMaterial*)tempVar_marble_SMUI_14.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_marble_SMUI_15(TEXT("'/Game/Movies/spriteMaterialsForUI/marble_SMUI_15.marble_SMUI_15'"));
+	if (tempVar_marble_SMUI_15.Object != NULL)
+	{
+		marble_SMUI_15 = (UMaterial*)tempVar_marble_SMUI_15.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_marble_SMUI_16(TEXT("'/Game/Movies/spriteMaterialsForUI/marble_SMUI_16.marble_SMUI_16'"));
+	if (tempVar_marble_SMUI_16.Object != NULL)
+	{
+		marble_SMUI_16 = (UMaterial*)tempVar_marble_SMUI_16.Object;
 	}
 
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_emptyImg_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/emptyImg_SMUI.emptyImg_SMUI'"));
@@ -5184,10 +5598,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 14;//intersectiondir: 1, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 1, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 13;//intersectiondir: 1, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;//intersectiondir: 1, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -5200,10 +5616,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 12;//intersectiondir: 2, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;//intersectiondir: 2, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 11;//intersectiondir: 2, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;//intersectiondir: 2, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -5254,10 +5672,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 14;//intersectiondir: 1, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 1, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 13;//intersectiondir: 1, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;//intersectiondir: 1, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -5270,10 +5690,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 12;//intersectiondir: 2, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;//intersectiondir: 2, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 11;//intersectiondir: 2, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;//intersectiondir: 2, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -5355,10 +5777,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 14;//intersectiondir: 1, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 1, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 13;//intersectiondir: 1, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;//intersectiondir: 1, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -5371,10 +5795,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 12;//intersectiondir: 2, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;//intersectiondir: 2, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 11;//intersectiondir: 2, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;//intersectiondir: 2, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -5432,10 +5858,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 14;//intersectiondir: 1, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 1, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 13;//intersectiondir: 1, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;//intersectiondir: 1, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -5448,10 +5876,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 12;//intersectiondir: 2, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;//intersectiondir: 2, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 11;//intersectiondir: 2, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;//intersectiondir: 2, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -5517,10 +5947,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 14;//intersectiondir: 1, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 1, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 13;//intersectiondir: 1, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;//intersectiondir: 1, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -5533,10 +5965,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 12;//intersectiondir: 2, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;//intersectiondir: 2, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 11;//intersectiondir: 2, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;//intersectiondir: 2, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -5628,10 +6062,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 14;//intersectiondir: 1, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 1, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 13;//intersectiondir: 1, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;//intersectiondir: 1, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -5644,10 +6080,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 12;//intersectiondir: 2, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;//intersectiondir: 2, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 11;//intersectiondir: 2, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;//intersectiondir: 2, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -5775,10 +6213,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 12;//intersectiondir: 2, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;//intersectiondir: 2, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 11;//intersectiondir: 2, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;//intersectiondir: 2, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -5791,10 +6231,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 8;//intersectiondir: 3, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//intersectiondir: 3, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 3, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 0;//intersectiondir: 3, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -5845,10 +6287,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 12;//intersectiondir: 2, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;//intersectiondir: 2, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 11;//intersectiondir: 2, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;//intersectiondir: 2, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -5861,10 +6305,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 8;//intersectiondir: 3, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//intersectiondir: 3, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 3, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 0;//intersectiondir: 3, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -5946,10 +6392,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 12;//intersectiondir: 2, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;//intersectiondir: 2, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 11;//intersectiondir: 2, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;//intersectiondir: 2, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -5962,10 +6410,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 8;//intersectiondir: 3, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//intersectiondir: 3, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 3, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 0;//intersectiondir: 3, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -6023,10 +6473,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 12;//intersectiondir: 2, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;//intersectiondir: 2, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 11;//intersectiondir: 2, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;//intersectiondir: 2, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -6039,10 +6491,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 8;//intersectiondir: 3, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//intersectiondir: 3, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 3, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 0;//intersectiondir: 3, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -6108,10 +6562,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 12;//intersectiondir: 2, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;//intersectiondir: 2, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 11;//intersectiondir: 2, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;//intersectiondir: 2, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -6124,10 +6580,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 8;//intersectiondir: 3, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//intersectiondir: 3, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 3, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 0;//intersectiondir: 3, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -6204,10 +6662,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 12;//intersectiondir: 2, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;//intersectiondir: 2, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 11;//intersectiondir: 2, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;//intersectiondir: 2, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -6220,10 +6680,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 8;//intersectiondir: 3, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//intersectiondir: 3, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 3, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 0;//intersectiondir: 3, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -6360,10 +6822,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 8;//intersectiondir: 3, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//intersectiondir: 3, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 3, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 0;//intersectiondir: 3, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -6376,10 +6840,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 10;//intersectiondir: 4, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;//intersectiondir: 4, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 9;//intersectiondir: 4, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//intersectiondir: 4, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -6430,10 +6896,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 8;//intersectiondir: 3, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//intersectiondir: 3, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 3, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 0;//intersectiondir: 3, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -6446,10 +6914,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 10;//intersectiondir: 4, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;//intersectiondir: 4, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 9;//intersectiondir: 4, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//intersectiondir: 4, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -6531,10 +7001,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 8;//intersectiondir: 3, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//intersectiondir: 3, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 3, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 0;//intersectiondir: 3, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -6547,10 +7019,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 10;//intersectiondir: 4, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;//intersectiondir: 4, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 9;//intersectiondir: 4, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//intersectiondir: 4, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -6608,10 +7082,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 8;//intersectiondir: 3, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//intersectiondir: 3, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 3, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 0;//intersectiondir: 3, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -6624,10 +7100,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 10;//intersectiondir: 4, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;//intersectiondir: 4, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 9;//intersectiondir: 4, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//intersectiondir: 4, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -6693,10 +7171,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 8;//intersectiondir: 3, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//intersectiondir: 3, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 3, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 0;//intersectiondir: 3, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -6709,10 +7189,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 10;//intersectiondir: 4, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;//intersectiondir: 4, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 9;//intersectiondir: 4, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//intersectiondir: 4, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -6789,10 +7271,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 8;//intersectiondir: 3, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;//intersectiondir: 3, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 3, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 0;//intersectiondir: 3, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -6805,10 +7289,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 10;//intersectiondir: 4, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;//intersectiondir: 4, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 9;//intersectiondir: 4, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//intersectiondir: 4, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -6945,10 +7431,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 10;//intersectiondir: 4, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;//intersectiondir: 4, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 9;//intersectiondir: 4, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//intersectiondir: 4, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -6961,10 +7449,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 14;//intersectiondir: 1, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 1, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 13;//intersectiondir: 1, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;//intersectiondir: 1, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -7015,10 +7505,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 10;//intersectiondir: 4, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;//intersectiondir: 4, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 9;//intersectiondir: 4, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//intersectiondir: 4, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -7031,10 +7523,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 14;//intersectiondir: 1, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 1, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 13;//intersectiondir: 1, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;//intersectiondir: 1, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -7116,10 +7610,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 10;//intersectiondir: 4, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;//intersectiondir: 4, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 9;//intersectiondir: 4, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//intersectiondir: 4, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -7132,10 +7628,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 14;//intersectiondir: 1, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 1, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 13;//intersectiondir: 1, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;//intersectiondir: 1, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -7193,10 +7691,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 10;//intersectiondir: 4, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;//intersectiondir: 4, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 9;//intersectiondir: 4, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//intersectiondir: 4, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -7209,10 +7709,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 14;//intersectiondir: 1, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 1, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 13;//intersectiondir: 1, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;//intersectiondir: 1, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -7278,10 +7780,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 10;//intersectiondir: 4, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;//intersectiondir: 4, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 9;//intersectiondir: 4, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//intersectiondir: 4, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -7294,10 +7798,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 14;//intersectiondir: 1, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 1, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 13;//intersectiondir: 1, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;//intersectiondir: 1, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -7374,10 +7880,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 10;//intersectiondir: 4, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;//intersectiondir: 4, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 9;//intersectiondir: 4, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;//intersectiondir: 4, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
@@ -7390,10 +7898,12 @@ void ATestHud::BuildLevel()
 										switch (culminatingIntersectionOrientation)
 										{
 										case 0:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 14;//intersectiondir: 1, intersectionOrientation: 0;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 7;//intersectiondir: 1, intersectionOrientation: 0;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 1:
-											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 13;//intersectiondir: 1, intersectionOrientation: 1;
+											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;//intersectiondir: 1, intersectionOrientation: 1;
+											tileIsIntersection[convertedTrackPos.Y * 15 + convertedTrackPos.X] = true;
 											break;
 										case 2:
 											trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
@@ -7665,6 +8175,10 @@ void ATestHud::BuildLevel()
 					break;
 				}
 			}
+
+			startingPos = convertedTrackPos;
+			startingDir = 2;
+			
 			break;
 		case 2:
 			newTrackPos = finalIntersectionPos;
@@ -7799,6 +8313,10 @@ void ATestHud::BuildLevel()
 					break;
 				}
 			}
+
+			startingPos = convertedTrackPos;
+			startingDir = 2;
+			
 			break;
 		case 3:
 			finalIntersectionPos.Y -= 1;
@@ -7939,6 +8457,10 @@ void ATestHud::BuildLevel()
 					break;
 				}
 			}
+
+			startingPos = convertedTrackPos;
+			startingDir = 2;
+			
 			break;
 		}
 
@@ -8079,6 +8601,10 @@ void ATestHud::BuildLevel()
 					break;
 				}
 			}
+
+			startingPos = convertedTrackPos;
+			startingDir = 3;
+			
 			break;
 		case 2:
 			finalIntersectionPos.X += 1;
@@ -8219,6 +8745,10 @@ void ATestHud::BuildLevel()
 					break;
 				}
 			}
+
+			startingPos = convertedTrackPos;
+			startingDir = 3;
+			
 			break;
 		case 4:
 			finalIntersectionPos.X -= 1;
@@ -8359,6 +8889,10 @@ void ATestHud::BuildLevel()
 					break;
 				}
 			}
+			
+			startingPos = convertedTrackPos;
+			startingDir = 3;
+
 			break;
 		}
 
@@ -8505,6 +9039,10 @@ void ATestHud::BuildLevel()
 					break;
 				}
 			}
+
+			startingPos = convertedTrackPos;
+			startingDir = 4;
+			
 			break;
 		case 3 :
 			finalIntersectionPos.Y -= 1;
@@ -8645,6 +9183,10 @@ void ATestHud::BuildLevel()
 					break;
 				}
 			}
+
+			startingPos = convertedTrackPos;
+			startingDir = 4;
+			
 			break;
 		case 4 :
 			newTrackPos = finalIntersectionPos;
@@ -8779,6 +9321,10 @@ void ATestHud::BuildLevel()
 					break;
 				}
 			}
+
+			startingPos = convertedTrackPos;
+			startingDir = 4;
+
 			break;
 		}
 
@@ -9214,14 +9760,54 @@ void ATestHud::BuildLevel()
 			.holeFromLeft_VMUI(holeFromLeft_VMUI)
 			.holeFromRight_VMUI(holeFromRight_VMUI)
 			.holeFromUp_VMUI(holeFromUp_VMUI)
+			.flag_VMUI_1(flag_VMUI_1)
+			.flag_VMUI_2(flag_VMUI_2)
+			.flag_VMUI_3(flag_VMUI_3)
+			.flag_VMUI_4(flag_VMUI_4)
+			.flag_VMUI_5(flag_VMUI_5)
+			.flag_VMUI_6(flag_VMUI_6)
+			.flag_VMUI_7(flag_VMUI_7)
+			.flag_VMUI_8(flag_VMUI_8)
+			.flag_VMUI_9(flag_VMUI_9)
+			.flag_VMUI_10(flag_VMUI_10)
+			.flag_VMUI_11(flag_VMUI_11)
+			.flag_VMUI_12(flag_VMUI_12)
+			.flag_VMUI_13(flag_VMUI_13)
+			.flag_VMUI_14(flag_VMUI_14)
+			.flag_VMUI_15(flag_VMUI_15)
+			.flag_VMUI_16(flag_VMUI_16)
 			.buttonFromDownTurningRightZero_SMUI(buttonFromDownTurningRightZero_SMUI)
+			.buttonFromDownTurningRightOne_SMUI(buttonFromDownTurningRightOne_SMUI)
+			.buttonFromDownTurningRightTwo_SMUI(buttonFromDownTurningRightTwo_SMUI)
+			.buttonFromDownTurningRightThree_SMUI(buttonFromDownTurningRightThree_SMUI)
 			.buttonFromDownTurningLeftZero_SMUI(buttonFromDownTurningLeftZero_SMUI)
+			.buttonFromDownTurningLeftOne_SMUI(buttonFromDownTurningLeftOne_SMUI)
+			.buttonFromDownTurningLeftTwo_SMUI(buttonFromDownTurningLeftTwo_SMUI)
+			.buttonFromDownTurningLeftThree_SMUI(buttonFromDownTurningLeftThree_SMUI)
 			.buttonFromLeftTurningRightZero_SMUI(buttonFromLeftTurningRightZero_SMUI)
+			.buttonFromLeftTurningRightOne_SMUI(buttonFromLeftTurningRightOne_SMUI)
+			.buttonFromLeftTurningRightTwo_SMUI(buttonFromLeftTurningRightTwo_SMUI)
+			.buttonFromLeftTurningRightThree_SMUI(buttonFromLeftTurningRightThree_SMUI)
 			.buttonFromLeftTurningLeftZero_SMUI(buttonFromLeftTurningLeftZero_SMUI)
+			.buttonFromLeftTurningLeftOne_SMUI(buttonFromLeftTurningLeftOne_SMUI)
+			.buttonFromLeftTurningLeftTwo_SMUI(buttonFromLeftTurningLeftTwo_SMUI)
+			.buttonFromLeftTurningLeftThree_SMUI(buttonFromLeftTurningLeftThree_SMUI)
 			.buttonFromRightTurningRightZero_SMUI(buttonFromRightTurningRightZero_SMUI)
+			.buttonFromRightTurningRightOne_SMUI(buttonFromRightTurningRightOne_SMUI)
+			.buttonFromRightTurningRightTwo_SMUI(buttonFromRightTurningRightTwo_SMUI)
+			.buttonFromRightTurningRightThree_SMUI(buttonFromRightTurningRightThree_SMUI)
 			.buttonFromRightTurningLeftZero_SMUI(buttonFromRightTurningLeftZero_SMUI)
+			.buttonFromRightTurningLeftOne_SMUI(buttonFromRightTurningLeftOne_SMUI)
+			.buttonFromRightTurningLeftTwo_SMUI(buttonFromRightTurningLeftTwo_SMUI)
+			.buttonFromRightTurningLeftThree_SMUI(buttonFromRightTurningLeftThree_SMUI)
 			.buttonFromUpTurningRightZero_SMUI(buttonFromUpTurningRightZero_SMUI)
+			.buttonFromUpTurningRightOne_SMUI(buttonFromUpTurningRightOne_SMUI)
+			.buttonFromUpTurningRightTwo_SMUI(buttonFromUpTurningRightTwo_SMUI)
+			.buttonFromUpTurningRightThree_SMUI(buttonFromUpTurningRightThree_SMUI)
 			.buttonFromUpTurningLeftZero_SMUI(buttonFromUpTurningLeftZero_SMUI)
+			.buttonFromUpTurningLeftOne_SMUI(buttonFromUpTurningLeftOne_SMUI)
+			.buttonFromUpTurningLeftTwo_SMUI(buttonFromUpTurningLeftTwo_SMUI)
+			.buttonFromUpTurningLeftThree_SMUI(buttonFromUpTurningLeftThree_SMUI)
 			.verticleRail_SMUI(verticleRail_SMUI)
 			.horizontalRail_SMUI(horizontalRail_SMUI)
 			.railTurningOne_SMUI(railTurningOne_SMUI)
@@ -9235,7 +9821,16 @@ void ATestHud::BuildLevel()
 			.marble_SMUI_4(marble_SMUI_4)
 			.marble_SMUI_5(marble_SMUI_5)
 			.marble_SMUI_6(marble_SMUI_6)
-			.marble_SMUI_7(marble_SMUI_7);
+			.marble_SMUI_7(marble_SMUI_7)
+			.marble_SMUI_8(marble_SMUI_8)
+			.marble_SMUI_9(marble_SMUI_9)
+			.marble_SMUI_10(marble_SMUI_10)
+			.marble_SMUI_11(marble_SMUI_11)
+			.marble_SMUI_12(marble_SMUI_12)
+			.marble_SMUI_13(marble_SMUI_13)
+			.marble_SMUI_14(marble_SMUI_14)
+			.marble_SMUI_15(marble_SMUI_15)
+			.marble_SMUI_16(marble_SMUI_16);
 
 		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerTwo, SWeakWidget).PossiblyNullContent(gameSlateWidget.ToSharedRef()));
 
