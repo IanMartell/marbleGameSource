@@ -176,6 +176,8 @@ public:
 	UMaterial* marble_SMUI_15;
 	UMaterial* marble_SMUI_16;
 
+	UMaterial* gameFrameColor_SMUI;
+
 	UMaterial* placeholderTrash;
 	UMaterial* emptyImg_SMUI;
 	//data structures of content browser assets
@@ -239,6 +241,7 @@ public:
 	TArray<FVector2D> arrOfViableHoleCoordinates;
 	TArray<FVector2D> arrOfViableHoleCoordinatesBase = { FVector2D(12, 2), FVector2D(12, 1), FVector2D(11, 2), FVector2D(11, 1), FVector2D(10, 2), FVector2D(10, 1), FVector2D(9, 2), FVector2D(9, 1), FVector2D(8, 2), FVector2D(8, 1), FVector2D(7, 2), FVector2D(7, 1), FVector2D(6, 2), FVector2D(6, 1), FVector2D(5, 2), FVector2D(5, 1), FVector2D(4, 2), FVector2D(4, 1) };
 	TArray<FVector2D> holePositions;
+	TArray<FVector2D> convertedHolePositions;
 
 	int negativeOneZeroOrOne;
 

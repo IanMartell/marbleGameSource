@@ -44,6 +44,8 @@ public:
 
 	SLATE_ARGUMENT(int, startingDir)
 
+	SLATE_ARGUMENT(TArray<FVector2D>, holePositions)
+
 	SLATE_ARGUMENT(UMaterial*, grass_VMUI_1)
 
 	SLATE_ARGUMENT(UMaterial*, grass_VMUI_2)
@@ -242,6 +244,8 @@ public:
 
 	SLATE_ARGUMENT(UMaterial*, marble_SMUI_16)
 
+	SLATE_ARGUMENT(UMaterial*, gameFrameColor_SMUI)
+
 	SLATE_ARGUMENT(UMaterial*, emptyImg_SMUI)
 
 	//SLATE_ARGUMENT(FVector2D, viewportSize)
@@ -257,9 +261,7 @@ public:
 
 	virtual bool IsInteractable() const override { return true; };
 	virtual bool SupportsKeyboardFocus() const override { return true; };
-	
-	FReply OnClicked() const;
-	FReply OnQuitClicked() const;
+
 	void OnIntersectionPressedOne();
 	void OnIntersectionReleasedOne();
 	void OnIntersectionPressedTwo();
@@ -295,6 +297,9 @@ public:
 	void OnIntersectionPressedSeventeen();
 	void OnIntersectionReleasedSeventeen();
 
+	FVector2D PrepTurnMarble(int currentMarble, FVector2d marblePosition, int dirOfMarble, bool isIntersection, int trackArrValue);
+	FVector2D TurnMarble(int CurrentMarble, FVector2D marblePosition);
+
 	// constructor variables
 
 	TWeakObjectPtr<class ATestHud> OwningHUD;
@@ -304,6 +309,7 @@ public:
 	TArray<int> pondSpecifierArr;
 	TArray<FVector2D> pondPositionArr;
 	TArray<bool> tileIsIntersection;
+	TArray<FVector2D> holePositions;
 
 	APlayerController* playerOnePlayerController;
 
@@ -412,6 +418,8 @@ public:
 	UMaterial* marble_SMUI_14;
 	UMaterial* marble_SMUI_15;
 	UMaterial* marble_SMUI_16;
+
+	UMaterial* gameFrameColor_SMUI;
 
 	UMaterial* emptyImg_SMUI;
 
@@ -525,6 +533,8 @@ public:
 	FSlateBrush* marble_SB_15;
 	FSlateBrush* marble_SB_16;
 
+	FSlateBrush* gameFrameColor_SB;
+
 	FSlateBrush* emptyImg_SB;
 
 	TArray<TArray<TArray<UMaterial*> > > intersectionButtons =
@@ -553,7 +563,11 @@ public:
 	TArray<FSlateBrush*> landscapeStuff;
 	TArray<FSlateBrush*> trackStuff;
 	TArray<FSlateBrush*> flags;
+	TArray<FSlateBrush*> relevantFlags;
+	TArray<FSlateBrush*> flagsRandomized;
 	TArray<FSlateBrush*> marbles;
+	TArray<FSlateBrush*> relevantMarbles;
+	TArray<FSlateBrush*> marblesRandomized;
 
 	FVector2D startingPos;
 	int startingDir;
@@ -571,20 +585,31 @@ public:
 
 public: 
 	TSharedPtr<class SWindow> windowOne;
-	TSharedPtr<class SImage> marbleOne;
-	FWindowStyle marbleWindowStyle;
+	TArray<TSharedPtr<class SBox>> activeMarbles;
+	TArray<FSlateBrush*> activeMarblesContent;
+	TArray<FSlateBrush*> marblesThisGame;
+	int marbleIndexToSpawn;
+	TSharedPtr<class STextBlock>  scoreText;
+	FText currentScore;
+	int playerScore = 0;
+	int maximumPossibleScore = 0;
+	FSlateFontInfo scoreTextStyle;
+	TSharedPtr<class STextBlock>  timeText;
+	FText currentTimeText;
 	TSharedPtr< class SOverlay> marbleOverlay;
 	TSharedPtr< class FOverlaySlot> marbleOneSlot;
-	TSharedPtr< class SBox> marbleOneBox;
 
 	TSharedPtr<class SOverlay> largeTilesOverlay;
 	TSharedPtr<class SOverlay> landscapeOverlay;
 	TSharedPtr<class SOverlay> trackOverlay;
+	TSharedPtr<class SOverlay> flagsOverlay;
+	TSharedPtr<class SOverlay> frameColorOverlay;
 
 	TArray<TArray<FSlateBrush*> > intersections;
 	TArray<int> intersectionsKeys;
 	TArray<int> intersectionCycle;
 	TArray< TSharedPtr<class SImage> > intersectionImages;
+	TArray<FVector2D> intersectionPositions;
 
 	float DPIScale;
 
@@ -594,8 +619,25 @@ public:
 	float viewportX = 0.0f;
 	float viewportY = 0.0f;
 	int deleteMe;
-	int b;
+	TArray<FVector2D> marblePositions;
+	TArray<FVector2D> marblePositionsCenters;
+	TArray<FVector2D> previousTickMarblePositionsCenters;
 	int currentIntersection = 1;
+	TArray<int> startingMarbleMovementTracker = { { 0, 0 } };
+	TArray<TArray<int> > marbleMovementTracker = { { 0, 0 } };
+	TArray<bool> marbleIsTurning;
+	TArray<int> turnToExecute = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	TArray<int> dirOfMarbles;
+	TArray<FVector2D> deltaMarblePos = { FVector2D( 0, 0 ), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0) };
+
+	int timeOfGame = 120;
+	float startingTime = 0;
+	float fCurrentTime = 0;
+	int currentTime = 120;
+	float spawningWindow;
+	TArray<float> timeIntoWindowMarbleIsSpawned;
+	bool gameStarted = false;
+	bool gameEnded;
 
 	FMargin changingPosition;
 };

@@ -1001,6 +1001,12 @@ ATestHud::ATestHud()
 		marble_SMUI_16 = (UMaterial*)tempVar_marble_SMUI_16.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_gameFrameColor_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/gameFrameColor_SMUI.gameFrameColor_SMUI'"));
+	if (tempVar_gameFrameColor_SMUI.Object != NULL)
+	{
+		gameFrameColor_SMUI = (UMaterial*)tempVar_gameFrameColor_SMUI.Object;
+	}
+
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_emptyImg_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/emptyImg_SMUI.emptyImg_SMUI'"));
 	if (tempVar_emptyImg_SMUI.Object != NULL)
 	{
@@ -8177,7 +8183,7 @@ void ATestHud::BuildLevel()
 			}
 
 			startingPos = convertedTrackPos;
-			startingDir = 2;
+			startingDir = 4;
 			
 			break;
 		case 2:
@@ -8315,7 +8321,7 @@ void ATestHud::BuildLevel()
 			}
 
 			startingPos = convertedTrackPos;
-			startingDir = 2;
+			startingDir = 4;
 			
 			break;
 		case 3:
@@ -8459,7 +8465,7 @@ void ATestHud::BuildLevel()
 			}
 
 			startingPos = convertedTrackPos;
-			startingDir = 2;
+			startingDir = 4;
 			
 			break;
 		}
@@ -9041,7 +9047,7 @@ void ATestHud::BuildLevel()
 			}
 
 			startingPos = convertedTrackPos;
-			startingDir = 4;
+			startingDir = 2;
 			
 			break;
 		case 3 :
@@ -9185,7 +9191,7 @@ void ATestHud::BuildLevel()
 			}
 
 			startingPos = convertedTrackPos;
-			startingDir = 4;
+			startingDir = 2;
 			
 			break;
 		case 4 :
@@ -9323,7 +9329,7 @@ void ATestHud::BuildLevel()
 			}
 
 			startingPos = convertedTrackPos;
-			startingDir = 4;
+			startingDir = 2;
 
 			break;
 		}
@@ -9348,6 +9354,8 @@ void ATestHud::BuildLevel()
 
 			convertedTrackPos.X = newTrackPos.X - 1;
 			convertedTrackPos.Y = 15 - newTrackPos.Y;
+
+			convertedHolePositions.Add(convertedTrackPos);
 
 			currentHoleDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][currentGroupIndex][currentHoleIndex];
 
@@ -9576,7 +9584,7 @@ void ATestHud::BuildLevel()
 			}
 		}
 
-		if (FMath::RandRange(0, 6) > 3 && canAddPond)
+		if (FMath::RandRange(0, 6) > 0 && canAddPond)
 		{// a pond or waterfall occurs
 			pondMetric = indexFormatByRiverDir / 3 - 3;
 
@@ -9612,7 +9620,7 @@ void ATestHud::BuildLevel()
 				}
 			}
 
-			if (FMath::RandRange(x, 15) > 5 && canTurn)
+			if (FMath::RandRange(x, 40) > 5 && canTurn)
 			{// a turn occurs
 				newRiverPos.X += 1;
 
@@ -9640,7 +9648,7 @@ void ATestHud::BuildLevel()
 				}
 			}
 
-			if (FMath::RandRange(x, 15) > 5 && canTurn)
+			if (FMath::RandRange(x, 40) > 5 && canTurn)
 			{// a turn occurs
 				newRiverPos.Y -= 1;
 
@@ -9677,7 +9685,7 @@ void ATestHud::BuildLevel()
 				}
 			}
 
-			if (FMath::RandRange(x, 15) > 5 && canTurn)
+			if (FMath::RandRange(x, 40) > 5 && canTurn)
 			{// a turn occurs
 				newRiverPos.X -= 1;
 
@@ -9731,6 +9739,9 @@ void ATestHud::BuildLevel()
 			.pondPositionArr(pondPositionArr)
 			.tileIsIntersection(tileIsIntersection)
 			.playerOnePlayerController(playerOnePlayerController)
+			.startingPos(startingPos)
+			.startingDir(startingDir)
+			.holePositions(convertedHolePositions)
 			.grass_VMUI_1(grass_VMUI_1)
 			.grass_VMUI_2(grass_VMUI_2)
 			.grass_VMUI_3(grass_VMUI_3)
@@ -9815,6 +9826,7 @@ void ATestHud::BuildLevel()
 			.railTurningThree_SMUI(railTurningThree_SMUI)
 			.railTurningFour_SMUI(railTurningFour_SMUI)
 			.emptyImg_SMUI(emptyImg_SMUI)
+			.gameFrameColor_SMUI(gameFrameColor_SMUI)
 			.marble_SMUI_1(marble_SMUI_1)
 			.marble_SMUI_2(marble_SMUI_2)
 			.marble_SMUI_3(marble_SMUI_3)

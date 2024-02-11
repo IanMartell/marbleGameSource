@@ -10,6 +10,7 @@
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
 
 #define LOCTEXT_NAMESPACE "TestSlate"
+PRAGMA_DISABLE_OPTIMIZATION
 
 const FMargin CalculateTilePosition(FVector2D tileCoords, FVector2D adjustedViewportSize)//this has been adjusted to respond to 1D arr coordinates
 {//this will only work if screenSize.X >= screenSize.Y
@@ -37,6 +38,40 @@ const FMargin CalculateLargeTilePosition(FVector2D tileCoords, FVector2D adjuste
 	return FMargin(leftPad, topPad, rightPad, bottomPad);
 }
 
+const FVector2D CalculateMarblePositionCenters(FVector2D tileCoords)
+{
+	int tileCoordsX = FMath::RoundToZero(tileCoords.X + 0.5);
+	int tileCoordsY = FMath::RoundToZero(tileCoords.Y + 0.5);
+
+	return FVector2D(tileCoordsX, tileCoordsY);
+}
+
+const FMargin CalculateScorePos(FVector2D adjustedViewportSize)
+{
+	float viewportX = adjustedViewportSize.X;
+	float viewportY = adjustedViewportSize.Y;
+	float fOne = (viewportX - viewportY) / 2;
+	float leftPad = fOne / 6;
+	float topPad = viewportY / 10;
+	float rightPad = (fOne / 6) + viewportY + fOne;
+	float bottomPad = (viewportY / 10) * 8.5;
+
+	return FMargin(leftPad, topPad, rightPad, bottomPad);
+}
+
+const FMargin CalculateTimePos(FVector2D adjustedViewportSize)
+{
+	float viewportX = adjustedViewportSize.X;
+	float viewportY = adjustedViewportSize.Y;
+	float fOne = (viewportX - viewportY) / 2;
+	float leftPad = (fOne / 6) + viewportY + fOne;
+	float topPad = viewportY / 10;
+	float rightPad = (fOne / 6);
+	float bottomPad = (viewportY / 10) * 8.5;
+
+	return FMargin(leftPad, topPad, rightPad, bottomPad);
+}
+
 //you could change the size of the background tiles without changing the size of the track tiles because they are being calculated seperately. just moving down to 12 x 12 would have a big impact on performance
 void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will need to write a destructor considering all the 'new' keywords used here
 {
@@ -52,6 +87,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	playerOnePlayerController = InArgs._playerOnePlayerController;
 	startingPos = InArgs._startingPos;
 	startingDir = InArgs._startingDir;
+	holePositions = InArgs._holePositions;
 	grass_VMUI_1 = InArgs._grass_VMUI_1;
 	grass_VMUI_2 = InArgs._grass_VMUI_2;
 	grass_VMUI_3 = InArgs._grass_VMUI_3;
@@ -135,6 +171,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	railTurningTwo_SMUI = InArgs._railTurningTwo_SMUI;
 	railTurningThree_SMUI = InArgs._railTurningThree_SMUI;
 	railTurningFour_SMUI = InArgs._railTurningFour_SMUI;
+	gameFrameColor_SMUI = InArgs._gameFrameColor_SMUI;
 	emptyImg_SMUI = InArgs._emptyImg_SMUI;
 	marble_SMUI_1 = InArgs._marble_SMUI_1;
 	marble_SMUI_2 = InArgs._marble_SMUI_2;
@@ -357,6 +394,9 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	marble_SB_15->SetResourceObject(marble_SMUI_15);
 	marble_SB_16->SetResourceObject(marble_SMUI_16);
 
+	gameFrameColor_SB = new FSlateBrush();
+	gameFrameColor_SB->SetResourceObject(gameFrameColor_SMUI);
+
 	emptyImg_SB = new FSlateBrush();
 	emptyImg_SB->SetResourceObject(emptyImg_SMUI);
 
@@ -365,6 +405,22 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 
 	flags = { flag_SB_1, flag_SB_2, flag_SB_3, flag_SB_4, flag_SB_5, flag_SB_6, flag_SB_7, flag_SB_8, flag_SB_9, flag_SB_10, flag_SB_11, flag_SB_12, flag_SB_13, flag_SB_14, flag_SB_15, flag_SB_16, };
 	marbles = { marble_SB_1, marble_SB_2, marble_SB_3, marble_SB_4, marble_SB_5, marble_SB_6, marble_SB_7, marble_SB_8, marble_SB_9, marble_SB_10, marble_SB_11, marble_SB_12, marble_SB_13, marble_SB_14, marble_SB_15, marble_SB_16, };
+
+	for (int a = 0; a < holePositions.Num(); a++)
+	{
+		relevantFlags.Add(flags[a]);
+		relevantMarbles.Add(marbles[a]);
+	}
+	for (int a = 0; a < holePositions.Num(); a++)
+	{
+		int x = FMath::RandRange(0, relevantFlags.Num() - 1);
+
+		flagsRandomized.Add(relevantFlags[x]);
+		marblesRandomized.Add(relevantMarbles[x]);
+
+		relevantFlags.RemoveAt(x);
+		relevantMarbles.RemoveAt(x);
+	}
 
 	intersections = {
 		{ buttonFromDownTurningRightZero_SB, buttonFromDownTurningRightOne_SB, buttonFromDownTurningRightTwo_SB, buttonFromDownTurningRightThree_SB },
@@ -401,22 +457,52 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	masterButtonStyle = new FButtonStyle();
 	masterButtonStyle->SetNormalPadding(FMargin());
 
+	switch (startingDir)
+	{
+	case 2 :
+		startingPos.X = -1;
+		startingMarbleMovementTracker[0] = 1;
+		break;
+	case 3 :
+		startingPos.Y = -1;
+		startingMarbleMovementTracker[1] = 1;
+		break; 
+	case 4 :
+		startingPos.X = 15;//does this need to be 15 or 16?
+		startingMarbleMovementTracker[0] = -1;
+		break;
+	default:
+		break;
+	}
+
 	//now that the track is built you can control the marbles movement merely by left turns, right turns or straight track. from the marbles starting direction a left turn will incriment the marble direction counter clockwise and a right turn clockwise 
 
-	marbleOneBox = SNew(SBox)
-		.Padding(CalculateTilePosition(FVector2D(0, 0), adjustedViewportSize))
-		[
-			SNew(SImage)
-			.Image(marble_SB_1)
-		];
+	spawningWindow = timeOfGame / (18 + holePositions.Num() * 2);
+
+	for (int a = 0; a < 18 + holePositions.Num() * 2; a++)
+	{
+		marblesThisGame.Add(marblesRandomized[FMath::RandRange(0, marblesRandomized.Num() - 1)]);
+		timeIntoWindowMarbleIsSpawned.Add((spawningWindow / 6) * FMath::RandRange(2, 4) + (spawningWindow * a));
+	}
+	marbleIndexToSpawn = 0;
 
 	marbleOverlay = SNew(SOverlay);
-	marbleOverlay->AddSlot()
-		.HAlign(HAlign_Fill)
-		.VAlign(VAlign_Fill)
-		[
-			marbleOneBox.ToSharedRef()
-		];
+
+	scoreText = SNew(STextBlock);
+	scoreText->SetJustification(ETextJustify::Center);
+	scoreText->SetColorAndOpacity(FColor::Orange);
+	currentScore = FText::FromString("Score: " + FString::FromInt(playerScore) + " of " + FString::FromInt(maximumPossibleScore));
+	scoreText->SetText(currentScore);
+	scoreTextStyle = FCoreStyle::Get().GetFontStyle("EmbossedText");
+	scoreTextStyle.Size = 0.04 * adjustedViewportSize.Y;
+	scoreText->SetFont(scoreTextStyle);
+
+	timeText = SNew(STextBlock);
+	timeText->SetJustification(ETextJustify::Center);
+	timeText->SetColorAndOpacity(FColor::Orange);
+	currentTimeText = FText::FromString("Time: " + FString::FromInt(FMath::RoundToZero((double)currentTime / 60)) + ":" + FString::FromInt(currentTime % 60));
+	timeText->SetText(currentTimeText);
+	timeText->SetFont(scoreTextStyle);
 
 	largeTilesOverlay = SNew(SOverlay);
 	for (int a = 0; a < pondPositionArr.Num(); a++)
@@ -444,6 +530,37 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			];
 	}
 
+	flagsOverlay = SNew(SOverlay);
+	for (int a = 0; a < holePositions.Num(); a++)
+	{
+		flagsOverlay->AddSlot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			.Padding(CalculateTilePosition(holePositions[a], adjustedViewportSize))
+			[
+				SNew(SImage)
+				.Image(flagsRandomized[a])
+			];
+	}
+
+	frameColorOverlay = SNew(SOverlay);
+	frameColorOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(FMargin(0, 0, (adjustedViewportSize.X - adjustedViewportSize.Y) / 2 + adjustedViewportSize.Y, 0))
+		[
+			SNew(SImage)
+				.Image(gameFrameColor_SB)
+		];
+	frameColorOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(FMargin((adjustedViewportSize.X - adjustedViewportSize.Y) / 2 + adjustedViewportSize.Y, 0, 0, 0))
+		[
+			SNew(SImage)
+			.Image(gameFrameColor_SB)
+		];
+
 	trackOverlay = SNew(SOverlay);
 	for (int a = 0; a < 225; a++)
 	{
@@ -466,6 +583,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[0]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -491,6 +609,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[1]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -516,6 +635,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[2]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -541,6 +661,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[3]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -566,6 +687,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[4]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -591,6 +713,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[5]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -616,6 +739,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[6]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -641,6 +765,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[7]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -666,6 +791,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[8]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -691,6 +817,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[9]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -716,6 +843,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[10]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -741,6 +869,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[11]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -766,6 +895,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[12]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -791,6 +921,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[13]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -816,6 +947,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[14]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -841,6 +973,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[15]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -866,6 +999,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[16]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
+				intersectionPositions.Add(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)));
 
 				trackOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
@@ -895,7 +1029,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 		}
 	}
 
-	b = 0;
 	deleteMe = 0;
 
 	testFMargin = FMargin(485.0f* 1.85185f, 537.6f* 1.85185f, 1022.6f* 1.85185f, 0.0f);
@@ -928,7 +1061,13 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			+ SOverlay::Slot()
 			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Fill)
-			//.Padding(CalculateTilePosition(FVector2D(14, 14), adjustedViewportSize))
+			[
+				trackOverlay.ToSharedRef()
+			]
+
+			+ SOverlay::Slot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
 			[
 				marbleOverlay.ToSharedRef()
 			]
@@ -937,35 +1076,32 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Fill)
 			[
-				trackOverlay.ToSharedRef()
+				flagsOverlay.ToSharedRef()
 			]
 
+			 + SOverlay::Slot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			[
+				frameColorOverlay.ToSharedRef()
+			]
+
+			+ SOverlay::Slot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			.Padding(CalculateScorePos(adjustedViewportSize))
+			[
+				scoreText.ToSharedRef()
+			]
+
+			+ SOverlay::Slot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			.Padding(CalculateTimePos(adjustedViewportSize))
+			[
+				timeText.ToSharedRef()
+			]
 		];
-}
-
-FReply STestWidgetThree::OnClicked() const
-{
-	UGameUserSettings* myGameSettings = GEngine->GetGameUserSettings();
-
-	FGeometry testGeometry = GetPaintSpaceGeometry();
-	float y = testGeometry.GetAbsoluteSize().Component(1);
-
-	GEngine->AddOnScreenDebugMessage(-1, 200.0, FColor::Blue, FString::SanitizeFloat(y));
-
-	return FReply::Handled();
-}
-
-FReply STestWidgetThree::OnQuitClicked() const
-{
-	if (OwningHUD.IsValid())
-	{
-		if (APlayerController* PC = OwningHUD->PlayerOwner)
-		{
-			PC->ConsoleCommand("Quit");
-		}
-	}
-
-	return FReply::Handled();
 }
 
 void STestWidgetThree::OnIntersectionPressedOne()
@@ -1173,20 +1309,338 @@ FReply STestWidgetThree::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent&
 	return FReply::Handled();
 }
 
+FVector2D STestWidgetThree::PrepTurnMarble(int currentMarble, FVector2d marblePosition, int dirOfMarble, bool isIntersection, int trackArrValue)
+{
+	int turnBeingMade;
+
+	if (isIntersection)
+	{
+		turnBeingMade = trackArrValue + 4;
+	}
+	else
+	{
+		turnBeingMade = trackArrValue - 3;
+	}
+
+	switch (dirOfMarble)
+	{
+	case 1 :
+		deltaMarblePos[currentMarble] = marblePosition;
+		deltaMarblePos[currentMarble].Y = FMath::RoundToZero(deltaMarblePos[currentMarble].Y) + 0.5;
+
+		if (turnBeingMade == 1 || turnBeingMade == 4)//1 is right, 2 is left, 4 is right, 5 is left
+		{
+			turnToExecute[currentMarble] = 0;
+		}
+		else
+		{
+			turnToExecute[currentMarble] = 1;
+		}
+		break;
+	case 2 :
+		deltaMarblePos[currentMarble] = marblePosition;
+		deltaMarblePos[currentMarble].X = FMath::RoundToZero(deltaMarblePos[currentMarble].X) + 0.5;
+
+		if (turnBeingMade == 2 || turnBeingMade == 6)//2 is right, 3 is left, 6 is right, 7 is left
+		{
+			turnToExecute[currentMarble] = 2;
+		}
+		else
+		{
+			turnToExecute[currentMarble] = 3;
+		}
+		break;
+	case 3 :
+		deltaMarblePos[currentMarble] = marblePosition;
+		deltaMarblePos[currentMarble].Y = FMath::RoundToZero(deltaMarblePos[currentMarble].Y) + 0.5;
+
+		if (turnBeingMade == 3 || turnBeingMade == 10)//0 is left, 3 is right, 10 is right, 11 is left
+		{
+			turnToExecute[currentMarble] = 4;
+		}
+		else
+		{
+			turnToExecute[currentMarble] = 5;
+		}
+		break;
+	case 4 :
+		deltaMarblePos[currentMarble] = marblePosition;
+		deltaMarblePos[currentMarble].X = FMath::RoundToZero(deltaMarblePos[currentMarble].X) + 0.5;
+
+		if (turnBeingMade == 0 || turnBeingMade == 8)//0 is right, 1 is left, 8 is right, 9 is left
+		{
+			turnToExecute[currentMarble] = 6;
+		}
+		else
+		{
+			turnToExecute[currentMarble] = 7;
+		}
+		break;
+	default:
+		break;
+	}
+
+	return TurnMarble(currentMarble, marblePosition);
+}
+
+FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePosition)
+{
+	FVector2D convertedMarblePos;
+
+	switch (turnToExecute[currentMarble])
+	{
+	case 0 :
+		if (deltaMarblePos[currentMarble].Y - marblePosition.Y >= 1)
+		{
+			marbleIsTurning[currentMarble] = false;
+			dirOfMarbles[currentMarble] = 2;
+			marbleMovementTracker[currentMarble][0] = 1;
+			marbleMovementTracker[currentMarble][1] = 0;
+			marblePositions[currentMarble].X = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].X) + 0.5;
+			marblePositions[currentMarble].Y = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].Y - 0.5);
+			convertedMarblePos = marblePositions[currentMarble];
+			break;
+		}
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X + -1 * pow(-1 * pow(((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 2), 2) + 0.25, 0.5) + 0.5;
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + -1 * pow(-1 * pow((((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
+
+		break;
+	case 1 :
+		if (deltaMarblePos[currentMarble].Y - marblePosition.Y >= 1)
+		{
+			marbleIsTurning[currentMarble] = false;
+			dirOfMarbles[currentMarble] = 4;
+			marbleMovementTracker[currentMarble][0] = -1;
+			marbleMovementTracker[currentMarble][1] = 0;
+			marblePositions[currentMarble].X = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].X) - 0.5;
+			marblePositions[currentMarble].Y = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].Y - 0.5);
+			convertedMarblePos = marblePositions[currentMarble];
+			break;
+		}
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X + -1 * (-1 * pow(-1 * pow(((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 2), 2) + 0.25, 0.5) + 0.5);
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + -1 * pow(-1 * pow((((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
+
+		break;
+	case 2 :
+		if (deltaMarblePos[currentMarble].X - marblePosition.X <= -1)
+		{
+			marbleIsTurning[currentMarble] = false;
+			dirOfMarbles[currentMarble] = 3;
+			marbleMovementTracker[currentMarble][0] = 0;
+			marbleMovementTracker[currentMarble][1] = 1;
+			marblePositions[currentMarble].X = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].X + 0.5);
+			marblePositions[currentMarble].Y = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].Y) + 0.5;
+			convertedMarblePos = marblePositions[currentMarble];
+			break;
+		}
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X + pow(-1 * pow((((marblePosition.X - deltaMarblePos[currentMarble].X) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + -1 * pow(-1 * pow(((marblePosition.X - deltaMarblePos[currentMarble].X) / 2), 2) + 0.25, 0.5) + 0.5;
+
+		break;
+	case 3 :
+		if (deltaMarblePos[currentMarble].X - marblePosition.X <= -1)
+		{
+			marbleIsTurning[currentMarble] = false;
+			dirOfMarbles[currentMarble] = 1;
+			marbleMovementTracker[currentMarble][0] = 0;
+			marbleMovementTracker[currentMarble][1] = -1;
+			marblePositions[currentMarble].X = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].X + 0.5);
+			marblePositions[currentMarble].Y = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].Y) - 0.5;
+			convertedMarblePos = marblePositions[currentMarble];
+			break;
+		}
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X + pow(-1 * pow((((marblePosition.X - deltaMarblePos[currentMarble].X) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + -1 * (-1 * pow(-1 * pow(((marblePosition.X - deltaMarblePos[currentMarble].X) / 2), 2) + 0.25, 0.5) + 0.5);
+
+		break;
+	case 4 :
+		if (deltaMarblePos[currentMarble].Y - marblePosition.Y <= -1)
+		{
+			marbleIsTurning[currentMarble] = false;
+			dirOfMarbles[currentMarble] = 4;
+			marbleMovementTracker[currentMarble][0] = -1;
+			marbleMovementTracker[currentMarble][1] = 0;
+			marblePositions[currentMarble].X = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].X) - 0.5;
+			marblePositions[currentMarble].Y = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].Y + 0.5);
+			convertedMarblePos = marblePositions[currentMarble];
+			break;
+		}
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X + -1 * (-1 * pow(-1 * pow(((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 2), 2) + 0.25, 0.5) + 0.5);
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + pow(-1 * pow((((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
+
+		break;
+	case 5 :
+		if (deltaMarblePos[currentMarble].Y - marblePosition.Y <= -1)
+		{
+			marbleIsTurning[currentMarble] = false;
+			dirOfMarbles[currentMarble] = 2;
+			marbleMovementTracker[currentMarble][0] = 1;
+			marbleMovementTracker[currentMarble][1] = 0;
+			marblePositions[currentMarble].X = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].X) + 0.5;
+			marblePositions[currentMarble].Y = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].Y + 0.5);
+			convertedMarblePos = marblePositions[currentMarble];
+			break;
+		}
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X + -1 * pow(-1 * pow(((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 2), 2) + 0.25, 0.5) + 0.5;
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + pow(-1 * pow((((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
+
+		break;
+	case 6 :
+		if (deltaMarblePos[currentMarble].X - marblePosition.X >= 1)
+		{
+			marbleIsTurning[currentMarble] = false;
+			dirOfMarbles[currentMarble] = 1;
+			marbleMovementTracker[currentMarble][0] = 0;
+			marbleMovementTracker[currentMarble][1] = -1;
+			marblePositions[currentMarble].X = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].X - 0.5);
+			marblePositions[currentMarble].Y = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].Y) - 0.5;
+			convertedMarblePos = marblePositions[currentMarble];
+			break;
+		}
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X + -1 * pow(-1 * pow((((deltaMarblePos[currentMarble].X - marblePosition.X) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + -1 * (-1 * pow(-1 * pow(((deltaMarblePos[currentMarble].X - marblePosition.X) / 2), 2) + 0.25, 0.5) + 0.5);
+
+		break;
+	case 7 :
+		if (deltaMarblePos[currentMarble].X - marblePosition.X >= 1)
+		{
+			marbleIsTurning[currentMarble] = false;
+			dirOfMarbles[currentMarble] = 3;
+			marbleMovementTracker[currentMarble][0] = 0;
+			marbleMovementTracker[currentMarble][1] = 1;
+			marblePositions[currentMarble].X = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].X - 0.5);
+			marblePositions[currentMarble].Y = FMath::RoundHalfFromZero(deltaMarblePos[currentMarble].Y) + 0.5;
+			convertedMarblePos = marblePositions[currentMarble];
+			break;
+		}
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X + -1 * pow(-1 * pow((((deltaMarblePos[currentMarble].X - marblePosition.X) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + -1 * pow(-1 * pow(((deltaMarblePos[currentMarble].X - marblePosition.X) / 2), 2) + 0.25, 0.5) + 0.5;
+
+		break;
+	default:
+		break;
+	}
+
+	return convertedMarblePos;
+}
+
 void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
 
-	if (deleteMe > 29)
+	for (int a = 0; a < activeMarbles.Num(); a++)
 	{
-		deleteMe = 0;
+		marblePositions[a].X += InDeltaTime * 0.8 * marbleMovementTracker[a][0];
+		marblePositions[a].Y += InDeltaTime * 0.8 * marbleMovementTracker[a][1];
 
-		marbleOneBox->SetPadding(CalculateTilePosition(FVector2D(b, 0), adjustedViewportSize));
-		b++;
+		if (marbleIsTurning[a])
+		{
+			activeMarbles[a]->SetPadding(CalculateTilePosition(TurnMarble(a, marblePositions[a]), adjustedViewportSize));
+		}
+		else
+		{
+			if (CalculateMarblePositionCenters(marblePositions[a]) == marblePositionsCenters[a])
+			{
+				activeMarbles[a]->SetPadding(CalculateTilePosition(marblePositions[a], adjustedViewportSize));
+			}
+			else
+			{
+				marblePositionsCenters[a] = CalculateMarblePositionCenters(marblePositions[a]);//this creates an index out of bounds error if the marble goes off screen
+
+				if (trackArr[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X] > 2 || tileIsIntersection[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X])//I need to redo how intersections are designated in trackArr so I need need to include this check for tileIsIntersection in this conditional
+				{
+					if (tileIsIntersection[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X])
+					{
+						if (intersectionCycle[intersectionPositions.Find(marblePositionsCenters[a])] > 1)
+						{
+							marbleIsTurning[a] = true;
+							activeMarbles[a]->SetPadding(CalculateTilePosition(PrepTurnMarble(a, marblePositions[a], dirOfMarbles[a], true, trackArr[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X]), adjustedViewportSize));
+						}
+					}
+					else
+					{
+						marbleIsTurning[a] = true;
+						activeMarbles[a]->SetPadding(CalculateTilePosition(PrepTurnMarble(a, marblePositions[a], dirOfMarbles[a], false, trackArr[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X]), adjustedViewportSize));
+					}
+				}
+				else if (holePositions.Find(marblePositionsCenters[a]) + 1)
+				{//check if the marble matches the flag, "remove" the marble and adjust the score accordingly
+					if (holePositions.Find(marblePositionsCenters[a]) == marblesRandomized.Find(activeMarblesContent[a]))
+					{
+						playerScore += 1;
+						maximumPossibleScore += 1;
+						currentScore = FText::FromString("Score: " + FString::FromInt(playerScore) + " of " + FString::FromInt(maximumPossibleScore));
+						scoreText->SetText(currentScore);
+					}
+					else
+					{
+						maximumPossibleScore += 1;
+						currentScore = FText::FromString("Score: " + FString::FromInt(playerScore) + " of " + FString::FromInt(maximumPossibleScore));
+						scoreText->SetText(currentScore);
+					}
+
+					activeMarbles.RemoveAt(a);
+					marbleMovementTracker.RemoveAt(a);
+					marblePositions.RemoveAt(a);
+					marbleIsTurning.RemoveAt(a);
+					dirOfMarbles.RemoveAt(a);
+
+					a -= 1; // I think this is necessary
+				}
+			}
+		}
 	}
-	else
+	if (!gameEnded)
 	{
-		deleteMe++;
+		if (gameStarted)
+		{
+			fCurrentTime += InDeltaTime;
+
+			if (currentTime != timeOfGame - FMath::RoundToZero(fCurrentTime))
+			{
+				currentTime = timeOfGame - FMath::RoundToZero(fCurrentTime);
+
+				currentTimeText = FText::FromString("Time: " + FString::FromInt(FMath::RoundToZero((double)currentTime / 60)) + ":" + FString::FromInt(currentTime % 60));
+				timeText->SetText(currentTimeText);
+
+				if (currentTime == 0)
+				{
+					gameEnded = true;
+				}
+			}
+
+			if (fCurrentTime > timeIntoWindowMarbleIsSpawned[marbleIndexToSpawn])
+			{
+				activeMarbles.Add(SNew(SBox));
+				activeMarbles[marbleIndexToSpawn]->SetContent(SNew(SImage).Image(marblesThisGame[marbleIndexToSpawn]));
+				activeMarbles[marbleIndexToSpawn]->SetPadding(CalculateTilePosition(FVector2D(0, 0), adjustedViewportSize));
+				activeMarblesContent.Add(marblesThisGame[marbleIndexToSpawn]);
+
+				marbleOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					[
+						activeMarbles[marbleIndexToSpawn].ToSharedRef()
+					];
+
+				marbleMovementTracker.Add(startingMarbleMovementTracker);
+				marblePositions.Add(startingPos);
+				marblePositionsCenters.Add(startingPos);
+				marbleIsTurning.Add(false);
+				dirOfMarbles.Add(startingDir);
+
+				marbleIndexToSpawn += 1;
+			}
+
+		}
+		else
+		{
+			startingTime += InDeltaTime;
+			if (startingTime > 5)
+			{
+				gameStarted = true;
+			}
+		}
 	}
 }
 
