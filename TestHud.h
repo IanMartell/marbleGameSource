@@ -75,6 +75,8 @@ public:
 	UMediaPlayer* riverTurning_MP_3;
 	UMaterial* riverTurning_VMUI_4;
 	UMediaPlayer* riverTurning_MP_4;
+	UMaterial* mountain_VMUI_1;
+	UMediaPlayer* mountain_MP_1;
 
 	UMaterial* holeFromDown_VMUI;
 	UMediaPlayer* holeFromDown_MP;
@@ -117,6 +119,55 @@ public:
 	UMediaPlayer* flag_MP_15;
 	UMaterial* flag_VMUI_16;
 	UMediaPlayer* flag_MP_16;
+
+	UImgMediaSource* grass_IS_1;
+	UImgMediaSource* grass_IS_2;
+	UImgMediaSource* grass_IS_3;
+	UImgMediaSource* pondHorizontal_IS;
+	UImgMediaSource* pondVerticleFlowingLeft_IS;
+	UImgMediaSource* pondVerticleFlowingRight_IS;
+	UImgMediaSource* riverFlowingDown_IS_1;
+	UImgMediaSource* riverFlowingDown_IS_2;
+	UImgMediaSource* riverFlowingDown_IS_3;
+	UImgMediaSource* riverFlowingLeft_IS_1;
+	UImgMediaSource* riverFlowingLeft_IS_2;
+	UImgMediaSource* riverFlowingLeft_IS_3;
+	UImgMediaSource* riverFlowingRight_IS_1;
+	UImgMediaSource* riverFlowingRight_IS_2;
+	UImgMediaSource* riverFlowingRight_IS_3;
+	UImgMediaSource* tree_IS_1;
+	UImgMediaSource* tree_IS_2;
+	UImgMediaSource* tree_IS_3;
+	UImgMediaSource* tree_IS_4;
+	UImgMediaSource* tree_IS_5;
+	UImgMediaSource* waterfall_IS;
+	UImgMediaSource* riverTurning_IS_1;
+	UImgMediaSource* riverTurning_IS_2;
+	UImgMediaSource* riverTurning_IS_3;
+	UImgMediaSource* riverTurning_IS_4;
+	UImgMediaSource* mountain_IS_1;
+
+	UImgMediaSource* holeFromDown_IS;
+	UImgMediaSource* holeFromLeft_IS;
+	UImgMediaSource* holeFromRight_IS;
+	UImgMediaSource* holeFromUp_IS;
+
+	UImgMediaSource* flag_IS_1;
+	UImgMediaSource* flag_IS_2;
+	UImgMediaSource* flag_IS_3;
+	UImgMediaSource* flag_IS_4;
+	UImgMediaSource* flag_IS_5;
+	UImgMediaSource* flag_IS_6;
+	UImgMediaSource* flag_IS_7;
+	UImgMediaSource* flag_IS_8;
+	UImgMediaSource* flag_IS_9;
+	UImgMediaSource* flag_IS_10;
+	UImgMediaSource* flag_IS_11;
+	UImgMediaSource* flag_IS_12;
+	UImgMediaSource* flag_IS_13;
+	UImgMediaSource* flag_IS_14;
+	UImgMediaSource* flag_IS_15;
+	UImgMediaSource* flag_IS_16;
 
 	UMaterial* buttonFromDownTurningRightZero_SMUI;
 	UMaterial* buttonFromDownTurningRightOne_SMUI;
@@ -249,7 +300,7 @@ public:
 	TArray<int> listOfHolePositionGroupings;
 
 	int holeCoordinateOrientation;
-	int numberOfHoles = 8;
+	int numberOfHoles = 10;
 
 	FVector2D startingPos;
 	int startingDir;
@@ -1582,6 +1633,7 @@ public:
 
 	TArray<FVector2D> pondPositionArr;
 	TArray<int> pondSpecifierArr;
+	TArray<FVector2D> largeTreeOrMountainPosArr;
 
 	void GenerateLevel();
 

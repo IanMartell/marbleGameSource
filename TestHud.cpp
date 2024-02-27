@@ -42,7 +42,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarGrass_IS_1(TEXT("'/Game/Movies/imageSources/grass_1_IS.grass_1_IS'"));
 	if (tempVarGrass_IS_1.Object != NULL)
 	{
-		grass_MP_1->OpenSource((UImgMediaSource*)tempVarGrass_IS_1.Object);
+		grass_IS_1 = (UImgMediaSource*)tempVarGrass_IS_1.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarGrass_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/grass_VMUI_2.grass_VMUI_2'"));
 	if (tempVarGrass_VMUI_2.Object != NULL)
@@ -57,7 +57,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarGrass_IS_2(TEXT("'/Game/Movies/imageSources/grass_2_IS.grass_2_IS'"));
 	if (tempVarGrass_IS_2.Object != NULL)
 	{
-		grass_MP_2->OpenSource((UImgMediaSource*)tempVarGrass_IS_2.Object);
+		grass_IS_2 = (UImgMediaSource*)tempVarGrass_IS_2.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarGrass_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/grass_VMUI_3.grass_VMUI_3'"));
 	if (tempVarGrass_VMUI_3.Object != NULL)
@@ -72,7 +72,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarGrass_IS_3(TEXT("'/Game/Movies/imageSources/grass_3_IS.grass_3_IS'"));
 	if (tempVarGrass_IS_3.Object != NULL)
 	{
-		grass_MP_3->OpenSource((UImgMediaSource*)tempVarGrass_IS_3.Object);
+		grass_IS_3 = (UImgMediaSource*)tempVarGrass_IS_3.Object;
 	}
 	//ponds
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarPondHorizontal_VMUI(TEXT("'/Game/Movies/videoMaterialsForUI/pondHorizontal_VMUI.pondHorizontal_VMUI'"));
@@ -88,7 +88,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarPondHorizontal_IS(TEXT("'/Game/Movies/imageSources/pondHorizontal_IS.pondHorizontal_IS'"));
 	if (tempVarPondHorizontal_IS.Object != NULL)
 	{
-		pondHorizontal_MP->OpenSource((UImgMediaSource*)tempVarPondHorizontal_IS.Object);
+		pondHorizontal_IS = (UImgMediaSource*)tempVarPondHorizontal_IS.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarPondVerticleFlowingLeft_VMUI(TEXT("'/Game/Movies/videoMaterialsForUI/pondVerticleFlowingLeft_VMUI.pondVerticleFlowingLeft_VMUI'"));
 	if (tempVarPondVerticleFlowingLeft_VMUI.Object != NULL)
@@ -103,7 +103,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarPondVerticleFlowingLeft_IS(TEXT("'/Game/Movies/imageSources/pondVerticleFlowingLeft_IS.pondVerticleFlowingLeft_IS'"));
 	if (tempVarPondVerticleFlowingLeft_IS.Object != NULL)
 	{
-		pondVerticleFlowingLeft_MP->OpenSource((UImgMediaSource*)tempVarPondVerticleFlowingLeft_IS.Object);
+		pondVerticleFlowingLeft_IS = (UImgMediaSource*)tempVarPondVerticleFlowingLeft_IS.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarPondVerticleFlowingRight_VMUI(TEXT("'/Game/Movies/videoMaterialsForUI/pondVerticleFlowingRight_VMUI.pondVerticleFlowingRight_VMUI'"));
 	if (tempVarPondVerticleFlowingRight_VMUI.Object != NULL)
@@ -118,7 +118,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarPondVerticleFlowingRight_IS(TEXT("'/Game/Movies/imageSources/pondVerticleFlowingRight_IS.pondVerticleFlowingRight_IS'"));
 	if (tempVarPondVerticleFlowingRight_IS.Object != NULL)
 	{
-		pondVerticleFlowingRight_MP->OpenSource((UImgMediaSource*)tempVarPondVerticleFlowingRight_IS.Object);
+		pondVerticleFlowingRight_IS = (UImgMediaSource*)tempVarPondVerticleFlowingRight_IS.Object;
 	}
 	//river flowing down
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingDown_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingDown_VMUI_1.riverFlowingDown_VMUI_1'"));
@@ -134,7 +134,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingDown_IS_1(TEXT("'/Game/Movies/imageSources/riverFlowingDown_IS_1.riverFlowingDown_IS_1'"));
 	if (tempVarRiverFlowingDown_IS_1.Object != NULL)
 	{
-		riverFlowingDown_MP_1->OpenSource((UImgMediaSource*)tempVarRiverFlowingDown_IS_1.Object);
+		riverFlowingDown_IS_1 = (UImgMediaSource*)tempVarRiverFlowingDown_IS_1.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingDown_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingDown_VMUI_2.riverFlowingDown_VMUI_2'"));
 	if (tempVarRiverFlowingDown_VMUI_2.Object != NULL)
@@ -149,7 +149,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingDown_IS_2(TEXT("'/Game/Movies/imageSources/riverFlowingDown_IS_2.riverFlowingDown_IS_2'"));
 	if (tempVarRiverFlowingDown_IS_2.Object != NULL)
 	{
-		riverFlowingDown_MP_2->OpenSource((UImgMediaSource*)tempVarRiverFlowingDown_IS_2.Object);
+		riverFlowingDown_IS_2 = (UImgMediaSource*)tempVarRiverFlowingDown_IS_2.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingDown_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingDown_VMUI_3.riverFlowingDown_VMUI_3'"));
 	if (tempVarRiverFlowingDown_VMUI_3.Object != NULL)
@@ -164,7 +164,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingDown_IS_3(TEXT("'/Game/Movies/imageSources/riverFlowingDown_IS_3.riverFlowingDown_IS_3'"));
 	if (tempVarRiverFlowingDown_IS_3.Object != NULL)
 	{
-		riverFlowingDown_MP_3->OpenSource((UImgMediaSource*)tempVarRiverFlowingDown_IS_3.Object);
+		riverFlowingDown_IS_3 = (UImgMediaSource*)tempVarRiverFlowingDown_IS_3.Object;
 	}
 	//river flowing left
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingLeft_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingLeft_VMUI_1.riverFlowingLeft_VMUI_1'"));
@@ -180,7 +180,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingLeft_IS_1(TEXT("'/Game/Movies/imageSources/riverFlowingLeft_IS_1.riverFlowingLeft_IS_1'"));
 	if (tempVarRiverFlowingLeft_IS_1.Object != NULL)
 	{
-		riverFlowingLeft_MP_1->OpenSource((UImgMediaSource*)tempVarRiverFlowingLeft_IS_1.Object);
+		riverFlowingLeft_IS_1 = (UImgMediaSource*)tempVarRiverFlowingLeft_IS_1.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingLeft_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingLeft_VMUI_2.riverFlowingLeft_VMUI_2'"));
 	if (tempVarRiverFlowingLeft_VMUI_2.Object != NULL)
@@ -195,7 +195,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingLeft_IS_2(TEXT("'/Game/Movies/imageSources/riverFlowingLeft_IS_2.riverFlowingLeft_IS_2'"));
 	if (tempVarRiverFlowingLeft_IS_2.Object != NULL)
 	{
-		riverFlowingLeft_MP_2->OpenSource((UImgMediaSource*)tempVarRiverFlowingLeft_IS_2.Object);
+		riverFlowingLeft_IS_2 = (UImgMediaSource*)tempVarRiverFlowingLeft_IS_2.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingLeft_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingLeft_VMUI_3.riverFlowingLeft_VMUI_3'"));
 	if (tempVarRiverFlowingLeft_VMUI_3.Object != NULL)
@@ -210,7 +210,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingLeft_IS_3(TEXT("'/Game/Movies/imageSources/riverFlowingLeft_IS_3.riverFlowingLeft_IS_3'"));
 	if (tempVarRiverFlowingLeft_IS_3.Object != NULL)
 	{
-		riverFlowingLeft_MP_3->OpenSource((UImgMediaSource*)tempVarRiverFlowingLeft_IS_3.Object);
+		riverFlowingLeft_IS_3 = (UImgMediaSource*)tempVarRiverFlowingLeft_IS_3.Object;
 	}
 	//river flowing right
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingRight_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingRight_VMUI_1.riverFlowingRight_VMUI_1'"));
@@ -226,7 +226,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingRight_IS_1(TEXT("'/Game/Movies/imageSources/riverFlowingRight_IS_1.riverFlowingRight_IS_1'"));
 	if (tempVarRiverFlowingRight_IS_1.Object != NULL)
 	{
-		riverFlowingRight_MP_1->OpenSource((UImgMediaSource*)tempVarRiverFlowingRight_IS_1.Object);
+		riverFlowingRight_IS_1 = (UImgMediaSource*)tempVarRiverFlowingRight_IS_1.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingRight_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingRight_VMUI_2.riverFlowingRight_VMUI_2'"));
 	if (tempVarRiverFlowingRight_VMUI_2.Object != NULL)
@@ -241,7 +241,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingRight_IS_2(TEXT("'/Game/Movies/imageSources/riverFlowingRight_IS_2.riverFlowingRight_IS_2'"));
 	if (tempVarRiverFlowingRight_IS_2.Object != NULL)
 	{
-		riverFlowingRight_MP_2->OpenSource((UImgMediaSource*)tempVarRiverFlowingRight_IS_2.Object);
+		riverFlowingRight_IS_2 = (UImgMediaSource*)tempVarRiverFlowingRight_IS_2.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverFlowingRight_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/riverFlowingRight_VMUI_3.riverFlowingRight_VMUI_3'"));
 	if (tempVarRiverFlowingRight_VMUI_3.Object != NULL)
@@ -256,7 +256,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverFlowingRight_IS_3(TEXT("'/Game/Movies/imageSources/riverFlowingRight_IS_3.riverFlowingRight_IS_3'"));
 	if (tempVarRiverFlowingRight_IS_3.Object != NULL)
 	{
-		riverFlowingRight_MP_3->OpenSource((UImgMediaSource*)tempVarRiverFlowingRight_IS_3.Object);
+		riverFlowingRight_IS_3 = (UImgMediaSource*)tempVarRiverFlowingRight_IS_3.Object;
 	}
 	//trees
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarTree_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/tree_VMUI_1.tree_VMUI_1'"));
@@ -272,7 +272,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarTree_IS_1(TEXT("'/Game/Movies/imageSources/tree_IS_1.tree_IS_1'"));
 	if (tempVarTree_IS_1.Object != NULL)
 	{
-		tree_MP_1->OpenSource((UImgMediaSource*)tempVarTree_IS_1.Object);
+		tree_IS_1 = (UImgMediaSource*)tempVarTree_IS_1.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarTree_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/tree_VMUI_2.tree_VMUI_2'"));
 	if (tempVarTree_VMUI_2.Object != NULL)
@@ -287,7 +287,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarTree_IS_2(TEXT("'/Game/Movies/imageSources/tree_IS_2.tree_IS_2'"));
 	if (tempVarTree_IS_2.Object != NULL)
 	{
-		tree_MP_2->OpenSource((UImgMediaSource*)tempVarTree_IS_2.Object);
+		tree_IS_2 = (UImgMediaSource*)tempVarTree_IS_2.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarTree_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/tree_VMUI_3.tree_VMUI_3'"));
 	if (tempVarTree_VMUI_3.Object != NULL)
@@ -302,7 +302,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarTree_IS_3(TEXT("'/Game/Movies/imageSources/tree_IS_3.tree_IS_3'"));
 	if (tempVarTree_IS_3.Object != NULL)
 	{
-		tree_MP_3->OpenSource((UImgMediaSource*)tempVarTree_IS_3.Object);
+		tree_IS_3 = (UImgMediaSource*)tempVarTree_IS_3.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarTree_VMUI_4(TEXT("'/Game/Movies/videoMaterialsForUI/tree_VMUI_4.tree_VMUI_4'"));
 	if (tempVarTree_VMUI_4.Object != NULL)
@@ -317,7 +317,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarTree_IS_4(TEXT("'/Game/Movies/imageSources/tree_IS_4.tree_IS_4'"));
 	if (tempVarTree_IS_4.Object != NULL)
 	{
-		tree_MP_4->OpenSource((UImgMediaSource*)tempVarTree_IS_4.Object);
+		tree_IS_4 = (UImgMediaSource*)tempVarTree_IS_4.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarTree_VMUI_5(TEXT("'/Game/Movies/videoMaterialsForUI/tree_VMUI_5.tree_VMUI_5'"));
 	if (tempVarTree_VMUI_5.Object != NULL)
@@ -332,7 +332,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarTree_IS_5(TEXT("'/Game/Movies/imageSources/tree_IS_5.tree_IS_5'"));
 	if (tempVarTree_IS_5.Object != NULL)
 	{
-		tree_MP_5->OpenSource((UImgMediaSource*)tempVarTree_IS_5.Object);
+		tree_IS_5 = (UImgMediaSource*)tempVarTree_IS_5.Object;
 	}
 	//waterfall
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarWaterfall_VMUI(TEXT("'/Game/Movies/videoMaterialsForUI/waterfall_VMUI.waterfall_VMUI'"));
@@ -348,7 +348,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarWaterfall_IS(TEXT("'/Game/Movies/imageSources/waterfall_IS.waterfall_IS'"));
 	if (tempVarWaterfall_IS.Object != NULL)
 	{
-		waterfall_MP->OpenSource((UImgMediaSource*)tempVarWaterfall_IS.Object);
+		waterfall_IS = (UImgMediaSource*)tempVarWaterfall_IS.Object;
 	}
 	//river turning
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverTurning_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/waterTurningLeftLatToLon_VMUI.waterTurningLeftLatToLon_VMUI'"));
@@ -364,7 +364,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverTurning_IS_1(TEXT("'/Game/Movies/imageSources/waterTurningLeftLatToLon_IS.waterTurningLeftLatToLon_IS'"));
 	if (tempVarRiverTurning_IS_1.Object != NULL)
 	{
-		riverTurning_MP_1->OpenSource((UImgMediaSource*)tempVarRiverTurning_IS_1.Object);
+		riverTurning_IS_1 = (UImgMediaSource*)tempVarRiverTurning_IS_1.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverTurning_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/waterTurningLeftLonToLat_VMUI.waterTurningLeftLonToLat_VMUI'"));
 	if (tempVarRiverTurning_VMUI_2.Object != NULL)
@@ -379,7 +379,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverTurning_IS_2(TEXT("'/Game/Movies/imageSources/waterTurningLeftLonToLat_IS.waterTurningLeftLonToLat_IS'"));
 	if (tempVarRiverTurning_IS_2.Object != NULL)
 	{
-		riverTurning_MP_2->OpenSource((UImgMediaSource*)tempVarRiverTurning_IS_2.Object);
+		riverTurning_IS_2 = (UImgMediaSource*)tempVarRiverTurning_IS_2.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverTurning_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/waterTurningRightLatToLon_VMUI.waterTurningRightLatToLon_VMUI'"));
 	if (tempVarRiverTurning_VMUI_3.Object != NULL)
@@ -394,7 +394,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverTurning_IS_3(TEXT("'/Game/Movies/imageSources/waterTurningRightLatToLon_IS.waterTurningRightLatToLon_IS'"));
 	if (tempVarRiverTurning_IS_3.Object != NULL)
 	{
-		riverTurning_MP_3->OpenSource((UImgMediaSource*)tempVarRiverTurning_IS_3.Object);
+		riverTurning_IS_3 = (UImgMediaSource*)tempVarRiverTurning_IS_3.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarRiverTurning_VMUI_4(TEXT("'/Game/Movies/videoMaterialsForUI/waterTurningRightLonToLat_VMUI.waterTurningRightLonToLat_VMUI'"));
 	if (tempVarRiverTurning_VMUI_4.Object != NULL)
@@ -409,7 +409,24 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarRiverTurning_IS_4(TEXT("'/Game/Movies/imageSources/waterTurningRightLonToLat_IS.waterTurningRightLonToLat_IS'"));
 	if (tempVarRiverTurning_IS_4.Object != NULL)
 	{
-		riverTurning_MP_4->OpenSource((UImgMediaSource*)tempVarRiverTurning_IS_4.Object);
+		riverTurning_IS_4 = (UImgMediaSource*)tempVarRiverTurning_IS_4.Object;
+	}
+
+	//mountains
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVarMountain_VMUI_1(TEXT("'/Game/Movies/videoMaterialsForUI/mountain_VMUI_1.mountain_VMUI_1'"));
+	if (tempVarMountain_VMUI_1.Object != NULL)
+	{
+		mountain_VMUI_1 = (UMaterial*)tempVarMountain_VMUI_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVarMountain_MP_1(TEXT("'/Game/Movies/mediaPlayers/mountain_MP_1.mountain_MP_1'"));
+	if (tempVarMountain_MP_1.Object != NULL)
+	{
+		mountain_MP_1 = (UMediaPlayer*)tempVarMountain_MP_1.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVarMountain_IS_1(TEXT("'/Game/Movies/imageSources/mountain_IS_1.mountain_IS_1'"));
+	if (tempVarMountain_IS_1.Object != NULL)
+	{
+		mountain_IS_1 = (UImgMediaSource*)tempVarMountain_IS_1.Object;
 	}
 
 	//holes
@@ -456,22 +473,22 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_holeFromDown_IS(TEXT("'/Game/Movies/imageSources/holeFromDown_IS.holeFromDown_IS'"));
 	if (tempVar_holeFromDown_IS.Object != NULL)
 	{
-		holeFromDown_MP->OpenSource((UImgMediaSource*)tempVar_holeFromDown_IS.Object);
+		holeFromDown_IS = (UImgMediaSource*)tempVar_holeFromDown_IS.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_holeFromLeft_IS(TEXT("'/Game/Movies/imageSources/holeFromLeft_IS.holeFromLeft_IS'"));
 	if (tempVar_holeFromLeft_IS.Object != NULL)
 	{
-		holeFromLeft_MP->OpenSource((UImgMediaSource*)tempVar_holeFromLeft_IS.Object);
+		holeFromLeft_IS = (UImgMediaSource*)tempVar_holeFromLeft_IS.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_holeFromRight_IS(TEXT("'/Game/Movies/imageSources/holeFromRight_IS.holeFromRight_IS'"));
 	if (tempVar_holeFromRight_IS.Object != NULL)
 	{
-		holeFromRight_MP->OpenSource((UImgMediaSource*)tempVar_holeFromRight_IS.Object);
+		holeFromRight_IS = (UImgMediaSource*)tempVar_holeFromRight_IS.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_holeFromUp_IS(TEXT("'/Game/Movies/imageSources/holeFromUp_IS.holeFromUp_IS'"));
 	if (tempVar_holeFromUp_IS.Object != NULL)
 	{
-		holeFromUp_MP->OpenSource((UImgMediaSource*)tempVar_holeFromUp_IS.Object);
+		holeFromUp_IS = (UImgMediaSource*)tempVar_holeFromUp_IS.Object;
 	}
 
 	//flags
@@ -488,7 +505,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_1(TEXT("'/Game/Movies/imageSources/flag_IS_1.flag_IS_1'"));
 	if (tempVar_flag_IS_1.Object != NULL)
 	{
-		flag_MP_1->OpenSource((UImgMediaSource*)tempVar_flag_IS_1.Object);
+		flag_IS_1 = (UImgMediaSource*)tempVar_flag_IS_1.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_2(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_2.flag_VMUI_2'"));
 	if (tempVar_flag_VMUI_2.Object != NULL)
@@ -503,7 +520,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_2(TEXT("'/Game/Movies/imageSources/flag_IS_2.flag_IS_2'"));
 	if (tempVar_flag_IS_2.Object != NULL)
 	{
-		flag_MP_2->OpenSource((UImgMediaSource*)tempVar_flag_IS_2.Object);
+		flag_IS_2 = (UImgMediaSource*)tempVar_flag_IS_2.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_3(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_3.flag_VMUI_3'"));
 	if (tempVar_flag_VMUI_3.Object != NULL)
@@ -518,7 +535,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_3(TEXT("'/Game/Movies/imageSources/flag_IS_3.flag_IS_3'"));
 	if (tempVar_flag_IS_3.Object != NULL)
 	{
-		flag_MP_3->OpenSource((UImgMediaSource*)tempVar_flag_IS_3.Object);
+		flag_IS_3 = (UImgMediaSource*)tempVar_flag_IS_3.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_4(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_4.flag_VMUI_4'"));
 	if (tempVar_flag_VMUI_4.Object != NULL)
@@ -533,7 +550,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_4(TEXT("'/Game/Movies/imageSources/flag_IS_4.flag_IS_4'"));
 	if (tempVar_flag_IS_4.Object != NULL)
 	{
-		flag_MP_4->OpenSource((UImgMediaSource*)tempVar_flag_IS_4.Object);
+		flag_IS_4 = (UImgMediaSource*)tempVar_flag_IS_4.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_5(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_5.flag_VMUI_5'"));
 	if (tempVar_flag_VMUI_5.Object != NULL)
@@ -548,7 +565,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_5(TEXT("'/Game/Movies/imageSources/flag_IS_5.flag_IS_5'"));
 	if (tempVar_flag_IS_5.Object != NULL)
 	{
-		flag_MP_5->OpenSource((UImgMediaSource*)tempVar_flag_IS_5.Object);
+		flag_IS_5 = (UImgMediaSource*)tempVar_flag_IS_5.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_6(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_6.flag_VMUI_6'"));
 	if (tempVar_flag_VMUI_6.Object != NULL)
@@ -563,7 +580,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_6(TEXT("'/Game/Movies/imageSources/flag_IS_6.flag_IS_6'"));
 	if (tempVar_flag_IS_6.Object != NULL)
 	{
-		flag_MP_6->OpenSource((UImgMediaSource*)tempVar_flag_IS_6.Object);
+		flag_IS_6 = (UImgMediaSource*)tempVar_flag_IS_6.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_7(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_7.flag_VMUI_7'"));
 	if (tempVar_flag_VMUI_7.Object != NULL)
@@ -578,7 +595,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_7(TEXT("'/Game/Movies/imageSources/flag_IS_7.flag_IS_7'"));
 	if (tempVar_flag_IS_7.Object != NULL)
 	{
-		flag_MP_7->OpenSource((UImgMediaSource*)tempVar_flag_IS_7.Object);
+		flag_IS_7 = (UImgMediaSource*)tempVar_flag_IS_7.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_8(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_8.flag_VMUI_8'"));
 	if (tempVar_flag_VMUI_8.Object != NULL)
@@ -593,7 +610,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_8(TEXT("'/Game/Movies/imageSources/flag_IS_8.flag_IS_8'"));
 	if (tempVar_flag_IS_8.Object != NULL)
 	{
-		flag_MP_8->OpenSource((UImgMediaSource*)tempVar_flag_IS_8.Object);
+		flag_IS_8 = (UImgMediaSource*)tempVar_flag_IS_8.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_9(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_9.flag_VMUI_9'"));
 	if (tempVar_flag_VMUI_9.Object != NULL)
@@ -608,7 +625,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_9(TEXT("'/Game/Movies/imageSources/flag_IS_9.flag_IS_9'"));
 	if (tempVar_flag_IS_9.Object != NULL)
 	{
-		flag_MP_9->OpenSource((UImgMediaSource*)tempVar_flag_IS_9.Object);
+		flag_IS_9 = (UImgMediaSource*)tempVar_flag_IS_9.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_10(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_10.flag_VMUI_10'"));
 	if (tempVar_flag_VMUI_10.Object != NULL)
@@ -623,7 +640,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_10(TEXT("'/Game/Movies/imageSources/flag_IS_10.flag_IS_10'"));
 	if (tempVar_flag_IS_10.Object != NULL)
 	{
-		flag_MP_10->OpenSource((UImgMediaSource*)tempVar_flag_IS_10.Object);
+		flag_IS_10 = (UImgMediaSource*)tempVar_flag_IS_10.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_11(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_11.flag_VMUI_11'"));
 	if (tempVar_flag_VMUI_11.Object != NULL)
@@ -638,7 +655,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_11(TEXT("'/Game/Movies/imageSources/flag_IS_11.flag_IS_11'"));
 	if (tempVar_flag_IS_11.Object != NULL)
 	{
-		flag_MP_11->OpenSource((UImgMediaSource*)tempVar_flag_IS_11.Object);
+		flag_IS_11 = (UImgMediaSource*)tempVar_flag_IS_11.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_12(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_12.flag_VMUI_12'"));
 	if (tempVar_flag_VMUI_12.Object != NULL)
@@ -653,7 +670,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_12(TEXT("'/Game/Movies/imageSources/flag_IS_12.flag_IS_12'"));
 	if (tempVar_flag_IS_12.Object != NULL)
 	{
-		flag_MP_12->OpenSource((UImgMediaSource*)tempVar_flag_IS_12.Object);
+		flag_IS_12 = (UImgMediaSource*)tempVar_flag_IS_12.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_13(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_13.flag_VMUI_13'"));
 	if (tempVar_flag_VMUI_13.Object != NULL)
@@ -668,7 +685,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_13(TEXT("'/Game/Movies/imageSources/flag_IS_13.flag_IS_13'"));
 	if (tempVar_flag_IS_13.Object != NULL)
 	{
-		flag_MP_13->OpenSource((UImgMediaSource*)tempVar_flag_IS_13.Object);
+		flag_IS_13 = (UImgMediaSource*)tempVar_flag_IS_13.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_14(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_14.flag_VMUI_14'"));
 	if (tempVar_flag_VMUI_14.Object != NULL)
@@ -683,7 +700,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_14(TEXT("'/Game/Movies/imageSources/flag_IS_14.flag_IS_14'"));
 	if (tempVar_flag_IS_14.Object != NULL)
 	{
-		flag_MP_14->OpenSource((UImgMediaSource*)tempVar_flag_IS_14.Object);
+		flag_IS_14 = (UImgMediaSource*)tempVar_flag_IS_14.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_15(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_15.flag_VMUI_15'"));
 	if (tempVar_flag_VMUI_15.Object != NULL)
@@ -698,7 +715,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_15(TEXT("'/Game/Movies/imageSources/flag_IS_15.flag_IS_15'"));
 	if (tempVar_flag_IS_15.Object != NULL)
 	{
-		flag_MP_15->OpenSource((UImgMediaSource*)tempVar_flag_IS_15.Object);
+		flag_IS_15 = (UImgMediaSource*)tempVar_flag_IS_15.Object;
 	}
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_flag_VMUI_16(TEXT("'/Game/Movies/videoMaterialsForUI/flag_VMUI_16.flag_VMUI_16'"));
 	if (tempVar_flag_VMUI_16.Object != NULL)
@@ -713,7 +730,7 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_flag_IS_16(TEXT("'/Game/Movies/imageSources/flag_IS_16.flag_IS_16'"));
 	if (tempVar_flag_IS_16.Object != NULL)
 	{
-		flag_MP_16->OpenSource((UImgMediaSource*)tempVar_flag_IS_16.Object);
+		flag_IS_16 = (UImgMediaSource*)tempVar_flag_IS_16.Object;
 	}
 
 	//buttons or "intersections"
@@ -1039,8 +1056,6 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 		playerOnePlayerController->SetInputMode(loadingScreenInputMode);
 		playerOnePlayerController->SetShowMouseCursor(true);
 		FSlateApplication::Get().SetKeyboardFocus(loadingSlateWidget);
-
-		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, GetGameViewportSize().ToString());
 	}
 
 	GenerateLevel();
@@ -1050,7 +1065,7 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED " + FString::FromInt(a) + " TIME(S)");
 		HouseKeeping();
 
-		if (a > 11)
+		if (a > 15)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "INFINITE LOOP TRIGGERED");
 			return;
@@ -1288,8 +1303,6 @@ void ATestHud::GenerateTrackShape()
 		}
 	}
 	countOfLoopsOne = 0;
-
-	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, (FString)"------------");
 	 
 	// This is where the master loop containing the all of the remaining sub processes for laying out the track is declared and initialized. Once this is done looping and the resulting data has been packaged, the track is ready for assembly.
 	// make sure to write code to continue laying out straight track if there is any distance remaining after all the turns are layed
@@ -1298,10 +1311,6 @@ void ATestHud::GenerateTrackShape()
 	for (int currentGroupIndex = 0; currentGroupIndex < listOfHolePositionGroupings.Num(); currentGroupIndex++)
 	{
 		currentGroupSize = listOfHolePositionGroupings[currentGroupIndex];
-
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, (FString)"------------");
-
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current group size: " + FString::FromInt(currentGroupSize) + "  | number of levels calculated: " + FString::FromInt(FMath::Clamp(FMath::RoundHalfFromZero((float)currentGroupSize / 2.0f), 1, 3)) + "  |  current group index: " + FString::FromInt(currentGroupIndex));
 
 		for (int currentLevelIndex = 0; currentLevelIndex <= FMath::Clamp(FMath::RoundHalfFromZero((float)currentGroupSize / 2.0f), 1, 3) - 1; currentLevelIndex++)
 		{
@@ -1331,8 +1340,6 @@ void ATestHud::GenerateTrackShape()
 				unpairedHoleOrIntersectionDir = intersectionDirStorArr[intersectionDirStorArr.Num() - 1];
 				unpairedHoleOrIntersectionPos = vector2DStorArrOne[vector2DStorArrOne.Num() - 1];
 			}
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "--");
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current level index: " + FString::FromInt(currentLevelIndex));
 
 			// designating the amount of turns to the next intersection per pair of holes or intersections, getting the distance between the holes or intersections and then getting the horizontal and verticle distance between the holes or intersections. Then checking if the first hole or intersection of a pair is "above" the other.
 
@@ -1488,22 +1495,11 @@ void ATestHud::GenerateTrackShape()
 						}
 					}
 				}
-
-				if ( currentLevelIndex == 0)
-				{
-					//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "pair " + FString::FromInt(a-1) + " | turns: " + FString::FromInt(availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[a - 1]) + " | difference in pair position: " + differenceInPairPosition.ToString() + " | horizontal distance: " + FString::FromInt(horizontalDistancesBetweenHolesOrIntersections[horizontalDistancesBetweenHolesOrIntersections.Num() - 1]) + ", verticle distance: " + FString::FromInt(verticleDistancesBetweenHolesOrIntersections[verticleDistancesBetweenHolesOrIntersections.Num() - 1]));
-				}
 				//for pairs starting on different sides have you decided how to determine which direction their intersection will face? yes they will take the direction of whichever side they are closest to unless firstOfPairIsAboveSecond or firstOfPairIsEvenWithOrLeftOfSecond
 			}
 
 			horizontalAndVerticleDistancesBetweenHolesOrIntersections[0] = horizontalDistancesBetweenHolesOrIntersections;
 			horizontalAndVerticleDistancesBetweenHolesOrIntersections[1] = verticleDistancesBetweenHolesOrIntersections;
-			
-			if (currentGroupIndex == listOfHolePositionGroupings.Num() - 1 && currentLevelIndex == 0)
-			{
-				//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, (FString)"size of this group and level's availableTurnsArr: " + FString::FromInt(availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num()) + " | FMath randrange test: " + FString::FromInt(FMath::RandRange(3, 1)));
-			}
-			//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of availableTurnsPerPairBlock : " + FString::FromInt(availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num()) + " | first value of availableTurnsPerPairBlock : " + FString::FromInt(availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[0]) + " | size of pair orientation arrs firstOfPairAboveSecond first: " + FString::FromInt(firstOfPairIsAboveSecondArr.Num()) + " " + FString::FromInt(firstOfPairIsEvenWithOrLeftOfSecondArr.Num()) + " | length of horizontal and verticle distance arrays: " + FString::FromInt(horizontalAndVerticleDistancesBetweenHolesOrIntersections[0].Num()) + " " + FString::FromInt(horizontalAndVerticleDistancesBetweenHolesOrIntersections[1].Num()));
 
 			//using the availableTurnsPerPair list to assign which of the turns given to each pair becomes the intersection. for pairs of holes that start on the same side of the grid for the even indexed holes if the even indexed hole is below the odd indexed hole the intersection will be placed at the last turn or any odd indexed turn. for cases in which the even indexed hole is above the odd the intersection will be placed at the first turn or any even indexed turn. for pairs of holes starting on different sides of the track the intersection can be placed at any left turn but it should alternate based on where the last turn was placed?..
 			//I will need to generate new logic for if firstOfpair is left of second, for if firstOfPair is even with second, and also for both of those things if first of pair is above second
@@ -1930,8 +1926,6 @@ void ATestHud::GenerateTrackShape()
 				currentFirstOfPairIsAboveSecond = firstOfPairIsAboveSecondArr[currentIntersection];
 				currentFirstOfPairIsEvenWithOrLeftOfSecond = firstOfPairIsEvenWithOrLeftOfSecondArr[currentIntersection];
 
-				//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "currentIntersection of culminatingIntersections: " + FString::FromInt(currentIntersection));
-
 				if (pairStartsOnSameSide[currentIntersection])
 				{
 					intersectionDirStorArr.Add(firstOfPairHoleDirStorArr[currentIntersection]);
@@ -2225,11 +2219,6 @@ void ATestHud::GenerateTrackShape()
 				//will this intersectionOrientation need to be set to 2 for straight track? or will enough be handled by directionOfTurns it wont matter?
 				//make sure this unpaired hole does not get an adjustment in the following code bracket. it shouldnt but just watch out
 			}
-
-			/*for (int a = 0; a < vector2DStorArrOne.Num(); a++)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "vector2dStorArr index " + FString::FromInt(a) + ": " + vector2DStorArrOne[a].ToString());
-			}*/
 
 			// this is where everything gets placed into permanent storage. remember this needs to get moved above the intersection adjustment section
 			holeAndIntersectionPositions[currentLevelIndex + 1][currentGroupIndex] = vector2DStorArrOne;
@@ -3587,12 +3576,6 @@ void ATestHud::GenerateTrackShape()
 	firstOfPairIsAboveSecondAllPairs[4][0] = firstOfPairIsAboveSecondArr;
 	firstOfPairIsEvenWithOrLeftOfSecondAllPairs[4][0] = firstOfPairIsEvenWithOrLeftOfSecondArr;
 
-	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "all final group 4th level intersection adjustment weights");
-	for (int a : intersectionAjustmentWeights)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, FString::FromInt(a));
-	}
-
 	if (currentGroupSize == 1)
 	{
 		currentGroupSize = 0;
@@ -3605,8 +3588,6 @@ void ATestHud::GenerateTrackShape()
 			unpairedHoleOrIntersectionDir = intersectionDirStorArr[intersectionDirStorArr.Num() - 1];
 			unpairedHoleOrIntersectionPos = vector2DStorArrOne[vector2DStorArrOne.Num() - 1];
 		}
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "--");
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current level index: " + FString::FromInt(currentLevelIndex));
 
 		//amount of turns for each pair as well as horizontal and verticle distance between pairs are determined
 		for (int a = 1; a <= intersectionDirStorArr.Num() / 2; a++)//this won't run if there is only one element in the current group
@@ -4458,10 +4439,6 @@ void ATestHud::GenerateTrackShape()
 			firstOfPairIsAboveSecondAllPairs[currentLevelIndex][0].Add(0);
 			firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex][0].Add(0);
 		}
-		for (FVector2D a : vector2DStorArrOne)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, a.ToString());
-		}
 
 		holeAndIntersectionPositions[currentLevelIndex + 1][0] = vector2DStorArrOne;
 		arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex + 1][0] = intersectionDirStorArr;
@@ -5199,8 +5176,6 @@ void ATestHud::BuildLevel()
 	int finalGroupingActive = 0;
 	int adjustmentAppliedToCurrentIntersectionPair;
 
-	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "------------");
-
 	//there can be remaining verticle distance when pairStartsOnSameSide, firstOfPairIsRightOfAndEvenWithOrBelowSecond, and firstOfPairGetsAdjustment. I still need to fix this
 	//I just noticed when their facing opposite sides and the second of pair gets adjustment the adjustment goes verticle not horizontal. try to get a picture you didnt at first glance
 
@@ -5223,23 +5198,16 @@ void ATestHud::BuildLevel()
 		}
 
 		intersectionAdjustmentTrackerArr = { 0, 0, 0, 0, 0, 0, 0, 0 };
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current group size: " + FString::FromInt(currentGroupSize) + " | current group index: " + FString::FromInt(currentGroupIndex));
 
 		for (int currentLevelIndex = 0 + (4 * finalGroupingActive); currentLevelIndex <= FMath::Clamp(FMath::RoundHalfFromZero((float)currentGroupSize / 2.0f), 0, 3) - 1 + (4 * finalGroupingActive); currentLevelIndex++)
 		{//since I will be determining the hole positions 
 			topLevelIndex = currentLevelIndex;
 
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current level index: " + FString::FromInt(currentLevelIndex));
-
-			/*GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of holeAndIntersectionPositions current level current group: " + FString::FromInt(holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex].Num()) + " | size of ArrOfTrackDir: " + FString::FromInt(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex].Num()) + " | size of firstOfPairIsAboveSecondAllPairs current level current group: " + FString::FromInt(firstOfPairIsAboveSecondAllPairs[currentLevelIndex][currentGroupIndex].Num()) + " | size of firstOfPairIsEvenWithOrLeftOfSecondAllPairs current level current group: " + FString::FromInt(firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex][currentGroupIndex].Num()));
-
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "size of holeAndIntersectionPositions next level current group: " + FString::FromInt(holeAndIntersectionPositions[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of ArrOfTrackDir at next level: " + FString::FromInt(arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of intersectionOrientations next level current group: " + FString::FromInt(intersectionOrientationsPerGroupPerLevel[currentLevelIndex + 1][currentGroupIndex].Num()) + " | size of adjustmentAppliedToCulminatingIntersection next level current group: " + FString::FromInt(adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex].Num()));*/
 			if (currentLevelIndex == 4)
 			{
 				for (int currentFirstOfPairIndex = 0; currentFirstOfPairIndex < holeAndIntersectionPositions[4][0].Num(); currentFirstOfPairIndex += 2)
 				{
 					adjustmentAppliedToCurrentIntersectionPair = adjustmentsAppliedToEachIntersection[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2];
-					GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "for the 4th level of the final grouping currentGroupIndex: " + FString::FromInt(currentGroupIndex) + " | currentLevelIndex: " + FString::FromInt(currentLevelIndex) + " | adjustmentAppliedToCurrentIntersectionPair: " + FString::FromInt(adjustmentAppliedToCurrentIntersectionPair));
 
 					if (adjustmentAppliedToCurrentIntersectionPair != 0)
 					{
@@ -5518,17 +5486,10 @@ void ATestHud::BuildLevel()
 			{
 				//what would happen if there were 7 holes in terms of how the adjustment is handled? I need to check in the intersection adjustment section of the generate track function. currently I think everything would run properly. if the 7nth hole's "promoted" intersection got an adjustment it should just run as if the promoted intersection were a standard intersection
 
-				//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "index " + FString::FromInt(currentFirstOfPairIndex) + " of holeAndIntersectionPositions: " + holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex].ToString() + " | quantity of turn distances for current pair: " + FString::FromInt(turnAndIntersectionDistancesPerPair[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num()) + " | quantity of turn directions for current pair: " + FString::FromInt(directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num()) + " | current firstOfPairIsAboveSecond: " + FString::FromInt(firstOfPairIsAboveSecondAllPairs[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2]) + " | current firstOfPairIsLeftSecond: " + FString::FromInt(firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2]));
-
 				currentFirstOfPairPosition = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex];
 				currentFirstOfPairDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex];
 				currentPairTurnDistances = turnAndIntersectionDistancesPerPair[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2];
 				currentPairTurnDirections = directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2];
-
-				/*for (int a = 0; a < directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2].Num(); a++)
-				{
-					GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "turn direction and distance at index " + FString::FromInt(a) + ": " + FString::FromInt(directionsOfTurns[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2][a]) + ", " + FString::FromInt(turnAndIntersectionDistancesPerPair[currentLevelIndex][currentGroupIndex][currentFirstOfPairIndex / 2][a]));
-				}*/
 
 				previousTurnOrIntersectionPosition = currentFirstOfPairPosition;
 
@@ -7999,9 +7960,6 @@ void ATestHud::BuildLevel()
 		}
 		topLevelIndex++;
 
-		/*GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "current level index: " + FString::FromInt(topLevelIndex));
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "index " + FString::FromInt(0) + " of holeAndIntersectionPositions: " + holeAndIntersectionPositions[topLevelIndex][currentGroupIndex][0].ToString());*/
-
 		if (finalGroupingActive)
 		{
 			currentGroupIndex = listOfHolePositionGroupings.Num() + 1;
@@ -9716,13 +9674,553 @@ void ATestHud::BuildLevel()
 		}
 	}
 
+	// all other landscape stuff besides river and hole positions
+	FVector2D convertedTilePos;
+	bool canAddLargeTile;
+
+	switch (FMath::RandRange(0, 2))
+	{
+	case 0 :
+		//thin tree cover, possible mountain
+		for (int a = 0; a < 225; a++)
+		{
+			if (landscapeArr[a] == 0)
+			{
+				if (tileIsTrack[a])
+				{
+					landscapeArr[a] = 29 + FMath::RandRange(1, 3);
+				}
+				else
+				{
+					if (FMath::RandRange(0, 11) > 7)
+					{
+						landscapeArr[a] = 20 + FMath::RandRange(0, 3);
+					}
+					else
+					{
+						convertedTilePos.X = a % 15;
+						convertedTilePos.Y = a / 15;
+
+						if (convertedTilePos.X < 13 && convertedTilePos.Y < 13 && a < 89)
+						{
+							for (int b = 0; b < 3; b++)
+							{
+								for (int c = 0; c < 3; c++)
+								{
+									relevantPos = convertedTilePos + FVector2D(c, b);
+
+									if (landscapeArr[relevantPos.Y * 15 + relevantPos.X] || tileIsTrack[relevantPos.Y * 15 + relevantPos.X])
+									{
+										canAddLargeTile = false;
+									}
+								}
+							}
+						}
+						else
+						{
+							canAddLargeTile = false;
+						}
+
+						if (canAddLargeTile && FMath::RandRange(0, 40) < numberOfHoles)
+						{
+							for (int b = 0; b < 3; b++)
+							{
+								for (int c = 0; c < 3; c++)
+								{
+									relevantPos = convertedTilePos + FVector2D(c, b);
+
+									landscapeArr[relevantPos.Y * 15 + relevantPos.X] = 29;
+								}
+							}
+
+							pondPositionArr.Add(convertedTilePos);
+							pondSpecifierArr.Add(33);
+						}
+						else
+						{
+							landscapeArr[a] = 29 + FMath::RandRange(1, 3);
+						}
+						canAddLargeTile = true;
+					}
+				}
+			}
+		}
+		break;
+	case 1 :
+		//thick tree cover, no mountains
+		for (int a = 0; a < 225; a++)
+		{
+			if (landscapeArr[a] == 0)
+			{
+				if (tileIsTrack[a])
+				{
+					landscapeArr[a] = 29 + FMath::RandRange(1, 3);
+				}
+				else
+				{
+					if (FMath::RandRange(0, 11) > 3)
+					{
+						convertedTilePos.X = a % 15;
+						convertedTilePos.Y = a / 15;
+						if (convertedTilePos.X < 13 && convertedTilePos.Y < 13)
+						{
+							for (int b = 0; b < 3; b++)
+							{
+								for (int c = 0; c < 3; c++)
+								{
+									relevantPos = convertedTilePos + FVector2D(c, b);
+
+									if (landscapeArr[relevantPos.Y * 15 + relevantPos.X] || tileIsTrack[relevantPos.Y * 15 + relevantPos.X])
+									{
+										canAddLargeTile = false;
+									}
+								}
+							}
+						}
+						else
+						{
+							canAddLargeTile = false;
+						}
+
+						if (canAddLargeTile && FMath::RandRange(0, 32) < numberOfHoles)
+						{
+							for (int b = 0; b < 3; b++)
+							{
+								for (int c = 0; c < 3; c++)
+								{
+									relevantPos = convertedTilePos + FVector2D(c, b);
+
+									landscapeArr[relevantPos.Y * 15 + relevantPos.X] = 29;
+								}
+							}
+
+							pondPositionArr.Add(convertedTilePos);
+							pondSpecifierArr.Add(24);
+						}
+						else
+						{
+							landscapeArr[a] = 20 + FMath::RandRange(0, 3);
+						}
+
+						canAddLargeTile = true;
+					}
+					else
+					{
+						landscapeArr[a] = 29 + FMath::RandRange(1, 3);
+					}
+				}
+			}
+		}
+		break;
+	case 2 :
+		//gradient of thin to thick tree cover
+		switch (FMath::RandRange(0, 1))
+		{
+		case 0 :
+			//gradient dir 2, thin to thick
+			for (int a = 0; a < 225; a++)
+			{
+				if (landscapeArr[a] == 0)
+				{
+					if (tileIsTrack[a])
+					{
+						landscapeArr[a] = 29 + FMath::RandRange(1, 3);
+					}
+					else
+					{
+						if (FMath::RandRange(0, 24) < (a % 15) + 4)
+						{
+							convertedTilePos.X = a % 15;
+							convertedTilePos.Y = a / 15;
+							if (convertedTilePos.X < 13 && convertedTilePos.Y < 13 && a % 15 > 8)
+							{
+								for (int b = 0; b < 3; b++)
+								{
+									for (int c = 0; c < 3; c++)
+									{
+										relevantPos = convertedTilePos + FVector2D(c, b);
+
+										if (landscapeArr[relevantPos.Y * 15 + relevantPos.X] || tileIsTrack[relevantPos.Y * 15 + relevantPos.X])
+										{
+											canAddLargeTile = false;
+										}
+									}
+								}
+							}
+							else
+							{
+								canAddLargeTile = false;
+							}
+
+							if (canAddLargeTile && FMath::RandRange(0, 32) < numberOfHoles)
+							{
+								for (int b = 0; b < 3; b++)
+								{
+									for (int c = 0; c < 3; c++)
+									{
+										relevantPos = convertedTilePos + FVector2D(c, b);
+
+										landscapeArr[relevantPos.Y * 15 + relevantPos.X] = 29;
+									}
+								}
+
+								pondPositionArr.Add(convertedTilePos);
+								pondSpecifierArr.Add(24);
+							}
+							else
+							{
+								landscapeArr[a] = 20 + FMath::RandRange(0, 3);
+							}
+
+							canAddLargeTile = true;
+						}
+						else
+						{
+							convertedTilePos.X = a % 15;
+							convertedTilePos.Y = a / 15;
+
+							if (convertedTilePos.X < 13 && convertedTilePos.Y < 13 && a < 89 && a % 15 < 9)
+							{
+								for (int b = 0; b < 3; b++)
+								{
+									for (int c = 0; c < 3; c++)
+									{
+										relevantPos = convertedTilePos + FVector2D(c, b);
+
+										if (landscapeArr[relevantPos.Y * 15 + relevantPos.X] || tileIsTrack[relevantPos.Y * 15 + relevantPos.X])
+										{
+											canAddLargeTile = false;
+										}
+									}
+								}
+							}
+							else
+							{
+								canAddLargeTile = false;
+							}
+
+							if (canAddLargeTile && FMath::RandRange(0, 24) < numberOfHoles)
+							{
+								for (int b = 0; b < 3; b++)
+								{
+									for (int c = 0; c < 3; c++)
+									{
+										relevantPos = convertedTilePos + FVector2D(c, b);
+
+										landscapeArr[relevantPos.Y * 15 + relevantPos.X] = 29;
+									}
+								}
+
+								pondPositionArr.Add(convertedTilePos);
+								pondSpecifierArr.Add(33);
+							}
+							else
+							{
+								landscapeArr[a] = 29 + FMath::RandRange(1, 3);
+							}
+							canAddLargeTile = true;
+						}
+					}
+				}
+			}
+			break;
+		case 1 :
+			//gradient dir 4, thin to thick
+			for (int a = 0; a < 225; a++)
+			{
+				if (landscapeArr[a] == 0)
+				{
+					if (tileIsTrack[a])
+					{
+						landscapeArr[a] = 29 + FMath::RandRange(1, 3);
+					}
+					else
+					{
+						if (FMath::RandRange(0, 24) > (a % 15) + 4)
+						{
+							convertedTilePos.X = a % 15;
+							convertedTilePos.Y = a / 15;
+							if (convertedTilePos.X < 13 && convertedTilePos.Y < 13 && a % 15 < 8)
+							{
+								for (int b = 0; b < 3; b++)
+								{
+									for (int c = 0; c < 3; c++)
+									{
+										relevantPos = convertedTilePos + FVector2D(c, b);
+
+										if (landscapeArr[relevantPos.Y * 15 + relevantPos.X] || tileIsTrack[relevantPos.Y * 15 + relevantPos.X])
+										{
+											canAddLargeTile = false;
+										}
+									}
+								}
+							}
+							else
+							{
+								canAddLargeTile = false;
+							}
+
+							if (canAddLargeTile && FMath::RandRange(0, 32) < numberOfHoles)
+							{
+								for (int b = 0; b < 3; b++)
+								{
+									for (int c = 0; c < 3; c++)
+									{
+										relevantPos = convertedTilePos + FVector2D(c, b);
+
+										landscapeArr[relevantPos.Y * 15 + relevantPos.X] = 29;
+									}
+								}
+
+								pondPositionArr.Add(convertedTilePos);
+								pondSpecifierArr.Add(24);
+							}
+							else
+							{
+								landscapeArr[a] = 20 + FMath::RandRange(0, 3);
+							}
+
+							canAddLargeTile = true;
+						}
+						else
+						{
+							convertedTilePos.X = a % 15;
+							convertedTilePos.Y = a / 15;
+
+							if (convertedTilePos.X < 13 && convertedTilePos.Y < 13 && a < 89 && a % 15 > 7)
+							{
+								for (int b = 0; b < 3; b++)
+								{
+									for (int c = 0; c < 3; c++)
+									{
+										relevantPos = convertedTilePos + FVector2D(c, b);
+
+										if (landscapeArr[relevantPos.Y * 15 + relevantPos.X] || tileIsTrack[relevantPos.Y * 15 + relevantPos.X])
+										{
+											canAddLargeTile = false;
+										}
+									}
+								}
+							}
+							else
+							{
+								canAddLargeTile = false;
+							}
+
+							if (canAddLargeTile && FMath::RandRange(0, 24) < numberOfHoles)
+							{
+								for (int b = 0; b < 3; b++)
+								{
+									for (int c = 0; c < 3; c++)
+									{
+										relevantPos = convertedTilePos + FVector2D(c, b);
+
+										landscapeArr[relevantPos.Y * 15 + relevantPos.X] = 29;
+									}
+								}
+
+								pondPositionArr.Add(convertedTilePos);
+								pondSpecifierArr.Add(33);
+							}
+							else
+							{
+								landscapeArr[a] = 29 + FMath::RandRange(1, 3);
+							}
+							canAddLargeTile = true;
+						}
+					}
+				}
+			}
+			break;
+		default:
+			break;
+		}
+		break;
+	default:
+		break;
+	}
+
+	for (int a : landscapeArr)
+	{
+		switch (a)
+		{
+		case 0 :
+			grass_MP_1->OpenSource(grass_IS_1);
+			break;
+		case 1 :
+			holeFromDown_MP->OpenSource(holeFromDown_IS);
+			break;
+		case 2 :
+			holeFromLeft_MP->OpenSource(holeFromLeft_IS);
+			break;
+		case 3 :
+			holeFromRight_MP->OpenSource(holeFromRight_IS);
+			break;
+		case 4 :
+			holeFromUp_MP->OpenSource(holeFromUp_IS);
+			break;
+		case 5 :
+			break;
+		case 6 :
+			break;
+		case 11 :
+			riverFlowingDown_MP_1->OpenSource(riverFlowingDown_IS_1);
+			break;
+		case 12 :
+			riverFlowingDown_MP_2->OpenSource(riverFlowingDown_IS_2);
+			break;
+		case 13 :
+			riverFlowingDown_MP_3->OpenSource(riverFlowingDown_IS_3);
+			break;
+		case 14 :
+			riverFlowingLeft_MP_1->OpenSource(riverFlowingLeft_IS_1);
+			break;
+		case 15 :
+			riverFlowingLeft_MP_2->OpenSource(riverFlowingLeft_IS_2);
+			break;
+		case 16 :
+			riverFlowingLeft_MP_3->OpenSource(riverFlowingLeft_IS_3);
+			break;
+		case 17 :
+			riverFlowingRight_MP_1->OpenSource(riverFlowingRight_IS_1);
+			break;
+		case 18 :
+			riverFlowingRight_MP_2->OpenSource(riverFlowingRight_IS_2);
+			break;
+		case 19 :
+			riverFlowingRight_MP_3->OpenSource(riverFlowingRight_IS_3);
+			break;
+		case 20 :
+			tree_MP_1->OpenSource(tree_IS_1);
+			break;
+		case 21 :
+			tree_MP_2->OpenSource(tree_IS_2);
+			break;
+		case 22 :
+			tree_MP_3->OpenSource(tree_IS_3);
+			break;
+		case 23 :
+			tree_MP_4->OpenSource(tree_IS_4);
+			break; 
+		case 25 :
+			riverTurning_MP_1->OpenSource(riverTurning_IS_1);
+			break;
+		case 26 :
+			riverTurning_MP_2->OpenSource(riverTurning_IS_2);
+			break;
+		case 27 :
+			riverTurning_MP_3->OpenSource(riverTurning_IS_3);
+			break;
+		case 28 :
+			riverTurning_MP_4->OpenSource(riverTurning_IS_4);
+			break;
+		case 29 :
+			break;
+		case 30 :
+			grass_MP_1->OpenSource(grass_IS_1);
+			break;
+		case 31 :
+			grass_MP_2->OpenSource(grass_IS_2);
+			break;
+		case 32 :
+			grass_MP_3->OpenSource(grass_IS_3);
+			break;
+		default:
+			break;
+		}
+	}
+
+	for (int a : pondSpecifierArr)
+	{
+		switch (a)
+		{
+		case 7 :
+			pondHorizontal_MP->OpenSource(pondHorizontal_IS);
+			break;
+		case 8 :
+			pondVerticleFlowingLeft_MP->OpenSource(pondVerticleFlowingLeft_IS);
+			break;
+		case 9 :
+			pondVerticleFlowingRight_MP->OpenSource(pondVerticleFlowingRight_IS);
+			break;
+		case 10 :
+			waterfall_MP->OpenSource(waterfall_IS);
+			break;
+		case 24 :
+			tree_MP_5->OpenSource(tree_IS_5);
+			break;
+		case 33 :
+			mountain_MP_1->OpenSource(mountain_IS_1);
+			break;
+		default:
+			break;
+		}
+	}
+
+	for (int a = 0; a < numberOfHoles; a++)
+	{
+		switch (a)
+		{
+		case 0 :
+			flag_MP_1->OpenSource(flag_IS_1);
+			break;
+		case 1 :
+			flag_MP_2->OpenSource(flag_IS_2);
+			break;
+		case 2 :
+			flag_MP_3->OpenSource(flag_IS_3);
+			break;
+		case 3 :
+			flag_MP_4->OpenSource(flag_IS_4);
+			break;
+		case 4 :
+			flag_MP_5->OpenSource(flag_IS_5);
+			break;
+		case 5 :
+			flag_MP_6->OpenSource(flag_IS_6);
+			break;
+		case 6 :
+			flag_MP_7->OpenSource(flag_IS_7);
+			break;
+		case 7 :
+			flag_MP_8->OpenSource(flag_IS_8);
+			break;
+		case 8 :
+			flag_MP_9->OpenSource(flag_IS_9);
+			break;
+		case 9 :
+			flag_MP_10->OpenSource(flag_IS_10);
+			break;
+		case 10 :
+			flag_MP_11->OpenSource(flag_IS_11);
+			break;
+		case 11 :
+			flag_MP_12->OpenSource(flag_IS_12);
+			break;
+		case 12 :
+			flag_MP_13->OpenSource(flag_IS_13);
+			break;
+		case 13 :
+			flag_MP_14->OpenSource(flag_IS_14);
+			break;
+		case 14 :
+			flag_MP_15->OpenSource(flag_IS_15);
+			break;
+		case 15 :
+			flag_MP_16->OpenSource(flag_IS_16);
+			break;
+		default:
+			break;
+		}
+	}
+
 	for (int a : tileIsTrack)
 	{
 		if (a > 1)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED ");
-			//regenerateLevel.Add(1);
-			//return;//I think I implimented this incorrectly it is running much more frequently then it should be FIXED
+			//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED ");
+			regenerateLevel.Add(1);
+			return;
 		}
 	}
 
@@ -9767,6 +10265,7 @@ void ATestHud::BuildLevel()
 			.riverTurning_VMUI_2(riverTurning_VMUI_2)
 			.riverTurning_VMUI_3(riverTurning_VMUI_3)
 			.riverTurning_VMUI_4(riverTurning_VMUI_4)
+			.mountain_VMUI_1(mountain_VMUI_1)
 			.holeFromDown_VMUI(holeFromDown_VMUI)
 			.holeFromLeft_VMUI(holeFromLeft_VMUI)
 			.holeFromRight_VMUI(holeFromRight_VMUI)
@@ -9866,12 +10365,65 @@ void ATestHud::GenerateLevel()
 
 void ATestHud::HouseKeeping()
 {
+	grass_MP_1->Close();
+	grass_MP_2->Close();
+	grass_MP_3->Close();
+	pondHorizontal_MP->Close();
+	pondVerticleFlowingLeft_MP->Close();
+	pondVerticleFlowingRight_MP->Close();
+	riverFlowingDown_MP_1->Close();
+	riverFlowingDown_MP_2->Close();
+	riverFlowingDown_MP_3->Close();
+	riverFlowingLeft_MP_1->Close();
+	riverFlowingLeft_MP_2->Close();
+	riverFlowingLeft_MP_3->Close();
+	riverFlowingRight_MP_1->Close();
+	riverFlowingRight_MP_2->Close();
+	riverFlowingRight_MP_3->Close();
+	tree_MP_1->Close();
+	tree_MP_2->Close();
+	tree_MP_3->Close();
+	tree_MP_4->Close();
+	tree_MP_5->Close();
+	waterfall_MP->Close();
+	riverTurning_MP_1->Close();
+	riverTurning_MP_2->Close();
+	riverTurning_MP_3->Close();
+	riverTurning_MP_4->Close();
+	mountain_MP_1->Close();
+
+	holeFromDown_MP->Close();
+	holeFromLeft_MP->Close();
+	holeFromRight_MP->Close();
+	holeFromUp_MP->Close();
+
+	flag_MP_1->Close();
+	flag_MP_2->Close();
+	flag_MP_3->Close();
+	flag_MP_4->Close();
+	flag_MP_5->Close();
+	flag_MP_6->Close();
+	flag_MP_7->Close();
+	flag_MP_8->Close();
+	flag_MP_9->Close();
+	flag_MP_10->Close();
+	flag_MP_11->Close();
+	flag_MP_12->Close();
+	flag_MP_13->Close();
+	flag_MP_14->Close();
+	flag_MP_15->Close();
+	flag_MP_16->Close();
+
 	arrOfViableHoleCoordinates.Empty();
 	holePositions.Empty();
+	convertedHolePositions.Empty();
 	test.Empty();
 	listOfHolePositionGroupings.Empty();
 	negativeOneZeroOrOne = 0;
 	extentOfAdjustment = 1;
+	pondPositionArr.Empty();
+	pondSpecifierArr.Empty();
+	largeTreeOrMountainPosArr.Empty();
 
 	holeAndIntersectionPositions =
 	{

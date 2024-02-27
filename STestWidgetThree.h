@@ -96,6 +96,8 @@ public:
 
 	SLATE_ARGUMENT(UMaterial*, riverTurning_VMUI_4)
 
+	SLATE_ARGUMENT(UMaterial*, mountain_VMUI_1)
+
 	SLATE_ARGUMENT(UMaterial*, holeFromDown_VMUI)
 
 	SLATE_ARGUMENT(UMaterial*, holeFromLeft_VMUI)
@@ -298,7 +300,8 @@ public:
 	void OnIntersectionReleasedSeventeen();
 
 	FVector2D PrepTurnMarble(int currentMarble, FVector2d marblePosition, int dirOfMarble, bool isIntersection, int trackArrValue);
-	FVector2D TurnMarble(int CurrentMarble, FVector2D marblePosition);
+	FVector2D TurnMarble(int currentMarble, FVector2D marblePosition);
+	FMargin ShrinkMarble(FMargin inPadding, double factorOfShrinkage);
 
 	// constructor variables
 
@@ -338,6 +341,8 @@ public:
 	UMaterial* riverTurning_VMUI_2;
 	UMaterial* riverTurning_VMUI_3;
 	UMaterial* riverTurning_VMUI_4;
+
+	UMaterial* mountain_VMUI_1;
 
 	UMaterial* holeFromDown_VMUI;
 	UMaterial* holeFromLeft_VMUI;
@@ -452,6 +457,8 @@ public:
 	FSlateBrush* riverTurning_SB_2;
 	FSlateBrush* riverTurning_SB_3;
 	FSlateBrush* riverTurning_SB_4;
+
+	FSlateBrush* mountain_SB_1;
 
 	FSlateBrush* holeFromDown_SB;
 	FSlateBrush* holeFromLeft_SB;
@@ -586,9 +593,18 @@ public:
 public: 
 	TSharedPtr<class SWindow> windowOne;
 	TArray<TSharedPtr<class SBox>> activeMarbles;
+	TArray<TSharedPtr<class SBox>> marblesToBeDestroyed;
 	TArray<FSlateBrush*> activeMarblesContent;
 	TArray<FSlateBrush*> marblesThisGame;
+	TArray<int> marblesThisGameProxy;
+	TArray<int> marblesThisGameProxyTracker;
+	int marbleProxyIndexToAdd;
+	int marbleIndexToAdd;
 	int marbleIndexToSpawn;
+	int marbleIndexToDelete;
+	TArray <int> marbleIndexesBeingAdded;
+	TArray<double> marblesBeingDestroyedTime;
+	TArray<FMargin> marblesShrinking;
 	TSharedPtr<class STextBlock>  scoreText;
 	FText currentScore;
 	int playerScore = 0;
@@ -602,6 +618,7 @@ public:
 	TSharedPtr<class SOverlay> largeTilesOverlay;
 	TSharedPtr<class SOverlay> landscapeOverlay;
 	TSharedPtr<class SOverlay> trackOverlay;
+	TSharedPtr<class SOverlay> intersectionButtonsOverlay;
 	TSharedPtr<class SOverlay> flagsOverlay;
 	TSharedPtr<class SOverlay> frameColorOverlay;
 
@@ -620,24 +637,29 @@ public:
 	float viewportY = 0.0f;
 	int deleteMe;
 	TArray<FVector2D> marblePositions;
-	TArray<FVector2D> marblePositionsCenters;
+	TArray<FVector2D> marblesToBeDestroyedPosition;
+	TArray<FVector2D> marblePositionsCenters;//you need to change this from the center of the marbles "tile" to what appears to be the center of the marble
 	TArray<FVector2D> previousTickMarblePositionsCenters;
 	int currentIntersection = 1;
 	TArray<int> startingMarbleMovementTracker = { { 0, 0 } };
-	TArray<TArray<int> > marbleMovementTracker = { { 0, 0 } };
+	TArray<TArray<int> > marbleMovementTracker;
+	TArray<TArray<int> > marblesToBeDestroyedMovementTracker;
 	TArray<bool> marbleIsTurning;
-	TArray<int> turnToExecute = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	TArray<int> turnToExecute;
 	TArray<int> dirOfMarbles;
-	TArray<FVector2D> deltaMarblePos = { FVector2D( 0, 0 ), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0), FVector2D(0, 0) };
+	TArray<FVector2D> deltaMarblePos;
+	int quantityOfMarbles;
 
 	int timeOfGame = 120;
-	float startingTime = 0;
-	float fCurrentTime = 0;
+	double startingTime = 0;
+	double fCurrentTime = 0;
 	int currentTime = 120;
-	float spawningWindow;
-	TArray<float> timeIntoWindowMarbleIsSpawned;
+	double spawningWindow;
+	TArray<double> timeIntoWindowMarbleIsSpawned;
 	bool gameStarted = false;
 	bool gameEnded;
+	double speedMultiplier;
+	double timeToCoverOneTileDividedByTwo;
 
-	FMargin changingPosition;
+	FMargin marbleToBeDestroyedPadding;
 };

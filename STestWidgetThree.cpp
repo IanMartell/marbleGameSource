@@ -25,6 +25,17 @@ const FMargin CalculateTilePosition(FVector2D tileCoords, FVector2D adjustedView
 	return FMargin(leftPad, topPad, rightPad, bottomPad);
 }
 
+FMargin STestWidgetThree::ShrinkMarble(FMargin inPadding, double factorOfShrinkage)
+{
+	float halfSizeOfTile = (adjustedViewportSize.Y / 15) / 2;
+	float leftPad = inPadding.Left + halfSizeOfTile * factorOfShrinkage;
+	float topPad = inPadding.Top + halfSizeOfTile * factorOfShrinkage;
+	float rightPad = inPadding.Right + halfSizeOfTile * factorOfShrinkage;
+	float bottomPad = inPadding.Bottom + halfSizeOfTile * factorOfShrinkage;
+
+	return FMargin(leftPad, topPad, rightPad, bottomPad);
+}
+
 const FMargin CalculateLargeTilePosition(FVector2D tileCoords, FVector2D adjustedViewportSize)
 {
 	float viewportX = adjustedViewportSize.X;
@@ -41,7 +52,7 @@ const FMargin CalculateLargeTilePosition(FVector2D tileCoords, FVector2D adjuste
 const FVector2D CalculateMarblePositionCenters(FVector2D tileCoords)
 {
 	int tileCoordsX = FMath::RoundToZero(tileCoords.X + 0.5);
-	int tileCoordsY = FMath::RoundToZero(tileCoords.Y + 0.5);
+	int tileCoordsY = FMath::RoundToZero(tileCoords.Y + 0.4);
 
 	return FVector2D(tileCoordsX, tileCoordsY);
 }
@@ -103,6 +114,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	riverFlowingRight_VMUI_1 = InArgs._riverFlowingRight_VMUI_1;
 	riverFlowingRight_VMUI_2 = InArgs._riverFlowingRight_VMUI_2;
 	riverFlowingRight_VMUI_3 = InArgs._riverFlowingRight_VMUI_3;
+	mountain_VMUI_1 = InArgs._mountain_VMUI_1;
 	tree_VMUI_1 = InArgs._tree_VMUI_1;
 	tree_VMUI_2 = InArgs._tree_VMUI_2;
 	tree_VMUI_3 = InArgs._tree_VMUI_3;
@@ -240,6 +252,8 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	riverTurning_SB_3->SetResourceObject(riverTurning_VMUI_3);
 	riverTurning_SB_4 = new FSlateBrush();
 	riverTurning_SB_4->SetResourceObject(riverTurning_VMUI_4);
+	mountain_SB_1 = new FSlateBrush();
+	mountain_SB_1->SetResourceObject(mountain_VMUI_1);
 	
 	holeFromDown_SB = new FSlateBrush();
 	holeFromLeft_SB = new FSlateBrush();
@@ -400,14 +414,14 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	emptyImg_SB = new FSlateBrush();
 	emptyImg_SB->SetResourceObject(emptyImg_SMUI);
 
-	landscapeStuff = { grass_SB_1, holeFromDown_SB, holeFromLeft_SB, holeFromRight_SB, holeFromUp_SB, grass_SB_2, grass_SB_3, pondHorizontal_SB, pondVerticleFlowingLeft_SB, pondVerticleFlowingRight_SB, waterfall_SB, riverFlowingDown_SB_1, riverFlowingDown_SB_2, riverFlowingDown_SB_3, riverFlowingLeft_SB_1, riverFlowingLeft_SB_2, riverFlowingLeft_SB_3, riverFlowingRight_SB_1, riverFlowingRight_SB_2, riverFlowingRight_SB_3, tree_SB_1, tree_SB_2, tree_SB_3, tree_SB_4, tree_SB_5, riverTurning_SB_1, riverTurning_SB_2, riverTurning_SB_3, riverTurning_SB_4, emptyImg_SB };
+	landscapeStuff = { grass_SB_1, holeFromDown_SB, holeFromLeft_SB, holeFromRight_SB, holeFromUp_SB, grass_SB_2, grass_SB_3, pondHorizontal_SB, pondVerticleFlowingLeft_SB, pondVerticleFlowingRight_SB, waterfall_SB, riverFlowingDown_SB_1, riverFlowingDown_SB_2, riverFlowingDown_SB_3, riverFlowingLeft_SB_1, riverFlowingLeft_SB_2, riverFlowingLeft_SB_3, riverFlowingRight_SB_1, riverFlowingRight_SB_2, riverFlowingRight_SB_3, tree_SB_1, tree_SB_2, tree_SB_3, tree_SB_4, tree_SB_5, riverTurning_SB_1, riverTurning_SB_2, riverTurning_SB_3, riverTurning_SB_4, emptyImg_SB, grass_SB_1, grass_SB_2, grass_SB_3, mountain_SB_1 };
 	trackStuff = { emptyImg_SB, verticleRail_SB, horizontalRail_SB, railTurningOne_SB, railTurningTwo_SB, railTurningThree_SB, railTurningFour_SB, buttonFromDownTurningRightZero_SB, buttonFromDownTurningLeftZero_SB, buttonFromLeftTurningRightZero_SB, buttonFromLeftTurningLeftZero_SB, buttonFromRightTurningRightZero_SB, buttonFromRightTurningLeftZero_SB, buttonFromUpTurningRightZero_SB, buttonFromUpTurningLeftZero_SB};//the first element for this arr is an empty image ALSO I should change this to an array of fully assembled widget structures with the intersection having their logic built in
 
 	flags = { flag_SB_1, flag_SB_2, flag_SB_3, flag_SB_4, flag_SB_5, flag_SB_6, flag_SB_7, flag_SB_8, flag_SB_9, flag_SB_10, flag_SB_11, flag_SB_12, flag_SB_13, flag_SB_14, flag_SB_15, flag_SB_16, };
 	marbles = { marble_SB_1, marble_SB_2, marble_SB_3, marble_SB_4, marble_SB_5, marble_SB_6, marble_SB_7, marble_SB_8, marble_SB_9, marble_SB_10, marble_SB_11, marble_SB_12, marble_SB_13, marble_SB_14, marble_SB_15, marble_SB_16, };
 
 	for (int a = 0; a < holePositions.Num(); a++)
-	{
+	{//feb 15 just encountered a bug where holePositions.Num() was 18 instead of the projected 9. this was because convertedHolePositions in TestHud was not being reset during regeneration. is this the only variable I forgot to designate to reset during regeneration? yes there is.. the river.
 		relevantFlags.Add(flags[a]);
 		relevantMarbles.Add(marbles[a]);
 	}
@@ -474,16 +488,63 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	default:
 		break;
 	}
+	
+	quantityOfMarbles = 12 + holePositions.Num() * 2;
+	speedMultiplier = 0.7 + 1 * ((holePositions.Num() - 2) / 35);
+	timeToCoverOneTileDividedByTwo = (1 / speedMultiplier) / 2;
 
-	//now that the track is built you can control the marbles movement merely by left turns, right turns or straight track. from the marbles starting direction a left turn will incriment the marble direction counter clockwise and a right turn clockwise 
+	spawningWindow = timeOfGame / quantityOfMarbles;
 
-	spawningWindow = timeOfGame / (18 + holePositions.Num() * 2);
-
-	for (int a = 0; a < 18 + holePositions.Num() * 2; a++)
+	for (int a = 0; a < marblesRandomized.Num() * 10; a++)
 	{
-		marblesThisGame.Add(marblesRandomized[FMath::RandRange(0, marblesRandomized.Num() - 1)]);
-		timeIntoWindowMarbleIsSpawned.Add((spawningWindow / 6) * FMath::RandRange(2, 4) + (spawningWindow * a));
+		marblesThisGameProxy.Add(1);
 	}
+	for (int a = 0; a < marblesRandomized.Num(); a++)
+	{
+		marblesThisGameProxyTracker.Add(9);
+	}
+
+	for (int a = 0; a < quantityOfMarbles; a++)
+	{
+		marbleProxyIndexToAdd = FMath::RandRange(0, marblesThisGameProxy.Num() - 1);
+
+		if (marblesThisGameProxy[marbleProxyIndexToAdd] != 0)
+		{
+			marbleIndexToAdd = marbleProxyIndexToAdd / 10;
+
+			for (int b = 0; b < marblesRandomized.Num(); b++)
+			{
+				if (marbleIndexToAdd == b)
+				{
+					marblesThisGameProxy[b * 10 + marblesThisGameProxyTracker[b]] = 0;
+					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 9);
+					marblesThisGameProxy[b * 10 + marblesThisGameProxyTracker[b]] = 0;
+					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 9);
+					marblesThisGameProxy[b * 10 + marblesThisGameProxyTracker[b]] = 0;
+					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 9);
+					marblesThisGameProxy[b * 10 + marblesThisGameProxyTracker[b]] = 0;
+					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 9);
+					marblesThisGameProxy[b * 10 + marblesThisGameProxyTracker[b]] = 0;
+					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 9);
+				}
+				else
+				{
+					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] + 1, 0, 9);
+					marblesThisGameProxy[b * 10 + marblesThisGameProxyTracker[b]] = 1;
+				}
+			}
+			marblesThisGame.Add(marblesRandomized[marbleIndexToAdd]);
+			marbleIndexesBeingAdded.Add(marbleIndexToAdd);
+
+			timeIntoWindowMarbleIsSpawned.Add((spawningWindow / 6)* FMath::RandRange(2, 4) + (spawningWindow * a));
+		}
+		else
+		{
+			a -= 1;
+		}
+	}
+
+	timeIntoWindowMarbleIsSpawned.Add(timeOfGame + 1);
 	marbleIndexToSpawn = 0;
 
 	marbleOverlay = SNew(SOverlay);
@@ -494,7 +555,14 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	currentScore = FText::FromString("Score: " + FString::FromInt(playerScore) + " of " + FString::FromInt(maximumPossibleScore));
 	scoreText->SetText(currentScore);
 	scoreTextStyle = FCoreStyle::Get().GetFontStyle("EmbossedText");
-	scoreTextStyle.Size = 0.04 * adjustedViewportSize.Y;
+	if ((double)((double)adjustedViewportSize.X / (double)adjustedViewportSize.Y) < (double)((double)2367 / (double)1273))//theres a ration of viewportSize.X to viewportSize.Y, after a certain point you should go from using one axis to calculate font size to the other
+	{
+		scoreTextStyle.Size = (adjustedViewportSize.X - adjustedViewportSize.Y) * 0.04;
+	}
+	else
+	{
+		scoreTextStyle.Size = adjustedViewportSize.Y * 0.033;
+	}
 	scoreText->SetFont(scoreTextStyle);
 
 	timeText = SNew(STextBlock);
@@ -562,6 +630,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 		];
 
 	trackOverlay = SNew(SOverlay);
+	intersectionButtonsOverlay = SNew(SOverlay);
 	for (int a = 0; a < 225; a++)
 	{
 		if (!tileIsIntersection[a])
@@ -590,16 +659,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[0].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
 						.ContentPadding(FMargin())
 						.ButtonStyle(masterButtonStyle)
 						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedOne)
 						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedOne)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
 						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-						[
-							intersectionImages[0].ToSharedRef()
-						]
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -616,16 +690,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[1].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTwo)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTwo)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[1].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTwo)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTwo)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -642,16 +721,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[2].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedThree)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedThree)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[2].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedThree)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedThree)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -668,16 +752,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[3].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFour)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFour)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[3].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFour)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFour)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -694,16 +783,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[4].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFive)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFive)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[4].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFive)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFive)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -720,16 +814,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[5].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSix)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSix)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[5].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSix)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSix)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -746,16 +845,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[6].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSeven)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSeven)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[6].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSeven)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSeven)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -772,16 +876,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[7].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedEight)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedEight)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[7].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedEight)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedEight)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -798,16 +907,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[8].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedNine)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedNine)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[8].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedNine)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedNine)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -824,16 +938,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[9].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTen)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[9].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTen)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -850,16 +969,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[10].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedEleven)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedEleven)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[10].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedEleven)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedEleven)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -876,16 +1000,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[11].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTwelve)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTwelve)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[11].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTwelve)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTwelve)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -902,16 +1031,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[12].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedThirteen)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedThirteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[12].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedThirteen)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedThirteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -928,16 +1062,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[13].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFourteen)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFourteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[13].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFourteen)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFourteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -954,16 +1093,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[14].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFifteen)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFifteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[14].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFifteen)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFifteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -980,16 +1124,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[15].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSixteen)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSixteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[15].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSixteen)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSixteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1006,16 +1155,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
+						intersectionImages[16].ToSharedRef()
+					];
+
+				intersectionButtonsOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
+					[
 						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSeventeen)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSeventeen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)///weerrks so now can I nest the rail stuff in buttons?
-							[
-								intersectionImages[16].ToSharedRef()
-							]
+						.ContentPadding(FMargin())
+						.ButtonStyle(masterButtonStyle)
+						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSeventeen)
+						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSeventeen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+						.ButtonColorAndOpacity(FLinearColor::Transparent)
+						.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1076,10 +1230,17 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Fill)
 			[
+				intersectionButtonsOverlay.ToSharedRef()
+			]
+
+			+ SOverlay::Slot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			[
 				flagsOverlay.ToSharedRef()
 			]
 
-			 + SOverlay::Slot()
+			+ SOverlay::Slot()
 			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Fill)
 			[
@@ -1330,7 +1491,7 @@ FVector2D STestWidgetThree::PrepTurnMarble(int currentMarble, FVector2d marblePo
 
 		if (turnBeingMade == 1 || turnBeingMade == 4)//1 is right, 2 is left, 4 is right, 5 is left
 		{
-			turnToExecute[currentMarble] = 0;
+			turnToExecute[currentMarble] = 0;// your current problem with these marbles is if a marble gets deleted while another is turning it screws everything up
 		}
 		else
 		{
@@ -1390,7 +1551,7 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 	switch (turnToExecute[currentMarble])
 	{
 	case 0 :
-		if (deltaMarblePos[currentMarble].Y - marblePosition.Y >= 1)
+		if (deltaMarblePos[currentMarble].Y - marblePosition.Y >= 0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
 			dirOfMarbles[currentMarble] = 2;
@@ -1401,12 +1562,12 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 			convertedMarblePos = marblePositions[currentMarble];
 			break;
 		}
-		convertedMarblePos.X = deltaMarblePos[currentMarble].X + -1 * pow(-1 * pow(((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 2), 2) + 0.25, 0.5) + 0.5;
-		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + -1 * pow(-1 * pow((((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X + 0.5 - (0.5 * (sin(1.57079 - (((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 0.7854) * 1.57079))));
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y - 0.5 * sin(((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 0.7854) * 1.57079);
 
 		break;
 	case 1 :
-		if (deltaMarblePos[currentMarble].Y - marblePosition.Y >= 1)
+		if (deltaMarblePos[currentMarble].Y - marblePosition.Y >= 0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
 			dirOfMarbles[currentMarble] = 4;
@@ -1417,12 +1578,12 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 			convertedMarblePos = marblePositions[currentMarble];
 			break;
 		}
-		convertedMarblePos.X = deltaMarblePos[currentMarble].X + -1 * (-1 * pow(-1 * pow(((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 2), 2) + 0.25, 0.5) + 0.5);
-		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + -1 * pow(-1 * pow((((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X - (0.5 - (0.5 * (sin(1.57079 - (((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 0.7854) * 1.57079)))));
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y - 0.5 * sin(((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 0.7854) * 1.57079);
 
 		break;
 	case 2 :
-		if (deltaMarblePos[currentMarble].X - marblePosition.X <= -1)
+		if (deltaMarblePos[currentMarble].X - marblePosition.X <= -0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
 			dirOfMarbles[currentMarble] = 3;
@@ -1433,12 +1594,12 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 			convertedMarblePos = marblePositions[currentMarble];
 			break;
 		}
-		convertedMarblePos.X = deltaMarblePos[currentMarble].X + pow(-1 * pow((((marblePosition.X - deltaMarblePos[currentMarble].X) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
-		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + -1 * pow(-1 * pow(((marblePosition.X - deltaMarblePos[currentMarble].X) / 2), 2) + 0.25, 0.5) + 0.5;
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X + 0.5 * sin(((marblePosition.X - deltaMarblePos[currentMarble].X) / 0.7854) * 1.57079);
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + 0.5 - (0.5 * (sin(1.57079 - (((marblePosition.X - deltaMarblePos[currentMarble].X) / 0.7854) * 1.57079))));
 
 		break;
 	case 3 :
-		if (deltaMarblePos[currentMarble].X - marblePosition.X <= -1)
+		if (deltaMarblePos[currentMarble].X - marblePosition.X <= -0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
 			dirOfMarbles[currentMarble] = 1;
@@ -1449,12 +1610,12 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 			convertedMarblePos = marblePositions[currentMarble];
 			break;
 		}
-		convertedMarblePos.X = deltaMarblePos[currentMarble].X + pow(-1 * pow((((marblePosition.X - deltaMarblePos[currentMarble].X) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
-		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + -1 * (-1 * pow(-1 * pow(((marblePosition.X - deltaMarblePos[currentMarble].X) / 2), 2) + 0.25, 0.5) + 0.5);
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X + 0.5 * sin(((marblePosition.X - deltaMarblePos[currentMarble].X) / 0.7854) * 1.57079);
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y - (0.5 - (0.5 * sin(1.57079 - (((marblePosition.X - deltaMarblePos[currentMarble].X) / 0.7854) * 1.57079))));
 
 		break;
 	case 4 :
-		if (deltaMarblePos[currentMarble].Y - marblePosition.Y <= -1)
+		if (deltaMarblePos[currentMarble].Y - marblePosition.Y <= -0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
 			dirOfMarbles[currentMarble] = 4;
@@ -1465,12 +1626,12 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 			convertedMarblePos = marblePositions[currentMarble];
 			break;
 		}
-		convertedMarblePos.X = deltaMarblePos[currentMarble].X + -1 * (-1 * pow(-1 * pow(((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 2), 2) + 0.25, 0.5) + 0.5);
-		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + pow(-1 * pow((((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X - (0.5 - (0.5 * (sin(1.57079 - (((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 0.7854) * 1.57079)))));
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + 0.5 * sin(((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 0.7854) * 1.57079);
 
 		break;
 	case 5 :
-		if (deltaMarblePos[currentMarble].Y - marblePosition.Y <= -1)
+		if (deltaMarblePos[currentMarble].Y - marblePosition.Y <= -0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
 			dirOfMarbles[currentMarble] = 2;
@@ -1481,12 +1642,12 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 			convertedMarblePos = marblePositions[currentMarble];
 			break;
 		}
-		convertedMarblePos.X = deltaMarblePos[currentMarble].X + -1 * pow(-1 * pow(((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 2), 2) + 0.25, 0.5) + 0.5;
-		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + pow(-1 * pow((((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X + 0.5 - (0.5 * (sin(1.57079 - (((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 0.7854) * 1.57079))));
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + 0.5 * sin(((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 0.7854) * 1.57079);
 
 		break;
 	case 6 :
-		if (deltaMarblePos[currentMarble].X - marblePosition.X >= 1)
+		if (deltaMarblePos[currentMarble].X - marblePosition.X >= 0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
 			dirOfMarbles[currentMarble] = 1;
@@ -1497,12 +1658,12 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 			convertedMarblePos = marblePositions[currentMarble];
 			break;
 		}
-		convertedMarblePos.X = deltaMarblePos[currentMarble].X + -1 * pow(-1 * pow((((deltaMarblePos[currentMarble].X - marblePosition.X) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
-		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + -1 * (-1 * pow(-1 * pow(((deltaMarblePos[currentMarble].X - marblePosition.X) / 2), 2) + 0.25, 0.5) + 0.5);
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X - 0.5 * sin(((deltaMarblePos[currentMarble].X - marblePosition.X) / 0.7854) * 1.57079);
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y - (0.5 - (0.5 * (sin(1.57079 - (((deltaMarblePos[currentMarble].X - marblePosition.X) / 0.7854) * 1.57079)))));
 
 		break;
 	case 7 :
-		if (deltaMarblePos[currentMarble].X - marblePosition.X >= 1)
+		if (deltaMarblePos[currentMarble].X - marblePosition.X >= 0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
 			dirOfMarbles[currentMarble] = 3;
@@ -1513,8 +1674,8 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 			convertedMarblePos = marblePositions[currentMarble];
 			break;
 		}
-		convertedMarblePos.X = deltaMarblePos[currentMarble].X + -1 * pow(-1 * pow((((deltaMarblePos[currentMarble].X - marblePosition.X) / 2) + 0.5) - 1, 2) + 0.25, 0.5);
-		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + -1 * pow(-1 * pow(((deltaMarblePos[currentMarble].X - marblePosition.X) / 2), 2) + 0.25, 0.5) + 0.5;
+		convertedMarblePos.X = deltaMarblePos[currentMarble].X - 0.5 * sin(((deltaMarblePos[currentMarble].X - marblePosition.X) / 0.7854) * 1.57079);
+		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + (0.5 - (0.5 * sin(1.57079 - (((marblePosition.X - deltaMarblePos[currentMarble].X) / 0.7854) * 1.57079))));
 
 		break;
 	default:
@@ -1526,12 +1687,13 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 
 void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
+	//the quantity of ticks that happen per second directly factors into the turning process, you need to know it and it needs to be stable
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
 
 	for (int a = 0; a < activeMarbles.Num(); a++)
 	{
-		marblePositions[a].X += InDeltaTime * 0.8 * marbleMovementTracker[a][0];
-		marblePositions[a].Y += InDeltaTime * 0.8 * marbleMovementTracker[a][1];
+		marblePositions[a].X += InDeltaTime * speedMultiplier * marbleMovementTracker[a][0];
+		marblePositions[a].Y += InDeltaTime * speedMultiplier * marbleMovementTracker[a][1];
 
 		if (marbleIsTurning[a])
 		{
@@ -1544,14 +1706,14 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 				activeMarbles[a]->SetPadding(CalculateTilePosition(marblePositions[a], adjustedViewportSize));
 			}
 			else
-			{
+			{	
 				marblePositionsCenters[a] = CalculateMarblePositionCenters(marblePositions[a]);//this creates an index out of bounds error if the marble goes off screen
 
-				if (trackArr[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X] > 2 || tileIsIntersection[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X])//I need to redo how intersections are designated in trackArr so I need need to include this check for tileIsIntersection in this conditional
+				if (trackArr[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X] > 2 || tileIsIntersection[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X])//I need to redo how intersections are designated in trackArr so I dont need to include this check for tileIsIntersection in this conditional
 				{
 					if (tileIsIntersection[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X])
 					{
-						if (intersectionCycle[intersectionPositions.Find(marblePositionsCenters[a])] > 1)
+						if (intersectionCycle[intersectionPositions.Find(marblePositionsCenters[a])] > 1)//an error has occured here but only because the marbles were falling of the track unexpectedly after turns
 						{
 							marbleIsTurning[a] = true;
 							activeMarbles[a]->SetPadding(CalculateTilePosition(PrepTurnMarble(a, marblePositions[a], dirOfMarbles[a], true, trackArr[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X]), adjustedViewportSize));
@@ -1565,6 +1727,7 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 				}
 				else if (holePositions.Find(marblePositionsCenters[a]) + 1)
 				{//check if the marble matches the flag, "remove" the marble and adjust the score accordingly
+
 					if (holePositions.Find(marblePositionsCenters[a]) == marblesRandomized.Find(activeMarblesContent[a]))
 					{
 						playerScore += 1;
@@ -1578,23 +1741,82 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 						currentScore = FText::FromString("Score: " + FString::FromInt(playerScore) + " of " + FString::FromInt(maximumPossibleScore));
 						scoreText->SetText(currentScore);
 					}
+					marblesToBeDestroyed.Add(activeMarbles[a]);
+					marblesToBeDestroyedMovementTracker.Add(marbleMovementTracker[a]);
+					marblesToBeDestroyedPosition.Add(marblePositions[a]);
+					marblesBeingDestroyedTime.Add(0);
 
-					activeMarbles.RemoveAt(a);
+					activeMarblesContent.RemoveAt(a);
 					marbleMovementTracker.RemoveAt(a);
 					marblePositions.RemoveAt(a);
+					marblePositionsCenters.RemoveAt(a);
 					marbleIsTurning.RemoveAt(a);
 					dirOfMarbles.RemoveAt(a);
-
-					a -= 1; // I think this is necessary
+					turnToExecute.RemoveAt(a);
+					deltaMarblePos.RemoveAt(a);
+					activeMarbles.RemoveAt(a);
 				}
 			}
 		}
 	}
+
+	for (int a = 0; a < marblesToBeDestroyed.Num(); a++)
+	{
+		marblesBeingDestroyedTime[a] += InDeltaTime;
+
+		marblesToBeDestroyedPosition[a].X += InDeltaTime * speedMultiplier * marblesToBeDestroyedMovementTracker[a][0];
+		marblesToBeDestroyedPosition[a].Y += InDeltaTime * speedMultiplier * marblesToBeDestroyedMovementTracker[a][1];
+
+		marbleToBeDestroyedPadding = CalculateTilePosition(marblesToBeDestroyedPosition[a], adjustedViewportSize);
+		marblesToBeDestroyed[a]->SetPadding(marbleToBeDestroyedPadding);
+
+		if (marblesBeingDestroyedTime[a] > (1 / speedMultiplier) / 4)
+		{
+			marblesToBeDestroyed[a]->SetPadding(ShrinkMarble(marbleToBeDestroyedPadding, (marblesBeingDestroyedTime[a] - (1 / speedMultiplier) / 4) / ((1 / speedMultiplier) / 4)));
+
+			if (marblesBeingDestroyedTime[a] > (1 / speedMultiplier) / 2)
+			{
+				marblesToBeDestroyedMovementTracker.RemoveAt(a);
+				marblesToBeDestroyedPosition.RemoveAt(a);
+				marblesBeingDestroyedTime.RemoveAt(a);
+				marbleOverlay->RemoveSlot(marblesToBeDestroyed[a].ToSharedRef());
+				marblesToBeDestroyed.RemoveAt(a);
+
+				a -= 1;
+			}
+		}
+	}
+
 	if (!gameEnded)
 	{
 		if (gameStarted)
 		{
 			fCurrentTime += InDeltaTime;
+
+			if (fCurrentTime > timeIntoWindowMarbleIsSpawned[marbleIndexToSpawn])
+			{
+				activeMarbles.Add(SNew(SBox));
+				activeMarbles[activeMarbles.Num() - 1]->SetContent(SNew(SImage).Image(marblesThisGame[marbleIndexToSpawn]));
+				activeMarbles[activeMarbles.Num() - 1]->SetPadding(CalculateTilePosition(startingPos, adjustedViewportSize));
+				activeMarblesContent.Add(marblesThisGame[marbleIndexToSpawn]);
+
+				marbleOverlay->AddSlot()
+					.HAlign(HAlign_Fill)
+					.VAlign(VAlign_Fill)
+					[
+						activeMarbles[activeMarbles.Num() - 1].ToSharedRef()
+					];
+
+				marbleMovementTracker.Add(startingMarbleMovementTracker);
+				marblePositions.Add(startingPos);
+				marblePositionsCenters.Add(startingPos);
+				marbleIsTurning.Add(false);
+				dirOfMarbles.Add(startingDir);
+				turnToExecute.Add(0);
+				deltaMarblePos.Add(FVector2D(0, 0));
+
+				marbleIndexToSpawn += 1;
+			}
 
 			if (currentTime != timeOfGame - FMath::RoundToZero(fCurrentTime))
 			{
@@ -1608,30 +1830,6 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 					gameEnded = true;
 				}
 			}
-
-			if (fCurrentTime > timeIntoWindowMarbleIsSpawned[marbleIndexToSpawn])
-			{
-				activeMarbles.Add(SNew(SBox));
-				activeMarbles[marbleIndexToSpawn]->SetContent(SNew(SImage).Image(marblesThisGame[marbleIndexToSpawn]));
-				activeMarbles[marbleIndexToSpawn]->SetPadding(CalculateTilePosition(FVector2D(0, 0), adjustedViewportSize));
-				activeMarblesContent.Add(marblesThisGame[marbleIndexToSpawn]);
-
-				marbleOverlay->AddSlot()
-					.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Fill)
-					[
-						activeMarbles[marbleIndexToSpawn].ToSharedRef()
-					];
-
-				marbleMovementTracker.Add(startingMarbleMovementTracker);
-				marblePositions.Add(startingPos);
-				marblePositionsCenters.Add(startingPos);
-				marbleIsTurning.Add(false);
-				dirOfMarbles.Add(startingDir);
-
-				marbleIndexToSpawn += 1;
-			}
-
 		}
 		else
 		{
