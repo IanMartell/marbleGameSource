@@ -8,11 +8,15 @@
 /**
  * 
  */
-class MARBLEGAMEBLUEPRINT_API SSArcadeModeTitleScreen : public SCompoundWidget
+class SSArcadeModeTitleScreen : public SCompoundWidget
 {
 public:
-	SLATE_BEGIN_ARGS(SSArcadeModeTitleScreen)
-	{}
+	SLATE_BEGIN_ARGS(SLoadingScreenOne) {}
+
+	SLATE_ARGUMENT(TWeakObjectPtr<class ATestHud>, OwningHUD)
+
+	SLATE_ARGUMENT(APlayerController*, playerOnePlayerController)
+
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
