@@ -26,4 +26,7 @@ public:
     TWeakObjectPtr<class ATestHud> OwningHUD;
 
 	APlayerController* playerOnePlayerController;
+    
+    FVector2D viewportSize;
+	FVector2D adjustedViewportSize;
 };
