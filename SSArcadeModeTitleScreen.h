@@ -21,4 +21,8 @@ public:
 
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
+    
+    TWeakObjectPtr<class ATestHud> OwningHUD;
+
+	APlayerController* playerOnePlayerController;
 };
