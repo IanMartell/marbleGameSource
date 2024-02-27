@@ -37,6 +37,10 @@ const FMargin CalculateMenuTextPosition(FVector2D viewportSize, int textIndex)
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 {
+	bCanSupportFocus = true;
+
+	OwningHUD = InArgs._OwningHUD;
+	playerOnePlayerController = InArgs._playerOnePlayerController;
 	
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
