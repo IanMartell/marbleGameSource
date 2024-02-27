@@ -27,6 +27,6 @@ public:
 
 	APlayerController* playerOnePlayerController;
     
-    FVector2D viewportSize;
+ FVector2D viewportSize;
 	FVector2D adjustedViewportSize;
 };
