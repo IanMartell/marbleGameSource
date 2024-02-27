@@ -4,14 +4,29 @@
 #include "SSArcadeModeTitleScreen.h"
 #include "SlateOptMacros.h"
 
+const FMargin CalculateTitlePosition(FVector2D viewportSize)
+{
+	float leftPad = viewportSize.X * 0.1;
+	float topPad = viewportSize.Y * 0.1;
+	float rightPad = viewportSize.X * 0.5;
+	float bottomPad = viewportSize.Y * 0.8;
+
+	return FMargin(leftPad, topPad, rightPad, bottomPad);
+}
+
+const FMargin CalculateSubTitlePosition(FVector2D viewportSize)
+{
+	float leftPad = viewportSize.X * 0.1;
+	float topPad = viewportSize.Y * 0.1;
+	float rightPad = viewportSize.X * 0.6;
+	float bottomPad = viewportSize.Y * 0.85;
+
+	return FMargin(leftPad, topPad, rightPad, bottomPad);
+}
+
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 {
-	/*
-	ChildSlot
-	[
-		// Populate the widget
-	];
-	*/
+	
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
