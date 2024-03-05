@@ -41,6 +41,12 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 
 	OwningHUD = InArgs._OwningHUD;
 	playerOnePlayerController = InArgs._playerOnePlayerController;
+
+	GEngine->GameViewport->GetViewportSize(viewportSize);
+	int32 X = FGenericPlatformMath::FloorToInt(viewportSize.X);
+	int32 Y = FGenericPlatformMath::FloorToInt(viewportSize.Y);
+	DPIScale = GetDefault<UUserInterfaceSettings>(UUserInterfaceSettings::StaticClass())->GetDPIScaleBasedOnSize(FIntPoint(X, Y));
+	adjustedViewportSize = (1 / DPIScale) * viewportSize;
 	
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
