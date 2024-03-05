@@ -23,10 +23,10 @@ public:
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
     
-    TWeakObjectPtr<class ATestHud> OwningHUD;
+	TWeakObjectPtr<class ATestHud> OwningHUD;
 
 	APlayerController* playerOnePlayerController;
     
- FVector2D viewportSize;
+ 	FVector2D viewportSize;
 	FVector2D adjustedViewportSize;
 };
