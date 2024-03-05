@@ -29,4 +29,7 @@ public:
     
  	FVector2D viewportSize;
 	FVector2D adjustedViewportSize;
+
+	FSlateFontInfo titleTextStyle;
+	FText titleText;
 };
