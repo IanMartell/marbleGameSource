@@ -18,18 +18,30 @@ public:
 
 	SLATE_ARGUMENT(APlayerController*, playerOnePlayerController)
 
+	SLATE_ARGUMENT(TArray<FSlateBrush*>, backgroundStuff)
+
+	SLATE_ARGUMENT(UMaterial*, gameFrameColor_SMUI)
+
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
     
 	TWeakObjectPtr<class ATestHud> OwningHUD;
-
 	APlayerController* playerOnePlayerController;
+
+	UMaterial* gameFrameColor_SMUI;
+
+	FSlateBrush* gameFrameColor_SB;
+
+	TSharedPtr< class SOverlay> backgroundOverlay;
+	TSharedPtr< class SOverlay> frameColorOverlay;
     
  	FVector2D viewportSize;
 	FVector2D adjustedViewportSize;
 
 	FSlateFontInfo titleTextStyle;
 	FText titleText;
+
+	TArray<FSlateBrush*> backgroundStuff;
 };
