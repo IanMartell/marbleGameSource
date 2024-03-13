@@ -8,6 +8,7 @@
 #include "Materials/MaterialInterface.h"
 #include "Engine/Classes/Materials/Material.h"
 #include "SLoadingScreenOne.h"
+#include "SSArcadeModeTitleScreen.h"
 #include "Math/UnrealMathUtility.h"
 #include<array>
 //#include "Engine/World.h"
@@ -1039,24 +1040,390 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 	{
 		playerOnePlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
-		loadingSlateWidget = SNew(SLoadingScreenOne)
-			.OwningHUD(this)
-			.playerOnePlayerController(playerOnePlayerController);
-			//.grass_VMUI_1(grass_VMUI_1);
+		GenerateMainMenuBackground();
 
-		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerOne, SWeakWidget).PossiblyNullContent(loadingSlateWidget.ToSharedRef()));
-		
+		mainMenuSlateWidget = SNew(SSArcadeModeTitleScreen)
+			.OwningHUD(this)
+			.playerOnePlayerController(playerOnePlayerController)
+			.backgroundMaterials(backgroundMaterials)
+			.backgroundIsLargeTile(backgroundIsLargeTile)
+			.gameFrameColor_SMUI(gameFrameColor_SMUI);
+
+		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerThree, SWeakWidget).PossiblyNullContent(mainMenuSlateWidget.ToSharedRef()));
+
 		//FSlateApplication::SetUserFocus(0, loadingSlateWidget);
 
-		//FInputModeGameAndUI loadingScreenInputMode = FInputModeGameAndUI();
-		FInputModeUIOnly loadingScreenInputMode = FInputModeUIOnly();
-		loadingScreenInputMode.SetWidgetToFocus(loadingSlateWidget);
-		loadingScreenInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
-		//loadingScreenInputMode.SetHideCursorDuringCapture(false);
-		playerOnePlayerController->SetInputMode(loadingScreenInputMode);
+		//FInputModeGameAndUI mainMenuInputMode = FInputModeGameAndUI();
+		FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();
+		mainMenuInputMode.SetWidgetToFocus(mainMenuSlateWidget);
+		mainMenuInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+		//mainMenuInputMode.SetHideCursorDuringCapture(false);
+		playerOnePlayerController->SetInputMode(mainMenuInputMode);
 		playerOnePlayerController->SetShowMouseCursor(true);
-		FSlateApplication::Get().SetKeyboardFocus(loadingSlateWidget);
+		FSlateApplication::Get().SetKeyboardFocus(mainMenuSlateWidget);
 	}
+}
+
+void ATestHud::GenerateMainMenuBackground()
+{//wait a sec, for this Ill need to generate a mini river.. oh damnit
+	backgroundMaterials = {pondHorizontal_VMUI, emptyImg_SMUI, emptyImg_SMUI, emptyImg_SMUI, emptyImg_SMUI, emptyImg_SMUI, emptyImg_SMUI, emptyImg_SMUI, emptyImg_SMUI};
+
+	int randomNum = FMath::RandRange(0, 33);
+	TArray <int> indexOfNonRiverSpaces;
+
+	if (randomNum == 7 || randomNum == 8 || randomNum == 9 || randomNum == 10 || randomNum == 24 || randomNum == 33)
+	{
+		switch (randomNum)
+		{
+		case 7:
+			backgroundMaterials[0] = pondHorizontal_VMUI;
+			pondHorizontal_MP->OpenSource(pondHorizontal_IS);
+			mediaPlayersToClose.Add(pondHorizontal_MP);
+			break;
+		case 8:
+			backgroundMaterials[0] = pondVerticleFlowingLeft_VMUI;
+			pondVerticleFlowingLeft_MP->OpenSource(pondVerticleFlowingLeft_IS);
+			mediaPlayersToClose.Add(pondVerticleFlowingLeft_MP);
+			break;
+		case 9:
+			backgroundMaterials[0] = pondVerticleFlowingRight_VMUI;
+			pondVerticleFlowingRight_MP->OpenSource(pondVerticleFlowingRight_IS);
+			mediaPlayersToClose.Add(pondVerticleFlowingRight_MP);
+			break;
+		case 10:
+			backgroundMaterials[0] = waterfall_VMUI;
+			waterfall_MP->OpenSource(waterfall_IS);
+			mediaPlayersToClose.Add(waterfall_MP);
+			break;
+		case 24:
+			backgroundMaterials[0] = tree_VMUI_5;
+			tree_MP_5->OpenSource(tree_IS_5);
+			mediaPlayersToClose.Add(tree_MP_5);
+			break;
+		case 33:
+			backgroundMaterials[0] = mountain_VMUI_1;
+			mountain_MP_1->OpenSource(mountain_IS_1);
+			mediaPlayersToClose.Add(mountain_MP_1);
+			break;
+		}
+
+		backgroundIsLargeTile = true;
+		return;
+	}
+	else if (FMath::RandRange(0, 19) > 9)
+	{// a mini river is made
+		int dirOfRiver;
+		int riverStartingPos;
+		int startingSegment = FMath::RandRange(1, 3);
+		FVector2D newRiverPos;
+		FVector2D convertedRiverPos;
+		int indexFormatByRiverDir;
+		TArray <int> viableRiverStartingPositions = { 1, 2, 3 };
+
+		switch (FMath::RandRange(0, 2))
+		{
+		case 0:
+			dirOfRiver = 2;
+			riverStartingPos = viableRiverStartingPositions[FMath::RandRange(0, 2)];
+			newRiverPos = FVector2D(0, riverStartingPos);
+			indexFormatByRiverDir = 16;
+
+			break;
+		case 1:
+			dirOfRiver = 3;
+			riverStartingPos = viableRiverStartingPositions[FMath::RandRange(0, 2)];
+			newRiverPos = FVector2D(riverStartingPos, 4);
+			indexFormatByRiverDir = 10;
+			break;
+		case 2:
+			dirOfRiver = 4;
+			riverStartingPos = viableRiverStartingPositions[FMath::RandRange(0, 2)];
+			newRiverPos = FVector2D(4, riverStartingPos);
+			indexFormatByRiverDir = 13;
+			break;
+		default:
+			break;
+		}
+
+		while (true)
+		{
+			for (int a = startingSegment; a <= 3; a++)
+			{
+				newRiverPos += FVector2D(1 * ((dirOfRiver - 3) * -1), -1 * (dirOfRiver % 2));
+				if (newRiverPos.Y < 1 || newRiverPos.X > 3 || newRiverPos.X < 1)
+				{
+					break;
+				}
+
+				convertedRiverPos.X = newRiverPos.X - 1;
+				convertedRiverPos.Y = 3 - newRiverPos.Y;
+				backgroundArr[convertedRiverPos.Y * 3 + convertedRiverPos.X] = indexFormatByRiverDir + a;
+			}
+			if (newRiverPos.Y < 1 || newRiverPos.X > 3 || newRiverPos.X < 1)
+			{
+				break;
+			}
+
+			startingSegment = 1;
+
+			switch (dirOfRiver)
+			{
+			case 2:
+				if (newRiverPos.X + 1 > 3)
+				{
+					break;
+				}
+
+				newRiverPos.X += 1;
+
+				convertedRiverPos.X = newRiverPos.X - 1;
+				convertedRiverPos.Y = 3 - newRiverPos.Y;
+				backgroundArr[convertedRiverPos.Y * 3 + convertedRiverPos.X] = 27;
+
+				dirOfRiver = 3;
+				indexFormatByRiverDir = 10;
+				startingSegment = 2;
+
+				break;
+			case 3:
+				if (newRiverPos.Y - 1 < 1)
+				{
+					break;
+				}
+				newRiverPos.Y -= 1;
+
+				convertedRiverPos.X = newRiverPos.X - 1;
+				convertedRiverPos.Y = 3 - newRiverPos.Y;
+
+				if (FMath::RandRange(0, 19) > 9)
+				{// turning towards 2
+					backgroundArr[convertedRiverPos.Y * 3 + convertedRiverPos.X] = 26;
+					dirOfRiver = 2;
+					indexFormatByRiverDir = 16;
+				}
+				else
+				{// turning towards 4
+					backgroundArr[convertedRiverPos.Y * 3 + convertedRiverPos.X] = 28;
+					dirOfRiver = 4;
+					indexFormatByRiverDir = 13;
+				}
+				startingSegment = 2;
+
+				break;
+			case 4:
+				if (newRiverPos.X - 1 < 1)
+				{
+					break;
+				}
+				newRiverPos.X -= 1;
+
+				convertedRiverPos.X = newRiverPos.X - 1;
+				convertedRiverPos.Y = 3 - newRiverPos.Y;
+				backgroundArr[convertedRiverPos.Y * 3 + convertedRiverPos.X] = 25;
+
+				dirOfRiver = 3;
+				indexFormatByRiverDir = 10;
+				startingSegment = 2;
+
+				break;
+			}
+		}
+
+		for (int a = 0; a < backgroundArr.Num(); a++)
+		{
+			if (backgroundArr[a] == 0)
+			{
+				indexOfNonRiverSpaces.Add(a);
+			}
+			else
+			{
+				switch (backgroundArr[a])
+				{
+				case 11:
+					backgroundMaterials[a] = riverFlowingDown_VMUI_1;
+					if (!(mediaPlayersToClose.Find(riverFlowingDown_MP_1) + 1))
+					{
+						riverFlowingDown_MP_1->OpenSource(riverFlowingDown_IS_1);
+						mediaPlayersToClose.Add(riverFlowingDown_MP_1);
+					}
+					break;
+				case 12:
+					backgroundMaterials[a] = riverFlowingDown_VMUI_2;
+					if (!(mediaPlayersToClose.Find(riverFlowingDown_MP_2) + 1))
+					{
+						riverFlowingDown_MP_2->OpenSource(riverFlowingDown_IS_2);
+						mediaPlayersToClose.Add(riverFlowingDown_MP_2);
+					}
+					break;
+				case 13:
+					backgroundMaterials[a] = riverFlowingDown_VMUI_3;
+					if (!(mediaPlayersToClose.Find(riverFlowingDown_MP_3) + 1))
+					{
+						riverFlowingDown_MP_3->OpenSource(riverFlowingDown_IS_3);
+						mediaPlayersToClose.Add(riverFlowingDown_MP_3);
+					}
+					break;
+				case 14:
+					backgroundMaterials[a] = riverFlowingLeft_VMUI_1;
+					if (!(mediaPlayersToClose.Find(riverFlowingLeft_MP_1) + 1))
+					{
+						riverFlowingLeft_MP_1->OpenSource(riverFlowingLeft_IS_1);
+						mediaPlayersToClose.Add(riverFlowingLeft_MP_1);
+					}
+					break;
+				case 15:
+					backgroundMaterials[a] = riverFlowingLeft_VMUI_2;
+					if (!(mediaPlayersToClose.Find(riverFlowingLeft_MP_2) + 1))
+					{
+						riverFlowingLeft_MP_2->OpenSource(riverFlowingLeft_IS_2);
+						mediaPlayersToClose.Add(riverFlowingLeft_MP_2);
+					}
+					break;
+				case 16:
+					backgroundMaterials[a] = riverFlowingLeft_VMUI_3;
+					if (!(mediaPlayersToClose.Find(riverFlowingLeft_MP_3) + 1))
+					{
+						riverFlowingLeft_MP_3->OpenSource(riverFlowingLeft_IS_3);
+						mediaPlayersToClose.Add(riverFlowingLeft_MP_3);
+					}
+					break;
+				case 17:
+					backgroundMaterials[a] = riverFlowingRight_VMUI_1;
+					if (!(mediaPlayersToClose.Find(riverFlowingRight_MP_1) + 1))
+					{
+						riverFlowingRight_MP_1->OpenSource(riverFlowingRight_IS_1);
+						mediaPlayersToClose.Add(riverFlowingRight_MP_1);
+					}
+					break;
+				case 18:
+					backgroundMaterials[a] = riverFlowingRight_VMUI_2;
+					if (!(mediaPlayersToClose.Find(riverFlowingRight_MP_2) + 1))
+					{
+						riverFlowingRight_MP_2->OpenSource(riverFlowingRight_IS_2);
+						mediaPlayersToClose.Add(riverFlowingRight_MP_2);
+					}
+					break;
+				case 19:
+					backgroundMaterials[a] = riverFlowingRight_VMUI_3;
+					if (!(mediaPlayersToClose.Find(riverFlowingRight_MP_3) + 1))
+					{
+						riverFlowingRight_MP_3->OpenSource(riverFlowingRight_IS_3);
+						mediaPlayersToClose.Add(riverFlowingRight_MP_3);
+					}
+					break;
+				case 25:
+					backgroundMaterials[a] = riverTurning_VMUI_1;
+					if (!(mediaPlayersToClose.Find(riverTurning_MP_1) + 1))
+					{
+						riverTurning_MP_1->OpenSource(riverTurning_IS_1);
+						mediaPlayersToClose.Add(riverTurning_MP_1);
+					}
+					break;
+				case 26:
+					backgroundMaterials[a] = riverTurning_VMUI_2;
+					if (!(mediaPlayersToClose.Find(riverTurning_MP_2) + 1))
+					{
+						riverTurning_MP_2->OpenSource(riverTurning_IS_2);
+						mediaPlayersToClose.Add(riverTurning_MP_2);
+					}
+					break;
+				case 27:
+					backgroundMaterials[a] = riverTurning_VMUI_3;
+					if (!(mediaPlayersToClose.Find(riverTurning_MP_3) + 1))
+					{
+						riverTurning_MP_3->OpenSource(riverTurning_IS_3);
+						mediaPlayersToClose.Add(riverTurning_MP_3);
+					}
+					break;
+				case 28:
+					backgroundMaterials[a] = riverTurning_VMUI_4;
+					if (!(mediaPlayersToClose.Find(riverTurning_MP_4) + 1))
+					{
+						riverTurning_MP_4->OpenSource(riverTurning_IS_4);
+						mediaPlayersToClose.Add(riverTurning_MP_4);
+					}
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+	else
+	{
+		indexOfNonRiverSpaces = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+	}
+
+	for (int a = 0; a < indexOfNonRiverSpaces.Num(); a++)
+	{
+		switch (FMath::RandRange(0, 6))
+		{
+		case 0:
+			backgroundMaterials[indexOfNonRiverSpaces[a]] = tree_VMUI_1;
+			if (!(mediaPlayersToClose.Find(tree_MP_1) + 1))
+			{
+				tree_MP_1->OpenSource(tree_IS_1);
+				mediaPlayersToClose.Add(tree_MP_1);
+			}
+			break;
+		case 1:
+			backgroundMaterials[indexOfNonRiverSpaces[a]] = tree_VMUI_2;
+			if (!(mediaPlayersToClose.Find(tree_MP_2) + 1))
+			{
+				tree_MP_2->OpenSource(tree_IS_2);
+				mediaPlayersToClose.Add(tree_MP_2);
+			}
+			break;
+		case 2:
+			backgroundMaterials[indexOfNonRiverSpaces[a]] = tree_VMUI_3;
+			if (!(mediaPlayersToClose.Find(tree_MP_3) + 1))
+			{
+				tree_MP_3->OpenSource(tree_IS_3);
+				mediaPlayersToClose.Add(tree_MP_3);
+			}
+			break;
+		case 3:
+			backgroundMaterials[indexOfNonRiverSpaces[a]] = tree_VMUI_4;
+			if (!(mediaPlayersToClose.Find(tree_MP_4) + 1))
+			{
+				tree_MP_4->OpenSource(tree_IS_4);
+				mediaPlayersToClose.Add(tree_MP_4);
+			}
+			break;
+		case 4:
+			backgroundMaterials[indexOfNonRiverSpaces[a]] = grass_VMUI_1;
+			if (!(mediaPlayersToClose.Find(grass_MP_1) + 1))
+			{
+				grass_MP_1->OpenSource(grass_IS_1);
+				mediaPlayersToClose.Add(grass_MP_1);
+			}
+			break;
+		case 5:
+			backgroundMaterials[indexOfNonRiverSpaces[a]] = grass_VMUI_2;
+			if (!(mediaPlayersToClose.Find(grass_MP_2) + 1))
+			{
+				grass_MP_2->OpenSource(grass_IS_2);
+				mediaPlayersToClose.Add(grass_MP_2);
+			}
+			break;
+		case 6:
+			backgroundMaterials[indexOfNonRiverSpaces[a]] = grass_VMUI_3;
+			if (!(mediaPlayersToClose.Find(grass_MP_3) + 1))
+			{
+				grass_MP_3->OpenSource(grass_IS_3);
+				mediaPlayersToClose.Add(grass_MP_3);
+			}
+			break;
+		default:
+			break;
+		}
+	}
+	backgroundIsLargeTile = false;
+}
+
+void ATestHud::MasterGenerateLevel(int numHoles)
+{
+	numberOfHoles = numHoles;
 
 	GenerateLevel();
 
@@ -1093,7 +1460,7 @@ void ATestHud::GenerateHolePositions() //this function appears to function as ex
 			{
 				arrOfViableHoleCoordinates.Add(FVector2D(b + 14, 15 - a));
 			}
-			
+
 		}
 	}
 
@@ -1117,7 +1484,7 @@ void ATestHud::GenerateHolePositions() //this function appears to function as ex
 
 		firstIndexOfCurrentPortionOfViableHolePositionsTempVar = (arrOfViableHoleCoordinates.Num() / 2 / numberOfHoles * a + FMath::RoundHalfFromZero(((float)((arrOfViableHoleCoordinates.Num() / 2) % numberOfHoles) / (float)numberOfHoles) * a)) * 2;
 
-		int currentHolePositionCoordinateIndex = (FMath::RandRange(0, ( ( firstIndexOfCurrentPortionOfViableHolePositionsTempVar - firstIndexOfCurrentPortionOfViableHolePositions ) / evenHoleRowCorrectionFigure ) - 1) * evenHoleRowCorrectionFigure) + firstIndexOfCurrentPortionOfViableHolePositions;
+		int currentHolePositionCoordinateIndex = (FMath::RandRange(0, ((firstIndexOfCurrentPortionOfViableHolePositionsTempVar - firstIndexOfCurrentPortionOfViableHolePositions) / evenHoleRowCorrectionFigure) - 1) * evenHoleRowCorrectionFigure) + firstIndexOfCurrentPortionOfViableHolePositions;
 
 		test.Add(currentHolePositionCoordinateIndex);
 
@@ -1138,7 +1505,7 @@ void ATestHud::GenerateHolePositions() //this function appears to function as ex
 		// elsewhere switches based on integers need to be consecutive this switch statement might glitch out
 		switch (negativeOneZeroOrOne)
 		{
-		case -1 :
+		case -1:
 			for (int a = 0; a < holePositions.Num(); a++)
 			{
 				FVector2D adjustedHolePosition = holePositions[a] - centerOfRotation;
@@ -1147,7 +1514,7 @@ void ATestHud::GenerateHolePositions() //this function appears to function as ex
 			}
 
 			break;
-		case 1 :
+		case 1:
 			for (int a = 0; a < holePositions.Num(); a++)
 			{
 				FVector2D adjustedHolePosition = holePositions[a] - centerOfRotation;
@@ -1178,7 +1545,7 @@ void ATestHud::GenerateTrackShape()
 	TArray<int> intStorArrOne;
 	int currentGroupSize;
 	int unpairedHoleOrIntersectionDir = 0;
-	FVector2D unpairedHoleOrIntersectionPos = FVector2D( 0, 0 );
+	FVector2D unpairedHoleOrIntersectionPos = FVector2D(0, 0);
 	int currentFirstOfPairHoleDir;
 	TArray<int> firstOfPairHoleDirStorArr;
 	TArray<FVector2D> firstOfPairHoleOrIntersectionPosStorArr;
@@ -1222,11 +1589,11 @@ void ATestHud::GenerateTrackShape()
 	{
 		switch (FMath::RandRange((int32)0, (int32)2))
 		{
-		case 0 :
+		case 0:
 			listOfHolePositionGroupings.Add(2);
 			cumulativeGroupingCoverage += 2;
 			break;
-		case 1 :
+		case 1:
 			listOfHolePositionGroupings.Add(4);
 			cumulativeGroupingCoverage += 4;
 			break;
@@ -1286,15 +1653,15 @@ void ATestHud::GenerateTrackShape()
 	{
 		switch (negativeOneZeroOrOne)
 		{
-		case -1 :
+		case -1:
 			arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][0][0] = 1;
 			arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][listOfHolePositionGroupings.Num() - 1][listOfHolePositionGroupings[listOfHolePositionGroupings.Num() - 1] - 1] = 3;
 			break;
-		case 0 :
+		case 0:
 			arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][0][0] = 4;
 			arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][listOfHolePositionGroupings.Num() - 1][listOfHolePositionGroupings[listOfHolePositionGroupings.Num() - 1] - 1] = 2;
 			break;
-		case 1 :
+		case 1:
 			arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][0][0] = 3;
 			arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[0][listOfHolePositionGroupings.Num() - 1][listOfHolePositionGroupings[listOfHolePositionGroupings.Num() - 1] - 1] = 1;
 			break;
@@ -1303,7 +1670,7 @@ void ATestHud::GenerateTrackShape()
 		}
 	}
 	countOfLoopsOne = 0;
-	 
+
 	// This is where the master loop containing the all of the remaining sub processes for laying out the track is declared and initialized. Once this is done looping and the resulting data has been packaged, the track is ready for assembly.
 	// make sure to write code to continue laying out straight track if there is any distance remaining after all the turns are layed
 	//so I think once this completes I will promote all the results into the same group on the 4th level and run the level stuff loop one last time. if it works out like this you can change the permanent storage to only have 1 group for the fourth level and beyond. this would restrict you to a maximum of 16 holes but thats probably enough
@@ -1334,7 +1701,7 @@ void ATestHud::GenerateTrackShape()
 				vector2DStorArrOne = holeAndIntersectionPositions[currentLevelIndex][currentGroupIndex];
 				intersectionDirStorArr = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[currentLevelIndex][currentGroupIndex];
 			}
-			
+
 			if (intersectionDirStorArr.Num() % 2 == 1)
 			{
 				unpairedHoleOrIntersectionDir = intersectionDirStorArr[intersectionDirStorArr.Num() - 1];
@@ -1353,7 +1720,7 @@ void ATestHud::GenerateTrackShape()
 			// *** what are you doing for any case where there is verticle or horizontal distance still left between the last turn and the second hole of the pair? this occurs when firstOfPairIsAboveSecond and amountOfTurnsPerPair is 2, and when..
 
 			//am I using absolute value properly when determining horizontal and verticle distance?
-			 
+
 			for (int a = 1; a <= intersectionDirStorArr.Num() / 2; a++)//this won't run if there is only one element in the current group
 			{
 				currentFirstOfPairHoleDir = intersectionDirStorArr[a * 2 - 2];
@@ -1364,8 +1731,8 @@ void ATestHud::GenerateTrackShape()
 
 				differenceInPairPosition = firstOfPairHoleOrIntersectionPosStorArr[a - 1] - vector2DStorArrOne[a * 2 - 1];
 				differenceInPairPositionAbsolute = differenceInPairPosition.GetAbs();
-				differenceInPairPositionClampedX = FMath::Clamp( FMath::RoundToZero((float)differenceInPairPositionAbsolute.X / 2), 0, 2);
-				differenceInPairPositionClampedY = FMath::Clamp( FMath::RoundToZero((float)differenceInPairPositionAbsolute.Y / 2), 0, 2);
+				differenceInPairPositionClampedX = FMath::Clamp(FMath::RoundToZero((float)differenceInPairPositionAbsolute.X / 2), 0, 2);
+				differenceInPairPositionClampedY = FMath::Clamp(FMath::RoundToZero((float)differenceInPairPositionAbsolute.Y / 2), 0, 2);
 				//this needs to be altered to take into consideration if firstOfPairIsAboveSecond and if firstOfPairIsEvenWithOrLeftOfSecond. if the pair starts on the same side and firstOfPairIsAboveSecond the verticleDistance must equal the differenceInPairPositionAbsolute unmodified. if the pair starts on different sides and firstOfPairIsEvenWithOrLeftOfSecond horizontalDistance must equal the differenceInPairPositionAbsolute + 1, if the pair starts on different sides and firstOfPairIsAboveSecond verticleDistance must equal the differenceInPairPositionAbsolute + 1
 
 				currentFirstOfPairIsAboveSecond = firstOfPairIsAboveSecondArr[a - 1];
@@ -1439,11 +1806,11 @@ void ATestHud::GenerateTrackShape()
 
 					if (differenceInPairPositionClampedX <= differenceInPairPositionClampedY)
 					{//do I need to add logic to force the quantity of turns to be > 2 past a certain quantity of distance?
-						availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Add(FMath::RandRange( FMath::Clamp(firstOfPairIsAboveSecondArr[a -1] + firstOfPairIsEvenWithOrLeftOfSecondArr[a - 1], 0, 1), differenceInPairPositionClampedX) * 2 + 1);// I just took off a * 2 from the end of the first argument of the RandRange 01/17/24
+						availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Add(FMath::RandRange(FMath::Clamp(firstOfPairIsAboveSecondArr[a - 1] + firstOfPairIsEvenWithOrLeftOfSecondArr[a - 1], 0, 1), differenceInPairPositionClampedX) * 2 + 1);// I just took off a * 2 from the end of the first argument of the RandRange 01/17/24
 					}
 					else
 					{
-						availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Add(FMath::RandRange( FMath::Clamp(firstOfPairIsAboveSecondArr[a - 1] + firstOfPairIsEvenWithOrLeftOfSecondArr[a - 1], 0, 1), differenceInPairPositionClampedY) * 2 + 1);
+						availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Add(FMath::RandRange(FMath::Clamp(firstOfPairIsAboveSecondArr[a - 1] + firstOfPairIsEvenWithOrLeftOfSecondArr[a - 1], 0, 1), differenceInPairPositionClampedY) * 2 + 1);
 					}
 
 					if (currentFirstOfPairIsAboveSecond)
@@ -1517,14 +1884,14 @@ void ATestHud::GenerateTrackShape()
 					}
 					else if (firstOfPairIsAboveSecondArr[a])//this gets treated just like if the pair started on the same side ACCEPT if pairs start on same side AND first of pair is above second the resulting intersection would have to take the direction of the first of the pair.
 					{
-						whichOfEachPairsTurnsBecomesTheIntersection.Add(FMath::RandRange( 1, 2 ));//maybe this should take into consideration whether the resulting intersection will be the first or second of its pair 
+						whichOfEachPairsTurnsBecomesTheIntersection.Add(FMath::RandRange(1, 2));//maybe this should take into consideration whether the resulting intersection will be the first or second of its pair 
 					}
 					else
 					{
 						//Im excluding the first turn from the possibilities when theres more than one turn because that could be an issue - wait what?! how? fuck it Im just gonna pretend like I didnt see this
 						//minus when intersectionAdjustmentWeights = 2, plus when intersectionAdjustmentWeights = 1
 						//this works for both if weights and if not
-						whichOfEachPairsTurnsBecomesTheIntersection.Add((currentATPPBOCLCG* (1 - (intersectionAjustmentWeights[a] % 2))) + (intersectionAjustmentWeights[a] % 2) + (-1 + ((intersectionAjustmentWeights[a] % 2) * 2)) * FMath::RandRange(0, FMath::DivideAndRoundDown(currentATPPBOCLCG - 2, 2)) * 2);
+						whichOfEachPairsTurnsBecomesTheIntersection.Add((currentATPPBOCLCG * (1 - (intersectionAjustmentWeights[a] % 2))) + (intersectionAjustmentWeights[a] % 2) + (-1 + ((intersectionAjustmentWeights[a] % 2) * 2)) * FMath::RandRange(0, FMath::DivideAndRoundDown(currentATPPBOCLCG - 2, 2)) * 2);
 					}
 				}
 				else
@@ -1537,7 +1904,7 @@ void ATestHud::GenerateTrackShape()
 					{
 						whichOfEachPairsTurnsBecomesTheIntersection.Add(currentATPPBOCLCG - FMath::RandRange(0, 1));
 					}
-					else 
+					else
 					{
 						if (intersectionAjustmentWeights[a] == 1)
 						{// do I need to add logic to force the intersection deeper into the sequence of turns if there are 6 here? 
@@ -1550,7 +1917,7 @@ void ATestHud::GenerateTrackShape()
 					}
 				}
 			}//so Ive got 3 things to do! delete this when your done. FIRST! solve the problem where intersections can be placed so close to eachother. SECOND! solve the problem where there can be remaining verticle distance when pairStartsOnSameSide, firstOfPairIsRightOfAndEvenWithOrBelowSecond, and firstOfPairGetsAdjustment. THIRD! solve the problem where I have noticed when pairStartsOnDifferentSides the logic needs to be handled as if first of pair is above second when first of pair is level with second which is not the case for when pairStartsOnSameSide
-			
+
 
 			//determining how far along the total quantity of verticle or horizontal distance a turn is placed given a pair's verticle and lateral positioning relevant to each other
 			for (int currentPair = 0; currentPair < availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num(); currentPair++)
@@ -1579,7 +1946,7 @@ void ATestHud::GenerateTrackShape()
 				//this approach will actually cause a problem if a pair starts on different sides and first of pair is above second. in this case the last horizontal turn would overshoot? actually nevermind it wouldn't i dont think
 				for (int a = 1 + currentFirstOfPairIsAboveSecond; a <= currentATPPBOCLCG; a++)
 				{
-					turnDistancesFromFirstOfPairStorArr.Add((relevantHorizontalAndVerticleDistances[a % 2] / amountOfTurnsPerDistance[a % 2])* FMath::RoundHalfFromZero((float)a / 2.0f) + FMath::RoundHalfFromZero(((float)(relevantHorizontalAndVerticleDistances[a % 2] % amountOfTurnsPerDistance[a % 2]) / (float)amountOfTurnsPerDistance[a % 2]) * FMath::RoundHalfFromZero((float)a / 2.0f)));
+					turnDistancesFromFirstOfPairStorArr.Add((relevantHorizontalAndVerticleDistances[a % 2] / amountOfTurnsPerDistance[a % 2]) * FMath::RoundHalfFromZero((float)a / 2.0f) + FMath::RoundHalfFromZero(((float)(relevantHorizontalAndVerticleDistances[a % 2] % amountOfTurnsPerDistance[a % 2]) / (float)amountOfTurnsPerDistance[a % 2]) * FMath::RoundHalfFromZero((float)a / 2.0f)));
 				}
 
 				if (oneLastThing)
@@ -1597,7 +1964,7 @@ void ATestHud::GenerateTrackShape()
 			for (int currentPair = 0; currentPair < availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping.Num(); currentPair++)
 			{
 				currentATPPBOCLCG = availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[currentPair];
-				
+
 				if (currentATPPBOCLCG % 2)
 				{//pairs starting on different sides
 					if (firstOfPairIsEvenWithOrLeftOfSecondArr[currentPair])
@@ -1689,7 +2056,7 @@ void ATestHud::GenerateTrackShape()
 						directionsOfTurns[currentLevelIndex][currentGroupIndex][currentPair] = turnDirectionsStorArr;
 
 						turnDirectionsStorArr.Empty();
-					} 
+					}
 				}
 			}
 
@@ -1719,7 +2086,7 @@ void ATestHud::GenerateTrackShape()
 
 				switch (firstOfPairHoleDirStorArr[currentPairIndex])
 				{
-				case 1 :
+				case 1:
 					if (firstOfPairIsAboveSecondArr[currentPairIndex])//you still need to adjust how horizontal and verticle distances are calculated to account for if firstOfPairIsAboveSecond or if firstOfPairIsEvenWithOrLeftOfSecond
 					{
 						if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
@@ -1767,7 +2134,7 @@ void ATestHud::GenerateTrackShape()
 					}
 
 					break;
-				case 2 : 
+				case 2:
 					if (firstOfPairIsAboveSecondArr[currentPairIndex])
 					{
 						if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
@@ -1815,7 +2182,7 @@ void ATestHud::GenerateTrackShape()
 					}
 
 					break;
-				case 3 :
+				case 3:
 					if (firstOfPairIsAboveSecondArr[currentPairIndex])
 					{
 						if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
@@ -1863,7 +2230,7 @@ void ATestHud::GenerateTrackShape()
 					}
 
 					break;
-				case 4 :
+				case 4:
 					if (firstOfPairIsAboveSecondArr[currentPairIndex])
 					{
 						if (whichOfEachPairsTurnsBecomesTheIntersection[currentPairIndex] % 2 == 1)
@@ -1943,7 +2310,7 @@ void ATestHud::GenerateTrackShape()
 				{
 					switch (firstOfPairHoleDirStorArr[currentIntersection])//are the 16s in this switch statement correct? I think so
 					{
-					case 1 :
+					case 1:
 						if (currentFirstOfPairIsEvenWithOrLeftOfSecond)
 						{
 							if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] == availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[currentIntersection])
@@ -2001,7 +2368,7 @@ void ATestHud::GenerateTrackShape()
 							}
 						}
 						break;
-					case 2 :
+					case 2:
 						if (currentFirstOfPairIsEvenWithOrLeftOfSecond)
 						{
 							if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] == availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[currentIntersection])
@@ -2059,7 +2426,7 @@ void ATestHud::GenerateTrackShape()
 							}
 						}
 						break;
-					case 3 :
+					case 3:
 						if (currentFirstOfPairIsEvenWithOrLeftOfSecond)
 						{
 							if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] == availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[currentIntersection])
@@ -2117,7 +2484,7 @@ void ATestHud::GenerateTrackShape()
 							}
 						}
 						break;
-					case 4 :
+					case 4:
 						if (currentFirstOfPairIsEvenWithOrLeftOfSecond)
 						{
 							if (whichOfEachPairsTurnsBecomesTheIntersection[currentIntersection] == availableTurnsPerPairBlockOfCurrentLevelCurrentGrouping[currentIntersection])
@@ -2175,7 +2542,7 @@ void ATestHud::GenerateTrackShape()
 							}
 						}
 						break;
-					default: 
+					default:
 						break;
 					}
 				}
@@ -2189,16 +2556,16 @@ void ATestHud::GenerateTrackShape()
 
 				switch (unpairedHoleOrIntersectionDir)
 				{
-				case 1 :
+				case 1:
 					vector2DStorArrOne.Add(FVector2D(unpairedHoleOrIntersectionPos.X, unpairedHoleOrIntersectionPos.Y + 1));
 					break;
-				case 2 :
+				case 2:
 					vector2DStorArrOne.Add(FVector2D(unpairedHoleOrIntersectionPos.X + 1, unpairedHoleOrIntersectionPos.Y));
 					break;
-				case 3 :
+				case 3:
 					vector2DStorArrOne.Add(FVector2D(unpairedHoleOrIntersectionPos.X, unpairedHoleOrIntersectionPos.Y - 1));
 					break;
-				case 4 :
+				case 4:
 					vector2DStorArrOne.Add(FVector2D(unpairedHoleOrIntersectionPos.X - 1, unpairedHoleOrIntersectionPos.Y));
 					break;
 				default:
@@ -2236,7 +2603,7 @@ void ATestHud::GenerateTrackShape()
 
 			if (vector2DStorArrOne.Num() > 1)
 			{
-				for (int currentPair = 1; currentPair <= vector2DStorArrOne.Num()/2; currentPair++)
+				for (int currentPair = 1; currentPair <= vector2DStorArrOne.Num() / 2; currentPair++)
 				{//go through and change the below variables from arrays to single variables if it turns out you aren't using modulo to divine the appropriate index anywhere
 					firstOfPairIntersectionPos = vector2DStorArrOne[currentPair * 2 - 2];
 					secondOfPairIntersectionPos = vector2DStorArrOne[currentPair * 2 - 1];
@@ -2252,7 +2619,7 @@ void ATestHud::GenerateTrackShape()
 
 						switch (firstOfPairIntersectionDir)
 						{
-						case 1 :
+						case 1:
 							firstOfPairIntersectionPos.Y += 1;
 							vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
 							differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
@@ -2273,7 +2640,7 @@ void ATestHud::GenerateTrackShape()
 								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
 							}
 							break;
-						case 2 :
+						case 2:
 							firstOfPairIntersectionPos.X += 1;
 							vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
 							differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
@@ -2294,7 +2661,7 @@ void ATestHud::GenerateTrackShape()
 								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
 							}
 							break;
-						case 3 :
+						case 3:
 							firstOfPairIntersectionPos.Y -= 1;
 							vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
 							differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
@@ -2315,7 +2682,7 @@ void ATestHud::GenerateTrackShape()
 								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
 							}
 							break;
-						case 4 :
+						case 4:
 							firstOfPairIntersectionPos.X -= 1;
 							vector2DStorArrOne[currentPair * 2 - 2] = firstOfPairIntersectionPos;
 							differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
@@ -2875,7 +3242,7 @@ void ATestHud::GenerateTrackShape()
 						}
 					}
 				}
-			} 
+			}
 			if (vector2DStorArrOne.Num() % 2 == 1)
 			{
 				intersectionAjustmentWeights.Add(0);
@@ -2884,7 +3251,7 @@ void ATestHud::GenerateTrackShape()
 			adjustmentsAppliedToEachIntersection[currentLevelIndex + 1][currentGroupIndex] = intersectionAjustmentWeights;
 			firstOfPairIsAboveSecondAllPairs[currentLevelIndex + 1][currentGroupIndex] = firstOfPairIsAboveSecondArr;
 			firstOfPairIsEvenWithOrLeftOfSecondAllPairs[currentLevelIndex + 1][currentGroupIndex] = firstOfPairIsEvenWithOrLeftOfSecondArr;
-			
+
 
 			// this is the pile of arrays and misc which needs to get reset between every level
 			horizontalAndVerticleDistancesBetweenHolesOrIntersections[0].Empty();
@@ -5127,8 +5494,8 @@ void ATestHud::BuildLevel()
 
 	//the 1D lists will work as follows:
 	/*
-	     0   1   2   3   4   5   6   7   8   9   10  11  12  13  14
-	     -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
+		 0   1   2   3   4   5   6   7   8   9   10  11  12  13  14
+		 -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
 	0 |  0   1   2   3   4   5   6   7   8   9   10  11  12  13  14
 	1 |  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29
 	2 |  30  31  32  33  34  35  36  37  38  39  40  41  42  43  44
@@ -5146,13 +5513,13 @@ void ATestHud::BuildLevel()
 	14|  210 211 212 213 214 215 216 217 218 219 220 221 222 223 224
 
 	currently my coordinates will need to be translated into these coordinates before being applied to the 1D list
-	conversion from previous format to current: x2 = x1 - 1 |  y2 = 15 - y1  
+	conversion from previous format to current: x2 = x1 - 1 |  y2 = 15 - y1
 	conversion from current format to corresponding index: index = y * width + x  | e.g. : (4, 12) = 12 * 15 + 4 = 184
 
 	the 1D lists will be lists of integers where each value will correspond to the index of the desired sprite/sprite animation stored in a seperate data structure
 			 */
-	//TRACK DATA
-	//***to correct for unforseen or downright tricky track overlap I could implement a regeneration array: an array of 225 bools which correspond to the tiles of the track board. when a piece of track is layed down check if theres already track there. if true regenerate everything, if false set to true *** this may be brunt but it will be an adequate solution as long as overlapping track is at least relatively uncommon; I envision overlapping trapping becoming increasingly common with increase in hole count.
+			 //TRACK DATA
+			 //***to correct for unforseen or downright tricky track overlap I could implement a regeneration array: an array of 225 bools which correspond to the tiles of the track board. when a piece of track is layed down check if theres already track there. if true regenerate everything, if false set to true *** this may be brunt but it will be an adequate solution as long as overlapping track is at least relatively uncommon; I envision overlapping trapping becoming increasingly common with increase in hole count.
 	int currentGroupSize;
 	FVector2D currentFirstOfPairPosition;
 	int currentFirstOfPairDir;
@@ -5354,7 +5721,7 @@ void ATestHud::BuildLevel()
 
 									}
 								}
-									
+
 								break;
 							case 4:
 								if (adjustmentAppliedToCurrentIntersectionPair == 3)
@@ -5400,7 +5767,7 @@ void ATestHud::BuildLevel()
 
 									}
 								}
-									
+
 								break;
 							default:
 								break;
@@ -5456,7 +5823,7 @@ void ATestHud::BuildLevel()
 									tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 
 								}
-								
+
 
 								break;
 							case 4:
@@ -5512,7 +5879,7 @@ void ATestHud::BuildLevel()
 
 				switch (currentFirstOfPairDirCorrectedForAdjustment)
 				{
-				case 1 :
+				case 1:
 					if (currentIntersectionAdjustmentTracker)
 					{// I will need to check if adjustment is for intersections of pair facing opposite directions both here and below where intersection adjustment track is layed
 						if (currentIntersectionAdjustmentTracker == 2)
@@ -5978,17 +6345,17 @@ void ATestHud::BuildLevel()
 													tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 												}
 											}
-												/*else if (currentFirstOfPairDir != currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.Y < -1)
+											/*else if (currentFirstOfPairDir != currentFirstOfPairDirCorrectedForAdjustment && differenceInPairPos.Y < -1)
+											{
+												for (int a = -1; a > differenceInPairPos.Y; a--)
 												{
-													for (int a = -1; a > differenceInPairPos.Y; a--)
-													{
-														newTrackPos = secondOfPairPos + FVector2D(0, a);
+													newTrackPos = secondOfPairPos + FVector2D(0, a);
 
-														convertedTrackPos.X = newTrackPos.X - 1;
-														convertedTrackPos.Y = 15 - newTrackPos.Y;
-														trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-													}
-												}*/
+													convertedTrackPos.X = newTrackPos.X - 1;
+													convertedTrackPos.Y = 15 - newTrackPos.Y;
+													trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+												}
+											}*/
 											//}
 										}
 									}
@@ -6079,14 +6446,14 @@ void ATestHud::BuildLevel()
 					//here, if the current culminating intersection gets an adjustment, we lay the track to span the adjustment now
 					if (adjustmentAppliedToCulminatingIntersectionPair != 0 && adjustmentAppliedToCulminatingIntersectionPair % 2 == 1 - ((currentFirstOfPairIndex / 2) % 2))//can this be in this scope or does it need to move up into the next? I think it can..
 					{// this means: if current culminating intersection does get adjustment
-						
+
 						if (adjustmentAppliedToCulminatingIntersectionPair == 3)
 						{
 							intersectionAdjustmentTrackerArr[currentFirstOfPairIndex / 2] = 2;
 
 							switch (culminatingIntersectionDir)
 							{//this would need to have a case 3 if it's possible for this to occur twice in a row
-							case 1 :
+							case 1:
 								newTrackPos = culminatingIntersectionPos + FVector2D(0, 1);
 
 								convertedTrackPos.X = newTrackPos.X - 1;
@@ -6094,7 +6461,7 @@ void ATestHud::BuildLevel()
 								trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
 								tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 								break;
-							case 2 :// I dont think this case can actually occur because if culminatingIntersectionDir == 2 adjustmentAppliedToCulminatingIntersection cannot equal 3
+							case 2:// I dont think this case can actually occur because if culminatingIntersectionDir == 2 adjustmentAppliedToCulminatingIntersection cannot equal 3
 								newTrackPos = culminatingIntersectionPos + FVector2D(1, 0);
 
 								convertedTrackPos.X = newTrackPos.X - 1;
@@ -6127,7 +6494,7 @@ void ATestHud::BuildLevel()
 					}
 
 					break;
-				case 2 :
+				case 2:
 					if (currentIntersectionAdjustmentTracker)
 					{
 						if (currentIntersectionAdjustmentTracker == 2)
@@ -6239,7 +6606,7 @@ void ATestHud::BuildLevel()
 
 								if (currentPairTurnDirections[currentTurnIndex] == 1)
 								{
-									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5; 
+									trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
 								}
 								else if (currentPairTurnDirections[currentTurnIndex] == 0)
 								{
@@ -6736,7 +7103,7 @@ void ATestHud::BuildLevel()
 					}
 
 					break;
-				case 3 :
+				case 3:
 					if (currentIntersectionAdjustmentTracker)
 					{
 						if (currentIntersectionAdjustmentTracker == 2)
@@ -7337,7 +7704,7 @@ void ATestHud::BuildLevel()
 						{
 							intersectionAdjustmentTrackerArr[currentFirstOfPairIndex / 2] = 0;
 						}
-						
+
 					}
 					else
 					{
@@ -7345,7 +7712,7 @@ void ATestHud::BuildLevel()
 					}
 
 					break;
-				case 4 :
+				case 4:
 					if (currentIntersectionAdjustmentTracker)
 					{
 						if (currentIntersectionAdjustmentTracker == 2)
@@ -7997,7 +8364,7 @@ void ATestHud::BuildLevel()
 
 	switch (negativeOneZeroOrOne)
 	{
-	case -1 :
+	case -1:
 		switch (finalIntersectionDir)
 		{
 		case 1:
@@ -8142,7 +8509,7 @@ void ATestHud::BuildLevel()
 
 			startingPos = convertedTrackPos;
 			startingDir = 4;
-			
+
 			break;
 		case 2:
 			newTrackPos = finalIntersectionPos;
@@ -8280,7 +8647,7 @@ void ATestHud::BuildLevel()
 
 			startingPos = convertedTrackPos;
 			startingDir = 4;
-			
+
 			break;
 		case 3:
 			finalIntersectionPos.Y -= 1;
@@ -8424,12 +8791,12 @@ void ATestHud::BuildLevel()
 
 			startingPos = convertedTrackPos;
 			startingDir = 4;
-			
+
 			break;
 		}
 
 		break;
-	case 0 :
+	case 0:
 		switch (finalIntersectionDir)
 		{
 		case 1:
@@ -8568,7 +8935,7 @@ void ATestHud::BuildLevel()
 
 			startingPos = convertedTrackPos;
 			startingDir = 3;
-			
+
 			break;
 		case 2:
 			finalIntersectionPos.X += 1;
@@ -8712,7 +9079,7 @@ void ATestHud::BuildLevel()
 
 			startingPos = convertedTrackPos;
 			startingDir = 3;
-			
+
 			break;
 		case 4:
 			finalIntersectionPos.X -= 1;
@@ -8853,7 +9220,7 @@ void ATestHud::BuildLevel()
 					break;
 				}
 			}
-			
+
 			startingPos = convertedTrackPos;
 			startingDir = 3;
 
@@ -8861,10 +9228,10 @@ void ATestHud::BuildLevel()
 		}
 
 		break;
-	case 1 :
+	case 1:
 		switch (finalIntersectionDir)
 		{
-		case 1 :
+		case 1:
 			finalIntersectionPos.Y += 1;
 			newTrackPos = finalIntersectionPos;
 			distanceToEdgeOfBoard = finalIntersectionPos.X - 1;
@@ -9006,9 +9373,9 @@ void ATestHud::BuildLevel()
 
 			startingPos = convertedTrackPos;
 			startingDir = 2;
-			
+
 			break;
-		case 3 :
+		case 3:
 			finalIntersectionPos.Y -= 1;
 			newTrackPos = finalIntersectionPos;
 			distanceToEdgeOfBoard = finalIntersectionPos.X - 1;
@@ -9150,9 +9517,9 @@ void ATestHud::BuildLevel()
 
 			startingPos = convertedTrackPos;
 			startingDir = 2;
-			
+
 			break;
-		case 4 :
+		case 4:
 			newTrackPos = finalIntersectionPos;
 			distanceToEdgeOfBoard = finalIntersectionPos.X - 1;
 
@@ -9319,19 +9686,19 @@ void ATestHud::BuildLevel()
 
 			switch (currentHoleDir)
 			{
-			case 1 :
+			case 1:
 				landscapeArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
 				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 				break;
-			case 2 :
+			case 2:
 				landscapeArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
 				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 				break;
-			case 3 :
+			case 3:
 				landscapeArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 				break;
-			case 4 :
+			case 4:
 				landscapeArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 				break;
@@ -9351,7 +9718,7 @@ void ATestHud::BuildLevel()
 	FVector2D convertedRiverPos;
 	int indexFormatByRiverDir;
 	int pondMetric;
-	TArray<TArray< int> > pondStruct = 
+	TArray<TArray< int> > pondStruct =
 	{
 		{ 10, 7 },
 		{ 8 },
@@ -9371,7 +9738,7 @@ void ATestHud::BuildLevel()
 
 	switch (FMath::RandRange(0, 2))
 	{
-	case 0 :
+	case 0:
 		dirOfRiver = 2;
 
 		for (FVector2D b : holePositions)
@@ -9406,7 +9773,7 @@ void ATestHud::BuildLevel()
 		indexFormatByRiverDir = 16;//abs((dirOfRiver * 3 - 10) / 2) * 3 + 10;//will this abs actually work? 
 
 		break;
-	case 1 :
+	case 1:
 		dirOfRiver = 3;
 
 		for (FVector2D b : holePositions)
@@ -9440,7 +9807,7 @@ void ATestHud::BuildLevel()
 
 		indexFormatByRiverDir = 10;
 		break;
-	case 2 :
+	case 2:
 		dirOfRiver = 4;
 
 		for (FVector2D b : holePositions)
@@ -9680,7 +10047,7 @@ void ATestHud::BuildLevel()
 
 	switch (FMath::RandRange(0, 2))
 	{
-	case 0 :
+	case 0:
 		//thin tree cover, possible mountain
 		for (int a = 0; a < 225; a++)
 		{
@@ -9746,7 +10113,7 @@ void ATestHud::BuildLevel()
 			}
 		}
 		break;
-	case 1 :
+	case 1:
 		//thick tree cover, no mountains
 		for (int a = 0; a < 225; a++)
 		{
@@ -9812,11 +10179,11 @@ void ATestHud::BuildLevel()
 			}
 		}
 		break;
-	case 2 :
+	case 2:
 		//gradient of thin to thick tree cover
 		switch (FMath::RandRange(0, 1))
 		{
-		case 0 :
+		case 0:
 			//gradient dir 2, thin to thick
 			for (int a = 0; a < 225; a++)
 			{
@@ -9924,7 +10291,7 @@ void ATestHud::BuildLevel()
 				}
 			}
 			break;
-		case 1 :
+		case 1:
 			//gradient dir 4, thin to thick
 			for (int a = 0; a < 225; a++)
 			{
@@ -10044,85 +10411,85 @@ void ATestHud::BuildLevel()
 	{
 		switch (a)
 		{
-		case 0 :
+		case 0:
 			grass_MP_1->OpenSource(grass_IS_1);
 			break;
-		case 1 :
+		case 1:
 			holeFromDown_MP->OpenSource(holeFromDown_IS);
 			break;
-		case 2 :
+		case 2:
 			holeFromLeft_MP->OpenSource(holeFromLeft_IS);
 			break;
-		case 3 :
+		case 3:
 			holeFromRight_MP->OpenSource(holeFromRight_IS);
 			break;
-		case 4 :
+		case 4:
 			holeFromUp_MP->OpenSource(holeFromUp_IS);
 			break;
-		case 5 :
+		case 5:
 			break;
-		case 6 :
+		case 6:
 			break;
-		case 11 :
+		case 11:
 			riverFlowingDown_MP_1->OpenSource(riverFlowingDown_IS_1);
 			break;
-		case 12 :
+		case 12:
 			riverFlowingDown_MP_2->OpenSource(riverFlowingDown_IS_2);
 			break;
-		case 13 :
+		case 13:
 			riverFlowingDown_MP_3->OpenSource(riverFlowingDown_IS_3);
 			break;
-		case 14 :
+		case 14:
 			riverFlowingLeft_MP_1->OpenSource(riverFlowingLeft_IS_1);
 			break;
-		case 15 :
+		case 15:
 			riverFlowingLeft_MP_2->OpenSource(riverFlowingLeft_IS_2);
 			break;
-		case 16 :
+		case 16:
 			riverFlowingLeft_MP_3->OpenSource(riverFlowingLeft_IS_3);
 			break;
-		case 17 :
+		case 17:
 			riverFlowingRight_MP_1->OpenSource(riverFlowingRight_IS_1);
 			break;
-		case 18 :
+		case 18:
 			riverFlowingRight_MP_2->OpenSource(riverFlowingRight_IS_2);
 			break;
-		case 19 :
+		case 19:
 			riverFlowingRight_MP_3->OpenSource(riverFlowingRight_IS_3);
 			break;
-		case 20 :
+		case 20:
 			tree_MP_1->OpenSource(tree_IS_1);
 			break;
-		case 21 :
+		case 21:
 			tree_MP_2->OpenSource(tree_IS_2);
 			break;
-		case 22 :
+		case 22:
 			tree_MP_3->OpenSource(tree_IS_3);
 			break;
-		case 23 :
+		case 23:
 			tree_MP_4->OpenSource(tree_IS_4);
-			break; 
-		case 25 :
+			break;
+		case 25:
 			riverTurning_MP_1->OpenSource(riverTurning_IS_1);
 			break;
-		case 26 :
+		case 26:
 			riverTurning_MP_2->OpenSource(riverTurning_IS_2);
 			break;
-		case 27 :
+		case 27:
 			riverTurning_MP_3->OpenSource(riverTurning_IS_3);
 			break;
-		case 28 :
+		case 28:
 			riverTurning_MP_4->OpenSource(riverTurning_IS_4);
 			break;
-		case 29 :
+		case 29:
 			break;
-		case 30 :
+		case 30:
 			grass_MP_1->OpenSource(grass_IS_1);
 			break;
-		case 31 :
+		case 31:
 			grass_MP_2->OpenSource(grass_IS_2);
 			break;
-		case 32 :
+		case 32:
 			grass_MP_3->OpenSource(grass_IS_3);
 			break;
 		default:
@@ -10134,22 +10501,22 @@ void ATestHud::BuildLevel()
 	{
 		switch (a)
 		{
-		case 7 :
+		case 7:
 			pondHorizontal_MP->OpenSource(pondHorizontal_IS);
 			break;
-		case 8 :
+		case 8:
 			pondVerticleFlowingLeft_MP->OpenSource(pondVerticleFlowingLeft_IS);
 			break;
-		case 9 :
+		case 9:
 			pondVerticleFlowingRight_MP->OpenSource(pondVerticleFlowingRight_IS);
 			break;
-		case 10 :
+		case 10:
 			waterfall_MP->OpenSource(waterfall_IS);
 			break;
-		case 24 :
+		case 24:
 			tree_MP_5->OpenSource(tree_IS_5);
 			break;
-		case 33 :
+		case 33:
 			mountain_MP_1->OpenSource(mountain_IS_1);
 			break;
 		default:
@@ -10161,52 +10528,52 @@ void ATestHud::BuildLevel()
 	{
 		switch (a)
 		{
-		case 0 :
+		case 0:
 			flag_MP_1->OpenSource(flag_IS_1);
 			break;
-		case 1 :
+		case 1:
 			flag_MP_2->OpenSource(flag_IS_2);
 			break;
-		case 2 :
+		case 2:
 			flag_MP_3->OpenSource(flag_IS_3);
 			break;
-		case 3 :
+		case 3:
 			flag_MP_4->OpenSource(flag_IS_4);
 			break;
-		case 4 :
+		case 4:
 			flag_MP_5->OpenSource(flag_IS_5);
 			break;
-		case 5 :
+		case 5:
 			flag_MP_6->OpenSource(flag_IS_6);
 			break;
-		case 6 :
+		case 6:
 			flag_MP_7->OpenSource(flag_IS_7);
 			break;
-		case 7 :
+		case 7:
 			flag_MP_8->OpenSource(flag_IS_8);
 			break;
-		case 8 :
+		case 8:
 			flag_MP_9->OpenSource(flag_IS_9);
 			break;
-		case 9 :
+		case 9:
 			flag_MP_10->OpenSource(flag_IS_10);
 			break;
-		case 10 :
+		case 10:
 			flag_MP_11->OpenSource(flag_IS_11);
 			break;
-		case 11 :
+		case 11:
 			flag_MP_12->OpenSource(flag_IS_12);
 			break;
-		case 12 :
+		case 12:
 			flag_MP_13->OpenSource(flag_IS_13);
 			break;
-		case 13 :
+		case 13:
 			flag_MP_14->OpenSource(flag_IS_14);
 			break;
-		case 14 :
+		case 14:
 			flag_MP_15->OpenSource(flag_IS_15);
 			break;
-		case 15 :
+		case 15:
 			flag_MP_16->OpenSource(flag_IS_16);
 			break;
 		default:
@@ -11744,6 +12111,8 @@ void ATestHud::HouseKeeping()
 	tileIsIntersection = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 
 	tileIsTrack = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+	backgroundArr = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 }
 
 void ATestHud::ResetRegenLevel()

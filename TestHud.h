@@ -14,7 +14,7 @@
 #include "TestHud.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class MARBLEGAMEBLUEPRINT_API ATestHud : public AHUD
@@ -283,6 +283,9 @@ protected:
 	TSharedPtr<class STestWidgetThree> gameSlateWidget;
 	TSharedPtr<class SWidget> slateWidgetContainerTwo; // we use this container to remove and add the menu to the screen
 
+	TSharedPtr<class SSArcadeModeTitleScreen> mainMenuSlateWidget;
+	TSharedPtr<class SWidget> slateWidgetContainerThree;
+
 	virtual void BeginPlay() override;
 
 public:
@@ -310,6 +313,11 @@ public:
 	int extentOfAdjustment = 2 - FMath::Clamp(numberOfHoles - 8, 0, 1);
 
 	TArray<int> regenerateLevel;
+
+	TArray<UMaterial*> backgroundMaterials;
+	bool backgroundIsLargeTile;
+
+	TArray<UMediaPlayer*> mediaPlayersToClose;
 
 	TArray<TArray<TArray<FVector2D> > > holeAndIntersectionPositions =
 	{
@@ -1631,9 +1639,13 @@ public:
 
 	TArray<int> tileIsTrack = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
+	TArray<int> backgroundArr = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
 	TArray<FVector2D> pondPositionArr;
 	TArray<int> pondSpecifierArr;
 	TArray<FVector2D> largeTreeOrMountainPosArr;
+
+	void MasterGenerateLevel(int numHoles);
 
 	void GenerateLevel();
 
@@ -1646,5 +1658,7 @@ public:
 	void HouseKeeping();
 
 	void ResetRegenLevel();
+
+	void GenerateMainMenuBackground();
 
 };
