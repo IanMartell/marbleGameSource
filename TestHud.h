@@ -120,6 +120,9 @@ public:
 	UMaterial* flag_VMUI_16;
 	UMediaPlayer* flag_MP_16;
 
+	UMaterial* curtains_VMUI;
+	UMediaPlayer* curtains_MP;
+
 	UImgMediaSource* grass_IS_1;
 	UImgMediaSource* grass_IS_2;
 	UImgMediaSource* grass_IS_3;
@@ -168,6 +171,8 @@ public:
 	UImgMediaSource* flag_IS_14;
 	UImgMediaSource* flag_IS_15;
 	UImgMediaSource* flag_IS_16;
+
+	UImgMediaSource* curtains_IS;
 
 	UMaterial* buttonFromDownTurningRightZero_SMUI;
 	UMaterial* buttonFromDownTurningRightOne_SMUI;
@@ -281,10 +286,13 @@ protected:
 	TSharedPtr<class SWidget> slateWidgetContainerOne;
 
 	TSharedPtr<class STestWidgetThree> gameSlateWidget;
-	TSharedPtr<class SWidget> slateWidgetContainerTwo; // we use this container to remove and add the menu to the screen
+	TSharedPtr<class SWeakWidget> slateWidgetContainerTwo; // we use this container to remove and add the menu to the screen
 
 	TSharedPtr<class SSArcadeModeTitleScreen> mainMenuSlateWidget;
 	TSharedPtr<class SWidget> slateWidgetContainerThree;
+
+	TSharedPtr<class SCurtains> curtainsSlateWidget;
+	TSharedPtr<class SWidget> slateWidgetContainerFour;
 
 	virtual void BeginPlay() override;
 
@@ -304,6 +312,7 @@ public:
 
 	int holeCoordinateOrientation;
 	int numberOfHoles = 10;
+	int holesToGenerate;
 
 	FVector2D startingPos;
 	int startingDir;
@@ -1661,4 +1670,9 @@ public:
 
 	void GenerateMainMenuBackground();
 
+	void DisplayCurtains(int integerOne);
+
+	void HideCurtains();
+
+	void PreLoadCurtains();
 };

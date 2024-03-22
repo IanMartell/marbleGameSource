@@ -1183,9 +1183,11 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 		}
 	}
 
-	deleteMe = 0;
-
-	testFMargin = FMargin(485.0f* 1.85185f, 537.6f* 1.85185f, 1022.6f* 1.85185f, 0.0f);
+	pauseOverlay = SNew(SOverlay);
+	pauseBlur = SNew(SBackgroundBlur)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.BlurStrength(0);
 
 	ChildSlot //so it appears I cannot write code to systematically build only as much widget as necessary and will instead need to list out 225 landscape SImages and 225 track SImages and fill them as needed. but hold on, there is still some testing to be done, what if I store the initial SOverlay so I can reference it directly. ( this will mean potentially creating a new SOverlay sub class? no nvm I will just need to check through the childSlot logic to see if theres a way to display an already existing SOverlay, or to assign the SNew(SOverlay to an identity
 		[
@@ -1261,6 +1263,13 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			.Padding(CalculateTimePos(adjustedViewportSize))
 			[
 				timeText.ToSharedRef()
+			]
+
+			+ SOverlay::Slot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			[
+				pauseOverlay.ToSharedRef()
 			]
 		];
 }
@@ -1457,6 +1466,11 @@ FReply STestWidgetThree::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent&
 	if (InKeyEvent.GetKey() == EKeys::Q)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "q");
+	}
+
+	if (InKeyEvent.GetKey() == EKeys::Tab)
+	{
+
 	}
 
 	if (InKeyEvent.GetKey() == EKeys::Escape)

@@ -38,24 +38,68 @@ public:
 	void OnBackFloorOneReleased();
 	void OnBackFloorOnePressed();
 
-	void PlayThree();
-	void PlayFour();
-	void PlayFive();
-	void PlaySix();
-	void PlaySeven();
-	void PlayEight();
-	void PlayNine();
-	void PlayTen();
-	void PlayEleven();
-	void PlayTwelve();
-	void PlayThirteen();
-	void PlayFourteen();
-	void PlayFifteen();
-	void PlaySixteen();
+	void PlayPressed_3();
+	void PlayPressed_4();
+	void PlayPressed_5();
+	void PlayPressed_6();
+	void PlayPressed_7();
+	void PlayPressed_8();
+	void PlayPressed_9();
+	void PlayPressed_10();
+	void PlayPressed_11();
+	void PlayPressed_12();
+	void PlayPressed_13();
+	void PlayPressed_14();
+	void PlayPressed_15();
+	void PlayPressed_16();
+	void PlayReleased_3();
+	void PlayReleased_4();
+	void PlayReleased_5();
+	void PlayReleased_6();
+	void PlayReleased_7();
+	void PlayReleased_8();
+	void PlayReleased_9();
+	void PlayReleased_10();
+	void PlayReleased_11();
+	void PlayReleased_12();
+	void PlayReleased_13();
+	void PlayReleased_14();
+	void PlayReleased_15();
+	void PlayReleased_16();
+	void PlayHovered_3();
+	void PlayHovered_4();
+	void PlayHovered_5();
+	void PlayHovered_6();
+	void PlayHovered_7();
+	void PlayHovered_8();
+	void PlayHovered_9();
+	void PlayHovered_10();
+	void PlayHovered_11();
+	void PlayHovered_12();
+	void PlayHovered_13();
+	void PlayHovered_14();
+	void PlayHovered_15();
+	void PlayHovered_16();
+	void PlayUnHovered_3();
+	void PlayUnHovered_4();
+	void PlayUnHovered_5();
+	void PlayUnHovered_6();
+	void PlayUnHovered_7();
+	void PlayUnHovered_8();
+	void PlayUnHovered_9();
+	void PlayUnHovered_10();
+	void PlayUnHovered_11();
+	void PlayUnHovered_12();
+	void PlayUnHovered_13();
+	void PlayUnHovered_14();
+	void PlayUnHovered_15();
+	void PlayUnHovered_16();
 
+	FMargin CalculateMenuTextPos(int textIndex, int numberOfLetters);
 	float CalculateGrownMarginX(FMargin inMargin);
 	float CalculateGrownMarginY(FMargin inMargin);
 	FMargin GrowMargin(FMargin inMargin);
+	FMargin GrownMargin(FMargin inMargin);
 	FMargin ShrinkMargin(FMargin inMargin, int marginIndex);
 
 	TWeakObjectPtr<class ATestHud> OwningHUD;
@@ -93,7 +137,6 @@ public:
 	FSlateFontInfo subTitleTextStyle;
 	FSlateFontInfo menuTextStyle;
 	FSlateFontInfo playTextStyle;
-	FSlateFontInfo playTextStyleProxy;
 	FSlateFontInfo levelSelectorTextStyle;
 	FText titleText;
 
@@ -105,13 +148,23 @@ public:
 
 	FButtonStyle* transparentButtonStyle;
 
+	TArray< TSharedPtr< class SBox> > levelSelectionBoxes;
+	TArray< TSharedPtr< class STextBlock> > levelSelectionTexts;
+
 	FMargin playMargin;
-	FMargin playMarginProxy;
+	TArray<FMargin> levelSelectionMargins;
+
+	float grownOpacity;
+	float multiplierOfOffset;
+	float multiplierOfPerimeterExpansion;
+
+	bool clicked;
+
 	TArray<TSharedPtr<class SBox>> shrinkingBoxes;
 	TArray<TSharedPtr<class STextBlock>> shrinkingTextBlocks;
-	TArray<FSlateFontInfo*> shrinkingTexts;
+	TArray<FSlateFontInfo> shrinkingTexts;
 	TArray<float> shrinkingTimes;
-	TArray<FMargin*> shrinkingMargins;
+	TArray<FMargin> shrinkingMargins;
 	TArray<FMargin> shrinkingMarginsStartingPoints;
 	TArray<float> shrinkingAdjustedMarginSizesX;
 	TArray<float> shrinkingAdjustedMarginSizesY;
@@ -121,9 +174,9 @@ public:
 	TArray<TSharedPtr<class SBox>> grownBox;
 	TArray<float> shrinkTargets;
 	TArray<TSharedPtr<class SBox>> growingBox;
-	FSlateFontInfo* growingText;
+	FSlateFontInfo growingText;
 	TSharedPtr<class STextBlock> growingTextBlock;
-	FMargin* growingMargin;
+	FMargin growingMargin;
 	float growingFontSize;
 	float startingFontSize;
 	FMargin startingMargin;
@@ -134,4 +187,20 @@ public:
 	float growTime;
 	float extentOfGrowth;
 	int indexOfShrinkingSubject;
+	float standardShadowOffset;
+	float startingShadowOffset;
+	float growingOffset;
+	float adjustedGrowingOffset;
+	TArray <float> shrinkingOffset;
+	TArray <float> startingShrinkingOffset;
+	TArray <float> adjustedShrinkingOffset;
+	float standardOpacity;
+	float startingOpacity;
+	FLinearColor growingLinearColor;
+	float growingOpacity;
+	float adjustedGrowingOpacity;
+	TArray<float> startingShrinkingOpacities;
+	TArray<FLinearColor> shrinkingLinearColors;
+	TArray<float> shrinkingOpacities;
+	TArray<float> adjustedShrinkingOpacities;
 };

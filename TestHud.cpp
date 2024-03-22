@@ -9,6 +9,7 @@
 #include "Engine/Classes/Materials/Material.h"
 #include "SLoadingScreenOne.h"
 #include "SSArcadeModeTitleScreen.h"
+#include "SCurtains.h"
 #include "Math/UnrealMathUtility.h"
 #include<array>
 //#include "Engine/World.h"
@@ -22,7 +23,7 @@ FVector2D GetGameViewportSize()
 	return Result;
 }
 
-//PRAGMA_DISABLE_OPTIMIZATION
+PRAGMA_DISABLE_OPTIMIZATION
 
 ATestHud::ATestHud()
 {
@@ -734,6 +735,23 @@ ATestHud::ATestHud()
 		flag_IS_16 = (UImgMediaSource*)tempVar_flag_IS_16.Object;
 	}
 
+	//curtains
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_curtains_VMUI(TEXT("'/Game/Movies/videoMaterialsForUI/curtains_VMUI.curtains_VMUI'"));
+	if (tempVar_curtains_VMUI.Object != NULL)
+	{
+		curtains_VMUI = (UMaterial*)tempVar_curtains_VMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMediaPlayer> tempVar_curtains_MP(TEXT("'/Game/Movies/mediaPlayers/curtains_MP.curtains_MP'"));
+	if (tempVar_curtains_MP.Object != NULL)
+	{
+		curtains_MP = (UMediaPlayer*)tempVar_curtains_MP.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UImgMediaSource> tempVar_curtains_IS(TEXT("'/Game/Movies/imageSources/curtains_IS.curtains_IS'"));
+	if (tempVar_curtains_IS.Object != NULL)
+	{
+		curtains_IS = (UImgMediaSource*)tempVar_curtains_IS.Object;
+	}
+
 	//buttons or "intersections"
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_buttonFromDownTurningRightZero_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/buttons/fromDown/one/buttonFromDownOneStraightStatic_SMUI.buttonFromDownOneStraightStatic_SMUI'"));
 	if (tempVar_buttonFromDownTurningRightZero_SMUI.Object != NULL)
@@ -1032,6 +1050,11 @@ ATestHud::ATestHud()
 	}
 }
 
+void ATestHud::PreLoadCurtains()
+{
+	curtains_MP->OpenSource(curtains_IS);
+}
+
 void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play for testing, but once everything is ironed out everything will be recompartmentalized for flow control
 {
 	Super::BeginPlay();
@@ -1041,6 +1064,8 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 		playerOnePlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
 		GenerateMainMenuBackground();
+
+		//PreLoadCurtains();
 
 		mainMenuSlateWidget = SNew(SSArcadeModeTitleScreen)
 			.OwningHUD(this)
@@ -1054,7 +1079,7 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 		//FSlateApplication::SetUserFocus(0, loadingSlateWidget);
 
 		//FInputModeGameAndUI mainMenuInputMode = FInputModeGameAndUI();
-		FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();
+		FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();//Im getting an error in the unreal engine log. do I need to set canSupportFocus within the widget before calling this?
 		mainMenuInputMode.SetWidgetToFocus(mainMenuSlateWidget);
 		mainMenuInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 		//mainMenuInputMode.SetHideCursorDuringCapture(false);
@@ -1421,18 +1446,49 @@ void ATestHud::GenerateMainMenuBackground()
 	backgroundIsLargeTile = false;
 }
 
+void ATestHud::DisplayCurtains(int integerOne)
+{
+	curtains_MP->OpenSource(curtains_IS);
+
+	holesToGenerate = integerOne;
+
+	curtainsSlateWidget = SNew(SCurtains)
+		.OwningHUD(this)
+		.curtains_VMUI(curtains_VMUI)
+		.x(holesToGenerate);
+
+	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerTwo, SWeakWidget));
+	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerFour, SWeakWidget).PossiblyNullContent(curtainsSlateWidget.ToSharedRef()));
+}
+
+void ATestHud::HideCurtains()
+{
+	curtains_MP->Close();
+
+	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerFour.ToSharedRef());
+}
+
 void ATestHud::MasterGenerateLevel(int numHoles)
 {
+	for (int a = 0; a < mediaPlayersToClose.Num(); a++)
+	{
+		mediaPlayersToClose[a]->Close();
+	}
+	mediaPlayersToClose.Empty();
+
+	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerThree.ToSharedRef()); //does this destroy the menu, or only hide it
+	//delete loadingSlateWidget.Get(); this doesnt work, it throughs an acception access violation to address 0x0000000 supposedly RemoveViewportWidgetContent takes care of this
+
 	numberOfHoles = numHoles;
 
 	GenerateLevel();
 
-	for (int a = 0; a < regenerateLevel.Num(); a++)
+	for (int regenIndex = 0; regenIndex < regenerateLevel.Num(); regenIndex++)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED " + FString::FromInt(a) + " TIME(S)");
+		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED " + FString::FromInt(regenIndex) + " TIME(S)");
 		HouseKeeping();
 
-		if (a > 15)
+		if (regenIndex > 15)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "INFINITE LOOP TRIGGERED");
 			return;
@@ -3646,22 +3702,22 @@ void ATestHud::GenerateTrackShape()
 									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
 								}
 							}
-						}
 
-						if (differenceInPairPosition.X > -1)
-						{
-							firstOfPairIsAboveSecondArr.Add(1);
-							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
-						}
-						else if (differenceInPairPosition.Y > -1)
-						{
-							firstOfPairIsAboveSecondArr.Add(0);
-							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
-						}
-						else
-						{
-							firstOfPairIsAboveSecondArr.Add(0);
-							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							if (differenceInPairPosition.X > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+							else if (differenceInPairPosition.Y > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							}
+							else
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
 						}
 					}
 
@@ -3777,22 +3833,22 @@ void ATestHud::GenerateTrackShape()
 									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
 								}
 							}
-						}
 
-						if (differenceInPairPosition.Y < 1)
-						{
-							firstOfPairIsAboveSecondArr.Add(1);
-							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
-						}
-						else if (differenceInPairPosition.X > -1)
-						{
-							firstOfPairIsAboveSecondArr.Add(0);
-							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
-						}
-						else
-						{
-							firstOfPairIsAboveSecondArr.Add(0);
-							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							if (differenceInPairPosition.Y < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+							else if (differenceInPairPosition.X > -1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							}
+							else
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
 						}
 					}
 
@@ -3908,22 +3964,22 @@ void ATestHud::GenerateTrackShape()
 									differenceInPairPosition = firstOfPairIntersectionPos - secondOfPairIntersectionPos;
 								}
 							}
-						}
 
-						if (differenceInPairPosition.X < 1)
-						{
-							firstOfPairIsAboveSecondArr.Add(1);
-							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
-						}
-						else if (differenceInPairPosition.Y < 1)
-						{
-							firstOfPairIsAboveSecondArr.Add(0);
-							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
-						}
-						else
-						{
-							firstOfPairIsAboveSecondArr.Add(0);
-							firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							if (differenceInPairPosition.X < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(1);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
+							else if (differenceInPairPosition.Y < 1)
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(1);
+							}
+							else
+							{
+								firstOfPairIsAboveSecondArr.Add(0);
+								firstOfPairIsEvenWithOrLeftOfSecondArr.Add(0);
+							}
 						}
 					}
 
@@ -10593,9 +10649,6 @@ void ATestHud::BuildLevel()
 
 	if (GEngine && GEngine->GameViewport)
 	{
-		GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerOne.ToSharedRef());
-		//delete loadingSlateWidget.Get(); this doesnt work, it throughs an acception access violation to address 0x0000000 supposedly RemoveViewportWidgetContent takes care of this
-
 		gameSlateWidget = SNew(STestWidgetThree)
 			.OwningHUD(this)
 			.landscapeArr(landscapeArr)
@@ -10710,7 +10763,7 @@ void ATestHud::BuildLevel()
 			.marble_SMUI_15(marble_SMUI_15)
 			.marble_SMUI_16(marble_SMUI_16);
 
-		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerTwo, SWeakWidget).PossiblyNullContent(gameSlateWidget.ToSharedRef()));
+			slateWidgetContainerTwo->SetContent(gameSlateWidget.ToSharedRef());
 
 		FInputModeUIOnly gameInWidgetInputMode = FInputModeUIOnly();
 		gameInWidgetInputMode.SetWidgetToFocus(loadingSlateWidget);

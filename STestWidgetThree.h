@@ -13,6 +13,7 @@
 #include "Widgets/DeclarativeSyntaxSupport.h"
 #include "Widgets/Images/SImage.h"
 #include "Widgets/SOverlay.h"
+#include "Widgets/Layout/SBackgroundBlur.h"
 #include "Materials/MaterialInterface.h"
 #include "Framework/Application/SlateApplication.h"
 #include "Engine/Classes/Materials/Material.h"
@@ -621,6 +622,9 @@ public:
 	TSharedPtr<class SOverlay> intersectionButtonsOverlay;
 	TSharedPtr<class SOverlay> flagsOverlay;
 	TSharedPtr<class SOverlay> frameColorOverlay;
+	TSharedPtr<class SOverlay> pauseOverlay;
+
+	TSharedPtr<class SBackgroundBlur> pauseBlur;
 
 	TArray<TArray<FSlateBrush*> > intersections;
 	TArray<int> intersectionsKeys;
