@@ -83,11 +83,57 @@ const FMargin CalculateTimePos(FVector2D adjustedViewportSize)
 	return FMargin(leftPad, topPad, rightPad, bottomPad);
 }
 
+const FMargin CalculateCountdownPos(FVector2D adjustedViewport)
+{
+	float fOne = (adjustedViewport.X - adjustedViewport.Y) / 2;
+	float leftPad = adjustedViewport.Y * 0.43 + fOne;
+	float topPad = adjustedViewport.Y * 0.43;
+	float rightPad = adjustedViewport.Y * 0.43 + fOne;
+	float bottomPad = adjustedViewport.Y * 0.43;
+
+	return FMargin(leftPad, topPad, rightPad, bottomPad);
+}
+
+/*float STestWidgetThree::CalculateGrownMarginX(FMargin inMargin)
+{
+	float sizeX = adjustedViewportSize.X - (inMargin.Left + inMargin.Right);
+	float newSizeX = ((sizeX - (1.42 * sizeX)) / 2) / 2;
+
+	return newSizeX;
+}*/
+
+float STestWidgetThree::CalculateAdjustedCountdownMargin(FMargin inMargin)
+{
+	float sizeY = adjustedViewportSize.Y - (inMargin.Top + inMargin.Bottom);
+	float newSizeY = ((sizeY - (1.42 * sizeY)) / 2) / 2;
+
+	return newSizeY;
+}
+
+FMargin STestWidgetThree::GrowCountdownMargin(FMargin inMargin)
+{
+	FMargin newMargin = inMargin;
+	float sizeX = (adjustedCountdownMargin * sin(9.42 * (countdownEffectClock - 0.167))) + adjustedCountdownMargin;
+	float sizeY = (adjustedCountdownMargin * sin(9.42 * (countdownEffectClock - 0.167))) + adjustedCountdownMargin;
+	newMargin.Left += sizeX;
+	newMargin.Top += sizeY;
+	newMargin.Right += sizeX;
+	newMargin.Bottom += sizeY;
+
+	return newMargin;
+}
+
 //you could change the size of the background tiles without changing the size of the track tiles because they are being calculated seperately. just moving down to 12 x 12 would have a big impact on performance
 void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will need to write a destructor considering all the 'new' keywords used here
 {
 	SetCanTick(true);
 	bCanSupportFocus = true;
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));// Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass()));
+	//lastSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	maxLevel = currentSave->GetMaxLevel();
+	highscores = currentSave->GetHighscores();
+	highscoreDataOne = currentSave->GetHighscoreDataOne();
+	highscoreDataTwo = currentSave->GetHighscoreDataTwo();
 
 	OwningHUD = InArgs._OwningHUD;
 	landscapeArr = InArgs._landscapeArr;
@@ -1189,6 +1235,35 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 		.VAlign(VAlign_Fill)
 		.BlurStrength(0);
 
+	countdownOverlay = SNew(SOverlay);
+	countdownFont = FCoreStyle::Get().GetFontStyle("Roboto"); //test italic
+	countdownFont.Size = 0.0866 *adjustedViewportSize.Y;
+	adjustedStartingFontSize = ((1.155 * countdownFont.Size) - countdownFont.Size) / 2;
+	countdownMargin = CalculateCountdownPos(adjustedViewportSize);
+	adjustedCountdownMargin = CalculateAdjustedCountdownMargin(countdownMargin);
+	adjustedStartingOpacity = 0.5;
+	countdownText = SNew(STextBlock)
+		.Margin(FMargin())
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FLinearColor(1, 1, 1, 0))
+		.Font(countdownFont)
+		.Text(FText::FromString("0"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.004, adjustedViewportSize.Y * 0.004))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 0));
+	countdownBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(countdownMargin)
+		[
+			countdownText.ToSharedRef()
+		];
+	countdownOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			countdownBox.ToSharedRef()
+		];
+
 	ChildSlot //so it appears I cannot write code to systematically build only as much widget as necessary and will instead need to list out 225 landscape SImages and 225 track SImages and fill them as needed. but hold on, there is still some testing to be done, what if I store the initial SOverlay so I can reference it directly. ( this will mean potentially creating a new SOverlay sub class? no nvm I will just need to check through the childSlot logic to see if theres a way to display an already existing SOverlay, or to assign the SNew(SOverlay to an identity
 		[
 			SNew(SOverlay)
@@ -1263,6 +1338,13 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			.Padding(CalculateTimePos(adjustedViewportSize))
 			[
 				timeText.ToSharedRef()
+			]
+
+			+ SOverlay::Slot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			[
+				countdownOverlay.ToSharedRef()
 			]
 
 			+ SOverlay::Slot()
@@ -1797,6 +1879,37 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 				marblesToBeDestroyed.RemoveAt(a);
 
 				a -= 1;
+
+				if (activeMarbles.Num() == 0)
+				{//curtains into main menu results screen and update the save file
+					finalScore = playerScore * pow(1.2, holePositions.Num() - 3);
+
+					if (playerScore == maximumPossibleScore)
+					{
+						if (holePositions.Num() - 2 > maxLevel)
+						{
+							maxLevel += 1;
+						}
+					}
+					
+					for (int b = 0; b < highscores.Num(); b++)
+					{
+						if (finalScore > highscores[b])
+						{
+							highscores.Insert(finalScore, b);
+							highscores.RemoveAt(3);
+							break;//if this doesnt break the loop the logic here will be faulty.. wait is this breaking
+						}
+					}
+
+					highscoreDataOne = holePositions.Num() - 3;
+					highscoreDataTwo = playerScore;
+					scoreThisGame = finalScore;
+
+					OwningHUD->SaveGame(maxLevel, highscores, highscoreDataOne, highscoreDataTwo, scoreThisGame);
+
+					OwningHUD->DisplayCurtains(3, false, true);
+				}
 			}
 		}
 	}
@@ -1848,9 +1961,120 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 		else
 		{
 			startingTime += InDeltaTime;
-			if (startingTime > 5)
+
+			if (startingTime > 6)
 			{
-				gameStarted = true;
+				if (startingTime > 10)
+				{
+					gameStarted = true;
+					countdownOverlay->RemoveSlot(countdownBox.ToSharedRef());
+				}
+				else if (startingTime > 9)
+				{
+					if (!goDisplayed)
+					{
+						goDisplayed = true;
+						startingFontSize = countdownFont.Size;
+						growingFontSize = 0;
+						startingOpacity = 0;
+						growingOpacity = 0;
+						shiftingFont = countdownFont;
+						startingMargin = countdownMargin;
+						growingMargin = countdownMargin;
+						countdownText->SetText(FText::FromString("GO"));
+						countdownEffectClock = 0.0;
+						growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
+						growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
+						growingBox->SetPadding(growingMargin);
+						growingText->SetFont(countdownFont);
+					}
+				}
+				else if (startingTime > 8)
+				{
+					if (!oneDisplayed)
+					{
+						oneDisplayed = true;
+						startingFontSize = countdownFont.Size;
+						growingFontSize = 0;
+						startingOpacity = 0;
+						growingOpacity = 0;
+						shiftingFont = countdownFont;
+						startingMargin = countdownMargin;
+						growingMargin = countdownMargin;
+						countdownText->SetText(FText::FromString("1"));
+						countdownEffectClock = 0.0;
+						growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
+						growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
+						growingBox->SetPadding(growingMargin);
+						growingText->SetFont(countdownFont);
+					}
+				}
+				else if (startingTime > 7)
+				{
+					if (!twoDisplayed)
+					{
+						twoDisplayed = true;
+						startingFontSize = countdownFont.Size;
+						growingFontSize = 0;
+						startingOpacity = 0;
+						growingOpacity = 0;
+						shiftingFont = countdownFont;
+						startingMargin = countdownMargin;
+						growingMargin = countdownMargin;
+						countdownText->SetText(FText::FromString("2"));
+						countdownEffectClock = 0.0;
+						growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
+						growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
+						growingBox->SetPadding(growingMargin);
+						growingText->SetFont(countdownFont);
+					}
+				}
+				if (!threeDisplayed)
+				{
+					threeDisplayed = true;
+					startingFontSize = countdownFont.Size;
+					growingFontSize = 0;
+					startingOpacity = 0;
+					growingOpacity = 0;
+					shiftingFont = countdownFont;
+					growingText = countdownText;
+					growingBox = countdownBox;
+					startingMargin = countdownMargin;
+					growingMargin = countdownMargin;
+					countdownText->SetText(FText::FromString("3"));//usually you would use FText::FromString("Play") but if this works alls the better
+					countdownEffectClock = 0.0;
+				}
+
+				countdownEffectClock += InDeltaTime;
+
+				if (countdownEffectClock < 0.33)
+				{
+					growingMargin = GrowCountdownMargin(startingMargin);
+					growingOpacity = (0.5 * sin(9.42 * (countdownEffectClock - 0.167))) + 0.5; //I think this will work
+					growingFontSize = startingFontSize + (adjustedStartingFontSize * sin(9.42 * (countdownEffectClock - 0.167))) + adjustedStartingFontSize;
+
+					growingBox->SetPadding(growingMargin);
+					shiftingFont.Size = growingFontSize;
+					growingText->SetFont(shiftingFont);
+					growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
+					growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
+				}
+				else if (countdownEffectClock > 0.833)
+				{
+
+				}
+				else if (countdownEffectClock > 0.666)
+				{
+					//growingMargin = GrowCountdownMargin(startingMargin);
+					growingOpacity = 1 - ((0.5 * sin(18.85 * ((countdownEffectClock - 0.666) - 0.083))) + 0.5);
+					//growingFontSize = 0.1 - (adjustedStartingFontSize * sin(18.85 * ((countdownEffectClock - 0.666) - 0.083))) + adjustedStartingFontSize;
+
+					//growingBox->SetPadding(growingMargin);
+					//shiftingFont.Size = growingFontSize;
+					//growingText->SetFont(shiftingFont);
+					growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
+					growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
+				}
 			}
 		}
 	}

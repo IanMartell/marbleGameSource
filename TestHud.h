@@ -9,6 +9,7 @@
 #include "BaseMediaSource.h"
 #include "ImgMediaSource.h"
 #include "Kismet/GameplayStatics.h"
+#include "SaveGameOne.h"
 #include "Framework/Application/SlateApplication.h"
 #include "Engine/EngineBaseTypes.h"
 #include "TestHud.generated.h"
@@ -289,10 +290,16 @@ protected:
 	TSharedPtr<class SWeakWidget> slateWidgetContainerTwo; // we use this container to remove and add the menu to the screen
 
 	TSharedPtr<class SSArcadeModeTitleScreen> mainMenuSlateWidget;
-	TSharedPtr<class SWidget> slateWidgetContainerThree;
+	TSharedPtr<class SWeakWidget> slateWidgetContainerThree;
 
 	TSharedPtr<class SCurtains> curtainsSlateWidget;
 	TSharedPtr<class SWidget> slateWidgetContainerFour;
+
+	TSharedPtr<class SCurtainsTwo> curtainsTwoSlateWidget;
+	TSharedPtr<class SWidget> slateWidgetContainerFive;
+
+	TSharedPtr<class SResultsBlur> resultsBlurSlateWidget;
+	TSharedPtr<class SWeakWidget> slateWidgetContainerSix;
 
 	virtual void BeginPlay() override;
 
@@ -325,6 +332,8 @@ public:
 
 	TArray<UMaterial*> backgroundMaterials;
 	bool backgroundIsLargeTile;
+
+	bool goToResults;
 
 	TArray<UMediaPlayer*> mediaPlayersToClose;
 
@@ -1670,9 +1679,15 @@ public:
 
 	void GenerateMainMenuBackground();
 
-	void DisplayCurtains(int integerOne);
+	void DisplayCurtains(int integerOne, bool goingToGame = true, bool displayResults = false);
 
-	void HideCurtains();
+	void HideCurtains(bool toGame = true);
 
 	void PreLoadCurtains();
+
+	void ReturnToMainMenu();
+
+	void RemoveResultsBlur();
+
+	void SaveGame(int maxLevel, TArray <int> highscores, int highscoreDataOne, int highscoreDataTwo, int scoreThisGame);
 };

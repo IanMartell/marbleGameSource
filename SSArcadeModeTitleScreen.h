@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
 #include "TestHud.h"
+#include "SaveGameOne.h"
 
 /**
  *
@@ -21,6 +22,8 @@ public:
 
 	SLATE_ARGUMENT(bool, backgroundIsLargeTile)
 
+	SLATE_ARGUMENT(bool, displayResults)
+
 	SLATE_ARGUMENT(UMaterial*, gameFrameColor_SMUI)
 
 	SLATE_END_ARGS()
@@ -35,8 +38,25 @@ public:
 	void OnPlayHovered();
 	void OnPlayUnHovered();
 
+	void OnResultsPressed();
+	void OnResultsReleased();
+	void OnResultsHovered();
+	void OnResultsUnHovered();
+
+	void OnOptionsPressed();
+	void OnOptionsReleased();
+	void OnOptionsHovered();
+	void OnOptionsUnHovered();
+
+	void OnQuitPressed();
+	void OnQuitReleased();
+	void OnQuitHovered();
+	void OnQuitUnHovered();
+
 	void OnBackFloorOneReleased();
 	void OnBackFloorOnePressed();
+	void OnBackFloorOneHovered();
+	void OnBackFloorOneUnHovered();
 
 	void PlayPressed_3();
 	void PlayPressed_4();
@@ -96,6 +116,8 @@ public:
 	void PlayUnHovered_16();
 
 	FMargin CalculateMenuTextPos(int textIndex, int numberOfLetters);
+	FMargin CalculateHighscorePos(int textIndex, int numberOfLetters);
+	FMargin CalculateLastGamePos(int textIndex, int numberOfLetters);
 	float CalculateGrownMarginX(FMargin inMargin);
 	float CalculateGrownMarginY(FMargin inMargin);
 	FMargin GrowMargin(FMargin inMargin);
@@ -104,6 +126,7 @@ public:
 
 	TWeakObjectPtr<class ATestHud> OwningHUD;
 	APlayerController* playerOnePlayerController;
+	USaveGameOne* currentSave;
 
 	TArray<UMaterial*> backgroundMaterials;
 	TArray<FSlateBrush*> backgroundStuff;
@@ -128,31 +151,47 @@ public:
 	TSharedPtr< class SOverlay> masterOverlay;
 	TSharedPtr< class SOverlay> levelSelectionOverlay;
 	TSharedPtr< class SOverlay> mainMenuOverlay;
+	TSharedPtr< class SOverlay> resultsOverlay;
 
 	FVector2D viewportSize;
 	FVector2D adjustedViewportSize;
 	float DPIScale;
 
-	FSlateFontInfo titleTextStyle;
-	FSlateFontInfo subTitleTextStyle;
-	FSlateFontInfo menuTextStyle;
-	FSlateFontInfo playTextStyle;
-	FSlateFontInfo levelSelectorTextStyle;
+	FSlateFontInfo titleFont;
+	FSlateFontInfo subTitleFont;
+	FSlateFontInfo menuFont;
+	FSlateFontInfo levelSelectorFont;
+	FSlateFontInfo scoreFont;
 	FText titleText;
 
 	TSharedPtr<class SBox> playBox;
-	TSharedPtr<class SButton> firstFloorBackButton;
+	TSharedPtr<class SBox> resultsBox;
+	TSharedPtr<class SBox> optionsBox;
+	TSharedPtr<class SBox> quitBox;
+	TSharedPtr<class SBox> firstFloorBackBox;
 
 	TSharedPtr<class STextBlock> playText;
+	TSharedPtr<class STextBlock> resultsText;
+	TSharedPtr<class STextBlock> optionsText;
+	TSharedPtr<class STextBlock> quitText;
 	TSharedPtr<class STextBlock> backText;
 
 	FButtonStyle* transparentButtonStyle;
 
 	TArray< TSharedPtr< class SBox> > levelSelectionBoxes;
 	TArray< TSharedPtr< class STextBlock> > levelSelectionTexts;
+	TArray <bool> enabledLevels;
 
 	FMargin playMargin;
+	FMargin resultsMargin;
+	FMargin optionsMargin;
+	FMargin quitMargin;
+	FMargin backMargin;
 	TArray<FMargin> levelSelectionMargins;
+
+	TArray<FMargin> completedMargins;
+	TArray<FSlateFontInfo> completedFonts;
+	TArray<float> completedOffsets;
 
 	float grownOpacity;
 	float multiplierOfOffset;
@@ -174,7 +213,7 @@ public:
 	TArray<TSharedPtr<class SBox>> grownBox;
 	TArray<float> shrinkTargets;
 	TArray<TSharedPtr<class SBox>> growingBox;
-	FSlateFontInfo growingText;
+	FSlateFontInfo growingFont;
 	TSharedPtr<class STextBlock> growingTextBlock;
 	FMargin growingMargin;
 	float growingFontSize;
@@ -203,4 +242,6 @@ public:
 	TArray<FLinearColor> shrinkingLinearColors;
 	TArray<float> shrinkingOpacities;
 	TArray<float> adjustedShrinkingOpacities;
+
+	bool displayResults;
 };

@@ -12,6 +12,7 @@
 #include "GameFramework/GameUserSettings.h"
 #include "Widgets/DeclarativeSyntaxSupport.h"
 #include "Widgets/Images/SImage.h"
+#include "SaveGameOne.h"
 #include "Widgets/SOverlay.h"
 #include "Widgets/Layout/SBackgroundBlur.h"
 #include "Materials/MaterialInterface.h"
@@ -299,6 +300,12 @@ public:
 	void OnIntersectionReleasedSixteen();
 	void OnIntersectionPressedSeventeen();
 	void OnIntersectionReleasedSeventeen();
+
+	//float CalculateGrownMarginX(FMargin inMargin);
+	float CalculateAdjustedCountdownMargin(FMargin inMargin);
+	FMargin GrowCountdownMargin(FMargin inMargin);
+	UPROPERTY(SaveGame) USaveGameOne* currentSave;
+	UPROPERTY(SaveGame) USaveGameOne* lastSave;
 
 	FVector2D PrepTurnMarble(int currentMarble, FVector2d marblePosition, int dirOfMarble, bool isIntersection, int trackArrValue);
 	FVector2D TurnMarble(int currentMarble, FVector2D marblePosition);
@@ -615,6 +622,9 @@ public:
 	FText currentTimeText;
 	TSharedPtr< class SOverlay> marbleOverlay;
 	TSharedPtr< class FOverlaySlot> marbleOneSlot;
+	TSharedPtr<class STextBlock>  countdownText;
+	TSharedPtr<class SBox>  countdownBox;
+	FSlateFontInfo countdownFont;
 
 	TSharedPtr<class SOverlay> largeTilesOverlay;
 	TSharedPtr<class SOverlay> landscapeOverlay;
@@ -623,6 +633,7 @@ public:
 	TSharedPtr<class SOverlay> flagsOverlay;
 	TSharedPtr<class SOverlay> frameColorOverlay;
 	TSharedPtr<class SOverlay> pauseOverlay;
+	TSharedPtr<class SOverlay> countdownOverlay;
 
 	TSharedPtr<class SBackgroundBlur> pauseBlur;
 
@@ -666,4 +677,32 @@ public:
 	double timeToCoverOneTileDividedByTwo;
 
 	FMargin marbleToBeDestroyedPadding;
+
+	bool threeDisplayed;
+	bool twoDisplayed;
+	bool oneDisplayed;
+	bool goDisplayed;
+
+	float standardFontSize;
+	float startingFontSize;
+	float growingFontSize;
+	float adjustedStartingFontSize;
+	float startingOpacity;
+	float growingOpacity;
+	float adjustedStartingOpacity;
+	FSlateFontInfo shiftingFont;
+	TSharedPtr<class STextBlock> growingText;
+	TSharedPtr<class SBox> growingBox;
+	FMargin countdownMargin;
+	FMargin startingMargin;
+	FMargin growingMargin;
+	float adjustedCountdownMargin;
+	float countdownEffectClock;
+
+	int finalScore;
+	TArray <int> highscores;
+	int maxLevel;
+	int highscoreDataOne;
+	int highscoreDataTwo;
+	int scoreThisGame;
 };

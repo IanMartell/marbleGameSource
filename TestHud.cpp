@@ -10,6 +10,8 @@
 #include "SLoadingScreenOne.h"
 #include "SSArcadeModeTitleScreen.h"
 #include "SCurtains.h"
+#include "SCurtainsTwo.h"
+#include "SResultsBlur.h"
 #include "Math/UnrealMathUtility.h"
 #include<array>
 //#include "Engine/World.h"
@@ -23,7 +25,7 @@ FVector2D GetGameViewportSize()
 	return Result;
 }
 
-PRAGMA_DISABLE_OPTIMIZATION
+//PRAGMA_DISABLE_OPTIMIZATION
 
 ATestHud::ATestHud()
 {
@@ -1055,9 +1057,29 @@ void ATestHud::PreLoadCurtains()
 	curtains_MP->OpenSource(curtains_IS);
 }
 
+void ATestHud::SaveGame(int maxLevel, TArray <int> highscores, int highscoreDataOne, int highscoreDataTwo, int scoreThisGame)
+{
+	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass()));
+	saveFile->SetMaxLevel(maxLevel);
+	saveFile->SetHighscores(highscores);
+	saveFile->SetHighscoreDataOne(highscoreDataOne);
+	saveFile->SetHighscoreDataTwo(highscoreDataTwo);
+	saveFile->SetScoreThisGame(scoreThisGame);
+	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
+}
+
 void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play for testing, but once everything is ironed out everything will be recompartmentalized for flow control
 {
 	Super::BeginPlay();
+
+	/*USaveGameOne* LoadGameInstance = Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass()));
+	LoadGameInstance->SetHighscores({ 0, 0, 0 });
+	UGameplayStatics::SaveGameToSlot(LoadGameInstance, TEXT("saveGameOne"), 0);*/
+	//LoadGameInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, 0));//is this gonna be a problem? do I need to get the actual default LoadGameInstance->SaveSlotName and the actual LoadGameInstance->UserIndex?
+	if (UGameplayStatics::LoadGameFromSlot("saveGameOne", 0) == nullptr)
+	{
+		UGameplayStatics::SaveGameToSlot(Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass())), "saveGameOne", 0);
+	}
 
 	if (GEngine && GEngine->GameViewport)
 	{
@@ -1072,6 +1094,7 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 			.playerOnePlayerController(playerOnePlayerController)
 			.backgroundMaterials(backgroundMaterials)
 			.backgroundIsLargeTile(backgroundIsLargeTile)
+			.displayResults(false)
 			.gameFrameColor_SMUI(gameFrameColor_SMUI);
 
 		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerThree, SWeakWidget).PossiblyNullContent(mainMenuSlateWidget.ToSharedRef()));
@@ -1446,26 +1469,117 @@ void ATestHud::GenerateMainMenuBackground()
 	backgroundIsLargeTile = false;
 }
 
-void ATestHud::DisplayCurtains(int integerOne)
+void ATestHud::DisplayCurtains(int integerOne, bool goingToGame, bool displayResults)
 {
-	curtains_MP->OpenSource(curtains_IS);
+	if (goingToGame)
+	{
+		curtains_MP->OpenSource(curtains_IS);
 
-	holesToGenerate = integerOne;
+		holesToGenerate = integerOne;
 
-	curtainsSlateWidget = SNew(SCurtains)
-		.OwningHUD(this)
-		.curtains_VMUI(curtains_VMUI)
-		.x(holesToGenerate);
+		curtainsSlateWidget = SNew(SCurtains)
+			.OwningHUD(this)
+			.curtains_VMUI(curtains_VMUI)
+			.x(holesToGenerate);
 
-	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerTwo, SWeakWidget));
-	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerFour, SWeakWidget).PossiblyNullContent(curtainsSlateWidget.ToSharedRef()));
+		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerTwo, SWeakWidget));
+		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerFour, SWeakWidget).PossiblyNullContent(curtainsSlateWidget.ToSharedRef()));
+	}
+	else
+	{
+		curtains_MP->OpenSource(curtains_IS);
+
+		curtainsTwoSlateWidget = SNew(SCurtainsTwo)
+			.OwningHUD(this)
+			.curtains_VMUI(curtains_VMUI);
+
+		goToResults = displayResults;
+
+		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerThree, SWeakWidget));
+
+		if (goToResults)
+		{
+			GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerSix, SWeakWidget));
+		}
+		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerFive, SWeakWidget).PossiblyNullContent(curtainsTwoSlateWidget.ToSharedRef()));
+	}
 }
 
-void ATestHud::HideCurtains()
+void ATestHud::ReturnToMainMenu()
 {
-	curtains_MP->Close();
+	HouseKeeping();
+	ResetRegenLevel();
+	GenerateMainMenuBackground();
 
-	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerFour.ToSharedRef());
+	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerTwo.ToSharedRef());
+
+	mainMenuSlateWidget = SNew(SSArcadeModeTitleScreen)
+		.OwningHUD(this)
+		.playerOnePlayerController(playerOnePlayerController)
+		.backgroundMaterials(backgroundMaterials)
+		.backgroundIsLargeTile(backgroundIsLargeTile)
+		.displayResults(goToResults)
+		.gameFrameColor_SMUI(gameFrameColor_SMUI);
+
+	slateWidgetContainerThree->SetContent(mainMenuSlateWidget.ToSharedRef());
+
+	if (goToResults)
+	{
+		resultsBlurSlateWidget = SNew(SResultsBlur)
+			.OwningHUD(this);
+
+		slateWidgetContainerSix->SetContent(resultsBlurSlateWidget.ToSharedRef());
+	}
+}
+
+void ATestHud::RemoveResultsBlur()
+{
+	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerSix.ToSharedRef());
+
+	FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();
+	mainMenuInputMode.SetWidgetToFocus(mainMenuSlateWidget);
+	mainMenuInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	//mainMenuInputMode.SetHideCursorDuringCapture(false);
+	playerOnePlayerController->SetInputMode(mainMenuInputMode);
+	playerOnePlayerController->SetShowMouseCursor(true);
+	FSlateApplication::Get().SetKeyboardFocus(mainMenuSlateWidget);
+}
+
+void ATestHud::HideCurtains(bool toGame)
+{
+	if (toGame)
+	{
+		curtains_MP->Close();
+
+		GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerFour.ToSharedRef());
+	}
+	else
+	{
+		curtains_MP->Close();
+
+		GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerFive.ToSharedRef());
+
+		if (goToResults)
+		{
+			FInputModeUIOnly resultsInputMode = FInputModeUIOnly();
+			resultsInputMode.SetWidgetToFocus(resultsBlurSlateWidget);
+			resultsInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+			//mainMenuInputMode.SetHideCursorDuringCapture(false);
+			playerOnePlayerController->SetInputMode(resultsInputMode);
+			playerOnePlayerController->SetShowMouseCursor(true);
+			FSlateApplication::Get().SetKeyboardFocus(resultsBlurSlateWidget);
+		}
+		else
+		{
+			FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();
+			mainMenuInputMode.SetWidgetToFocus(mainMenuSlateWidget);
+			mainMenuInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+			//mainMenuInputMode.SetHideCursorDuringCapture(false);
+			playerOnePlayerController->SetInputMode(mainMenuInputMode);
+			playerOnePlayerController->SetShowMouseCursor(true);
+			FSlateApplication::Get().SetKeyboardFocus(mainMenuSlateWidget);
+		}
+	}
 }
 
 void ATestHud::MasterGenerateLevel(int numHoles)
@@ -1476,7 +1590,7 @@ void ATestHud::MasterGenerateLevel(int numHoles)
 	}
 	mediaPlayersToClose.Empty();
 
-	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerThree.ToSharedRef()); //does this destroy the menu, or only hide it
+	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerThree.ToSharedRef()); //does this destroy the menu, or only hide it. we are about to find out
 	//delete loadingSlateWidget.Get(); this doesnt work, it throughs an acception access violation to address 0x0000000 supposedly RemoveViewportWidgetContent takes care of this
 
 	numberOfHoles = numHoles;
@@ -10840,7 +10954,7 @@ void ATestHud::HouseKeeping()
 	test.Empty();
 	listOfHolePositionGroupings.Empty();
 	negativeOneZeroOrOne = 0;
-	extentOfAdjustment = 1;
+	extentOfAdjustment = 2 - FMath::Clamp(numberOfHoles - 8, 0, 1);;
 	pondPositionArr.Empty();
 	pondSpecifierArr.Empty();
 	largeTreeOrMountainPosArr.Empty();
