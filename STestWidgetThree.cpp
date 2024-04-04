@@ -535,8 +535,8 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 		break;
 	}
 	
-	quantityOfMarbles = 12 + holePositions.Num() * 2;
-	speedMultiplier = 0.7 + 1 * ((holePositions.Num() - 2) / 35);
+	quantityOfMarbles = 18 + holePositions.Num() * 2;
+	speedMultiplier = 0.75 + 4.4 * ((holePositions.Num() - 2) / 35);
 	timeToCoverOneTileDividedByTwo = (1 / speedMultiplier) / 2;
 
 	spawningWindow = timeOfGame / quantityOfMarbles;
