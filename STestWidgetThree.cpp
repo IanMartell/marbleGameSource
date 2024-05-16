@@ -2,15 +2,17 @@
 
 #include "STestWidgetThree.h"
 #include <string>
+#include "GameFramework/Actor.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Math/Vector2D.h"
 #include "Layout/Geometry.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/AudioComponent.h"
 #include "Engine/World.h"
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
 
 #define LOCTEXT_NAMESPACE "TestSlate"
-PRAGMA_DISABLE_OPTIMIZATION
+//UE_DISABLE_OPTIMIZATION
 
 const FMargin CalculateTilePosition(FVector2D tileCoords, FVector2D adjustedViewportSize)//this has been adjusted to respond to 1D arr coordinates
 {//this will only work if screenSize.X >= screenSize.Y
@@ -136,6 +138,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	highscoreDataTwo = currentSave->GetHighscoreDataTwo();
 
 	OwningHUD = InArgs._OwningHUD;
+	standardWorldContextObject = InArgs._standardWorldContextObject;
 	landscapeArr = InArgs._landscapeArr;
 	trackArr = InArgs._trackArr;
 	pondSpecifierArr = InArgs._pondSpecifierArr;
@@ -247,6 +250,12 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	marble_SMUI_14 = InArgs._marble_SMUI_14;
 	marble_SMUI_15 = InArgs._marble_SMUI_15;
 	marble_SMUI_16 = InArgs._marble_SMUI_16;
+	intersectionDownAudioComponent = InArgs._intersectionDownAudioComponent;
+	intersectionUpAudioComponent = InArgs._intersectionUpAudioComponent;
+	windAudioComponents = InArgs._windAudioComponents;
+	riverAudioComponents = InArgs._riverAudioComponents;
+	waterfallAudioComponents = InArgs._waterfallAudioComponents;
+	environmentAudio = InArgs._environmentAudio;
 
 	grass_SB_1 = new FSlateBrush();
 	grass_SB_1->SetResourceObject(grass_VMUI_1);
@@ -517,6 +526,35 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	masterButtonStyle = new FButtonStyle();
 	masterButtonStyle->SetNormalPadding(FMargin());
 
+	intersectionDownAudioComponent->SetVolumeMultiplier(5.0);
+	intersectionUpAudioComponent->SetVolumeMultiplier(4.0);
+
+	for (int a = 0; a < 2; a++)
+	{
+		windAudioComponents[a]->SetVolumeMultiplier(2);
+		windAudioComponents[a]->Stop();
+		riverAudioComponents[a]->SetVolumeMultiplier(0.0833);
+		riverAudioComponents[a]->Stop();
+		waterfallAudioComponents[a]->SetVolumeMultiplier(0.2);
+		waterfallAudioComponents[a]->Stop();
+	}
+
+	switch (environmentAudio)
+	{
+	case 0:
+		windAudioComponents[0]->Play();
+
+		riverAudioComponents[0]->Play();
+		break;
+	case 1:
+		windAudioComponents[0]->Play();
+
+		waterfallAudioComponents[0]->Play();
+		break;
+	default:
+		break;
+	}
+
 	switch (startingDir)
 	{
 	case 2 :
@@ -535,19 +573,33 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 		break;
 	}
 	
-	quantityOfMarbles = 18 + holePositions.Num() * 2;
-	speedMultiplier = 0.75 + 4.4 * ((holePositions.Num() - 2) / 35);
+	quantityOfMarbles = 30 + holePositions.Num();
+	speedMultiplier = 0.8 * (1 + (0.023 * (holePositions.Num() - 3)));
+	// s = 0.8 and i = 33 is 0.0242424
+	//see desmos and notes for breakdown of equation, but C = i/i^2 * 1/s  C is concentration, i is interval of marble spawn, s is speed of marble. when i increases from 33 marbles over 120 seconds by 1 marble s needs to grow at a linear rate to maintain the same C but that rate varies by intended C and starting s
+
+	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "quantity: " + FString::FromInt(quantityOfMarbles));
+	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "speed: " + FString::SanitizeFloat(speedMultiplier));
+
 	timeToCoverOneTileDividedByTwo = (1 / speedMultiplier) / 2;
 
-	spawningWindow = timeOfGame / quantityOfMarbles;
+	spawningWindow = (float)((float)timeOfGame / (float)quantityOfMarbles);
+	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "speed: " + FString::SanitizeFloat(spawningWindow));
 
-	for (int a = 0; a < marblesRandomized.Num() * 10; a++)
+	for (int a = 0; a < marblesRandomized.Num() * 6; a++)
 	{
-		marblesThisGameProxy.Add(1);
+		if (a % 6 < 3)
+		{
+			marblesThisGameProxy.Add(1);
+		}
+		else
+		{
+			marblesThisGameProxy.Add(0);
+		}
 	}
 	for (int a = 0; a < marblesRandomized.Num(); a++)
 	{
-		marblesThisGameProxyTracker.Add(9);
+		marblesThisGameProxyTracker.Add(2);
 	}
 
 	for (int a = 0; a < quantityOfMarbles; a++)
@@ -556,34 +608,34 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 
 		if (marblesThisGameProxy[marbleProxyIndexToAdd] != 0)
 		{
-			marbleIndexToAdd = marbleProxyIndexToAdd / 10;
+			marbleIndexToAdd = marbleProxyIndexToAdd / 6;
 
 			for (int b = 0; b < marblesRandomized.Num(); b++)
 			{
 				if (marbleIndexToAdd == b)
 				{
-					marblesThisGameProxy[b * 10 + marblesThisGameProxyTracker[b]] = 0;
-					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 9);
-					marblesThisGameProxy[b * 10 + marblesThisGameProxyTracker[b]] = 0;
-					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 9);
-					marblesThisGameProxy[b * 10 + marblesThisGameProxyTracker[b]] = 0;
-					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 9);
-					marblesThisGameProxy[b * 10 + marblesThisGameProxyTracker[b]] = 0;
-					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 9);
-					marblesThisGameProxy[b * 10 + marblesThisGameProxyTracker[b]] = 0;
-					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 9);
+					marblesThisGameProxy[b * 6 + marblesThisGameProxyTracker[b]] = 0;
+					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 5);
+					marblesThisGameProxy[b * 6 + marblesThisGameProxyTracker[b]] = 0;
+					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 5);
+					marblesThisGameProxy[b * 6 + marblesThisGameProxyTracker[b]] = 0;
+					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 5);
+					marblesThisGameProxy[b * 6 + marblesThisGameProxyTracker[b]] = 0;
+					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 5);
+					marblesThisGameProxy[b * 6 + marblesThisGameProxyTracker[b]] = 0;
+					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] - 1, 0, 5);
 				}
 				else
 				{
-					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] + 1, 0, 9);
-					marblesThisGameProxy[b * 10 + marblesThisGameProxyTracker[b]] = 1;
+					marblesThisGameProxyTracker[b] = FMath::Clamp(marblesThisGameProxyTracker[b] + 1, 0, 5);
+					marblesThisGameProxy[b * 6 + marblesThisGameProxyTracker[b]] = 1;
 				}
 			}
 			marblesThisGame.Add(marblesRandomized[marbleIndexToAdd]);
 			marbleIndexesBeingAdded.Add(marbleIndexToAdd);
 
-			timeIntoWindowMarbleIsSpawned.Add((spawningWindow / 6)* FMath::RandRange(2, 4) + (spawningWindow * a));
-		}
+			timeIntoWindowMarbleIsSpawned.Add((float)((float)((float)spawningWindow / (float)6) * (float)FMath::RandRange(2, 4)) + (float)((float)spawningWindow * (float)a));
+		}//timeIntoWindowMarbleIsSpawned.Add((float)((float)((float)spawningWindow / (float)6) * (float)FMath::RandRange(2, 4)) + (float)((float)spawningWindow * (float)a));
 		else
 		{
 			a -= 1;
@@ -1307,14 +1359,21 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Fill)
 			[
-				intersectionButtonsOverlay.ToSharedRef()
+				flagsOverlay.ToSharedRef()
 			]
 
 			+ SOverlay::Slot()
 			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Fill)
 			[
-				flagsOverlay.ToSharedRef()
+				countdownOverlay.ToSharedRef()
+			]
+
+			+ SOverlay::Slot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			[
+				intersectionButtonsOverlay.ToSharedRef()
 			]
 
 			+ SOverlay::Slot()
@@ -1344,13 +1403,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Fill)
 			[
-				countdownOverlay.ToSharedRef()
-			]
-
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
 				pauseOverlay.ToSharedRef()
 			]
 		];
@@ -1360,199 +1412,250 @@ void STestWidgetThree::OnIntersectionPressedOne()
 {
 	intersectionCycle[0] = (intersectionCycle[0] + 1) % 4;
 	intersectionImages[0]->SetImage(intersections[intersectionsKeys[0]][intersectionCycle[0]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedOne()
 {
 	intersectionCycle[0] = (intersectionCycle[0] + 1) % 4;
 	intersectionImages[0]->SetImage(intersections[intersectionsKeys[0]][intersectionCycle[0]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedTwo()
 {
 	intersectionCycle[1] = (intersectionCycle[1] + 1) % 4;
 	intersectionImages[1]->SetImage(intersections[intersectionsKeys[1]][intersectionCycle[1]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedTwo()
 {
 	intersectionCycle[1] = (intersectionCycle[1] + 1) % 4;
 	intersectionImages[1]->SetImage(intersections[intersectionsKeys[1]][intersectionCycle[1]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedThree()
 {
 	intersectionCycle[2] = (intersectionCycle[2] + 1) % 4;
 	intersectionImages[2]->SetImage(intersections[intersectionsKeys[2]][intersectionCycle[2]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedThree()
 {
 	intersectionCycle[2] = (intersectionCycle[2] + 1) % 4;
 	intersectionImages[2]->SetImage(intersections[intersectionsKeys[2]][intersectionCycle[2]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedFour()
 {
 	intersectionCycle[3] = (intersectionCycle[3] + 1) % 4;
 	intersectionImages[3]->SetImage(intersections[intersectionsKeys[3]][intersectionCycle[3]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedFour()
 {
 	intersectionCycle[3] = (intersectionCycle[3] + 1) % 4;
 	intersectionImages[3]->SetImage(intersections[intersectionsKeys[3]][intersectionCycle[3]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedFive()
 {
 	intersectionCycle[4] = (intersectionCycle[4] + 1) % 4;
 	intersectionImages[4]->SetImage(intersections[intersectionsKeys[4]][intersectionCycle[4]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedFive()
 {
 	intersectionCycle[4] = (intersectionCycle[4] + 1) % 4;
 	intersectionImages[4]->SetImage(intersections[intersectionsKeys[4]][intersectionCycle[4]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedSix()
 {
 	intersectionCycle[5] = (intersectionCycle[5] + 1) % 4;
 	intersectionImages[5]->SetImage(intersections[intersectionsKeys[5]][intersectionCycle[5]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedSix()
 {
 	intersectionCycle[5] = (intersectionCycle[5] + 1) % 4;
 	intersectionImages[5]->SetImage(intersections[intersectionsKeys[5]][intersectionCycle[5]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedSeven()
 {
 	intersectionCycle[6] = (intersectionCycle[6] + 1) % 4;
 	intersectionImages[6]->SetImage(intersections[intersectionsKeys[6]][intersectionCycle[6]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedSeven()
 {
 	intersectionCycle[6] = (intersectionCycle[6] + 1) % 4;
 	intersectionImages[6]->SetImage(intersections[intersectionsKeys[6]][intersectionCycle[6]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedEight()
 {
 	intersectionCycle[7] = (intersectionCycle[7] + 1) % 4;
 	intersectionImages[7]->SetImage(intersections[intersectionsKeys[7]][intersectionCycle[7]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedEight()
 {
 	intersectionCycle[7] = (intersectionCycle[7] + 1) % 4;
 	intersectionImages[7]->SetImage(intersections[intersectionsKeys[7]][intersectionCycle[7]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedNine()
 {
 	intersectionCycle[8] = (intersectionCycle[8] + 1) % 4;
 	intersectionImages[8]->SetImage(intersections[intersectionsKeys[8]][intersectionCycle[8]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedNine()
 {
 	intersectionCycle[8] = (intersectionCycle[8] + 1) % 4;
 	intersectionImages[8]->SetImage(intersections[intersectionsKeys[8]][intersectionCycle[8]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedTen()
 {
 	intersectionCycle[9] = (intersectionCycle[9] + 1) % 4;
 	intersectionImages[9]->SetImage(intersections[intersectionsKeys[9]][intersectionCycle[9]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedTen()
 {
 	intersectionCycle[9] = (intersectionCycle[9] + 1) % 4;
 	intersectionImages[9]->SetImage(intersections[intersectionsKeys[9]][intersectionCycle[9]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedEleven()
 {
 	intersectionCycle[10] = (intersectionCycle[10] + 1) % 4;
 	intersectionImages[10]->SetImage(intersections[intersectionsKeys[10]][intersectionCycle[10]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedEleven()
 {
 	intersectionCycle[10] = (intersectionCycle[10] + 1) % 4;
 	intersectionImages[10]->SetImage(intersections[intersectionsKeys[10]][intersectionCycle[10]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedTwelve()
 {
 	intersectionCycle[11] = (intersectionCycle[11] + 1) % 4;
 	intersectionImages[11]->SetImage(intersections[intersectionsKeys[11]][intersectionCycle[11]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedTwelve()
 {
 	intersectionCycle[11] = (intersectionCycle[11] + 1) % 4;
 	intersectionImages[11]->SetImage(intersections[intersectionsKeys[11]][intersectionCycle[11]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedThirteen()
 {
 	intersectionCycle[12] = (intersectionCycle[12] + 1) % 4;
 	intersectionImages[12]->SetImage(intersections[intersectionsKeys[12]][intersectionCycle[12]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedThirteen()
 {
 	intersectionCycle[12] = (intersectionCycle[12] + 1) % 4;
 	intersectionImages[12]->SetImage(intersections[intersectionsKeys[12]][intersectionCycle[12]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedFourteen()
 {
 	intersectionCycle[13] = (intersectionCycle[13] + 1) % 4;
 	intersectionImages[13]->SetImage(intersections[intersectionsKeys[13]][intersectionCycle[13]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedFourteen()
 {
 	intersectionCycle[13] = (intersectionCycle[13] + 1) % 4;
 	intersectionImages[13]->SetImage(intersections[intersectionsKeys[13]][intersectionCycle[13]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedFifteen()
 {
 	intersectionCycle[14] = (intersectionCycle[14] + 1) % 4;
 	intersectionImages[14]->SetImage(intersections[intersectionsKeys[14]][intersectionCycle[14]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedFifteen()
 {
 	intersectionCycle[14] = (intersectionCycle[14] + 1) % 4;
 	intersectionImages[14]->SetImage(intersections[intersectionsKeys[14]][intersectionCycle[14]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedSixteen()
 {
 	intersectionCycle[15] = (intersectionCycle[15] + 1) % 4;
 	intersectionImages[15]->SetImage(intersections[intersectionsKeys[15]][intersectionCycle[15]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedSixteen()
 {
 	intersectionCycle[15] = (intersectionCycle[15] + 1) % 4;
 	intersectionImages[15]->SetImage(intersections[intersectionsKeys[15]][intersectionCycle[15]]);
+	intersectionUpAudioComponent->Play();
 }
 
 void STestWidgetThree::OnIntersectionPressedSeventeen()
 {
 	intersectionCycle[16] = (intersectionCycle[16] + 1) % 4;
 	intersectionImages[16]->SetImage(intersections[intersectionsKeys[16]][intersectionCycle[16]]);
+	intersectionDownAudioComponent->Play();
 }
 void STestWidgetThree::OnIntersectionReleasedSeventeen()
 {
 	intersectionCycle[16] = (intersectionCycle[16] + 1) % 4;
 	intersectionImages[16]->SetImage(intersections[intersectionsKeys[16]][intersectionCycle[16]]);
+	intersectionUpAudioComponent->Play();
 }
 
 FReply STestWidgetThree::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent)
 {
 	if (InKeyEvent.GetKey() == EKeys::Q)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "q");
+		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "q");
 	}
 
 	if (InKeyEvent.GetKey() == EKeys::Tab)
 	{
+		OwningHUD->DisplayPauseScreen();
+		paused = true;
 
+		switch (environmentAudio)
+		{
+		case 0:
+			windAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+
+			riverAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+			break;
+		case 1:
+			windAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+
+			waterfallAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+			break;
+		default:
+			break;
+		}
 	}
 
 	if (InKeyEvent.GetKey() == EKeys::Escape)
@@ -1781,302 +1884,351 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 	return convertedMarblePos;
 }
 
+void STestWidgetThree::PlayGame()
+{
+	paused = false;
+
+	switch (environmentAudio)
+	{
+	case 0:
+		windAudioComponents[audioCycleTracker % 2]->SetPaused(false);
+
+		riverAudioComponents[audioCycleTracker % 2]->SetPaused(false);
+		break;
+	case 1:
+		windAudioComponents[audioCycleTracker % 2]->SetPaused(false);
+
+		waterfallAudioComponents[audioCycleTracker % 2]->SetPaused(false);
+		break;
+	default:
+		break;
+	}
+}
+
 void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
-	//the quantity of ticks that happen per second directly factors into the turning process, you need to know it and it needs to be stable
+	//the quantity of ticks that happen per second directly factors into the turning process, you need to know it and it needs to be stable. adendum: Needs?
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
 
-	for (int a = 0; a < activeMarbles.Num(); a++)
+	if (paused == false)
 	{
-		marblePositions[a].X += InDeltaTime * speedMultiplier * marbleMovementTracker[a][0];
-		marblePositions[a].Y += InDeltaTime * speedMultiplier * marbleMovementTracker[a][1];
+		audioTimer += InDeltaTime;
 
-		if (marbleIsTurning[a])
+		if (audioCycleTracker < FMath::DivideAndRoundDown((int)audioTimer, 120))
 		{
-			activeMarbles[a]->SetPadding(CalculateTilePosition(TurnMarble(a, marblePositions[a]), adjustedViewportSize));
-		}
-		else
-		{
-			if (CalculateMarblePositionCenters(marblePositions[a]) == marblePositionsCenters[a])
+			audioCycleTracker += 1;
+
+			switch (environmentAudio)
 			{
-				activeMarbles[a]->SetPadding(CalculateTilePosition(marblePositions[a], adjustedViewportSize));
+			case 0:
+				windAudioComponents[audioCycleTracker % 2]->Play();
+
+				riverAudioComponents[audioCycleTracker % 2]->Play();
+				break;
+			case 1:
+				windAudioComponents[audioCycleTracker % 2]->Play();
+
+				waterfallAudioComponents[audioCycleTracker % 2]->Play();
+				break;
+			default:
+				break;
+			}
+		}
+
+
+		for (int a = 0; a < activeMarbles.Num(); a++)
+		{
+			marblePositions[a].X += InDeltaTime * speedMultiplier * marbleMovementTracker[a][0];
+			marblePositions[a].Y += InDeltaTime * speedMultiplier * marbleMovementTracker[a][1];
+
+			if (marbleIsTurning[a])
+			{
+				activeMarbles[a]->SetPadding(CalculateTilePosition(TurnMarble(a, marblePositions[a]), adjustedViewportSize));
 			}
 			else
-			{	
-				marblePositionsCenters[a] = CalculateMarblePositionCenters(marblePositions[a]);//this creates an index out of bounds error if the marble goes off screen
-
-				if (trackArr[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X] > 2 || tileIsIntersection[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X])//I need to redo how intersections are designated in trackArr so I dont need to include this check for tileIsIntersection in this conditional
+			{
+				if (CalculateMarblePositionCenters(marblePositions[a]) == marblePositionsCenters[a])
 				{
-					if (tileIsIntersection[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X])
+					activeMarbles[a]->SetPadding(CalculateTilePosition(marblePositions[a], adjustedViewportSize));
+				}
+				else
+				{
+					marblePositionsCenters[a] = CalculateMarblePositionCenters(marblePositions[a]);//this creates an index out of bounds error if the marble goes off screen
+
+					if (trackArr[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X] > 2 || tileIsIntersection[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X])//I need to redo how intersections are designated in trackArr so I dont need to include this check for tileIsIntersection in this conditional
 					{
-						if (intersectionCycle[intersectionPositions.Find(marblePositionsCenters[a])] > 1)//an error has occured here but only because the marbles were falling of the track unexpectedly after turns
+						if (tileIsIntersection[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X])
+						{
+							if (intersectionCycle[intersectionPositions.Find(marblePositionsCenters[a])] > 1)//an error has occured here but only because the marbles were falling of the track unexpectedly after turns
+							{
+								marbleIsTurning[a] = true;
+								activeMarbles[a]->SetPadding(CalculateTilePosition(PrepTurnMarble(a, marblePositions[a], dirOfMarbles[a], true, trackArr[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X]), adjustedViewportSize));
+							}
+						}
+						else
 						{
 							marbleIsTurning[a] = true;
-							activeMarbles[a]->SetPadding(CalculateTilePosition(PrepTurnMarble(a, marblePositions[a], dirOfMarbles[a], true, trackArr[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X]), adjustedViewportSize));
+							activeMarbles[a]->SetPadding(CalculateTilePosition(PrepTurnMarble(a, marblePositions[a], dirOfMarbles[a], false, trackArr[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X]), adjustedViewportSize));
 						}
 					}
-					else
-					{
-						marbleIsTurning[a] = true;
-						activeMarbles[a]->SetPadding(CalculateTilePosition(PrepTurnMarble(a, marblePositions[a], dirOfMarbles[a], false, trackArr[marblePositionsCenters[a].Y * 15 + marblePositionsCenters[a].X]), adjustedViewportSize));
-					}
-				}
-				else if (holePositions.Find(marblePositionsCenters[a]) + 1)
-				{//check if the marble matches the flag, "remove" the marble and adjust the score accordingly
+					else if (holePositions.Find(marblePositionsCenters[a]) + 1)
+					{//check if the marble matches the flag, "remove" the marble and adjust the score accordingly
 
-					if (holePositions.Find(marblePositionsCenters[a]) == marblesRandomized.Find(activeMarblesContent[a]))
-					{
-						playerScore += 1;
-						maximumPossibleScore += 1;
-						currentScore = FText::FromString("Score: " + FString::FromInt(playerScore) + " of " + FString::FromInt(maximumPossibleScore));
-						scoreText->SetText(currentScore);
-					}
-					else
-					{
-						maximumPossibleScore += 1;
-						currentScore = FText::FromString("Score: " + FString::FromInt(playerScore) + " of " + FString::FromInt(maximumPossibleScore));
-						scoreText->SetText(currentScore);
-					}
-					marblesToBeDestroyed.Add(activeMarbles[a]);
-					marblesToBeDestroyedMovementTracker.Add(marbleMovementTracker[a]);
-					marblesToBeDestroyedPosition.Add(marblePositions[a]);
-					marblesBeingDestroyedTime.Add(0);
-
-					activeMarblesContent.RemoveAt(a);
-					marbleMovementTracker.RemoveAt(a);
-					marblePositions.RemoveAt(a);
-					marblePositionsCenters.RemoveAt(a);
-					marbleIsTurning.RemoveAt(a);
-					dirOfMarbles.RemoveAt(a);
-					turnToExecute.RemoveAt(a);
-					deltaMarblePos.RemoveAt(a);
-					activeMarbles.RemoveAt(a);
-				}
-			}
-		}
-	}
-
-	for (int a = 0; a < marblesToBeDestroyed.Num(); a++)
-	{
-		marblesBeingDestroyedTime[a] += InDeltaTime;
-
-		marblesToBeDestroyedPosition[a].X += InDeltaTime * speedMultiplier * marblesToBeDestroyedMovementTracker[a][0];
-		marblesToBeDestroyedPosition[a].Y += InDeltaTime * speedMultiplier * marblesToBeDestroyedMovementTracker[a][1];
-
-		marbleToBeDestroyedPadding = CalculateTilePosition(marblesToBeDestroyedPosition[a], adjustedViewportSize);
-		marblesToBeDestroyed[a]->SetPadding(marbleToBeDestroyedPadding);
-
-		if (marblesBeingDestroyedTime[a] > (1 / speedMultiplier) / 4)
-		{
-			marblesToBeDestroyed[a]->SetPadding(ShrinkMarble(marbleToBeDestroyedPadding, (marblesBeingDestroyedTime[a] - (1 / speedMultiplier) / 4) / ((1 / speedMultiplier) / 4)));
-
-			if (marblesBeingDestroyedTime[a] > (1 / speedMultiplier) / 2)
-			{
-				marblesToBeDestroyedMovementTracker.RemoveAt(a);
-				marblesToBeDestroyedPosition.RemoveAt(a);
-				marblesBeingDestroyedTime.RemoveAt(a);
-				marbleOverlay->RemoveSlot(marblesToBeDestroyed[a].ToSharedRef());
-				marblesToBeDestroyed.RemoveAt(a);
-
-				a -= 1;
-
-				if (activeMarbles.Num() == 0)
-				{//curtains into main menu results screen and update the save file
-					finalScore = playerScore * pow(1.2, holePositions.Num() - 3);
-
-					if (playerScore == maximumPossibleScore)
-					{
-						if (holePositions.Num() - 2 > maxLevel)
+						if (holePositions.Find(marblePositionsCenters[a]) == marblesRandomized.Find(activeMarblesContent[a]))
 						{
-							maxLevel += 1;
+							playerScore += 1;
+							maximumPossibleScore += 1;
+							currentScore = FText::FromString("Score: " + FString::FromInt(playerScore) + " of " + FString::FromInt(maximumPossibleScore));
+							scoreText->SetText(currentScore);
 						}
-					}
-					
-					for (int b = 0; b < highscores.Num(); b++)
-					{
-						if (finalScore > highscores[b])
+						else
 						{
-							highscores.Insert(finalScore, b);
-							highscores.RemoveAt(3);
-							break;//if this doesnt break the loop the logic here will be faulty.. wait is this breaking
+							maximumPossibleScore += 1;
+							currentScore = FText::FromString("Score: " + FString::FromInt(playerScore) + " of " + FString::FromInt(maximumPossibleScore));
+							scoreText->SetText(currentScore);
+						}
+						marblesToBeDestroyed.Add(activeMarbles[a]);
+						marblesToBeDestroyedMovementTracker.Add(marbleMovementTracker[a]);
+						marblesToBeDestroyedPosition.Add(marblePositions[a]);
+						marblesBeingDestroyedTime.Add(0);
+
+						activeMarblesContent.RemoveAt(a);
+						marbleMovementTracker.RemoveAt(a);
+						marblePositions.RemoveAt(a);
+						marblePositionsCenters.RemoveAt(a);
+						marbleIsTurning.RemoveAt(a);
+						dirOfMarbles.RemoveAt(a);
+						turnToExecute.RemoveAt(a);
+						deltaMarblePos.RemoveAt(a);
+						activeMarbles.RemoveAt(a);
+					}
+				}
+			}
+		}
+
+		for (int a = 0; a < marblesToBeDestroyed.Num(); a++)
+		{
+			marblesBeingDestroyedTime[a] += InDeltaTime;
+
+			marblesToBeDestroyedPosition[a].X += InDeltaTime * speedMultiplier * marblesToBeDestroyedMovementTracker[a][0];
+			marblesToBeDestroyedPosition[a].Y += InDeltaTime * speedMultiplier * marblesToBeDestroyedMovementTracker[a][1];
+
+			marbleToBeDestroyedPadding = CalculateTilePosition(marblesToBeDestroyedPosition[a], adjustedViewportSize);
+			marblesToBeDestroyed[a]->SetPadding(marbleToBeDestroyedPadding);
+
+			if (marblesBeingDestroyedTime[a] > (1 / speedMultiplier) / 4)
+			{
+				marblesToBeDestroyed[a]->SetPadding(ShrinkMarble(marbleToBeDestroyedPadding, (marblesBeingDestroyedTime[a] - (1 / speedMultiplier) / 4) / ((1 / speedMultiplier) / 4)));
+
+				if (marblesBeingDestroyedTime[a] > (1 / speedMultiplier) / 2)
+				{
+					marblesToBeDestroyedMovementTracker.RemoveAt(a);
+					marblesToBeDestroyedPosition.RemoveAt(a);
+					marblesBeingDestroyedTime.RemoveAt(a);
+					marbleOverlay->RemoveSlot(marblesToBeDestroyed[a].ToSharedRef());
+					marblesToBeDestroyed.RemoveAt(a);
+
+					a -= 1;
+
+					if (activeMarbles.Num() == 0)
+					{//curtains into main menu results screen and update the save file
+						finalScore = playerScore * pow(1.2, holePositions.Num() - 3);
+
+						if (playerScore >= maximumPossibleScore - 1)
+						{
+							if (holePositions.Num() - 2 > maxLevel)
+							{
+								maxLevel += 1;
+							}
+						}
+
+						for (int b = 0; b < highscores.Num(); b++)
+						{
+							if (finalScore > highscores[b])
+							{
+								highscores.Insert(finalScore, b);
+								highscores.RemoveAt(3);
+								break;//if this doesnt break the loop the logic here will be faulty.. wait is this breaking
+							}
+						}
+
+						highscoreDataOne = holePositions.Num() - 3;
+						highscoreDataTwo = playerScore;
+						scoreThisGame = finalScore;
+
+						OwningHUD->SaveGame(maxLevel, highscores, highscoreDataOne, highscoreDataTwo, scoreThisGame);
+
+						OwningHUD->DisplayCurtains(3, false, true);
+					}
+				}
+			}
+		}
+
+		if (!gameEnded)
+		{
+			if (gameStarted)
+			{
+				fCurrentTime += InDeltaTime;
+
+				if (fCurrentTime > timeIntoWindowMarbleIsSpawned[marbleIndexToSpawn])
+				{
+					activeMarbles.Add(SNew(SBox));
+					activeMarbles[activeMarbles.Num() - 1]->SetContent(SNew(SImage).Image(marblesThisGame[marbleIndexToSpawn]));
+					activeMarbles[activeMarbles.Num() - 1]->SetPadding(CalculateTilePosition(startingPos, adjustedViewportSize));
+					activeMarblesContent.Add(marblesThisGame[marbleIndexToSpawn]);
+
+					marbleOverlay->AddSlot()
+						.HAlign(HAlign_Fill)
+						.VAlign(VAlign_Fill)
+						[
+							activeMarbles[activeMarbles.Num() - 1].ToSharedRef()
+						];
+
+					marbleMovementTracker.Add(startingMarbleMovementTracker);
+					marblePositions.Add(startingPos);
+					marblePositionsCenters.Add(startingPos);
+					marbleIsTurning.Add(false);
+					dirOfMarbles.Add(startingDir);
+					turnToExecute.Add(0);
+					deltaMarblePos.Add(FVector2D(0, 0));
+
+					marbleIndexToSpawn += 1;
+				}
+
+				if (currentTime != timeOfGame - FMath::RoundToZero(fCurrentTime))
+				{
+					currentTime = timeOfGame - FMath::RoundToZero(fCurrentTime);
+
+					currentTimeText = FText::FromString("Time: " + FString::FromInt(FMath::RoundToZero((double)currentTime / 60)) + ":" + FString::FromInt(currentTime % 60));
+					timeText->SetText(currentTimeText);
+
+					if (currentTime == 0)
+					{
+						gameEnded = true;
+					}
+				}
+			}
+			else
+			{
+				startingTime += InDeltaTime;
+
+				if (startingTime > 6)
+				{
+					if (startingTime > 10)
+					{
+						gameStarted = true;
+						countdownOverlay->RemoveSlot(countdownBox.ToSharedRef());
+					}
+					else if (startingTime > 9)
+					{
+						if (!goDisplayed)
+						{
+							goDisplayed = true;
+							startingFontSize = countdownFont.Size;
+							growingFontSize = 0;
+							startingOpacity = 0;
+							growingOpacity = 0;
+							shiftingFont = countdownFont;
+							startingMargin = countdownMargin;
+							growingMargin = countdownMargin;
+							countdownText->SetText(FText::FromString("GO"));
+							countdownEffectClock = 0.0;
+							growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
+							growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
+							growingBox->SetPadding(growingMargin);
+							growingText->SetFont(countdownFont);
 						}
 					}
-
-					highscoreDataOne = holePositions.Num() - 3;
-					highscoreDataTwo = playerScore;
-					scoreThisGame = finalScore;
-
-					OwningHUD->SaveGame(maxLevel, highscores, highscoreDataOne, highscoreDataTwo, scoreThisGame);
-
-					OwningHUD->DisplayCurtains(3, false, true);
-				}
-			}
-		}
-	}
-
-	if (!gameEnded)
-	{
-		if (gameStarted)
-		{
-			fCurrentTime += InDeltaTime;
-
-			if (fCurrentTime > timeIntoWindowMarbleIsSpawned[marbleIndexToSpawn])
-			{
-				activeMarbles.Add(SNew(SBox));
-				activeMarbles[activeMarbles.Num() - 1]->SetContent(SNew(SImage).Image(marblesThisGame[marbleIndexToSpawn]));
-				activeMarbles[activeMarbles.Num() - 1]->SetPadding(CalculateTilePosition(startingPos, adjustedViewportSize));
-				activeMarblesContent.Add(marblesThisGame[marbleIndexToSpawn]);
-
-				marbleOverlay->AddSlot()
-					.HAlign(HAlign_Fill)
-					.VAlign(VAlign_Fill)
-					[
-						activeMarbles[activeMarbles.Num() - 1].ToSharedRef()
-					];
-
-				marbleMovementTracker.Add(startingMarbleMovementTracker);
-				marblePositions.Add(startingPos);
-				marblePositionsCenters.Add(startingPos);
-				marbleIsTurning.Add(false);
-				dirOfMarbles.Add(startingDir);
-				turnToExecute.Add(0);
-				deltaMarblePos.Add(FVector2D(0, 0));
-
-				marbleIndexToSpawn += 1;
-			}
-
-			if (currentTime != timeOfGame - FMath::RoundToZero(fCurrentTime))
-			{
-				currentTime = timeOfGame - FMath::RoundToZero(fCurrentTime);
-
-				currentTimeText = FText::FromString("Time: " + FString::FromInt(FMath::RoundToZero((double)currentTime / 60)) + ":" + FString::FromInt(currentTime % 60));
-				timeText->SetText(currentTimeText);
-
-				if (currentTime == 0)
-				{
-					gameEnded = true;
-				}
-			}
-		}
-		else
-		{
-			startingTime += InDeltaTime;
-
-			if (startingTime > 6)
-			{
-				if (startingTime > 10)
-				{
-					gameStarted = true;
-					countdownOverlay->RemoveSlot(countdownBox.ToSharedRef());
-				}
-				else if (startingTime > 9)
-				{
-					if (!goDisplayed)
+					else if (startingTime > 8)
 					{
-						goDisplayed = true;
+						if (!oneDisplayed)
+						{
+							oneDisplayed = true;
+							startingFontSize = countdownFont.Size;
+							growingFontSize = 0;
+							startingOpacity = 0;
+							growingOpacity = 0;
+							shiftingFont = countdownFont;
+							startingMargin = countdownMargin;
+							growingMargin = countdownMargin;
+							countdownText->SetText(FText::FromString("1"));
+							countdownEffectClock = 0.0;
+							growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
+							growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
+							growingBox->SetPadding(growingMargin);
+							growingText->SetFont(countdownFont);
+						}
+					}
+					else if (startingTime > 7)
+					{
+						if (!twoDisplayed)
+						{
+							twoDisplayed = true;
+							startingFontSize = countdownFont.Size;
+							growingFontSize = 0;
+							startingOpacity = 0;
+							growingOpacity = 0;
+							shiftingFont = countdownFont;
+							startingMargin = countdownMargin;
+							growingMargin = countdownMargin;
+							countdownText->SetText(FText::FromString("2"));
+							countdownEffectClock = 0.0;
+							growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
+							growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
+							growingBox->SetPadding(growingMargin);
+							growingText->SetFont(countdownFont);
+						}
+					}
+					if (!threeDisplayed)
+					{
+						threeDisplayed = true;
 						startingFontSize = countdownFont.Size;
 						growingFontSize = 0;
 						startingOpacity = 0;
 						growingOpacity = 0;
 						shiftingFont = countdownFont;
+						growingText = countdownText;
+						growingBox = countdownBox;
 						startingMargin = countdownMargin;
 						growingMargin = countdownMargin;
-						countdownText->SetText(FText::FromString("GO"));
+						countdownText->SetText(FText::FromString("3"));//usually you would use FText::FromString("Play") but if this works alls the better
 						countdownEffectClock = 0.0;
-						growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
-						growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
-						growingBox->SetPadding(growingMargin);
-						growingText->SetFont(countdownFont);
 					}
-				}
-				else if (startingTime > 8)
-				{
-					if (!oneDisplayed)
+
+					countdownEffectClock += InDeltaTime;
+
+					if (countdownEffectClock < 0.33)
 					{
-						oneDisplayed = true;
-						startingFontSize = countdownFont.Size;
-						growingFontSize = 0;
-						startingOpacity = 0;
-						growingOpacity = 0;
-						shiftingFont = countdownFont;
-						startingMargin = countdownMargin;
-						growingMargin = countdownMargin;
-						countdownText->SetText(FText::FromString("1"));
-						countdownEffectClock = 0.0;
+						growingMargin = GrowCountdownMargin(startingMargin);
+						growingOpacity = (0.5 * sin(9.42 * (countdownEffectClock - 0.167))) + 0.5; //I think this will work
+						growingFontSize = startingFontSize + (adjustedStartingFontSize * sin(9.42 * (countdownEffectClock - 0.167))) + adjustedStartingFontSize;
+
+						growingBox->SetPadding(growingMargin);
+						shiftingFont.Size = growingFontSize;
+						growingText->SetFont(shiftingFont);
 						growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
 						growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
-						growingBox->SetPadding(growingMargin);
-						growingText->SetFont(countdownFont);
 					}
-				}
-				else if (startingTime > 7)
-				{
-					if (!twoDisplayed)
+					else if (countdownEffectClock > 0.833)
 					{
-						twoDisplayed = true;
-						startingFontSize = countdownFont.Size;
-						growingFontSize = 0;
-						startingOpacity = 0;
-						growingOpacity = 0;
-						shiftingFont = countdownFont;
-						startingMargin = countdownMargin;
-						growingMargin = countdownMargin;
-						countdownText->SetText(FText::FromString("2"));
-						countdownEffectClock = 0.0;
+
+					}
+					else if (countdownEffectClock > 0.666)
+					{
+						//growingMargin = GrowCountdownMargin(startingMargin);
+						growingOpacity = 1 - ((0.5 * sin(18.85 * ((countdownEffectClock - 0.666) - 0.083))) + 0.5);
+						//growingFontSize = 0.1 - (adjustedStartingFontSize * sin(18.85 * ((countdownEffectClock - 0.666) - 0.083))) + adjustedStartingFontSize;
+
+						//growingBox->SetPadding(growingMargin);
+						//shiftingFont.Size = growingFontSize;
+						//growingText->SetFont(shiftingFont);
 						growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
 						growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
-						growingBox->SetPadding(growingMargin);
-						growingText->SetFont(countdownFont);
 					}
-				}
-				if (!threeDisplayed)
-				{
-					threeDisplayed = true;
-					startingFontSize = countdownFont.Size;
-					growingFontSize = 0;
-					startingOpacity = 0;
-					growingOpacity = 0;
-					shiftingFont = countdownFont;
-					growingText = countdownText;
-					growingBox = countdownBox;
-					startingMargin = countdownMargin;
-					growingMargin = countdownMargin;
-					countdownText->SetText(FText::FromString("3"));//usually you would use FText::FromString("Play") but if this works alls the better
-					countdownEffectClock = 0.0;
-				}
-
-				countdownEffectClock += InDeltaTime;
-
-				if (countdownEffectClock < 0.33)
-				{
-					growingMargin = GrowCountdownMargin(startingMargin);
-					growingOpacity = (0.5 * sin(9.42 * (countdownEffectClock - 0.167))) + 0.5; //I think this will work
-					growingFontSize = startingFontSize + (adjustedStartingFontSize * sin(9.42 * (countdownEffectClock - 0.167))) + adjustedStartingFontSize;
-
-					growingBox->SetPadding(growingMargin);
-					shiftingFont.Size = growingFontSize;
-					growingText->SetFont(shiftingFont);
-					growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
-					growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
-				}
-				else if (countdownEffectClock > 0.833)
-				{
-
-				}
-				else if (countdownEffectClock > 0.666)
-				{
-					//growingMargin = GrowCountdownMargin(startingMargin);
-					growingOpacity = 1 - ((0.5 * sin(18.85 * ((countdownEffectClock - 0.666) - 0.083))) + 0.5);
-					//growingFontSize = 0.1 - (adjustedStartingFontSize * sin(18.85 * ((countdownEffectClock - 0.666) - 0.083))) + adjustedStartingFontSize;
-
-					//growingBox->SetPadding(growingMargin);
-					//shiftingFont.Size = growingFontSize;
-					//growingText->SetFont(shiftingFont);
-					growingText->SetColorAndOpacity(FLinearColor(1, 1, 1, growingOpacity));
-					growingText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, growingOpacity));
 				}
 			}
 		}
+
 	}
 }
 

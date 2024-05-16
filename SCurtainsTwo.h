@@ -18,6 +18,8 @@ public:
 
 	SLATE_ARGUMENT(UMaterial*, curtains_VMUI)
 
+	SLATE_ARGUMENT(UAudioComponent*, curtainOpeningAudioComponent)
+
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
@@ -26,6 +28,8 @@ public:
 	void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime);
 
 	TWeakObjectPtr<class ATestHud> OwningHUD;
+
+	UAudioComponent* curtainOpeningAudioComponent;
 
 	UMaterial* curtains_VMUI;
 	FSlateBrush* curtains_SB;
@@ -36,4 +40,6 @@ public:
 
 	float timeToLoadStage;
 	bool canLoad;
+
+	bool canPlaySoundEffect;
 };

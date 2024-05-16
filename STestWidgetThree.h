@@ -30,6 +30,8 @@ public:
 
 	SLATE_ARGUMENT(TWeakObjectPtr<class ATestHud>, OwningHUD)
 
+	SLATE_ARGUMENT(UObject*, standardWorldContextObject)
+
 	SLATE_ARGUMENT(TArray<int>, landscapeArr)
 
 	SLATE_ARGUMENT(TArray<int>, trackArr)
@@ -252,6 +254,18 @@ public:
 
 	SLATE_ARGUMENT(UMaterial*, emptyImg_SMUI)
 
+	SLATE_ARGUMENT(UAudioComponent*, intersectionDownAudioComponent)
+
+	SLATE_ARGUMENT(UAudioComponent*, intersectionUpAudioComponent)
+
+	SLATE_ARGUMENT(TArray <UAudioComponent*>, windAudioComponents)
+
+	SLATE_ARGUMENT(TArray <UAudioComponent*>, riverAudioComponents)
+
+	SLATE_ARGUMENT(TArray <UAudioComponent*>, waterfallAudioComponents)
+
+	SLATE_ARGUMENT(int, environmentAudio)
+
 	//SLATE_ARGUMENT(FVector2D, viewportSize)
 
 	SLATE_END_ARGS()
@@ -304,6 +318,9 @@ public:
 	//float CalculateGrownMarginX(FMargin inMargin);
 	float CalculateAdjustedCountdownMargin(FMargin inMargin);
 	FMargin GrowCountdownMargin(FMargin inMargin);
+
+	void PlayGame();
+
 	UPROPERTY(SaveGame) USaveGameOne* currentSave;
 	UPROPERTY(SaveGame) USaveGameOne* lastSave;
 
@@ -314,6 +331,7 @@ public:
 	// constructor variables
 
 	TWeakObjectPtr<class ATestHud> OwningHUD;
+	UObject* standardWorldContextObject;
 
 	TArray<int> landscapeArr;
 	TArray<int> trackArr;
@@ -584,6 +602,13 @@ public:
 	TArray<FSlateBrush*> relevantMarbles;
 	TArray<FSlateBrush*> marblesRandomized;
 
+	UAudioComponent* intersectionDownAudioComponent;
+	UAudioComponent* intersectionUpAudioComponent;
+
+	UPROPERTY() TArray<UAudioComponent*> windAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> riverAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> waterfallAudioComponents;
+
 	FVector2D startingPos;
 	int startingDir;
 
@@ -705,4 +730,10 @@ public:
 	int highscoreDataOne;
 	int highscoreDataTwo;
 	int scoreThisGame;
+
+	int environmentAudio;
+	float audioTimer;
+	int audioCycleTracker;
+
+	bool paused;
 };

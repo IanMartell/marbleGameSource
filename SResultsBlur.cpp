@@ -3,6 +3,7 @@
 
 #include "SResultsBlur.h"
 #include "SlateOptMacros.h"
+#include "Components/AudioComponent.h"
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
@@ -27,6 +28,7 @@ void SResultsBlur::Construct(const FArguments& InArgs)
 	bCanSupportFocus = true;
 
 	OwningHUD = InArgs._OwningHUD;
+	rainstickAudioComponent = InArgs._rainstickAudioComponent;
 
 	GEngine->GameViewport->GetViewportSize(viewportSize);
 	int32 X = FGenericPlatformMath::FloorToInt(viewportSize.X);
@@ -42,13 +44,16 @@ void SResultsBlur::Construct(const FArguments& InArgs)
 	scoreFont.Size = 0.035 * adjustedViewportSize.Y;
 
 	standardOpacity = 1;
-	standardBlur = 5;
+	standardBlur = 30;
+
+	rainstickAudioComponent->SetVolumeMultiplier(12.0);
+	rainstickAudioComponent->Stop();
 
 	masterButtonStyle = new FButtonStyle();
 	masterButtonStyle->SetNormalPadding(FMargin());
 
 	blur = SNew(SBackgroundBlur)
-		.BlurStrength(standardBlur);
+		.BlurStrength(standardBlur); // when lerping in and out the lighting gets all jittery. can SForegroundBlur be used instead? No doesn't exist.
 
 	resultsTextOne = SNew(STextBlock)
 		.Margin(FMargin())
@@ -103,6 +108,15 @@ void SResultsBlur::Construct(const FArguments& InArgs)
 		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity))
 		.Text(FText::FromString(FString::FromInt(currentSave->GetHighscoreDataTwo() * pow(1.2, currentSave->GetHighscoreDataOne()))));
 
+	resultsTextSix = SNew(STextBlock)
+		.Margin(FMargin())
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::White)
+		.Font(scoreFont)
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity))
+		.Text(FText::FromString("Click Anywhere"));
+
 	resultsOverlay = SNew(SOverlay);
 
 	resultsOverlay->AddSlot()
@@ -155,11 +169,19 @@ void SResultsBlur::Construct(const FArguments& InArgs)
 	resultsOverlay->AddSlot()
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
+		.Padding(CalculateHighscorePos(6, 6))
+		[
+			resultsTextSix.ToSharedRef()
+		];
+
+	resultsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
 		[
 			SNew(SButton)
 			.ContentPadding(FMargin())
 			.ButtonStyle(masterButtonStyle)
-			.OnPressed(this, &SResultsBlur::Pressed)
+			.OnReleased(this, &SResultsBlur::Released)
 			.ButtonColorAndOpacity(FLinearColor::Transparent)
 			.IsEnabled(true)
 		];
@@ -183,17 +205,26 @@ FReply SResultsBlur::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InK
 	{
 		destroySelf = true;
 		timer = 0;
+		rainstickAudioComponent->Play();
+	}
+
+	if (InKeyEvent.GetKey() == EKeys::Q && destroySelf == false)
+	{
+		destroySelf = true;
+		timer = 0;
+		rainstickAudioComponent->Play();
 	}
 
 	return FReply::Handled();
 }
 
-void SResultsBlur::Pressed()
+void SResultsBlur::Released()
 {
 	if (destroySelf == false)
 	{
 		destroySelf = true;
 		timer = 0;
+		rainstickAudioComponent->Play();
 	}
 }
 
@@ -202,19 +233,24 @@ void SResultsBlur::Tick(const FGeometry& AllottedGeometry, const double InCurren
 	if (destroySelf)
 	{
 		timer += InDeltaTime;
-		blur->SetBlurStrength(standardBlur - ((2.5 * sin(25.13 * (timer - 0.0625))) + 2.5));
-		resultsTextOne->SetColorAndOpacity(FLinearColor( 1, 1, 1, standardOpacity - ((0.5 * sin(25.13 * (timer - 0.0625))) + 0.5)));
-		resultsTextOne->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity - ((0.5 * sin(25.13 * (timer - 0.0625))) + 0.5)));
-		resultsTextTwo->SetColorAndOpacity(FLinearColor(1, 1, 1, standardOpacity - ((0.5 * sin(25.13 * (timer - 0.0625))) + 0.5)));
-		resultsTextTwo->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity - ((0.5 * sin(25.13 * (timer - 0.0625))) + 0.5)));
-		resultsTextThree->SetColorAndOpacity(FLinearColor(1, 1, 1, standardOpacity - ((0.5 * sin(25.13 * (timer - 0.0625))) + 0.5)));
-		resultsTextThree->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity - ((0.5 * sin(25.13 * (timer - 0.0625))) + 0.5)));
-		resultsTextFour->SetColorAndOpacity(FLinearColor(1, 1, 1, standardOpacity - ((0.5 * sin(25.13 * (timer - 0.0625))) + 0.5)));
-		resultsTextFour->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity - ((0.5 * sin(25.13 * (timer - 0.0625))) + 0.5)));
-		resultsTextFive->SetColorAndOpacity(FLinearColor(1, 1, 1, standardOpacity - ((0.5 * sin(25.13 * (timer - 0.0625))) + 0.5)));
-		resultsTextFive->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity - ((0.5 * sin(25.13 * (timer - 0.0625))) + 0.5)));
+		shrinkingOpacityWhite = FLinearColor( 1, 1, 1, standardOpacity - ((0.5 * sin(37.7 * (timer - 0.04166))) + 0.5));
+		shrinkingOpacityBlack = FLinearColor( 0, 0, 0, standardOpacity - ((0.5 * sin(37.7 * (timer - 0.04166))) + 0.5));
 
-		if (timer >= 0.125)
+		blur->SetBlurStrength(standardBlur - ((15 * sin(37.7 * (timer - 0.04166))) + 15));
+		resultsTextOne->SetColorAndOpacity(shrinkingOpacityWhite);
+		resultsTextOne->SetShadowColorAndOpacity(shrinkingOpacityBlack);
+		resultsTextTwo->SetColorAndOpacity(shrinkingOpacityWhite);
+		resultsTextTwo->SetShadowColorAndOpacity(shrinkingOpacityBlack);
+		resultsTextThree->SetColorAndOpacity(shrinkingOpacityWhite);
+		resultsTextThree->SetShadowColorAndOpacity(shrinkingOpacityBlack);
+		resultsTextFour->SetColorAndOpacity(shrinkingOpacityWhite);
+		resultsTextFour->SetShadowColorAndOpacity(shrinkingOpacityBlack);
+		resultsTextFive->SetColorAndOpacity(shrinkingOpacityWhite);
+		resultsTextFive->SetShadowColorAndOpacity(shrinkingOpacityBlack);
+		resultsTextSix->SetColorAndOpacity(shrinkingOpacityWhite);
+		resultsTextSix->SetShadowColorAndOpacity(shrinkingOpacityBlack);
+
+		if (timer >= 0.0833)
 		{
 			OwningHUD->RemoveResultsBlur();
 		}

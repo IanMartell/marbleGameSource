@@ -18,6 +18,8 @@ public:
 
 	SLATE_ARGUMENT(UMaterial*, curtains_VMUI)
 
+	SLATE_ARGUMENT(UAudioComponent*, curtainOpeningAudioComponent)
+
 	SLATE_ARGUMENT(int, x)
 
 	SLATE_END_ARGS()
@@ -29,6 +31,8 @@ public:
 
 	TWeakObjectPtr<class ATestHud> OwningHUD;
 
+	UAudioComponent* curtainOpeningAudioComponent;
+
 	UMaterial* curtains_VMUI;
 	FSlateBrush* curtains_SB;
 
@@ -38,4 +42,5 @@ public:
 
 	float timeToLoadStage;
 	bool canLoad;
+	bool canPlaySoundEffect;
 };

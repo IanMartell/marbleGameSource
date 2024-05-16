@@ -18,11 +18,13 @@ public:
 
 	SLATE_ARGUMENT(TWeakObjectPtr<class ATestHud>, OwningHUD)
 
+	SLATE_ARGUMENT(UAudioComponent*, rainstickAudioComponent)
+
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
-	void Pressed();
+	void Released();
 	void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime);
 	FReply OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent);
 	FMargin CalculateHighscorePos(int textIndex, int numberOfLetters);
@@ -30,17 +32,22 @@ public:
 	TWeakObjectPtr<class ATestHud> OwningHUD;
 	USaveGameOne* currentSave;
 
+	UAudioComponent* rainstickAudioComponent;
+
 	TSharedPtr< class SOverlay> resultsOverlay;
 	TSharedPtr<class STextBlock> resultsTextOne;
 	TSharedPtr<class STextBlock> resultsTextTwo;
 	TSharedPtr<class STextBlock> resultsTextThree;
 	TSharedPtr<class STextBlock> resultsTextFour;
 	TSharedPtr<class STextBlock> resultsTextFive;
+	TSharedPtr<class STextBlock> resultsTextSix;
 	FSlateFontInfo scoreFont;
 	FSlateFontInfo titleFont;
 	TSharedPtr<class SBackgroundBlur> blur;
 	
 	float standardOpacity;
+	FLinearColor shrinkingOpacityWhite;
+	FLinearColor shrinkingOpacityBlack;
 
 	FVector2D viewportSize;
 	FVector2D adjustedViewportSize;

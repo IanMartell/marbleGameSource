@@ -235,6 +235,13 @@ public:
 
 	UMaterial* gameFrameColor_SMUI;
 
+	UMaterial* goodUseSplashBootNoGrass_SMUI;
+	UMaterial* goodUseSplashGrass_SMUI;
+	UMaterial* goodUseDigitalText_SMUI;
+
+	TArray <UMaterial*> splashGrassArr;
+	TArray <UMaterial*> splashBootArr;
+
 	UMaterial* placeholderTrash;
 	UMaterial* emptyImg_SMUI;
 	//data structures of content browser assets
@@ -281,13 +288,43 @@ public:
 		}
 	};
 
+	USoundBase* intersectionButtonPressed;
+	USoundBase* intersectionButtonReleased;
+	USoundBase* hoverGrow;
+	USoundBase* hoverShrink;
+	USoundBase* curtainClosing;
+	USoundBase* curtainOpening;
+	USoundBase* rainstick;
+	USoundBase* wind;
+	USoundBase* windWithSheep;
+	USoundBase* river;
+	USoundBase* waterfall;
+
+	TArray <USoundBase*> hoverGrows;
+	TArray <USoundBase*> hoverShrinks;
+	TArray <USoundBase*> purpleLullaby;
+
+	UAudioComponent* intersectionDownAudioComponent;
+	UAudioComponent* intersectionUpAudioComponent;
+	UAudioComponent* curtainClosingAudioComponent;
+	UAudioComponent* curtainOpeningAudioComponent;
+	UAudioComponent* rainstickAudioComponent;
+
+	UPROPERTY() TArray <UAudioComponent*> hoverGrowAudioComponents;
+	UPROPERTY() TArray <UAudioComponent*> hoverShrinkAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> windAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> windWithSheepAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> riverAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> waterfallAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> purpleLullabyAudioComponents;
+
 protected:
 	//protected init stuff
 	TSharedPtr<class SLoadingScreenOne> loadingSlateWidget;
 	TSharedPtr<class SWidget> slateWidgetContainerOne;
 
 	TSharedPtr<class STestWidgetThree> gameSlateWidget;
-	TSharedPtr<class SWeakWidget> slateWidgetContainerTwo; // we use this container to remove and add the menu to the screen
+	TSharedPtr<class SWeakWidget> slateWidgetContainerTwo; // we use this container to remove and add the menu to the screen. weakWidgets cannot own their content, does this mean I must make these UProperties? probably not everything has worked so far
 
 	TSharedPtr<class SSArcadeModeTitleScreen> mainMenuSlateWidget;
 	TSharedPtr<class SWeakWidget> slateWidgetContainerThree;
@@ -301,10 +338,17 @@ protected:
 	TSharedPtr<class SResultsBlur> resultsBlurSlateWidget;
 	TSharedPtr<class SWeakWidget> slateWidgetContainerSix;
 
+	TSharedPtr<class SCompanySplash> splashScreenSlateWidget;
+	TSharedPtr<class SWidget> slateWidgetContainerSeven;
+
+	TSharedPtr<class SPauseScreen> pauseScreenSlateWidget;
+	TSharedPtr<class SWidget> slateWidgetContainerEight;
+
 	virtual void BeginPlay() override;
 
 public:
 	APlayerController* playerOnePlayerController;
+	UObject* standardWorldContextObject;
 
 	//level randomizer algorithm stuff
 	TArray<FVector2D> arrOfViableHoleCoordinates;
@@ -332,10 +376,15 @@ public:
 
 	TArray<UMaterial*> backgroundMaterials;
 	bool backgroundIsLargeTile;
+	bool inGame;
 
 	bool goToResults;
 
+	int environmentAudio;
+
 	TArray<UMediaPlayer*> mediaPlayersToClose;
+
+	TArray<bool> activeMediaPlayers = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 
 	TArray<TArray<TArray<FVector2D> > > holeAndIntersectionPositions =
 	{
@@ -1690,4 +1739,10 @@ public:
 	void RemoveResultsBlur();
 
 	void SaveGame(int maxLevel, TArray <int> highscores, int highscoreDataOne, int highscoreDataTwo, int scoreThisGame);
+
+	void DestroySplash();
+
+	void DisplayPauseScreen();
+
+	void DestroyPauseScreen();
 };

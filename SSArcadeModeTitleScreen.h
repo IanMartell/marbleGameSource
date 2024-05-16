@@ -4,6 +4,7 @@
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
 #include "TestHud.h"
+#include "Components/AudioComponent.h"
 #include "SaveGameOne.h"
 
 /**
@@ -16,7 +17,7 @@ public:
 
 	SLATE_ARGUMENT(TWeakObjectPtr<class ATestHud>, OwningHUD)
 
-	SLATE_ARGUMENT(APlayerController*, playerOnePlayerController)
+	SLATE_ARGUMENT(UObject*, standardWorldContextObject)
 
 	SLATE_ARGUMENT(TArray<UMaterial*>, backgroundMaterials)
 
@@ -25,6 +26,26 @@ public:
 	SLATE_ARGUMENT(bool, displayResults)
 
 	SLATE_ARGUMENT(UMaterial*, gameFrameColor_SMUI)
+
+	SLATE_ARGUMENT(USoundBase*, hoverGrow)
+
+	SLATE_ARGUMENT(USoundBase*, hoverShrink)
+
+	SLATE_ARGUMENT(TArray<UAudioComponent*>, hoverGrowAudioComponents)
+
+	SLATE_ARGUMENT(TArray<UAudioComponent*>, hoverShrinkAudioComponents)
+
+	SLATE_ARGUMENT(TArray <UAudioComponent*>, windAudioComponents)
+
+	SLATE_ARGUMENT(TArray <UAudioComponent*>, windWithSheepAudioComponents)
+
+	SLATE_ARGUMENT(TArray <UAudioComponent*>, riverAudioComponents)
+
+	SLATE_ARGUMENT(TArray <UAudioComponent*>, waterfallAudioComponents)
+
+	SLATE_ARGUMENT(TArray <UAudioComponent*>, purpleLullabyAudioComponents)
+
+	SLATE_ARGUMENT(int, environmentAudio)
 
 	SLATE_END_ARGS()
 
@@ -115,6 +136,7 @@ public:
 	void PlayUnHovered_15();
 	void PlayUnHovered_16();
 
+	FMargin CalculateTitlePosition(FVector2D funcViewportSize);
 	FMargin CalculateMenuTextPos(int textIndex, int numberOfLetters);
 	FMargin CalculateHighscorePos(int textIndex, int numberOfLetters);
 	FMargin CalculateLastGamePos(int textIndex, int numberOfLetters);
@@ -123,9 +145,10 @@ public:
 	FMargin GrowMargin(FMargin inMargin);
 	FMargin GrownMargin(FMargin inMargin);
 	FMargin ShrinkMargin(FMargin inMargin, int marginIndex);
+	void PlayChordToActiveNote();
 
 	TWeakObjectPtr<class ATestHud> OwningHUD;
-	APlayerController* playerOnePlayerController;
+	UObject* standardWorldContextObject;
 	USaveGameOne* currentSave;
 
 	TArray<UMaterial*> backgroundMaterials;
@@ -145,6 +168,8 @@ public:
 	FSlateBrush* background_SB_8;
 	FSlateBrush* background_SB_9;
 
+	USoundBase* hoverGrow;
+	USoundBase* hoverShrink;
 
 	TSharedPtr< class SOverlay> backgroundOverlay;
 	TSharedPtr< class SOverlay> frameColorOverlay;
@@ -244,4 +269,26 @@ public:
 	TArray<float> adjustedShrinkingOpacities;
 
 	bool displayResults;
+
+	TArray<int> childrensCornerNotes;
+	int childrensCornerIndex;
+
+	int environmentAudio;
+	float audioTimer;
+	int audioCycleTracker;
+
+	UAudioComponent* hoverGrowAudioComponent;
+	UAudioComponent* hoverShrinkAudioComponent;
+
+	UPROPERTY() TArray<UAudioComponent*> hoverGrowAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> hoverShrinkAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> windAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> windWithSheepAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> riverAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> waterfallAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> purpleLullabyAudioComponents;
+
+	int activeNoteIndex;
+	TArray< TArray <int> > correspondingChordsToNotes = { { 0 }, { 1 }, { 0, 3}, { 1 }, { 0, 2, 3}, { 1 }, { 2, 3}, { 3 } };
+	TArray< TArray <int> > chordIndexes = { { 0, 2, 4 }, { 1, 3, 5 }, { 2, 4, 6 }, { 4, 6, 7 } };
 };

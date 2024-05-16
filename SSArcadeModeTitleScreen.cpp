@@ -2,12 +2,12 @@
 #include "SlateOptMacros.h"
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
 
-FMargin CalculateTitlePosition(FVector2D viewportSize)
+FMargin SSArcadeModeTitleScreen::CalculateTitlePosition(FVector2D funcViewportSize)
 {//your sub titles will use this same positioning but the a different text style
-	float leftPad = viewportSize.X * 0.1;
-	float topPad = viewportSize.Y * 0.1;
-	float rightPad = viewportSize.X * 0.1;
-	float bottomPad = viewportSize.Y * 0.75;
+	float leftPad = funcViewportSize.X * 0.1;
+	float topPad = funcViewportSize.Y * 0.1;
+	float rightPad = funcViewportSize.X * 0.1;
+	float bottomPad = funcViewportSize.Y * 0.75;
 
 	return FMargin(leftPad, topPad, rightPad, bottomPad);
 }
@@ -143,20 +143,41 @@ FMargin SSArcadeModeTitleScreen::GrownMargin(FMargin inMargin)
 	return newMargin;
 }
 
+void SSArcadeModeTitleScreen::PlayChordToActiveNote()
+{
+	for (int a : chordIndexes[correspondingChordsToNotes[activeNoteIndex][FMath::RandRange(0, correspondingChordsToNotes[activeNoteIndex].Num() - 1)]])
+	{
+		if (a != activeNoteIndex)
+		{
+			purpleLullabyAudioComponents[a]->Play();
+		}
+	}
+}
+
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 {
 	SetCanTick(true);
 	bCanSupportFocus = true;
 	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
-	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, FString::FromInt(currentSave->GetHighscores()[1]));
+	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, FString::FromInt(currentSave->GetHighscores()[1]));
 
 	OwningHUD = InArgs._OwningHUD;
-	playerOnePlayerController = InArgs._playerOnePlayerController;
+	standardWorldContextObject = InArgs._standardWorldContextObject;
 	gameFrameColor_SMUI = InArgs._gameFrameColor_SMUI;
 	backgroundMaterials = InArgs._backgroundMaterials;
 	backgroundIsLargeTile = InArgs._backgroundIsLargeTile;
 	displayResults = InArgs._displayResults;
+	hoverGrow = InArgs._hoverGrow;
+	hoverShrink = InArgs._hoverShrink;
+	hoverGrowAudioComponents = InArgs._hoverGrowAudioComponents;
+	hoverShrinkAudioComponents = InArgs._hoverShrinkAudioComponents;
+	windAudioComponents = InArgs._windAudioComponents;
+	windWithSheepAudioComponents = InArgs._windWithSheepAudioComponents;
+	riverAudioComponents = InArgs._riverAudioComponents;
+	waterfallAudioComponents = InArgs._waterfallAudioComponents;
+	purpleLullabyAudioComponents = InArgs._purpleLullabyAudioComponents;
+	environmentAudio = InArgs._environmentAudio;
 
 	gameFrameColor_SB = new FSlateBrush();
 	gameFrameColor_SB->SetResourceObject(gameFrameColor_SMUI);
@@ -215,6 +236,85 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 
 	transparentButtonStyle = new FButtonStyle();
 	transparentButtonStyle->SetNormalPadding(FMargin());
+
+	childrensCornerNotes = { 8, 11, 12, 13, 8, 11, 13, 12, 7, 11, 12, 14, 9, 10, 14, 13, 8, 11, 13, 15, 10, 11, 15, 14, 9, 11, 14, 16, 9, 14, 16, 15, 11, 13, 15, 18, 13, 15, 18, 19, 13, 15, 19, 18, 13, 15, 18, 17, 13, 15, 17, 16, 13, 15, 16, 15, 11, 13, 15, 14, 11, 13, 14, 13, 10, 11, 13, 12, 9, 11, 12, 15, 10, 13, 15, 16, 11, 13, 16, 13, 9, 11, 13, 12, 9, 11, 12, 11, 8, 9, 11, 10, 7, 8, 10, 0, 4, 5, 6, 7, 9, 11, 12, 13, 12, 11, 9, 7, 6, 5, 4, 0, 4, 5, 6, 7, 9, 11, 12, 13, 12, 11, 9, 7, 6, 5, 4, 0, 4, 5, 6, 7, 22, 11, 12, 13, 12, 11, 9, 7, 6, 5, 4, 0, 4, 5, 6, 7, 22, 11, 12, 13, 12, 11, 10, 7, 6, 5, 4 };
+	childrensCornerIndex = -1;
+
+	audioCycleTracker = 0;
+
+	hoverGrowAudioComponent = NewObject<UAudioComponent>(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0));
+	hoverGrowAudioComponent->bAutoDestroy = false;
+	//testAudioComponent->AutoAttachParent = UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0);
+	hoverGrowAudioComponent->SetSound(hoverGrow);
+	hoverShrinkAudioComponent = NewObject<UAudioComponent>(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0));
+	hoverShrinkAudioComponent->bAutoDestroy = false;
+	hoverShrinkAudioComponent->SetSound(hoverShrink);
+
+	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
+	{
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(4.0);
+		hoverGrowAudioComponents[a]->Stop();
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(4.0);
+		hoverShrinkAudioComponents[a]->Stop();
+	}
+
+	for (int a = 0; a < 2; a++)
+	{
+		windAudioComponents[a]->SetVolumeMultiplier(8.0);
+		windAudioComponents[a]->Stop();
+		windWithSheepAudioComponents[a]->SetVolumeMultiplier(8.0);
+		windWithSheepAudioComponents[a]->Stop();
+		riverAudioComponents[a]->SetVolumeMultiplier(0.166);
+		riverAudioComponents[a]->Stop();
+		waterfallAudioComponents[a]->SetVolumeMultiplier(0.4);
+		waterfallAudioComponents[a]->Stop();
+	}
+
+	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
+	{
+		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(0.6);
+		purpleLullabyAudioComponents[a]->Stop();
+	}
+
+	switch (environmentAudio)
+	{
+	case 0 :
+		if (FMath::RandRange(0, 4) == 4)
+		{
+			windWithSheepAudioComponents[0]->Play();
+		}
+		else
+		{
+			windAudioComponents[0]->Play();
+		}
+		break;
+	case 1 :
+		if (FMath::RandRange(0, 4) == 4)
+		{
+			windWithSheepAudioComponents[0]->Play();
+		}
+		else
+		{
+			windAudioComponents[0]->Play();
+		}
+
+		riverAudioComponents[0]->Play();
+		break;
+	case 2 :
+		if (FMath::RandRange(0, 4) == 4)
+		{
+			windWithSheepAudioComponents[0]->Play();
+		}
+		else
+		{
+			windAudioComponents[0]->Play();
+		}
+
+		waterfallAudioComponents[0]->Play();
+		break;
+	default:
+		break;
+	}
 
 	frameColorOverlay = SNew(SOverlay);//how are you going to accomplish that fun menu thing where the menu characters swell up under your mouse?
 	frameColorOverlay->AddSlot()
@@ -958,6 +1058,53 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 
 void SSArcadeModeTitleScreen::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
+	audioTimer += InDeltaTime;
+
+	if (audioCycleTracker < FMath::DivideAndRoundDown((int)audioTimer, 120))
+	{
+		audioCycleTracker += 1;
+
+		switch (environmentAudio)
+		{
+		case 0:
+			if (FMath::RandRange(0, 4) == 4)
+			{
+				windWithSheepAudioComponents[audioCycleTracker % 2]->Play();
+			}
+			else
+			{
+				windAudioComponents[audioCycleTracker % 2]->Play();
+			}
+			break;
+		case 1:
+			if (FMath::RandRange(0, 4) == 4)
+			{
+				windWithSheepAudioComponents[audioCycleTracker % 2]->Play();
+			}
+			else
+			{
+				windAudioComponents[audioCycleTracker % 2]->Play();
+			}
+
+			riverAudioComponents[audioCycleTracker % 2]->Play();
+			break;
+		case 2:
+			if (FMath::RandRange(0, 4) == 4)
+			{
+				windWithSheepAudioComponents[audioCycleTracker % 2]->Play();
+			}
+			else
+			{
+				windAudioComponents[audioCycleTracker % 2]->Play();
+			}
+
+			waterfallAudioComponents[audioCycleTracker % 2]->Play();
+			break;
+		default:
+			break;
+		}
+	}
+
 	for (int a = 0; a < shrinkingBoxes.Num(); a++)
 	{
 		shrinkingTimes[a] += InDeltaTime;
@@ -1041,6 +1188,8 @@ void SSArcadeModeTitleScreen::OnPlayHovered()//the play button and all buttons a
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -1086,6 +1235,10 @@ void SSArcadeModeTitleScreen::OnPlayHovered()//the play button and all buttons a
 	growingBox.Add(playBox);
 	growingTextBlock = playText;
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
+	//UGameplayStatics::PlaySound2D(standardWorldContextObject, hoverGrow);
 }
 
 void SSArcadeModeTitleScreen::OnPlayUnHovered()
@@ -1112,6 +1265,8 @@ void SSArcadeModeTitleScreen::OnPlayUnHovered()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -1134,16 +1289,23 @@ void SSArcadeModeTitleScreen::OnPlayUnHovered()
 		completedMargins.Add(playMargin);
 		completedFonts.Add(menuFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::OnPlayPressed()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	playText->SetColorAndOpacity(FColor::White);
 }
 
 void SSArcadeModeTitleScreen::OnPlayReleased()
 {
+	PlayChordToActiveNote();
+
 	playText->SetColorAndOpacity(FColor::Orange);
 	playBox->SetPadding(playMargin);
 	playText->SetFont(menuFont);
@@ -1208,6 +1370,8 @@ void SSArcadeModeTitleScreen::OnResultsHovered()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -1253,6 +1417,9 @@ void SSArcadeModeTitleScreen::OnResultsHovered()
 	growingBox.Add(resultsBox);
 	growingTextBlock = resultsText;
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 
 void SSArcadeModeTitleScreen::OnResultsUnHovered()
@@ -1279,6 +1446,8 @@ void SSArcadeModeTitleScreen::OnResultsUnHovered()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -1301,16 +1470,23 @@ void SSArcadeModeTitleScreen::OnResultsUnHovered()
 		completedMargins.Add(resultsMargin);
 		completedFonts.Add(menuFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::OnResultsPressed()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	resultsText->SetColorAndOpacity(FColor::White);
 }
 
 void SSArcadeModeTitleScreen::OnResultsReleased()
 {
+	PlayChordToActiveNote();
+
 	resultsText->SetColorAndOpacity(FColor::Orange);
 	resultsBox->SetPadding(resultsMargin);
 	resultsText->SetFont(menuFont);
@@ -1375,6 +1551,8 @@ void SSArcadeModeTitleScreen::OnOptionsHovered()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -1420,6 +1598,9 @@ void SSArcadeModeTitleScreen::OnOptionsHovered()
 	growingBox.Add(optionsBox);
 	growingTextBlock = optionsText;
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 
 void SSArcadeModeTitleScreen::OnOptionsUnHovered()
@@ -1446,6 +1627,8 @@ void SSArcadeModeTitleScreen::OnOptionsUnHovered()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -1468,16 +1651,23 @@ void SSArcadeModeTitleScreen::OnOptionsUnHovered()
 		completedMargins.Add(optionsMargin);
 		completedFonts.Add(menuFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::OnOptionsPressed()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	optionsText->SetColorAndOpacity(FColor::White);
 }
 
 void SSArcadeModeTitleScreen::OnOptionsReleased()
 {
+	PlayChordToActiveNote();
+
 	optionsText->SetColorAndOpacity(FColor::Orange);
 	optionsBox->SetPadding(optionsMargin);
 	optionsText->SetFont(menuFont);
@@ -1542,6 +1732,8 @@ void SSArcadeModeTitleScreen::OnQuitHovered()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -1587,6 +1779,9 @@ void SSArcadeModeTitleScreen::OnQuitHovered()
 	growingBox.Add(quitBox);
 	growingTextBlock = quitText;
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 
 void SSArcadeModeTitleScreen::OnQuitUnHovered()
@@ -1613,6 +1808,8 @@ void SSArcadeModeTitleScreen::OnQuitUnHovered()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -1635,16 +1832,23 @@ void SSArcadeModeTitleScreen::OnQuitUnHovered()
 		completedMargins.Add(quitMargin);
 		completedFonts.Add(menuFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::OnQuitPressed()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	quitText->SetColorAndOpacity(FColor::White);
 }
 
 void SSArcadeModeTitleScreen::OnQuitReleased()
 {
+	PlayChordToActiveNote();
+
 	quitText->SetColorAndOpacity(FColor::Orange);
 	quitBox->SetPadding(quitMargin);
 	quitText->SetFont(menuFont);
@@ -1699,11 +1903,16 @@ void SSArcadeModeTitleScreen::OnQuitReleased()
 
 void SSArcadeModeTitleScreen::OnBackFloorOnePressed()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	backText->SetColorAndOpacity(FColor::White);
 }
 
 void SSArcadeModeTitleScreen::OnBackFloorOneReleased()
 {
+	PlayChordToActiveNote();
+
 	backText->SetColorAndOpacity(FColor::Orange);
 	firstFloorBackBox->SetPadding(backMargin);
 	backText->SetFont(menuFont);
@@ -1767,6 +1976,8 @@ void SSArcadeModeTitleScreen::OnBackFloorOneHovered()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -1812,6 +2023,9 @@ void SSArcadeModeTitleScreen::OnBackFloorOneHovered()
 	growingBox.Add(firstFloorBackBox);
 	growingTextBlock = backText;
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 
 void SSArcadeModeTitleScreen::OnBackFloorOneUnHovered()
@@ -1838,6 +2052,8 @@ void SSArcadeModeTitleScreen::OnBackFloorOneUnHovered()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -1860,15 +2076,22 @@ void SSArcadeModeTitleScreen::OnBackFloorOneUnHovered()
 		completedMargins.Add(backMargin);
 		completedFonts.Add(menuFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_3()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[0]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_3()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[0]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[0]->SetPadding(levelSelectionMargins[0]);
 	levelSelectionTexts[0]->SetFont(levelSelectorFont);
@@ -1927,6 +2150,8 @@ void SSArcadeModeTitleScreen::PlayHovered_3()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -1972,6 +2197,9 @@ void SSArcadeModeTitleScreen::PlayHovered_3()
 	growingBox.Add(levelSelectionBoxes[0]);
 	growingTextBlock = levelSelectionTexts[0];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_3()
 {
@@ -1997,6 +2225,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_3()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -2019,15 +2249,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_3()
 		completedMargins.Add(levelSelectionMargins[0]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_4()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[1]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_4()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[1]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[1]->SetPadding(levelSelectionMargins[1]);
 	levelSelectionTexts[1]->SetFont(levelSelectorFont);
@@ -2086,6 +2323,8 @@ void SSArcadeModeTitleScreen::PlayHovered_4()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -2131,6 +2370,9 @@ void SSArcadeModeTitleScreen::PlayHovered_4()
 	growingBox.Add(levelSelectionBoxes[1]);
 	growingTextBlock = levelSelectionTexts[1];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_4()
 {
@@ -2156,6 +2398,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_4()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -2178,15 +2422,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_4()
 		completedMargins.Add(levelSelectionMargins[1]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_5()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[2]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_5()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[2]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[2]->SetPadding(levelSelectionMargins[2]);
 	levelSelectionTexts[2]->SetFont(levelSelectorFont);
@@ -2245,6 +2496,8 @@ void SSArcadeModeTitleScreen::PlayHovered_5()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -2290,6 +2543,9 @@ void SSArcadeModeTitleScreen::PlayHovered_5()
 	growingBox.Add(levelSelectionBoxes[2]);
 	growingTextBlock = levelSelectionTexts[2];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_5()
 {
@@ -2315,6 +2571,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_5()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -2337,15 +2595,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_5()
 		completedMargins.Add(levelSelectionMargins[2]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_6()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[3]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_6()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[3]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[3]->SetPadding(levelSelectionMargins[3]);
 	levelSelectionTexts[3]->SetFont(levelSelectorFont);
@@ -2404,6 +2669,8 @@ void SSArcadeModeTitleScreen::PlayHovered_6()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -2449,6 +2716,9 @@ void SSArcadeModeTitleScreen::PlayHovered_6()
 	growingBox.Add(levelSelectionBoxes[3]);
 	growingTextBlock = levelSelectionTexts[3];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_6()
 {
@@ -2474,6 +2744,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_6()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -2496,15 +2768,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_6()
 		completedMargins.Add(levelSelectionMargins[3]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_7()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[4]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_7()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[4]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[4]->SetPadding(levelSelectionMargins[4]);
 	levelSelectionTexts[4]->SetFont(levelSelectorFont);
@@ -2563,6 +2842,8 @@ void SSArcadeModeTitleScreen::PlayHovered_7()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -2608,6 +2889,9 @@ void SSArcadeModeTitleScreen::PlayHovered_7()
 	growingBox.Add(levelSelectionBoxes[4]);
 	growingTextBlock = levelSelectionTexts[4];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_7()
 {
@@ -2633,6 +2917,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_7()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -2655,15 +2941,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_7()
 		completedMargins.Add(levelSelectionMargins[4]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_8()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[5]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_8()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[5]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[5]->SetPadding(levelSelectionMargins[5]);
 	levelSelectionTexts[5]->SetFont(levelSelectorFont);
@@ -2722,6 +3015,8 @@ void SSArcadeModeTitleScreen::PlayHovered_8()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -2767,6 +3062,9 @@ void SSArcadeModeTitleScreen::PlayHovered_8()
 	growingBox.Add(levelSelectionBoxes[5]);
 	growingTextBlock = levelSelectionTexts[5];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_8()
 {
@@ -2792,6 +3090,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_8()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -2814,15 +3114,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_8()
 		completedMargins.Add(levelSelectionMargins[5]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_9()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[6]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_9()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[6]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[6]->SetPadding(levelSelectionMargins[6]);
 	levelSelectionTexts[6]->SetFont(levelSelectorFont);
@@ -2881,6 +3188,8 @@ void SSArcadeModeTitleScreen::PlayHovered_9()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -2926,6 +3235,9 @@ void SSArcadeModeTitleScreen::PlayHovered_9()
 	growingBox.Add(levelSelectionBoxes[6]);
 	growingTextBlock = levelSelectionTexts[6];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_9()
 {
@@ -2951,6 +3263,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_9()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -2973,15 +3287,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_9()
 		completedMargins.Add(levelSelectionMargins[6]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_10()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[7]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_10()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[7]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[7]->SetPadding(levelSelectionMargins[7]);
 	levelSelectionTexts[7]->SetFont(levelSelectorFont);
@@ -3040,6 +3361,8 @@ void SSArcadeModeTitleScreen::PlayHovered_10()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -3085,6 +3408,9 @@ void SSArcadeModeTitleScreen::PlayHovered_10()
 	growingBox.Add(levelSelectionBoxes[7]);
 	growingTextBlock = levelSelectionTexts[7];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_10()
 {
@@ -3110,6 +3436,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_10()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -3132,15 +3460,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_10()
 		completedMargins.Add(levelSelectionMargins[7]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_11()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[8]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_11()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[8]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[8]->SetPadding(levelSelectionMargins[8]);
 	levelSelectionTexts[8]->SetFont(levelSelectorFont);
@@ -3199,6 +3534,8 @@ void SSArcadeModeTitleScreen::PlayHovered_11()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -3244,6 +3581,9 @@ void SSArcadeModeTitleScreen::PlayHovered_11()
 	growingBox.Add(levelSelectionBoxes[8]);
 	growingTextBlock = levelSelectionTexts[8];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_11()
 {
@@ -3269,6 +3609,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_11()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -3291,15 +3633,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_11()
 		completedMargins.Add(levelSelectionMargins[8]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_12()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[9]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_12()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[9]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[9]->SetPadding(levelSelectionMargins[9]);
 	levelSelectionTexts[9]->SetFont(levelSelectorFont);
@@ -3358,6 +3707,8 @@ void SSArcadeModeTitleScreen::PlayHovered_12()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -3403,6 +3754,9 @@ void SSArcadeModeTitleScreen::PlayHovered_12()
 	growingBox.Add(levelSelectionBoxes[9]);
 	growingTextBlock = levelSelectionTexts[9];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_12()
 {
@@ -3428,6 +3782,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_12()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -3450,15 +3806,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_12()
 		completedMargins.Add(levelSelectionMargins[9]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_13()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[10]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_13()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[10]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[10]->SetPadding(levelSelectionMargins[10]);
 	levelSelectionTexts[10]->SetFont(levelSelectorFont);
@@ -3517,6 +3880,8 @@ void SSArcadeModeTitleScreen::PlayHovered_13()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -3562,6 +3927,9 @@ void SSArcadeModeTitleScreen::PlayHovered_13()
 	growingBox.Add(levelSelectionBoxes[10]);
 	growingTextBlock = levelSelectionTexts[10];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_13()
 {
@@ -3587,6 +3955,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_13()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -3609,15 +3979,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_13()
 		completedMargins.Add(levelSelectionMargins[10]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_14()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[11]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_14()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[11]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[11]->SetPadding(levelSelectionMargins[11]);
 	levelSelectionTexts[11]->SetFont(levelSelectorFont);
@@ -3676,6 +4053,8 @@ void SSArcadeModeTitleScreen::PlayHovered_14()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -3721,6 +4100,9 @@ void SSArcadeModeTitleScreen::PlayHovered_14()
 	growingBox.Add(levelSelectionBoxes[11]);
 	growingTextBlock = levelSelectionTexts[11];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_14()
 {
@@ -3746,6 +4128,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_14()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -3768,15 +4152,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_14()
 		completedMargins.Add(levelSelectionMargins[11]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_15()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[12]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_15()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[12]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[12]->SetPadding(levelSelectionMargins[12]);
 	levelSelectionTexts[12]->SetFont(levelSelectorFont);
@@ -3835,6 +4226,8 @@ void SSArcadeModeTitleScreen::PlayHovered_15()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -3880,6 +4273,9 @@ void SSArcadeModeTitleScreen::PlayHovered_15()
 	growingBox.Add(levelSelectionBoxes[12]);
 	growingTextBlock = levelSelectionTexts[12];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_15()
 {
@@ -3905,6 +4301,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_15()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -3927,15 +4325,22 @@ void SSArcadeModeTitleScreen::PlayUnHovered_15()
 		completedMargins.Add(levelSelectionMargins[12]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 
 void SSArcadeModeTitleScreen::PlayPressed_16()
 {
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+
 	levelSelectionTexts[13]->SetColorAndOpacity(FColor::White);
 }
 void SSArcadeModeTitleScreen::PlayReleased_16()
 {
+	PlayChordToActiveNote();
+
 	levelSelectionTexts[13]->SetColorAndOpacity(FColor::Orange);
 	levelSelectionBoxes[13]->SetPadding(levelSelectionMargins[13]);
 	levelSelectionTexts[13]->SetFont(levelSelectorFont);
@@ -3994,6 +4399,8 @@ void SSArcadeModeTitleScreen::PlayHovered_16()
 		growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
 		growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+		hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
 		startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
@@ -4039,6 +4446,9 @@ void SSArcadeModeTitleScreen::PlayHovered_16()
 	growingBox.Add(levelSelectionBoxes[13]);
 	growingTextBlock = levelSelectionTexts[13];
 	growTime = 0;
+
+	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
 void SSArcadeModeTitleScreen::PlayUnHovered_16()
 {
@@ -4064,6 +4474,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_16()
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
 			growingOpacity = grownOpacity;
+
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 		}
 
 		shrinkingOpacities.Add(growingOpacity);
@@ -4086,6 +4498,8 @@ void SSArcadeModeTitleScreen::PlayUnHovered_16()
 		completedMargins.Add(levelSelectionMargins[13]);
 		completedFonts.Add(levelSelectorFont);
 		completedOffsets.Add(standardShadowOffset);
+
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION

@@ -12,6 +12,8 @@
 #include "SCurtains.h"
 #include "SCurtainsTwo.h"
 #include "SResultsBlur.h"
+#include "SCompanySplash.h"
+#include "SPauseScreen.h"
 #include "Math/UnrealMathUtility.h"
 #include<array>
 //#include "Engine/World.h"
@@ -1045,12 +1047,392 @@ ATestHud::ATestHud()
 		gameFrameColor_SMUI = (UMaterial*)tempVar_gameFrameColor_SMUI.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_bootAni_SMUI_1(TEXT("'/Game/Movies/spriteMaterialsForUI/bootAni_SMUI_1.bootAni_SMUI_1'"));
+	if (tempVar_bootAni_SMUI_1.Object != NULL)
+	{
+		splashBootArr.Add((UMaterial*)tempVar_bootAni_SMUI_1.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_bootAni_SMUI_2(TEXT("'/Game/Movies/spriteMaterialsForUI/bootAni_SMUI_2.bootAni_SMUI_2'"));
+	if (tempVar_bootAni_SMUI_2.Object != NULL)
+	{
+		splashBootArr.Add((UMaterial*)tempVar_bootAni_SMUI_2.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_bootAni_SMUI_3(TEXT("'/Game/Movies/spriteMaterialsForUI/bootAni_SMUI_3.bootAni_SMUI_3'"));
+	if (tempVar_bootAni_SMUI_3.Object != NULL)
+	{
+		splashBootArr.Add((UMaterial*)tempVar_bootAni_SMUI_3.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_bootAni_SMUI_4(TEXT("'/Game/Movies/spriteMaterialsForUI/bootAni_SMUI_4.bootAni_SMUI_4'"));
+	if (tempVar_bootAni_SMUI_4.Object != NULL)
+	{
+		splashBootArr.Add((UMaterial*)tempVar_bootAni_SMUI_4.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_goodUseSplashBoot_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashBoot_SMUI.goodUseSplashBoot_SMUI'"));
+	if (tempVar_goodUseSplashBoot_SMUI.Object != NULL)
+	{
+		splashBootArr.Add((UMaterial*)tempVar_goodUseSplashBoot_SMUI.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_goodUseSplashBootNoGrass_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashBootNoGrass_SMUI.goodUseSplashBootNoGrass_SMUI'"));
+	if (tempVar_goodUseSplashBootNoGrass_SMUI.Object != NULL)
+	{
+		goodUseSplashBootNoGrass_SMUI = (UMaterial*)tempVar_goodUseSplashBootNoGrass_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_goodUseSplashGrass_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI.goodUseSplashGrass_SMUI'"));
+	if (tempVar_goodUseSplashGrass_SMUI.Object != NULL)
+	{
+		goodUseSplashGrass_SMUI = (UMaterial*)tempVar_goodUseSplashGrass_SMUI.Object;
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_goodUseDigitalText_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseDigitalText_SMUI.goodUseDigitalText_SMUI'"));
+	if (tempVar_goodUseDigitalText_SMUI.Object != NULL)
+	{
+		goodUseDigitalText_SMUI = (UMaterial*)tempVar_goodUseDigitalText_SMUI.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_1(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_1.goodUseSplashGrass_SMUI_1'"));
+	if (tempVar_splashGrass_SMUI_1.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_1.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_2(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_2.goodUseSplashGrass_SMUI_2'"));
+	if (tempVar_splashGrass_SMUI_2.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_2.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_3(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_3.goodUseSplashGrass_SMUI_3'"));
+	if (tempVar_splashGrass_SMUI_3.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_3.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_4(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_4.goodUseSplashGrass_SMUI_4'"));
+	if (tempVar_splashGrass_SMUI_4.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_4.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_5(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_5.goodUseSplashGrass_SMUI_5'"));
+	if (tempVar_splashGrass_SMUI_5.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_5.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_6(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_6.goodUseSplashGrass_SMUI_6'"));
+	if (tempVar_splashGrass_SMUI_6.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_6.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_7(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_7.goodUseSplashGrass_SMUI_7'"));
+	if (tempVar_splashGrass_SMUI_7.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_7.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_8(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_8.goodUseSplashGrass_SMUI_8'"));
+	if (tempVar_splashGrass_SMUI_8.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_8.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_9(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_9.goodUseSplashGrass_SMUI_9'"));
+	if (tempVar_splashGrass_SMUI_9.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_9.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_10(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_10.goodUseSplashGrass_SMUI_10'"));
+	if (tempVar_splashGrass_SMUI_10.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_10.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_11(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_11.goodUseSplashGrass_SMUI_11'"));
+	if (tempVar_splashGrass_SMUI_11.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_11.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_12(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_12.goodUseSplashGrass_SMUI_12'"));
+	if (tempVar_splashGrass_SMUI_12.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_12.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_13(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_13.goodUseSplashGrass_SMUI_13'"));
+	if (tempVar_splashGrass_SMUI_13.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_13.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_14(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_14.goodUseSplashGrass_SMUI_14'"));
+	if (tempVar_splashGrass_SMUI_14.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_14.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_15(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_15.goodUseSplashGrass_SMUI_15'"));
+	if (tempVar_splashGrass_SMUI_15.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_15.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_16(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI_16.goodUseSplashGrass_SMUI_16'"));
+	if (tempVar_splashGrass_SMUI_16.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_16.Object);
+	}
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_splashGrass_SMUI_17(TEXT("'/Game/Movies/spriteMaterialsForUI/goodUseSplashGrass_SMUI.goodUseSplashGrass_SMUI'"));
+	if (tempVar_splashGrass_SMUI_17.Object != NULL)
+	{
+		splashGrassArr.Add((UMaterial*)tempVar_splashGrass_SMUI_17.Object);
+	}
+
 	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_emptyImg_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/emptyImg_SMUI.emptyImg_SMUI'"));
 	if (tempVar_emptyImg_SMUI.Object != NULL)
 	{
 		emptyImg_SMUI = (UMaterial*)tempVar_emptyImg_SMUI.Object;
 	}
-}
+
+	//now onto the sound effects, starting with intersection button sound effects. notice they do not impliment the isvalid conditional. will this be a problem?
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_intersectionButtonPressed(TEXT("'/Game/myAdditionsArcade/soundEffects/intersectionDownClick.intersectionDownClick'"));
+	intersectionButtonPressed = (USoundBase*)tempVar_intersectionButtonPressed.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_intersectionButtonReleased(TEXT("'/Game/myAdditionsArcade/soundEffects/intersectionUpClick.intersectionUpClick'"));
+	intersectionButtonReleased = (USoundBase*)tempVar_intersectionButtonReleased.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrow.hoverGrow'"));
+	hoverGrow = (USoundBase*)tempVar_hoverGrow.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrink.hoverShrink'"));
+	hoverShrink = (USoundBase*)tempVar_hoverShrink.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_1(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowF3.hoverGrowF3'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_1.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_2(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowG3.hoverGrowG3'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_2.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_3(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowA3.hoverGrowA3'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_3.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_4(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowB3.hoverGrowB3'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_4.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_5(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowC4.hoverGrowC4'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_5.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_6(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowD4.hoverGrowD4'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_6.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_7(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowE4.hoverGrowE4'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_7.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_8(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowF4.hoverGrowF4'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_8.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_9(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowG4.hoverGrowG4'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_9.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_10(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowA4.hoverGrowA4'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_10.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_11(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowB4.hoverGrowB4'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_11.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_12(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowC5.hoverGrowC5'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_12.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_13(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowD5.hoverGrowD5'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_13.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_14(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowE5.hoverGrowE5'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_14.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_15(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowF5.hoverGrowF5'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_15.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_16(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowG5.hoverGrowG5'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_16.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_17(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowA5.hoverGrowA5'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_17.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_18(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowB5.hoverGrowB5'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_18.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_19(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowC6.hoverGrowC6'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_19.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_20(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowD6.hoverGrowD6'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_20.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_21(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowE6.hoverGrowE6'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_21.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_22(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowF6.hoverGrowF6'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_22.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverGrow_23(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverGrowA4flat.hoverGrowA4flat'"));
+	hoverGrows.Add((USoundBase*)tempVar_hoverGrow_23.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_1(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkF3.hoverShrinkF3'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_1.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_2(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkG3.hoverShrinkG3'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_2.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_3(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkA3.hoverShrinkA3'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_3.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_4(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkB3.hoverShrinkB3'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_4.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_5(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkC4.hoverShrinkC4'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_5.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_6(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkD4.hoverShrinkD4'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_6.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_7(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkE4.hoverShrinkE4'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_7.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_8(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkF4.hoverShrinkF4'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_8.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_9(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkG4.hoverShrinkG4'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_9.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_10(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkA4.hoverShrinkA4'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_10.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_11(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkB4.hoverShrinkB4'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_11.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_12(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkC5.hoverShrinkC5'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_12.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_13(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkD5.hoverShrinkD5'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_13.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_14(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkE5.hoverShrinkE5'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_14.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_15(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkF5.hoverShrinkF5'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_15.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_16(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkG5.hoverShrinkG5'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_16.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_17(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkA5.hoverShrinkA5'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_17.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_18(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkB5.hoverShrinkB5'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_18.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_19(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkC6.hoverShrinkC6'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_19.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_20(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkD6.hoverShrinkD6'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_20.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_21(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkE6.hoverShrinkE6'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_21.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_22(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkF6.hoverShrinkF6'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_22.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_hoverShrink_23(TEXT("'/Game/myAdditionsArcade/soundEffects/hoverShrinkA4flat.hoverShrinkA4flat'"));
+	hoverShrinks.Add((USoundBase*)tempVar_hoverShrink_23.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_curtainClosing(TEXT("'/Game/myAdditionsArcade/soundEffects/curtainsClosing.curtainsClosing'"));
+	curtainClosing = (USoundBase*)tempVar_curtainClosing.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_curtainOpening(TEXT("'/Game/myAdditionsArcade/soundEffects/curtainsOpening.curtainsOpening'"));
+	curtainOpening = (USoundBase*)tempVar_curtainOpening.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_rainstick(TEXT("'/Game/myAdditionsArcade/soundEffects/rainStick.rainStick'"));
+	rainstick = (USoundBase*)tempVar_rainstick.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_wind(TEXT("'/Game/myAdditionsArcade/soundEffects/windOne.windOne'"));
+	wind = (USoundBase*)tempVar_wind.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_windWithSheep(TEXT("'/Game/myAdditionsArcade/soundEffects/windWSheep.windWSheep'"));
+	windWithSheep = (USoundBase*)tempVar_windWithSheep.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_river(TEXT("'/Game/myAdditionsArcade/soundEffects/river.river'"));
+	river = (USoundBase*)tempVar_river.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_waterfall(TEXT("'/Game/myAdditionsArcade/soundEffects/waterfall.waterfall'"));
+	waterfall = (USoundBase*)tempVar_waterfall.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_1(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyC5.purpleLullabyC5'"));
+	purpleLullaby.Add((USoundBase*)tempVar_purpleLullaby_1.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_2(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyD5.purpleLullabyD5'"));
+	purpleLullaby.Add((USoundBase*)tempVar_purpleLullaby_2.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_3(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyE5.purpleLullabyE5'"));
+	purpleLullaby.Add((USoundBase*)tempVar_purpleLullaby_3.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_4(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyFSharp5.purpleLullabyFSharp5'"));
+	purpleLullaby.Add((USoundBase*)tempVar_purpleLullaby_4.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_5(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyG5.purpleLullabyG5'"));
+	purpleLullaby.Add((USoundBase*)tempVar_purpleLullaby_5.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_6(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyA5.purpleLullabyA5'"));
+	purpleLullaby.Add((USoundBase*)tempVar_purpleLullaby_6.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_7(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyB5.purpleLullabyB5'"));
+	purpleLullaby.Add((USoundBase*)tempVar_purpleLullaby_7.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_8(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyD6.purpleLullabyD6'"));
+	purpleLullaby.Add((USoundBase*)tempVar_purpleLullaby_8.Object);
+
+	for (int a = 0; a < hoverGrows.Num(); a++)
+	{
+		hoverGrowAudioComponents.Add(CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass())));
+		hoverGrowAudioComponents[a]->bAutoDestroy = false;
+		hoverGrowAudioComponents[a]->SetSound(hoverGrows[a]);
+
+		hoverShrinkAudioComponents.Add(CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass())));
+		hoverShrinkAudioComponents[a]->bAutoDestroy = false;
+		hoverShrinkAudioComponents[a]->SetSound(hoverShrinks[a]);
+	}
+
+	for (int a = 0; a < 2; a++)
+	{
+		windAudioComponents.Add(CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass())));
+		windAudioComponents[a]->bAutoDestroy = false;
+		windAudioComponents[a]->SetSound(wind);
+
+		windWithSheepAudioComponents.Add(CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass())));
+		windWithSheepAudioComponents[a]->bAutoDestroy = false;
+		windWithSheepAudioComponents[a]->SetSound(windWithSheep);
+
+		riverAudioComponents.Add(CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass())));
+		riverAudioComponents[a]->bAutoDestroy = false;
+		riverAudioComponents[a]->SetSound(river);
+
+		waterfallAudioComponents.Add(CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass())));
+		waterfallAudioComponents[a]->bAutoDestroy = false;
+		waterfallAudioComponents[a]->SetSound(waterfall);
+	}
+
+	for (int a = 0; a < 8; a++)
+	{
+		purpleLullabyAudioComponents.Add(CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass())));
+		purpleLullabyAudioComponents[a]->bAutoDestroy = false;
+		purpleLullabyAudioComponents[a]->SetSound(purpleLullaby[a]);
+	}
+
+	intersectionDownAudioComponent = CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass()));
+	intersectionDownAudioComponent->bAutoDestroy = false;
+	intersectionDownAudioComponent->SetSound(intersectionButtonPressed);
+
+	intersectionUpAudioComponent = CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass()));
+	intersectionUpAudioComponent->bAutoDestroy = false;
+	intersectionUpAudioComponent->SetSound(intersectionButtonReleased);
+
+	curtainClosingAudioComponent = CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass()));
+	curtainClosingAudioComponent->bAutoDestroy = false;
+	curtainClosingAudioComponent->SetSound(curtainClosing);
+
+	curtainOpeningAudioComponent = CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass()));
+	curtainOpeningAudioComponent->bAutoDestroy = false;
+	curtainOpeningAudioComponent->SetSound(curtainOpening);
+
+	rainstickAudioComponent = CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass()));
+	rainstickAudioComponent->bAutoDestroy = false;
+	rainstickAudioComponent->SetSound(rainstick);
+}//to stagger the animations you could prolong the curtains and then open the assets at random intervals spaced over 6 seconds, but then the loading would take and extra 6 seconds
 
 void ATestHud::PreLoadCurtains()
 {
@@ -1072,8 +1454,57 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 {
 	Super::BeginPlay();
 
+	for (int a = 0; a < hoverGrows.Num(); a++)
+	{
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(0.0);
+		hoverGrowAudioComponents[a]->Play();
+
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(0.0);
+		hoverShrinkAudioComponents[a]->Play();
+	}
+
+	for (int a = 0; a < 2; a++)
+	{
+		windAudioComponents[a]->SetVolumeMultiplier(0.0);
+		windAudioComponents[a]->Play();
+
+		windWithSheepAudioComponents[a]->SetVolumeMultiplier(0.0);
+		windWithSheepAudioComponents[a]->Play();
+
+		riverAudioComponents[a]->SetVolumeMultiplier(0.0);
+		riverAudioComponents[a]->Play();
+
+		waterfallAudioComponents[a]->SetVolumeMultiplier(0.0);
+		waterfallAudioComponents[a]->Play();
+	}
+
+	for (int a = 0; a < 8; a++)
+	{
+		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(0.0);
+		purpleLullabyAudioComponents[a]->Play();
+	}
+
+	intersectionDownAudioComponent->SetVolumeMultiplier(0.0);
+	intersectionDownAudioComponent->Play();
+
+	intersectionUpAudioComponent->SetVolumeMultiplier(0.0);
+	intersectionUpAudioComponent->Play();
+
+	curtainClosingAudioComponent->SetVolumeMultiplier(0.0);
+	curtainClosingAudioComponent->Play();
+
+	curtainOpeningAudioComponent->SetVolumeMultiplier(0.0);
+	curtainOpeningAudioComponent->Play();
+
+	rainstickAudioComponent->SetVolumeMultiplier(0.0);
+	rainstickAudioComponent->Play();
+
 	/*USaveGameOne* LoadGameInstance = Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass()));
+	LoadGameInstance->SetMaxLevel(13);
 	LoadGameInstance->SetHighscores({ 0, 0, 0 });
+	LoadGameInstance->SetHighscoreDataOne(0);
+	LoadGameInstance->SetHighscoreDataTwo(0);
+	LoadGameInstance->SetScoreThisGame(0);
 	UGameplayStatics::SaveGameToSlot(LoadGameInstance, TEXT("saveGameOne"), 0);*/
 	//LoadGameInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, 0));//is this gonna be a problem? do I need to get the actual default LoadGameInstance->SaveSlotName and the actual LoadGameInstance->UserIndex?
 	if (UGameplayStatics::LoadGameFromSlot("saveGameOne", 0) == nullptr)
@@ -1081,35 +1512,440 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 		UGameplayStatics::SaveGameToSlot(Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass())), "saveGameOne", 0);
 	}
 
+	inGame = false;
+
 	if (GEngine && GEngine->GameViewport)
 	{
 		playerOnePlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		standardWorldContextObject = GetWorld();
 
-		GenerateMainMenuBackground();
-
-		//PreLoadCurtains();
-
-		mainMenuSlateWidget = SNew(SSArcadeModeTitleScreen)
+		splashScreenSlateWidget = SNew(SCompanySplash)
 			.OwningHUD(this)
-			.playerOnePlayerController(playerOnePlayerController)
-			.backgroundMaterials(backgroundMaterials)
-			.backgroundIsLargeTile(backgroundIsLargeTile)
-			.displayResults(false)
-			.gameFrameColor_SMUI(gameFrameColor_SMUI);
+			.goodUseSplashBootNoGrass_SMUI(goodUseSplashBootNoGrass_SMUI)
+			.goodUseSplashGrass_SMUI(goodUseSplashGrass_SMUI)
+			.goodUseDigitalText_SMUI(goodUseDigitalText_SMUI)
+			.splashGrassArr(splashGrassArr)
+			.splashBootArr(splashBootArr);
 
-		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerThree, SWeakWidget).PossiblyNullContent(mainMenuSlateWidget.ToSharedRef()));
+		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerSeven, SWeakWidget).PossiblyNullContent(splashScreenSlateWidget.ToSharedRef()));
 
-		//FSlateApplication::SetUserFocus(0, loadingSlateWidget);
-
-		//FInputModeGameAndUI mainMenuInputMode = FInputModeGameAndUI();
-		FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();//Im getting an error in the unreal engine log. do I need to set canSupportFocus within the widget before calling this?
-		mainMenuInputMode.SetWidgetToFocus(mainMenuSlateWidget);
-		mainMenuInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+		FInputModeUIOnly splashScreenInputMode = FInputModeUIOnly();//Im getting an error in the unreal engine log. do I need to set canSupportFocus within the widget before calling this?
+		splashScreenInputMode.SetWidgetToFocus(splashScreenSlateWidget);
+		splashScreenInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 		//mainMenuInputMode.SetHideCursorDuringCapture(false);
-		playerOnePlayerController->SetInputMode(mainMenuInputMode);
+		playerOnePlayerController->SetInputMode(splashScreenInputMode);
 		playerOnePlayerController->SetShowMouseCursor(true);
-		FSlateApplication::Get().SetKeyboardFocus(mainMenuSlateWidget);
+		FSlateApplication::Get().SetKeyboardFocus(splashScreenSlateWidget);
 	}
+}
+
+void ATestHud::DisplayPauseScreen()
+{
+	pauseScreenSlateWidget = SNew(SPauseScreen)
+		.OwningHUD(this)
+		.hoverGrowAudioComponents(hoverGrowAudioComponents)
+		.hoverShrinkAudioComponents(hoverShrinkAudioComponents)
+		.purpleLullabyAudioComponents(purpleLullabyAudioComponents);
+
+	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerEight, SWeakWidget).PossiblyNullContent(pauseScreenSlateWidget.ToSharedRef()));
+
+	FInputModeUIOnly pauseScreenInputMode = FInputModeUIOnly();
+	pauseScreenInputMode.SetWidgetToFocus(pauseScreenSlateWidget);
+	pauseScreenInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	//mainMenuInputMode.SetHideCursorDuringCapture(false);
+	playerOnePlayerController->SetInputMode(pauseScreenInputMode);
+	playerOnePlayerController->SetShowMouseCursor(true);
+	FSlateApplication::Get().SetKeyboardFocus(pauseScreenSlateWidget);
+
+	for (int a = 0; a < numberOfHoles; a++)
+	{
+		switch (a)
+		{
+		case 0:
+			flag_MP_1->Pause();
+			break;
+		case 1:
+			flag_MP_2->Pause();
+			break;
+		case 2:
+			flag_MP_3->Pause();
+			break;
+		case 3:
+			flag_MP_4->Pause();
+			break;
+		case 4:
+			flag_MP_5->Pause();
+			break;
+		case 5:
+			flag_MP_6->Pause();
+			break;
+		case 6:
+			flag_MP_7->Pause();
+			break;
+		case 7:
+			flag_MP_8->Pause();
+			break;
+		case 8:
+			flag_MP_9->Pause();
+			break;
+		case 9:
+			flag_MP_10->Pause();
+			break;
+		case 10:
+			flag_MP_11->Pause();
+			break;
+		case 11:
+			flag_MP_12->Pause();
+			break;
+		case 12:
+			flag_MP_13->Pause();
+			break;
+		case 13:
+			flag_MP_14->Pause();
+			break;
+		case 14:
+			flag_MP_15->Pause();
+			break;
+		case 15:
+			flag_MP_16->Pause();
+			break;
+		default:
+			break;
+		}
+	}
+
+	for (int a = 0; a < activeMediaPlayers.Num(); a++)
+	{
+		if (activeMediaPlayers[a])
+		{
+			switch (a)
+			{
+			case 0:
+				grass_MP_1->Pause();
+				break;
+			case 1:
+				holeFromDown_MP->Pause();
+				break;
+			case 2:
+				holeFromLeft_MP->Pause();
+				break;
+			case 3:
+				holeFromRight_MP->Pause();
+				break;
+			case 4:
+				holeFromUp_MP->Pause();
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+			case 7:
+					pondHorizontal_MP->Pause();
+				break;
+			case 8:
+					pondVerticleFlowingLeft_MP->Pause();
+				break;
+			case 9:
+					pondVerticleFlowingRight_MP->Pause();
+				break;
+			case 10:
+					waterfall_MP->Pause();
+				break;
+			case 11:
+					riverFlowingDown_MP_1->Pause();
+				break;
+			case 12:
+					riverFlowingDown_MP_2->Pause();
+				break;
+			case 13:
+					riverFlowingDown_MP_3->Pause();
+				break;
+			case 14:
+					riverFlowingLeft_MP_1->Pause();
+				break;
+			case 15:
+					riverFlowingLeft_MP_2->Pause();
+				break;
+			case 16:
+					riverFlowingLeft_MP_3->Pause();
+				break;
+			case 17:
+					riverFlowingRight_MP_1->Pause();
+				break;
+			case 18:
+					riverFlowingRight_MP_2->Pause();
+				break;
+			case 19:
+					riverFlowingRight_MP_3->Pause();
+				break;
+			case 20:
+					tree_MP_1->Pause();
+				break;
+			case 21:
+					tree_MP_2->Pause();
+				break;
+			case 22:
+					tree_MP_3->Pause();
+				break;
+			case 23:
+					tree_MP_4->Pause();
+				break;
+			case 24:
+					tree_MP_5->Pause();
+				break;
+			case 25:
+					riverTurning_MP_1->Pause();
+				break;
+			case 26:
+					riverTurning_MP_2->Pause();
+				break;
+			case 27:
+					riverTurning_MP_3->Pause();
+				break;
+			case 28:
+					riverTurning_MP_4->Pause();
+				break;
+			case 29:
+				break;
+			case 30:
+					grass_MP_1->Pause();
+				break;
+			case 31:
+					grass_MP_2->Pause();
+				break;
+			case 32:
+					grass_MP_3->Pause();
+				break;
+			case 33:
+					mountain_MP_1->Pause();
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}
+
+void ATestHud::DestroyPauseScreen()
+{
+	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerEight.ToSharedRef());
+
+	gameSlateWidget->PlayGame();
+
+	FInputModeUIOnly gameInWidgetInputMode = FInputModeUIOnly();
+	gameInWidgetInputMode.SetWidgetToFocus(loadingSlateWidget);
+	gameInWidgetInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	playerOnePlayerController->SetInputMode(gameInWidgetInputMode);
+	playerOnePlayerController->SetShowMouseCursor(true);
+	FSlateApplication::Get().SetKeyboardFocus(gameSlateWidget);
+
+	for (int a = 0; a < numberOfHoles; a++)
+	{
+		switch (a)
+		{
+		case 0:
+			flag_MP_1->Play();
+			break;
+		case 1:
+			flag_MP_2->Play();
+			break;
+		case 2:
+			flag_MP_3->Play();
+			break;
+		case 3:
+			flag_MP_4->Play();
+			break;
+		case 4:
+			flag_MP_5->Play();
+			break;
+		case 5:
+			flag_MP_6->Play();
+			break;
+		case 6:
+			flag_MP_7->Play();
+			break;
+		case 7:
+			flag_MP_8->Play();
+			break;
+		case 8:
+			flag_MP_9->Play();
+			break;
+		case 9:
+			flag_MP_10->Play();
+			break;
+		case 10:
+			flag_MP_11->Play();
+			break;
+		case 11:
+			flag_MP_12->Play();
+			break;
+		case 12:
+			flag_MP_13->Play();
+			break;
+		case 13:
+			flag_MP_14->Play();
+			break;
+		case 14:
+			flag_MP_15->Play();
+			break;
+		case 15:
+			flag_MP_16->Play();
+			break;
+		default:
+			break;
+		}
+	}
+
+	for (int a = 0; a < activeMediaPlayers.Num(); a++)
+	{
+		if (activeMediaPlayers[a])
+		{
+			switch (a)
+			{
+			case 0:
+				grass_MP_1->Play();
+				break;
+			case 1:
+				holeFromDown_MP->Play();
+				break;
+			case 2:
+				holeFromLeft_MP->Play();
+				break;
+			case 3:
+				holeFromRight_MP->Play();
+				break;
+			case 4:
+				holeFromUp_MP->Play();
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+			case 7:
+				pondHorizontal_MP->Play();
+				break;
+			case 8:
+				pondVerticleFlowingLeft_MP->Play();
+				break;
+			case 9:
+				pondVerticleFlowingRight_MP->Play();
+				break;
+			case 10:
+				waterfall_MP->Play();
+				break;
+			case 11:
+				riverFlowingDown_MP_1->Play();
+				break;
+			case 12:
+				riverFlowingDown_MP_2->Play();
+				break;
+			case 13:
+				riverFlowingDown_MP_3->Play();
+				break;
+			case 14:
+				riverFlowingLeft_MP_1->Play();
+				break;
+			case 15:
+				riverFlowingLeft_MP_2->Play();
+				break;
+			case 16:
+				riverFlowingLeft_MP_3->Play();
+				break;
+			case 17:
+				riverFlowingRight_MP_1->Play();
+				break;
+			case 18:
+				riverFlowingRight_MP_2->Play();
+				break;
+			case 19:
+				riverFlowingRight_MP_3->Play();
+				break;
+			case 20:
+				tree_MP_1->Play();
+				break;
+			case 21:
+				tree_MP_2->Play();
+				break;
+			case 22:
+				tree_MP_3->Play();
+				break;
+			case 23:
+				tree_MP_4->Play();
+				break;
+			case 24:
+				tree_MP_5->Play();
+				break;
+			case 25:
+				riverTurning_MP_1->Play();
+				break;
+			case 26:
+				riverTurning_MP_2->Play();
+				break;
+			case 27:
+				riverTurning_MP_3->Play();
+				break;
+			case 28:
+				riverTurning_MP_4->Play();
+				break;
+			case 29:
+				break;
+			case 30:
+				grass_MP_1->Play();
+				break;
+			case 31:
+				grass_MP_2->Play();
+				break;
+			case 32:
+				grass_MP_3->Play();
+				break;
+			case 33:
+				mountain_MP_1->Play();
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}
+
+void ATestHud::DestroySplash()
+{
+	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerSeven.ToSharedRef());
+
+	GenerateMainMenuBackground();
+
+	//PreLoadCurtains();
+
+	mainMenuSlateWidget = SNew(SSArcadeModeTitleScreen)
+		.OwningHUD(this)
+		.standardWorldContextObject(standardWorldContextObject)
+		.backgroundMaterials(backgroundMaterials)
+		.backgroundIsLargeTile(backgroundIsLargeTile)
+		.displayResults(false)
+		.gameFrameColor_SMUI(gameFrameColor_SMUI)
+		.hoverGrow(hoverGrow)
+		.hoverShrink(hoverShrink)
+		.hoverGrowAudioComponents(hoverGrowAudioComponents)
+		.hoverShrinkAudioComponents(hoverShrinkAudioComponents)
+		.windAudioComponents(windAudioComponents)
+		.windWithSheepAudioComponents(windWithSheepAudioComponents)
+		.riverAudioComponents(riverAudioComponents)
+		.waterfallAudioComponents(waterfallAudioComponents)
+		.purpleLullabyAudioComponents(purpleLullabyAudioComponents)
+		.environmentAudio(environmentAudio);
+
+	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerThree, SWeakWidget).PossiblyNullContent(mainMenuSlateWidget.ToSharedRef()));
+
+	//FSlateApplication::SetUserFocus(0, loadingSlateWidget);
+
+	//FInputModeGameAndUI mainMenuInputMode = FInputModeGameAndUI();
+	FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();//Im getting an error in the unreal engine log. do I need to set canSupportFocus within the widget before calling this?
+	mainMenuInputMode.SetWidgetToFocus(mainMenuSlateWidget);
+	mainMenuInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	//mainMenuInputMode.SetHideCursorDuringCapture(false);
+	playerOnePlayerController->SetInputMode(mainMenuInputMode);
+	playerOnePlayerController->SetShowMouseCursor(true);
+	FSlateApplication::Get().SetKeyboardFocus(mainMenuSlateWidget);
 }
 
 void ATestHud::GenerateMainMenuBackground()
@@ -1124,31 +1960,37 @@ void ATestHud::GenerateMainMenuBackground()
 		switch (randomNum)
 		{
 		case 7:
+			environmentAudio = 1;
 			backgroundMaterials[0] = pondHorizontal_VMUI;
 			pondHorizontal_MP->OpenSource(pondHorizontal_IS);
 			mediaPlayersToClose.Add(pondHorizontal_MP);
 			break;
 		case 8:
+			environmentAudio = 1;
 			backgroundMaterials[0] = pondVerticleFlowingLeft_VMUI;
 			pondVerticleFlowingLeft_MP->OpenSource(pondVerticleFlowingLeft_IS);
 			mediaPlayersToClose.Add(pondVerticleFlowingLeft_MP);
 			break;
 		case 9:
+			environmentAudio = 1;
 			backgroundMaterials[0] = pondVerticleFlowingRight_VMUI;
 			pondVerticleFlowingRight_MP->OpenSource(pondVerticleFlowingRight_IS);
 			mediaPlayersToClose.Add(pondVerticleFlowingRight_MP);
 			break;
 		case 10:
+			environmentAudio = 2;
 			backgroundMaterials[0] = waterfall_VMUI;
 			waterfall_MP->OpenSource(waterfall_IS);
 			mediaPlayersToClose.Add(waterfall_MP);
 			break;
 		case 24:
+			environmentAudio = 0;
 			backgroundMaterials[0] = tree_VMUI_5;
 			tree_MP_5->OpenSource(tree_IS_5);
 			mediaPlayersToClose.Add(tree_MP_5);
 			break;
 		case 33:
+			environmentAudio = 0;
 			backgroundMaterials[0] = mountain_VMUI_1;
 			mountain_MP_1->OpenSource(mountain_IS_1);
 			mediaPlayersToClose.Add(mountain_MP_1);
@@ -1160,6 +2002,7 @@ void ATestHud::GenerateMainMenuBackground()
 	}
 	else if (FMath::RandRange(0, 19) > 9)
 	{// a mini river is made
+		environmentAudio = 1;
 		int dirOfRiver;
 		int riverStartingPos;
 		int startingSegment = FMath::RandRange(1, 3);
@@ -1399,6 +2242,7 @@ void ATestHud::GenerateMainMenuBackground()
 	}
 	else
 	{
+		environmentAudio = 0;
 		indexOfNonRiverSpaces = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
 	}
 
@@ -1471,6 +2315,9 @@ void ATestHud::GenerateMainMenuBackground()
 
 void ATestHud::DisplayCurtains(int integerOne, bool goingToGame, bool displayResults)
 {
+	curtainClosingAudioComponent->SetVolumeMultiplier(1.0);
+	curtainClosingAudioComponent->Play();
+
 	if (goingToGame)
 	{
 		curtains_MP->OpenSource(curtains_IS);
@@ -1480,7 +2327,8 @@ void ATestHud::DisplayCurtains(int integerOne, bool goingToGame, bool displayRes
 		curtainsSlateWidget = SNew(SCurtains)
 			.OwningHUD(this)
 			.curtains_VMUI(curtains_VMUI)
-			.x(holesToGenerate);
+			.x(holesToGenerate)
+			.curtainOpeningAudioComponent(curtainOpeningAudioComponent);
 
 		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerTwo, SWeakWidget));
 		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerFour, SWeakWidget).PossiblyNullContent(curtainsSlateWidget.ToSharedRef()));
@@ -1491,7 +2339,8 @@ void ATestHud::DisplayCurtains(int integerOne, bool goingToGame, bool displayRes
 
 		curtainsTwoSlateWidget = SNew(SCurtainsTwo)
 			.OwningHUD(this)
-			.curtains_VMUI(curtains_VMUI);
+			.curtains_VMUI(curtains_VMUI)
+			.curtainOpeningAudioComponent(curtainOpeningAudioComponent);
 
 		goToResults = displayResults;
 
@@ -1515,21 +2364,34 @@ void ATestHud::ReturnToMainMenu()
 
 	mainMenuSlateWidget = SNew(SSArcadeModeTitleScreen)
 		.OwningHUD(this)
-		.playerOnePlayerController(playerOnePlayerController)
+		.standardWorldContextObject(standardWorldContextObject)
 		.backgroundMaterials(backgroundMaterials)
 		.backgroundIsLargeTile(backgroundIsLargeTile)
 		.displayResults(goToResults)
-		.gameFrameColor_SMUI(gameFrameColor_SMUI);
+		.gameFrameColor_SMUI(gameFrameColor_SMUI)
+		.hoverGrow(hoverGrow)
+		.hoverShrink(hoverShrink)
+		.hoverGrowAudioComponents(hoverGrowAudioComponents)
+		.hoverShrinkAudioComponents(hoverShrinkAudioComponents)
+		.windAudioComponents(windAudioComponents)
+		.windWithSheepAudioComponents(windWithSheepAudioComponents)
+		.riverAudioComponents(riverAudioComponents)
+		.waterfallAudioComponents(waterfallAudioComponents)
+		.purpleLullabyAudioComponents(purpleLullabyAudioComponents)
+		.environmentAudio(environmentAudio);
 
 	slateWidgetContainerThree->SetContent(mainMenuSlateWidget.ToSharedRef());
 
 	if (goToResults)
 	{
 		resultsBlurSlateWidget = SNew(SResultsBlur)
-			.OwningHUD(this);
+			.OwningHUD(this)
+			.rainstickAudioComponent(rainstickAudioComponent);
 
 		slateWidgetContainerSix->SetContent(resultsBlurSlateWidget.ToSharedRef());
 	}
+
+	inGame = false;
 }
 
 void ATestHud::RemoveResultsBlur()
@@ -1590,8 +2452,28 @@ void ATestHud::MasterGenerateLevel(int numHoles)
 	}
 	mediaPlayersToClose.Empty();
 
-	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerThree.ToSharedRef()); //does this destroy the menu, or only hide it. we are about to find out
-	//delete loadingSlateWidget.Get(); this doesnt work, it throughs an acception access violation to address 0x0000000 supposedly RemoveViewportWidgetContent takes care of this
+	if (!inGame)
+	{
+		GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerThree.ToSharedRef());//does this destroy the menu, or only hide it. we are about to find out
+		//delete loadingSlateWidget.Get(); this doesnt work, it throughs an acception access violation to address 0x0000000 supposedly RemoveViewportWidgetContent takes care of this
+	}
+	else
+	{
+		//GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerTwo.ToSharedRef());//somehow removing slateWidget container 3 here was actually working fyi
+		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "RanHouseKeeping");
+		HouseKeeping();
+		ResetRegenLevel();
+	}
+
+	inGame = true;
+
+	for (int a = 0; a < 2; a++)
+	{
+		windAudioComponents[a]->Stop();
+		windWithSheepAudioComponents[a]->Stop();
+		riverAudioComponents[a]->Stop();
+		waterfallAudioComponents[a]->Stop();
+	}
 
 	numberOfHoles = numHoles;
 
@@ -8526,7 +9408,16 @@ void ATestHud::BuildLevel()
 
 	if (15 - endOfSides > 2 && 14 > finalIntersectionPos.X && finalIntersectionPos.X > 2 && 14 > finalIntersectionPos.Y && finalIntersectionPos.Y > 2)
 	{
-		if (FMath::RandRange(0, 29) > 9)
+		if (numberOfHoles < 9)
+		{
+			float goatFloat = (float)((float)((float)0.5 * (float)sin((float)3.14 * ((float)((float)numberOfHoles / (float)9) - (float)0.5))) + (float)0.5) * (float)100;
+
+			if (FMath::RandRange(1, 100) < goatFloat)
+			{
+				canAddFlare = true;
+			}
+		}
+		else
 		{
 			canAddFlare = true;
 		}
@@ -8544,26 +9435,40 @@ void ATestHud::BuildLevel()
 
 			if (canAddFlare)
 			{
-				if (FMath::RandRange(0, 19) > 9)
+				if (numberOfHoles < 11)
 				{
-					if (newTrackPos.Y < 13)
+					if (FMath::RandRange(0, 19) > 9)
 					{
-						directionOfFlare = 1;
+						if (newTrackPos.Y < 13)
+						{
+							directionOfFlare = 1;
+						}
+						else
+						{
+							directionOfFlare = 3;
+						}
 					}
 					else
 					{
-						directionOfFlare = 3;
+						if (newTrackPos.Y > 3)
+						{
+							directionOfFlare = 3;
+						}
+						else
+						{
+							directionOfFlare = 1;
+						}
 					}
 				}
 				else
 				{
-					if (newTrackPos.Y > 3)
+					if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
 					{
-						directionOfFlare = 3;
+						directionOfFlare = 1;
 					}
 					else
 					{
-						directionOfFlare = 1;
+						directionOfFlare = 3;
 					}
 				}
 
@@ -8599,7 +9504,14 @@ void ATestHud::BuildLevel()
 				switch (directionOfFlare)
 				{
 				case 1:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.Y, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.X += 1;
 
@@ -8636,7 +9548,14 @@ void ATestHud::BuildLevel()
 					}
 					break;
 				case 3:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.Y - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.X += 1;
 
@@ -8687,26 +9606,40 @@ void ATestHud::BuildLevel()
 
 			if (canAddFlare)
 			{
-				if (FMath::RandRange(0, 19) > 9)
+				if (numberOfHoles < 11)
 				{
-					if (newTrackPos.Y < 13)
+					if (FMath::RandRange(0, 19) > 9)
 					{
-						directionOfFlare = 1;
+						if (newTrackPos.Y < 13)
+						{
+							directionOfFlare = 1;
+						}
+						else
+						{
+							directionOfFlare = 3;
+						}
 					}
 					else
 					{
-						directionOfFlare = 3;
+						if (newTrackPos.Y > 3)
+						{
+							directionOfFlare = 3;
+						}
+						else
+						{
+							directionOfFlare = 1;
+						}
 					}
 				}
 				else
 				{
-					if (newTrackPos.Y > 3)
+					if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
 					{
-						directionOfFlare = 3;
+						directionOfFlare = 1;
 					}
 					else
 					{
-						directionOfFlare = 1;
+						directionOfFlare = 3;
 					}
 				}
 
@@ -8737,7 +9670,14 @@ void ATestHud::BuildLevel()
 				switch (directionOfFlare)
 				{
 				case 1:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.Y, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.X += 1;
 
@@ -8774,7 +9714,14 @@ void ATestHud::BuildLevel()
 					}
 					break;
 				case 3:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.Y - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.X += 1;
 
@@ -8826,26 +9773,40 @@ void ATestHud::BuildLevel()
 
 			if (canAddFlare)
 			{
-				if (FMath::RandRange(0, 19) > 9)
+				if (numberOfHoles < 11)
 				{
-					if (newTrackPos.Y < 13)
+					if (FMath::RandRange(0, 19) > 9)
 					{
-						directionOfFlare = 1;
+						if (newTrackPos.Y < 13)
+						{
+							directionOfFlare = 1;
+						}
+						else
+						{
+							directionOfFlare = 3;
+						}
 					}
 					else
 					{
-						directionOfFlare = 3;
+						if (newTrackPos.Y > 3)
+						{
+							directionOfFlare = 3;
+						}
+						else
+						{
+							directionOfFlare = 1;
+						}
 					}
 				}
 				else
 				{
-					if (newTrackPos.Y > 3)
+					if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
 					{
-						directionOfFlare = 3;
+						directionOfFlare = 1;
 					}
 					else
 					{
-						directionOfFlare = 1;
+						directionOfFlare = 3;
 					}
 				}
 
@@ -8881,7 +9842,14 @@ void ATestHud::BuildLevel()
 				switch (directionOfFlare)
 				{
 				case 1:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.Y, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.X += 1;
 
@@ -8918,7 +9886,15 @@ void ATestHud::BuildLevel()
 					}
 					break;
 				case 3:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+					}
+					else
+					{
+						
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.Y - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.X += 1;
 
@@ -8975,20 +9951,34 @@ void ATestHud::BuildLevel()
 
 			if (canAddFlare)
 			{
-				if (FMath::RandRange(0, 19) > 9)
+				if (numberOfHoles < 11)
 				{
-					if (newTrackPos.X > 3)
+					if (FMath::RandRange(0, 19) > 9)
 					{
-						directionOfFlare = 4;
+						if (newTrackPos.X > 3)
+						{
+							directionOfFlare = 4;
+						}
+						else
+						{
+							directionOfFlare = 2;
+						}
 					}
 					else
 					{
-						directionOfFlare = 2;
+						if (newTrackPos.X < 13)
+						{
+							directionOfFlare = 2;
+						}
+						else
+						{
+							directionOfFlare = 4;
+						}
 					}
 				}
 				else
 				{
-					if (newTrackPos.X < 13)
+					if (15 - finalIntersectionPos.X > finalIntersectionPos.X)
 					{
 						directionOfFlare = 2;
 					}
@@ -9025,7 +10015,14 @@ void ATestHud::BuildLevel()
 				switch (directionOfFlare)
 				{
 				case 2:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.X, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.X, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.X, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.Y += 1;
 
@@ -9062,7 +10059,14 @@ void ATestHud::BuildLevel()
 					}
 					break;
 				case 4:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.X - 3, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.X - 3, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.X - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.Y += 1;
 
@@ -9114,20 +10118,34 @@ void ATestHud::BuildLevel()
 
 			if (canAddFlare)
 			{
-				if (FMath::RandRange(0, 19) > 9)
+				if (numberOfHoles < 11)
 				{
-					if (newTrackPos.X > 3)
+					if (FMath::RandRange(0, 19) > 9)
 					{
-						directionOfFlare = 4;
+						if (newTrackPos.X > 3)
+						{
+							directionOfFlare = 4;
+						}
+						else
+						{
+							directionOfFlare = 2;
+						}
 					}
 					else
 					{
-						directionOfFlare = 2;
+						if (newTrackPos.X < 13)
+						{
+							directionOfFlare = 2;
+						}
+						else
+						{
+							directionOfFlare = 4;
+						}
 					}
 				}
 				else
 				{
-					if (newTrackPos.X < 13)
+					if (15 - finalIntersectionPos.X > finalIntersectionPos.X)
 					{
 						directionOfFlare = 2;
 					}
@@ -9169,7 +10187,14 @@ void ATestHud::BuildLevel()
 				switch (directionOfFlare)
 				{
 				case 2:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.X, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.X, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.X, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.Y += 1;
 
@@ -9206,7 +10231,14 @@ void ATestHud::BuildLevel()
 					}
 					break;
 				case 4:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.X - 3, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.X - 3, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.X - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.Y += 1;
 
@@ -9258,20 +10290,34 @@ void ATestHud::BuildLevel()
 
 			if (canAddFlare)
 			{
-				if (FMath::RandRange(0, 19) > 9)
+				if (numberOfHoles < 11)
 				{
-					if (newTrackPos.X > 3)
+					if (FMath::RandRange(0, 19) > 9)
 					{
-						directionOfFlare = 4;
+						if (newTrackPos.X > 3)
+						{
+							directionOfFlare = 4;
+						}
+						else
+						{
+							directionOfFlare = 2;
+						}
 					}
 					else
 					{
-						directionOfFlare = 2;
+						if (newTrackPos.X < 13)
+						{
+							directionOfFlare = 2;
+						}
+						else
+						{
+							directionOfFlare = 4;
+						}
 					}
 				}
 				else
 				{
-					if (newTrackPos.X < 13)
+					if (15 - finalIntersectionPos.X > finalIntersectionPos.X)
 					{
 						directionOfFlare = 2;
 					}
@@ -9313,7 +10359,14 @@ void ATestHud::BuildLevel()
 				switch (directionOfFlare)
 				{
 				case 2:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.X, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.X, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.X, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.Y += 1;
 
@@ -9350,7 +10403,14 @@ void ATestHud::BuildLevel()
 					}
 					break;
 				case 4:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.X - 3, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.X - 3, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.X - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.Y += 1;
 
@@ -9408,20 +10468,34 @@ void ATestHud::BuildLevel()
 
 			if (canAddFlare)
 			{
-				if (FMath::RandRange(0, 19) > 9)
+				if (numberOfHoles < 11)
 				{
-					if (newTrackPos.Y > 3)
+					if (FMath::RandRange(0, 19) > 9)
 					{
-						directionOfFlare = 3;
+						if (newTrackPos.Y > 3)
+						{
+							directionOfFlare = 3;
+						}
+						else
+						{
+							directionOfFlare = 1;
+						}
 					}
 					else
 					{
-						directionOfFlare = 1;
+						if (newTrackPos.Y < 13)
+						{
+							directionOfFlare = 1;
+						}
+						else
+						{
+							directionOfFlare = 3;
+						}
 					}
 				}
 				else
 				{
-					if (newTrackPos.Y < 13)
+					if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
 					{
 						directionOfFlare = 1;
 					}
@@ -9463,7 +10537,14 @@ void ATestHud::BuildLevel()
 				switch (directionOfFlare)
 				{
 				case 1:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.Y, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.X -= 1;
 
@@ -9500,7 +10581,14 @@ void ATestHud::BuildLevel()
 					}
 					break;
 				case 3:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.Y - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.X -= 1;
 
@@ -9552,20 +10640,34 @@ void ATestHud::BuildLevel()
 
 			if (canAddFlare)
 			{
-				if (FMath::RandRange(0, 19) > 9)
+				if (numberOfHoles < 11)
 				{
-					if (newTrackPos.Y > 3)
+					if (FMath::RandRange(0, 19) > 9)
 					{
-						directionOfFlare = 3;
+						if (newTrackPos.Y > 3)
+						{
+							directionOfFlare = 3;
+						}
+						else
+						{
+							directionOfFlare = 1;
+						}
 					}
 					else
 					{
-						directionOfFlare = 1;
+						if (newTrackPos.Y < 13)
+						{
+							directionOfFlare = 1;
+						}
+						else
+						{
+							directionOfFlare = 3;
+						}
 					}
 				}
 				else
 				{
-					if (newTrackPos.Y < 13)
+					if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
 					{
 						directionOfFlare = 1;
 					}
@@ -9607,7 +10709,14 @@ void ATestHud::BuildLevel()
 				switch (directionOfFlare)
 				{
 				case 1:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.Y, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.X -= 1;
 
@@ -9644,7 +10753,14 @@ void ATestHud::BuildLevel()
 					}
 					break;
 				case 3:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.Y - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.X -= 1;
 
@@ -9695,20 +10811,34 @@ void ATestHud::BuildLevel()
 
 			if (canAddFlare)
 			{
-				if (FMath::RandRange(0, 19) > 9)
+				if (numberOfHoles < 11)
 				{
-					if (newTrackPos.Y > 3)
+					if (FMath::RandRange(0, 19) > 9)
 					{
-						directionOfFlare = 3;
+						if (newTrackPos.Y > 3)
+						{
+							directionOfFlare = 3;
+						}
+						else
+						{
+							directionOfFlare = 1;
+						}
 					}
 					else
 					{
-						directionOfFlare = 1;
+						if (newTrackPos.Y < 13)
+						{
+							directionOfFlare = 1;
+						}
+						else
+						{
+							directionOfFlare = 3;
+						}
 					}
 				}
 				else
 				{
-					if (newTrackPos.Y < 13)
+					if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
 					{
 						directionOfFlare = 1;
 					}
@@ -9745,7 +10875,14 @@ void ATestHud::BuildLevel()
 				switch (directionOfFlare)
 				{
 				case 1:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.Y, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.X -= 1;
 
@@ -9782,7 +10919,14 @@ void ATestHud::BuildLevel()
 					}
 					break;
 				case 3:
-					extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+					if (numberOfHoles < 11)
+					{
+						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
+					}
+					else
+					{
+						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.Y - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+					}
 
 					newTrackPos.X -= 1;
 
@@ -10582,112 +11726,239 @@ void ATestHud::BuildLevel()
 		switch (a)
 		{
 		case 0:
-			grass_MP_1->OpenSource(grass_IS_1);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				grass_MP_1->OpenSource(grass_IS_1);
+			}
 			break;
 		case 1:
-			holeFromDown_MP->OpenSource(holeFromDown_IS);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				holeFromDown_MP->OpenSource(holeFromDown_IS);
+			}
 			break;
 		case 2:
-			holeFromLeft_MP->OpenSource(holeFromLeft_IS);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				holeFromLeft_MP->OpenSource(holeFromLeft_IS);
+			}
 			break;
 		case 3:
-			holeFromRight_MP->OpenSource(holeFromRight_IS);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				holeFromRight_MP->OpenSource(holeFromRight_IS);
+			}
 			break;
 		case 4:
-			holeFromUp_MP->OpenSource(holeFromUp_IS);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				holeFromUp_MP->OpenSource(holeFromUp_IS);
+			}
 			break;
 		case 5:
 			break;
 		case 6:
 			break;
 		case 11:
-			riverFlowingDown_MP_1->OpenSource(riverFlowingDown_IS_1);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverFlowingDown_MP_1->OpenSource(riverFlowingDown_IS_1);
+			}
 			break;
 		case 12:
-			riverFlowingDown_MP_2->OpenSource(riverFlowingDown_IS_2);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverFlowingDown_MP_2->OpenSource(riverFlowingDown_IS_2);
+			}
 			break;
 		case 13:
-			riverFlowingDown_MP_3->OpenSource(riverFlowingDown_IS_3);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverFlowingDown_MP_3->OpenSource(riverFlowingDown_IS_3);
+			}
 			break;
 		case 14:
-			riverFlowingLeft_MP_1->OpenSource(riverFlowingLeft_IS_1);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverFlowingLeft_MP_1->OpenSource(riverFlowingLeft_IS_1);
+			}
 			break;
 		case 15:
-			riverFlowingLeft_MP_2->OpenSource(riverFlowingLeft_IS_2);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverFlowingLeft_MP_2->OpenSource(riverFlowingLeft_IS_2);
+			}
 			break;
 		case 16:
-			riverFlowingLeft_MP_3->OpenSource(riverFlowingLeft_IS_3);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverFlowingLeft_MP_3->OpenSource(riverFlowingLeft_IS_3);
+			}
 			break;
 		case 17:
-			riverFlowingRight_MP_1->OpenSource(riverFlowingRight_IS_1);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverFlowingRight_MP_1->OpenSource(riverFlowingRight_IS_1);
+			}
 			break;
 		case 18:
-			riverFlowingRight_MP_2->OpenSource(riverFlowingRight_IS_2);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverFlowingRight_MP_2->OpenSource(riverFlowingRight_IS_2);
+			}
 			break;
 		case 19:
-			riverFlowingRight_MP_3->OpenSource(riverFlowingRight_IS_3);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverFlowingRight_MP_3->OpenSource(riverFlowingRight_IS_3);
+			}
 			break;
 		case 20:
-			tree_MP_1->OpenSource(tree_IS_1);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				tree_MP_1->OpenSource(tree_IS_1);
+			}
 			break;
 		case 21:
-			tree_MP_2->OpenSource(tree_IS_2);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				tree_MP_2->OpenSource(tree_IS_2);
+			}
 			break;
 		case 22:
-			tree_MP_3->OpenSource(tree_IS_3);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				tree_MP_3->OpenSource(tree_IS_3);
+			}
 			break;
 		case 23:
-			tree_MP_4->OpenSource(tree_IS_4);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				tree_MP_4->OpenSource(tree_IS_4);
+			}
 			break;
 		case 25:
-			riverTurning_MP_1->OpenSource(riverTurning_IS_1);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverTurning_MP_1->OpenSource(riverTurning_IS_1);
+			}
 			break;
 		case 26:
-			riverTurning_MP_2->OpenSource(riverTurning_IS_2);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverTurning_MP_2->OpenSource(riverTurning_IS_2);
+			}
 			break;
 		case 27:
-			riverTurning_MP_3->OpenSource(riverTurning_IS_3);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverTurning_MP_3->OpenSource(riverTurning_IS_3);
+			}
 			break;
 		case 28:
-			riverTurning_MP_4->OpenSource(riverTurning_IS_4);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				riverTurning_MP_4->OpenSource(riverTurning_IS_4);
+			}
 			break;
 		case 29:
 			break;
 		case 30:
-			grass_MP_1->OpenSource(grass_IS_1);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				grass_MP_1->OpenSource(grass_IS_1);
+			}
 			break;
 		case 31:
-			grass_MP_2->OpenSource(grass_IS_2);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				grass_MP_2->OpenSource(grass_IS_2);
+			}
 			break;
 		case 32:
-			grass_MP_3->OpenSource(grass_IS_3);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				grass_MP_3->OpenSource(grass_IS_3);
+			}
 			break;
 		default:
 			break;
 		}
 	}
 
+	environmentAudio = 0;
+
 	for (int a : pondSpecifierArr)
 	{
 		switch (a)
 		{
 		case 7:
-			pondHorizontal_MP->OpenSource(pondHorizontal_IS);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				pondHorizontal_MP->OpenSource(pondHorizontal_IS);
+			}
 			break;
 		case 8:
-			pondVerticleFlowingLeft_MP->OpenSource(pondVerticleFlowingLeft_IS);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				pondVerticleFlowingLeft_MP->OpenSource(pondVerticleFlowingLeft_IS);
+			}
 			break;
 		case 9:
-			pondVerticleFlowingRight_MP->OpenSource(pondVerticleFlowingRight_IS);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				pondVerticleFlowingRight_MP->OpenSource(pondVerticleFlowingRight_IS);
+			}
 			break;
 		case 10:
-			waterfall_MP->OpenSource(waterfall_IS);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				environmentAudio = 1;
+				waterfall_MP->OpenSource(waterfall_IS);
+			}
 			break;
 		case 24:
-			tree_MP_5->OpenSource(tree_IS_5);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				tree_MP_5->OpenSource(tree_IS_5);
+			}
 			break;
 		case 33:
-			mountain_MP_1->OpenSource(mountain_IS_1);
+			if (activeMediaPlayers[a] == false)
+			{
+				activeMediaPlayers[a] = true;
+				mountain_MP_1->OpenSource(mountain_IS_1);
+			}
 			break;
 		default:
 			break;
@@ -10765,6 +12036,7 @@ void ATestHud::BuildLevel()
 	{
 		gameSlateWidget = SNew(STestWidgetThree)
 			.OwningHUD(this)
+			.standardWorldContextObject(standardWorldContextObject)
 			.landscapeArr(landscapeArr)
 			.trackArr(trackArr)
 			.pondSpecifierArr(pondSpecifierArr)
@@ -10875,7 +12147,13 @@ void ATestHud::BuildLevel()
 			.marble_SMUI_13(marble_SMUI_13)
 			.marble_SMUI_14(marble_SMUI_14)
 			.marble_SMUI_15(marble_SMUI_15)
-			.marble_SMUI_16(marble_SMUI_16);
+			.marble_SMUI_16(marble_SMUI_16)
+			.intersectionDownAudioComponent(intersectionDownAudioComponent)
+			.intersectionUpAudioComponent(intersectionUpAudioComponent)
+			.windAudioComponents(windAudioComponents)
+			.riverAudioComponents(riverAudioComponents)
+			.waterfallAudioComponents(waterfallAudioComponents)
+			.environmentAudio(environmentAudio);
 
 			slateWidgetContainerTwo->SetContent(gameSlateWidget.ToSharedRef());
 
@@ -10958,6 +12236,7 @@ void ATestHud::HouseKeeping()
 	pondPositionArr.Empty();
 	pondSpecifierArr.Empty();
 	largeTreeOrMountainPosArr.Empty();
+	activeMediaPlayers = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 
 	holeAndIntersectionPositions =
 	{
