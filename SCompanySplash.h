@@ -49,7 +49,7 @@ public:
 	FSlateBrush* goodUseDigitalText_SB;
 
 	FVector2D viewportSize;
-	FVector2D adjustedViewportSize;
+	UPROPERTY() FVector2D adjustedViewportSize;
 	float DPIScale;
 
 	TSharedPtr< class SOverlay> splashScreenOverlay;

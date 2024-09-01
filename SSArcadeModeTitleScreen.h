@@ -17,6 +17,8 @@ public:
 
 	SLATE_ARGUMENT(TWeakObjectPtr<class ATestHud>, OwningHUD)
 
+	SLATE_ARGUMENT(APlayerController*, playerOnePlayerController)
+
 	SLATE_ARGUMENT(UObject*, standardWorldContextObject)
 
 	SLATE_ARGUMENT(TArray<UMaterial*>, backgroundMaterials)
@@ -46,6 +48,12 @@ public:
 	SLATE_ARGUMENT(TArray <UAudioComponent*>, purpleLullabyAudioComponents)
 
 	SLATE_ARGUMENT(int, environmentAudio)
+
+	SLATE_ARGUMENT(int, masterCoefficient)
+
+	SLATE_ARGUMENT(int, atmosphereCoefficient)
+
+	SLATE_ARGUMENT(int, sfxCoefficient)
 
 	SLATE_END_ARGS()
 
@@ -136,149 +144,152 @@ public:
 	void PlayUnHovered_15();
 	void PlayUnHovered_16();
 
-	FMargin CalculateTitlePosition(FVector2D funcViewportSize);
-	FMargin CalculateMenuTextPos(int textIndex, int numberOfLetters);
-	FMargin CalculateHighscorePos(int textIndex, int numberOfLetters);
-	FMargin CalculateLastGamePos(int textIndex, int numberOfLetters);
-	float CalculateGrownMarginX(FMargin inMargin);
-	float CalculateGrownMarginY(FMargin inMargin);
-	FMargin GrowMargin(FMargin inMargin);
-	FMargin GrownMargin(FMargin inMargin);
-	FMargin ShrinkMargin(FMargin inMargin, int marginIndex);
 	void PlayChordToActiveNote();
+	void ReturnToMenu();
 
-	TWeakObjectPtr<class ATestHud> OwningHUD;
-	UObject* standardWorldContextObject;
-	USaveGameOne* currentSave;
+	UPROPERTY() FMargin CalculateTitlePosition(FVector2D funcViewportSize);
+	UPROPERTY() FMargin CalculateMenuTextPos(int textIndex, int numberOfLetters);
+	UPROPERTY() FMargin CalculateHighscorePos(int textIndex, int numberOfLetters);
+	UPROPERTY() FMargin CalculateLastGamePos(int textIndex, int numberOfLetters);
+	UPROPERTY() float CalculateGrownMarginX(FMargin inMargin);
+	UPROPERTY() float CalculateGrownMarginY(FMargin inMargin);
+	UPROPERTY() FMargin GrowMargin(FMargin inMargin);
+	UPROPERTY() FMargin GrownMargin(FMargin inMargin);
+	UPROPERTY() FMargin ShrinkMargin(FMargin inMargin, int marginIndex);
 
-	TArray<UMaterial*> backgroundMaterials;
-	TArray<FSlateBrush*> backgroundStuff;
-	bool backgroundIsLargeTile;
+	UPROPERTY() TWeakObjectPtr<class ATestHud> OwningHUD;
+	UPROPERTY() APlayerController* playerOnePlayerController;
+	UPROPERTY() UObject* standardWorldContextObject;
+	UPROPERTY() USaveGameOne* currentSave;
 
-	UMaterial* gameFrameColor_SMUI;
+	UPROPERTY() TArray<UMaterial*> backgroundMaterials;
+	UPROPERTY() TArray<FSlateBrush*> backgroundStuff;
+	UPROPERTY() bool backgroundIsLargeTile;
 
-	FSlateBrush* gameFrameColor_SB;
-	FSlateBrush* background_SB_1;
-	FSlateBrush* background_SB_2;
-	FSlateBrush* background_SB_3;
-	FSlateBrush* background_SB_4;
-	FSlateBrush* background_SB_5;
-	FSlateBrush* background_SB_6;
-	FSlateBrush* background_SB_7;
-	FSlateBrush* background_SB_8;
-	FSlateBrush* background_SB_9;
+	UPROPERTY() UMaterial* gameFrameColor_SMUI;
 
-	USoundBase* hoverGrow;
-	USoundBase* hoverShrink;
+	UPROPERTY() FSlateBrush* gameFrameColor_SB;
+	UPROPERTY() FSlateBrush* background_SB_1;
+	UPROPERTY() FSlateBrush* background_SB_2;
+	UPROPERTY() FSlateBrush* background_SB_3;
+	UPROPERTY() FSlateBrush* background_SB_4;
+	UPROPERTY() FSlateBrush* background_SB_5;
+	UPROPERTY() FSlateBrush* background_SB_6;
+	UPROPERTY() FSlateBrush* background_SB_7;
+	UPROPERTY() FSlateBrush* background_SB_8;
+	UPROPERTY() FSlateBrush* background_SB_9;
 
-	TSharedPtr< class SOverlay> backgroundOverlay;
-	TSharedPtr< class SOverlay> frameColorOverlay;
-	TSharedPtr< class SOverlay> masterOverlay;
-	TSharedPtr< class SOverlay> levelSelectionOverlay;
-	TSharedPtr< class SOverlay> mainMenuOverlay;
-	TSharedPtr< class SOverlay> resultsOverlay;
+	UPROPERTY() USoundBase* hoverGrow;
+	UPROPERTY() USoundBase* hoverShrink;
 
-	FVector2D viewportSize;
-	FVector2D adjustedViewportSize;
-	float DPIScale;
+	UPROPERTY() TSharedPtr< class SOverlay> backgroundOverlay;
+	UPROPERTY() TSharedPtr< class SOverlay> frameColorOverlay;
+	UPROPERTY() TSharedPtr< class SOverlay> masterOverlay;
+	UPROPERTY() TSharedPtr< class SOverlay> levelSelectionOverlay;
+	UPROPERTY() TSharedPtr< class SOverlay> mainMenuOverlay;
+	UPROPERTY() TSharedPtr< class SOverlay> resultsOverlay;
 
-	FSlateFontInfo titleFont;
-	FSlateFontInfo subTitleFont;
-	FSlateFontInfo menuFont;
-	FSlateFontInfo levelSelectorFont;
-	FSlateFontInfo scoreFont;
-	FText titleText;
+	UPROPERTY() FVector2D viewportSize;
+	UPROPERTY() FVector2D adjustedViewportSize;
+	UPROPERTY() float DPIScale;
 
-	TSharedPtr<class SBox> playBox;
-	TSharedPtr<class SBox> resultsBox;
-	TSharedPtr<class SBox> optionsBox;
-	TSharedPtr<class SBox> quitBox;
-	TSharedPtr<class SBox> firstFloorBackBox;
+	UPROPERTY() FSlateFontInfo titleFont;
+	UPROPERTY() FSlateFontInfo subTitleFont;
+	UPROPERTY() FSlateFontInfo menuFont;
+	UPROPERTY() FSlateFontInfo levelSelectorFont;
+	UPROPERTY() FSlateFontInfo scoreFont;
+	UPROPERTY() FText titleText;
 
-	TSharedPtr<class STextBlock> playText;
-	TSharedPtr<class STextBlock> resultsText;
-	TSharedPtr<class STextBlock> optionsText;
-	TSharedPtr<class STextBlock> quitText;
-	TSharedPtr<class STextBlock> backText;
+	UPROPERTY() TSharedPtr<class SBox> playBox;
+	UPROPERTY() TSharedPtr<class SBox> resultsBox;
+	UPROPERTY() TSharedPtr<class SBox> optionsBox;
+	UPROPERTY() TSharedPtr<class SBox> quitBox;
+	UPROPERTY() TSharedPtr<class SBox> firstFloorBackBox;
 
-	FButtonStyle* transparentButtonStyle;
+	UPROPERTY() TSharedPtr<class STextBlock> playText;
+	UPROPERTY() TSharedPtr<class STextBlock> resultsText;
+	UPROPERTY() TSharedPtr<class STextBlock> optionsText;
+	UPROPERTY() TSharedPtr<class STextBlock> quitText;
+	UPROPERTY() TSharedPtr<class STextBlock> backText;
 
-	TArray< TSharedPtr< class SBox> > levelSelectionBoxes;
-	TArray< TSharedPtr< class STextBlock> > levelSelectionTexts;
-	TArray <bool> enabledLevels;
+	UPROPERTY() FButtonStyle* transparentButtonStyle;
 
-	FMargin playMargin;
-	FMargin resultsMargin;
-	FMargin optionsMargin;
-	FMargin quitMargin;
-	FMargin backMargin;
-	TArray<FMargin> levelSelectionMargins;
+	UPROPERTY() TArray< TSharedPtr< class SBox> > levelSelectionBoxes;
+	UPROPERTY() TArray< TSharedPtr< class STextBlock> > levelSelectionTexts;
+	UPROPERTY() TArray <bool> enabledLevels;
 
-	TArray<FMargin> completedMargins;
-	TArray<FSlateFontInfo> completedFonts;
-	TArray<float> completedOffsets;
+	UPROPERTY() FMargin playMargin;
+	UPROPERTY() FMargin resultsMargin;
+	UPROPERTY() FMargin optionsMargin;
+	UPROPERTY() FMargin quitMargin;
+	UPROPERTY() FMargin backMargin;
+	UPROPERTY() TArray<FMargin> levelSelectionMargins;
 
-	float grownOpacity;
-	float multiplierOfOffset;
-	float multiplierOfPerimeterExpansion;
+	UPROPERTY() TArray<FMargin> completedMargins;
+	UPROPERTY() TArray<FSlateFontInfo> completedFonts;
+	UPROPERTY() TArray<float> completedOffsets;
 
-	bool clicked;
+	UPROPERTY() float grownOpacity;
+	UPROPERTY() float multiplierOfOffset;
+	UPROPERTY() float multiplierOfPerimeterExpansion;
 
-	TArray<TSharedPtr<class SBox>> shrinkingBoxes;
-	TArray<TSharedPtr<class STextBlock>> shrinkingTextBlocks;
-	TArray<FSlateFontInfo> shrinkingTexts;
-	TArray<float> shrinkingTimes;
-	TArray<FMargin> shrinkingMargins;
-	TArray<FMargin> shrinkingMarginsStartingPoints;
-	TArray<float> shrinkingAdjustedMarginSizesX;
-	TArray<float> shrinkingAdjustedMarginSizesY;
-	TArray<float> shrinkingFontSizes;
-	TArray<float> shrinkingFontSizesStartingPoints;
-	TArray<float> shrinkingAdjustedFontSizes;
-	TArray<TSharedPtr<class SBox>> grownBox;
-	TArray<float> shrinkTargets;
-	TArray<TSharedPtr<class SBox>> growingBox;
-	FSlateFontInfo growingFont;
-	TSharedPtr<class STextBlock> growingTextBlock;
-	FMargin growingMargin;
-	float growingFontSize;
-	float startingFontSize;
-	FMargin startingMargin;
-	float adjustedSizeX;
-	float adjustedSizeY;
-	float adjustedStartingFontSize;
-	FMargin adjustedStartingFMargin;
-	float growTime;
-	float extentOfGrowth;
-	int indexOfShrinkingSubject;
-	float standardShadowOffset;
-	float startingShadowOffset;
-	float growingOffset;
-	float adjustedGrowingOffset;
-	TArray <float> shrinkingOffset;
-	TArray <float> startingShrinkingOffset;
-	TArray <float> adjustedShrinkingOffset;
-	float standardOpacity;
-	float startingOpacity;
-	FLinearColor growingLinearColor;
-	float growingOpacity;
-	float adjustedGrowingOpacity;
-	TArray<float> startingShrinkingOpacities;
-	TArray<FLinearColor> shrinkingLinearColors;
-	TArray<float> shrinkingOpacities;
-	TArray<float> adjustedShrinkingOpacities;
+	UPROPERTY() bool clicked;
 
-	bool displayResults;
+	UPROPERTY() TArray<TSharedPtr<class SBox>> shrinkingBoxes;
+	UPROPERTY() TArray<TSharedPtr<class STextBlock>> shrinkingTextBlocks;
+	UPROPERTY() TArray<FSlateFontInfo> shrinkingTexts;
+	UPROPERTY() TArray<float> shrinkingTimes;
+	UPROPERTY() TArray<FMargin> shrinkingMargins;
+	UPROPERTY() TArray<FMargin> shrinkingMarginsStartingPoints;
+	UPROPERTY() TArray<float> shrinkingAdjustedMarginSizesX;
+	UPROPERTY() TArray<float> shrinkingAdjustedMarginSizesY;
+	UPROPERTY() TArray<float> shrinkingFontSizes;
+	UPROPERTY() TArray<float> shrinkingFontSizesStartingPoints;
+	UPROPERTY() TArray<float> shrinkingAdjustedFontSizes;
+	UPROPERTY() TArray<TSharedPtr<class SBox>> grownBox;
+	UPROPERTY() TArray<float> shrinkTargets;
+	UPROPERTY() TArray<TSharedPtr<class SBox>> growingBox;
+	UPROPERTY() FSlateFontInfo growingFont;
+	UPROPERTY() TSharedPtr<class STextBlock> growingTextBlock;
+	UPROPERTY() FMargin growingMargin;
+	UPROPERTY() float growingFontSize;
+	UPROPERTY() float startingFontSize;
+	UPROPERTY() FMargin startingMargin;
+	UPROPERTY() float adjustedSizeX;
+	UPROPERTY() float adjustedSizeY;
+	UPROPERTY() float adjustedStartingFontSize;
+	UPROPERTY() FMargin adjustedStartingFMargin;
+	UPROPERTY() float growTime;
+	UPROPERTY() float extentOfGrowth;
+	UPROPERTY() int indexOfShrinkingSubject;
+	UPROPERTY() float standardShadowOffset;
+	UPROPERTY() float startingShadowOffset;
+	UPROPERTY() float growingOffset;
+	UPROPERTY() float adjustedGrowingOffset;
+	UPROPERTY() TArray <float> shrinkingOffset;
+	UPROPERTY() TArray <float> startingShrinkingOffset;
+	UPROPERTY() TArray <float> adjustedShrinkingOffset;
+	UPROPERTY() float standardOpacity;
+	UPROPERTY() float startingOpacity;
+	UPROPERTY() FLinearColor growingLinearColor;
+	UPROPERTY() float growingOpacity;
+	UPROPERTY() float adjustedGrowingOpacity;
+	UPROPERTY() TArray<float> startingShrinkingOpacities;
+	UPROPERTY() TArray<FLinearColor> shrinkingLinearColors;
+	UPROPERTY() TArray<float> shrinkingOpacities;
+	UPROPERTY() TArray<float> adjustedShrinkingOpacities;
 
-	TArray<int> childrensCornerNotes;
-	int childrensCornerIndex;
+	UPROPERTY() bool displayResults;
 
-	int environmentAudio;
-	float audioTimer;
-	int audioCycleTracker;
+	UPROPERTY() TArray<int> childrensCornerNotes;
+	UPROPERTY() int childrensCornerIndex;
 
-	UAudioComponent* hoverGrowAudioComponent;
-	UAudioComponent* hoverShrinkAudioComponent;
+	UPROPERTY() int environmentAudio;
+	UPROPERTY() float audioTimer;
+	UPROPERTY() int audioCycleTracker;
+
+	UPROPERTY() UAudioComponent* hoverGrowAudioComponent;
+	UPROPERTY() UAudioComponent* hoverShrinkAudioComponent;
 
 	UPROPERTY() TArray<UAudioComponent*> hoverGrowAudioComponents;
 	UPROPERTY() TArray<UAudioComponent*> hoverShrinkAudioComponents;
@@ -288,7 +299,11 @@ public:
 	UPROPERTY() TArray<UAudioComponent*> waterfallAudioComponents;
 	UPROPERTY() TArray<UAudioComponent*> purpleLullabyAudioComponents;
 
-	int activeNoteIndex;
+	UPROPERTY() int activeNoteIndex;
 	TArray< TArray <int> > correspondingChordsToNotes = { { 0 }, { 1 }, { 0, 3}, { 1 }, { 0, 2, 3}, { 1 }, { 2, 3}, { 3 } };
 	TArray< TArray <int> > chordIndexes = { { 0, 2, 4 }, { 1, 3, 5 }, { 2, 4, 6 }, { 4, 6, 7 } };
+
+	UPROPERTY() int masterCoefficient;
+	UPROPERTY() int atmosphereCoefficient;
+	UPROPERTY() int sfxCoefficient;
 };

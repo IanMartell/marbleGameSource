@@ -18,13 +18,13 @@ FMargin SCompanySplash::CalculateSplashMarginTwo()
 {
 	float fOne = (adjustedViewportSize.X - adjustedViewportSize.Y) / 2;
 
-	return FMargin(fOne, (double)((double)adjustedViewportSize.Y * 0.0034), fOne, (double)((double)((double)adjustedViewportSize.Y * 0.0034) * -1));
+	return FMargin(fOne, (adjustedViewportSize.Y * 0.0034), fOne, ((adjustedViewportSize.Y * 0.0034) * -1));
 }
 
 FMargin SCompanySplash::CalculateStartingTextMargin()
 {
-	float fOne = (float)((float)(adjustedViewportSize.X - adjustedViewportSize.Y) / (float)2) + (float)((float)adjustedViewportSize.Y * (float)0.2125);
-	float fTwo = (float)((float)((float)adjustedViewportSize.Y * 0.075) * (float)-1.0);
+	float fOne = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + (adjustedViewportSize.Y * 0.2125);
+	float fTwo = ((adjustedViewportSize.Y * 0.075) * -1.0);
 
 	return FMargin(fOne, adjustedViewportSize.Y, fOne,  fTwo);
 }
@@ -56,20 +56,12 @@ void SCompanySplash::Construct(const FArguments& InArgs)
 	goodUseDigitalText_SB = new FSlateBrush();
 	goodUseDigitalText_SB->SetResourceObject(goodUseDigitalText_SMUI);
 
-	GEngine->GameViewport->GetViewportSize(viewportSize);
-	int32 X = FGenericPlatformMath::FloorToInt(viewportSize.X);
-	int32 Y = FGenericPlatformMath::FloorToInt(viewportSize.Y);
-	DPIScale = GetDefault<UUserInterfaceSettings>(UUserInterfaceSettings::StaticClass())->GetDPIScaleBasedOnSize(FIntPoint(X, Y));
-	adjustedViewportSize = (1 / DPIScale) * viewportSize;
-
 	masterButtonStyle = new FButtonStyle();
 	masterButtonStyle->SetNormalPadding(FMargin());
 
 	timer = 0;
 	trackerOne = 0;
 	trackerTwo = 0;
-	startingTextMargin = CalculateStartingTextMargin();
-	adjustedMarginFloat = (float)((float)adjustedViewportSize.Y * (float)0.04375);
 
 	splashScreenOverlay = SNew(SOverlay);
 
@@ -91,11 +83,7 @@ void SCompanySplash::Construct(const FArguments& InArgs)
 	textBox = SNew(SBox)
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
-		.Padding(startingTextMargin)
-		[
-			SNew(SImage)
-			.Image(goodUseDigitalText_SB)
-		];
+		.Padding(FMargin());
 
 	splashScreenOverlay->AddSlot()
 		.HAlign(HAlign_Fill)
@@ -122,7 +110,6 @@ void SCompanySplash::Construct(const FArguments& InArgs)
 			.ButtonColorAndOpacity(FLinearColor::Transparent)
 			.IsEnabled(true)
 		];
-
 
 	ChildSlot
 	[
@@ -152,18 +139,33 @@ void SCompanySplash::Tick(const FGeometry& AllottedGeometry, const double InCurr
 		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "tracker before: " + FString::FromInt(trackerOne));
 		trackerOne = intOne;
 
-		if (trackerOne > 12)
-		{
-			shiftingMargin = ((double)adjustedMarginFloat * (double)sin((double)31.4159 * (double)((double)((double)timer - (double)0.7329) - (double)0.05))) + (double)adjustedMarginFloat;
-			textBox->SetPadding(FMargin((double)startingTextMargin.Left, (double)((double)startingTextMargin.Top - (double)shiftingMargin), (double)startingTextMargin.Right, (double)((double)startingTextMargin.Bottom + (double)shiftingMargin)));
-		}
-
 		if (trackerOne == 1)
 		{
+			GEngine->GameViewport->GetViewportSize(viewportSize);
+			int32 X = FGenericPlatformMath::FloorToInt(viewportSize.X);
+			int32 Y = FGenericPlatformMath::FloorToInt(viewportSize.Y);
+			DPIScale = GetDefault<UUserInterfaceSettings>(UUserInterfaceSettings::StaticClass())->GetDPIScaleBasedOnSize(FIntPoint(X, Y));
+			adjustedViewportSize = (1 / DPIScale) * viewportSize;
+
+			startingTextMargin = CalculateStartingTextMargin();
+			adjustedMarginFloat = (float)((float)adjustedViewportSize.Y * (float)0.04375);
+
 			imageBoxOne->SetPadding(CalculateSplashMarginOne());
 			imageBoxOne->SetContent(imageOne.ToSharedRef());
 		}
 		imageOne->SetImage(splashGrassSBArr[trackerOne - 1]);
+
+		if (trackerOne > 12)
+		{
+			if (trackerOne == 13)
+			{
+				textBox->SetContent(SNew(SImage).Image(goodUseDigitalText_SB));
+			}
+
+			shiftingMargin = ((double)adjustedMarginFloat * (double)sin((double)31.4159 * (double)((double)((double)timer - (double)0.7329) - (double)0.05))) + (double)adjustedMarginFloat;
+			textBox->SetPadding(FMargin((double)startingTextMargin.Left, (double)((double)startingTextMargin.Top - (double)shiftingMargin), (double)startingTextMargin.Right, (double)((double)startingTextMargin.Bottom + (double)shiftingMargin)));
+		}
+
 		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "tracker after: " + FString::FromInt(trackerOne));
 		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "timer: " + FString::SanitizeFloat(timer));
 	}

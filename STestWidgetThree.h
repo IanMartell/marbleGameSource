@@ -264,7 +264,17 @@ public:
 
 	SLATE_ARGUMENT(TArray <UAudioComponent*>, waterfallAudioComponents)
 
+	SLATE_ARGUMENT(UAudioComponent*, songOneAudioComponent)
+
 	SLATE_ARGUMENT(int, environmentAudio)
+
+	SLATE_ARGUMENT(int, masterCoefficient)
+
+	SLATE_ARGUMENT(int, musicCoefficient)
+
+	SLATE_ARGUMENT(int, atmosphereCoefficient)
+
+	SLATE_ARGUMENT(int, sfxCoefficient)
 
 	//SLATE_ARGUMENT(FVector2D, viewportSize)
 
@@ -330,245 +340,245 @@ public:
 
 	// constructor variables
 
-	TWeakObjectPtr<class ATestHud> OwningHUD;
-	UObject* standardWorldContextObject;
+	UPROPERTY() TWeakObjectPtr<class ATestHud> OwningHUD;
+	UPROPERTY() UObject* standardWorldContextObject;
 
-	TArray<int> landscapeArr;
-	TArray<int> trackArr;
-	TArray<int> pondSpecifierArr;
-	TArray<FVector2D> pondPositionArr;
-	TArray<bool> tileIsIntersection;
-	TArray<FVector2D> holePositions;
+	UPROPERTY() TArray<int> landscapeArr;
+	UPROPERTY() TArray<int> trackArr;
+	UPROPERTY() TArray<int> pondSpecifierArr;
+	UPROPERTY() TArray<FVector2D> pondPositionArr;
+	UPROPERTY() TArray<bool> tileIsIntersection;
+	UPROPERTY() TArray<FVector2D> holePositions;
 
-	APlayerController* playerOnePlayerController;
+	UPROPERTY() APlayerController* playerOnePlayerController;
 
-	UMaterial* grass_VMUI_1;
-	UMaterial* grass_VMUI_2;
-	UMaterial* grass_VMUI_3;
-	UMaterial* pondHorizontal_VMUI;
-	UMaterial* pondVerticleFlowingLeft_VMUI;
-	UMaterial* pondVerticleFlowingRight_VMUI;
-	UMaterial* riverFlowingDown_VMUI_1;
-	UMaterial* riverFlowingDown_VMUI_2;
-	UMaterial* riverFlowingDown_VMUI_3;
-	UMaterial* riverFlowingLeft_VMUI_1;
-	UMaterial* riverFlowingLeft_VMUI_2;
-	UMaterial* riverFlowingLeft_VMUI_3;
-	UMaterial* riverFlowingRight_VMUI_1;
-	UMaterial* riverFlowingRight_VMUI_2;
-	UMaterial* riverFlowingRight_VMUI_3;
-	UMaterial* tree_VMUI_1;
-	UMaterial* tree_VMUI_2;
-	UMaterial* tree_VMUI_3;
-	UMaterial* tree_VMUI_4;
-	UMaterial* tree_VMUI_5;
-	UMaterial* waterfall_VMUI;
-	UMaterial* riverTurning_VMUI_1;
-	UMaterial* riverTurning_VMUI_2;
-	UMaterial* riverTurning_VMUI_3;
-	UMaterial* riverTurning_VMUI_4;
+	UPROPERTY() UMaterial* grass_VMUI_1;
+	UPROPERTY() UMaterial* grass_VMUI_2;
+	UPROPERTY() UMaterial* grass_VMUI_3;
+	UPROPERTY() UMaterial* pondHorizontal_VMUI;
+	UPROPERTY() UMaterial* pondVerticleFlowingLeft_VMUI;
+	UPROPERTY() UMaterial* pondVerticleFlowingRight_VMUI;
+	UPROPERTY() UMaterial* riverFlowingDown_VMUI_1;
+	UPROPERTY() UMaterial* riverFlowingDown_VMUI_2;
+	UPROPERTY() UMaterial* riverFlowingDown_VMUI_3;
+	UPROPERTY() UMaterial* riverFlowingLeft_VMUI_1;
+	UPROPERTY() UMaterial* riverFlowingLeft_VMUI_2;
+	UPROPERTY() UMaterial* riverFlowingLeft_VMUI_3;
+	UPROPERTY() UMaterial* riverFlowingRight_VMUI_1;
+	UPROPERTY() UMaterial* riverFlowingRight_VMUI_2;
+	UPROPERTY() UMaterial* riverFlowingRight_VMUI_3;
+	UPROPERTY() UMaterial* tree_VMUI_1;
+	UPROPERTY() UMaterial* tree_VMUI_2;
+	UPROPERTY() UMaterial* tree_VMUI_3;
+	UPROPERTY() UMaterial* tree_VMUI_4;
+	UPROPERTY() UMaterial* tree_VMUI_5;
+	UPROPERTY() UMaterial* waterfall_VMUI;
+	UPROPERTY() UMaterial* riverTurning_VMUI_1;
+	UPROPERTY() UMaterial* riverTurning_VMUI_2;
+	UPROPERTY() UMaterial* riverTurning_VMUI_3;
+	UPROPERTY() UMaterial* riverTurning_VMUI_4;
 
-	UMaterial* mountain_VMUI_1;
+	UPROPERTY() UMaterial* mountain_VMUI_1;
 
-	UMaterial* holeFromDown_VMUI;
-	UMaterial* holeFromLeft_VMUI;
-	UMaterial* holeFromRight_VMUI;
-	UMaterial* holeFromUp_VMUI;
+	UPROPERTY() UMaterial* holeFromDown_VMUI;
+	UPROPERTY() UMaterial* holeFromLeft_VMUI;
+	UPROPERTY() UMaterial* holeFromRight_VMUI;
+	UPROPERTY() UMaterial* holeFromUp_VMUI;
 
-	UMaterial* flag_VMUI_1;
-	UMaterial* flag_VMUI_2;
-	UMaterial* flag_VMUI_3;
-	UMaterial* flag_VMUI_4;
-	UMaterial* flag_VMUI_5;
-	UMaterial* flag_VMUI_6;
-	UMaterial* flag_VMUI_7;
-	UMaterial* flag_VMUI_8;
-	UMaterial* flag_VMUI_9;
-	UMaterial* flag_VMUI_10;
-	UMaterial* flag_VMUI_11;
-	UMaterial* flag_VMUI_12;
-	UMaterial* flag_VMUI_13;
-	UMaterial* flag_VMUI_14;
-	UMaterial* flag_VMUI_15;
-	UMaterial* flag_VMUI_16;
+	UPROPERTY() UMaterial* flag_VMUI_1;
+	UPROPERTY() UMaterial* flag_VMUI_2;
+	UPROPERTY() UMaterial* flag_VMUI_3;
+	UPROPERTY() UMaterial* flag_VMUI_4;
+	UPROPERTY() UMaterial* flag_VMUI_5;
+	UPROPERTY() UMaterial* flag_VMUI_6;
+	UPROPERTY() UMaterial* flag_VMUI_7;
+	UPROPERTY() UMaterial* flag_VMUI_8;
+	UPROPERTY() UMaterial* flag_VMUI_9;
+	UPROPERTY() UMaterial* flag_VMUI_10;
+	UPROPERTY() UMaterial* flag_VMUI_11;
+	UPROPERTY() UMaterial* flag_VMUI_12;
+	UPROPERTY() UMaterial* flag_VMUI_13;
+	UPROPERTY() UMaterial* flag_VMUI_14;
+	UPROPERTY() UMaterial* flag_VMUI_15;
+	UPROPERTY() UMaterial* flag_VMUI_16;
 
-	UMaterial* buttonFromDownTurningRightZero_SMUI;
-	UMaterial* buttonFromDownTurningRightOne_SMUI;
-	UMaterial* buttonFromDownTurningRightTwo_SMUI;
-	UMaterial* buttonFromDownTurningRightThree_SMUI;
-	UMaterial* buttonFromDownTurningLeftZero_SMUI;
-	UMaterial* buttonFromDownTurningLeftOne_SMUI;
-	UMaterial* buttonFromDownTurningLeftTwo_SMUI;
-	UMaterial* buttonFromDownTurningLeftThree_SMUI;
-	UMaterial* buttonFromLeftTurningRightZero_SMUI;
-	UMaterial* buttonFromLeftTurningRightOne_SMUI;
-	UMaterial* buttonFromLeftTurningRightTwo_SMUI;
-	UMaterial* buttonFromLeftTurningRightThree_SMUI;
-	UMaterial* buttonFromLeftTurningLeftZero_SMUI;
-	UMaterial* buttonFromLeftTurningLeftOne_SMUI;
-	UMaterial* buttonFromLeftTurningLeftTwo_SMUI;
-	UMaterial* buttonFromLeftTurningLeftThree_SMUI;
-	UMaterial* buttonFromRightTurningRightZero_SMUI;
-	UMaterial* buttonFromRightTurningRightOne_SMUI;
-	UMaterial* buttonFromRightTurningRightTwo_SMUI;
-	UMaterial* buttonFromRightTurningRightThree_SMUI;
-	UMaterial* buttonFromRightTurningLeftZero_SMUI;
-	UMaterial* buttonFromRightTurningLeftOne_SMUI;
-	UMaterial* buttonFromRightTurningLeftTwo_SMUI;
-	UMaterial* buttonFromRightTurningLeftThree_SMUI;
-	UMaterial* buttonFromUpTurningRightZero_SMUI;
-	UMaterial* buttonFromUpTurningRightOne_SMUI;
-	UMaterial* buttonFromUpTurningRightTwo_SMUI;
-	UMaterial* buttonFromUpTurningRightThree_SMUI;
-	UMaterial* buttonFromUpTurningLeftZero_SMUI;
-	UMaterial* buttonFromUpTurningLeftOne_SMUI;
-	UMaterial* buttonFromUpTurningLeftTwo_SMUI;
-	UMaterial* buttonFromUpTurningLeftThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningRightZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningRightOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningRightTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningRightThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningLeftZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningLeftOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningLeftTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningLeftThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningRightZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningRightOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningRightTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningRightThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningLeftZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningLeftOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningLeftTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningLeftThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningRightZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningRightOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningRightTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningRightThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningLeftZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningLeftOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningLeftTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningLeftThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningRightZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningRightOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningRightTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningRightThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningLeftZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningLeftOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningLeftTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningLeftThree_SMUI;
 	
-	UMaterial* verticleRail_SMUI;
-	UMaterial* horizontalRail_SMUI;
+	UPROPERTY() UMaterial* verticleRail_SMUI;
+	UPROPERTY() UMaterial* horizontalRail_SMUI;
 
-	UMaterial* railTurningOne_SMUI;
-	UMaterial* railTurningTwo_SMUI;
-	UMaterial* railTurningThree_SMUI;
-	UMaterial* railTurningFour_SMUI;
+	UPROPERTY() UMaterial* railTurningOne_SMUI;
+	UPROPERTY() UMaterial* railTurningTwo_SMUI;
+	UPROPERTY() UMaterial* railTurningThree_SMUI;
+	UPROPERTY() UMaterial* railTurningFour_SMUI;
 
-	UMaterial* marble_SMUI_1;
-	UMaterial* marble_SMUI_2;
-	UMaterial* marble_SMUI_3;
-	UMaterial* marble_SMUI_4;
-	UMaterial* marble_SMUI_5;
-	UMaterial* marble_SMUI_6;
-	UMaterial* marble_SMUI_7;
-	UMaterial* marble_SMUI_8;
-	UMaterial* marble_SMUI_9;
-	UMaterial* marble_SMUI_10;
-	UMaterial* marble_SMUI_11;
-	UMaterial* marble_SMUI_12;
-	UMaterial* marble_SMUI_13;
-	UMaterial* marble_SMUI_14;
-	UMaterial* marble_SMUI_15;
-	UMaterial* marble_SMUI_16;
+	UPROPERTY() UMaterial* marble_SMUI_1;
+	UPROPERTY() UMaterial* marble_SMUI_2;
+	UPROPERTY() UMaterial* marble_SMUI_3;
+	UPROPERTY() UMaterial* marble_SMUI_4;
+	UPROPERTY() UMaterial* marble_SMUI_5;
+	UPROPERTY() UMaterial* marble_SMUI_6;
+	UPROPERTY() UMaterial* marble_SMUI_7;
+	UPROPERTY() UMaterial* marble_SMUI_8;
+	UPROPERTY() UMaterial* marble_SMUI_9;
+	UPROPERTY() UMaterial* marble_SMUI_10;
+	UPROPERTY() UMaterial* marble_SMUI_11;
+	UPROPERTY() UMaterial* marble_SMUI_12;
+	UPROPERTY() UMaterial* marble_SMUI_13;
+	UPROPERTY() UMaterial* marble_SMUI_14;
+	UPROPERTY() UMaterial* marble_SMUI_15;
+	UPROPERTY() UMaterial* marble_SMUI_16;
 
-	UMaterial* gameFrameColor_SMUI;
+	UPROPERTY() UMaterial* gameFrameColor_SMUI;
 
-	UMaterial* emptyImg_SMUI;
+	UPROPERTY() UMaterial* emptyImg_SMUI;
 
 	//variables and data structures associated with constructor vars
-	UMaterial* placeholderTrash;
+	UPROPERTY() UMaterial* placeholderTrash;
 
 	//slate brushes
-	FSlateBrush* grass_SB_1;
-	FSlateBrush* grass_SB_2;
-	FSlateBrush* grass_SB_3;
-	FSlateBrush* pondHorizontal_SB;
-	FSlateBrush* pondVerticleFlowingLeft_SB;
-	FSlateBrush* pondVerticleFlowingRight_SB;
-	FSlateBrush* riverFlowingDown_SB_1;
-	FSlateBrush* riverFlowingDown_SB_2;
-	FSlateBrush* riverFlowingDown_SB_3;
-	FSlateBrush* riverFlowingLeft_SB_1;
-	FSlateBrush* riverFlowingLeft_SB_2;
-	FSlateBrush* riverFlowingLeft_SB_3;
-	FSlateBrush* riverFlowingRight_SB_1;
-	FSlateBrush* riverFlowingRight_SB_2;
-	FSlateBrush* riverFlowingRight_SB_3;
-	FSlateBrush* tree_SB_1;
-	FSlateBrush* tree_SB_2;
-	FSlateBrush* tree_SB_3;
-	FSlateBrush* tree_SB_4;
-	FSlateBrush* tree_SB_5;
-	FSlateBrush* waterfall_SB;
-	FSlateBrush* riverTurning_SB_1;
-	FSlateBrush* riverTurning_SB_2;
-	FSlateBrush* riverTurning_SB_3;
-	FSlateBrush* riverTurning_SB_4;
+	UPROPERTY() FSlateBrush* grass_SB_1;
+	UPROPERTY() FSlateBrush* grass_SB_2;
+	UPROPERTY() FSlateBrush* grass_SB_3;
+	UPROPERTY() FSlateBrush* pondHorizontal_SB;
+	UPROPERTY() FSlateBrush* pondVerticleFlowingLeft_SB;
+	UPROPERTY() FSlateBrush* pondVerticleFlowingRight_SB;
+	UPROPERTY() FSlateBrush* riverFlowingDown_SB_1;
+	UPROPERTY() FSlateBrush* riverFlowingDown_SB_2;
+	UPROPERTY() FSlateBrush* riverFlowingDown_SB_3;
+	UPROPERTY() FSlateBrush* riverFlowingLeft_SB_1;
+	UPROPERTY() FSlateBrush* riverFlowingLeft_SB_2;
+	UPROPERTY() FSlateBrush* riverFlowingLeft_SB_3;
+	UPROPERTY() FSlateBrush* riverFlowingRight_SB_1;
+	UPROPERTY() FSlateBrush* riverFlowingRight_SB_2;
+	UPROPERTY() FSlateBrush* riverFlowingRight_SB_3;
+	UPROPERTY() FSlateBrush* tree_SB_1;
+	UPROPERTY() FSlateBrush* tree_SB_2;
+	UPROPERTY() FSlateBrush* tree_SB_3;
+	UPROPERTY() FSlateBrush* tree_SB_4;
+	UPROPERTY() FSlateBrush* tree_SB_5;
+	UPROPERTY() FSlateBrush* waterfall_SB;
+	UPROPERTY() FSlateBrush* riverTurning_SB_1;
+	UPROPERTY() FSlateBrush* riverTurning_SB_2;
+	UPROPERTY() FSlateBrush* riverTurning_SB_3;
+	UPROPERTY() FSlateBrush* riverTurning_SB_4;
 
-	FSlateBrush* mountain_SB_1;
+	UPROPERTY() FSlateBrush* mountain_SB_1;
 
-	FSlateBrush* holeFromDown_SB;
-	FSlateBrush* holeFromLeft_SB;
-	FSlateBrush* holeFromRight_SB;
-	FSlateBrush* holeFromUp_SB;
+	UPROPERTY() FSlateBrush* holeFromDown_SB;
+	UPROPERTY() FSlateBrush* holeFromLeft_SB;
+	UPROPERTY() FSlateBrush* holeFromRight_SB;
+	UPROPERTY() FSlateBrush* holeFromUp_SB;
 
-	FSlateBrush* flag_SB_1;
-	FSlateBrush* flag_SB_2;
-	FSlateBrush* flag_SB_3;
-	FSlateBrush* flag_SB_4;
-	FSlateBrush* flag_SB_5;
-	FSlateBrush* flag_SB_6;
-	FSlateBrush* flag_SB_7;
-	FSlateBrush* flag_SB_8;
-	FSlateBrush* flag_SB_9;
-	FSlateBrush* flag_SB_10;
-	FSlateBrush* flag_SB_11;
-	FSlateBrush* flag_SB_12;
-	FSlateBrush* flag_SB_13;
-	FSlateBrush* flag_SB_14;
-	FSlateBrush* flag_SB_15;
-	FSlateBrush* flag_SB_16;
+	UPROPERTY() FSlateBrush* flag_SB_1;
+	UPROPERTY() FSlateBrush* flag_SB_2;
+	UPROPERTY() FSlateBrush* flag_SB_3;
+	UPROPERTY() FSlateBrush* flag_SB_4;
+	UPROPERTY() FSlateBrush* flag_SB_5;
+	UPROPERTY() FSlateBrush* flag_SB_6;
+	UPROPERTY() FSlateBrush* flag_SB_7;
+	UPROPERTY() FSlateBrush* flag_SB_8;
+	UPROPERTY() FSlateBrush* flag_SB_9;
+	UPROPERTY() FSlateBrush* flag_SB_10;
+	UPROPERTY() FSlateBrush* flag_SB_11;
+	UPROPERTY() FSlateBrush* flag_SB_12;
+	UPROPERTY() FSlateBrush* flag_SB_13;
+	UPROPERTY() FSlateBrush* flag_SB_14;
+	UPROPERTY() FSlateBrush* flag_SB_15;
+	UPROPERTY() FSlateBrush* flag_SB_16;
 
-	FSlateBrush* buttonFromDownTurningRightZero_SB;
-	FSlateBrush* buttonFromDownTurningRightOne_SB;
-	FSlateBrush* buttonFromDownTurningRightTwo_SB;
-	FSlateBrush* buttonFromDownTurningRightThree_SB;
-	FSlateBrush* buttonFromDownTurningLeftZero_SB;
-	FSlateBrush* buttonFromDownTurningLeftOne_SB;
-	FSlateBrush* buttonFromDownTurningLeftTwo_SB;
-	FSlateBrush* buttonFromDownTurningLeftThree_SB;
-	FSlateBrush* buttonFromLeftTurningRightZero_SB;
-	FSlateBrush* buttonFromLeftTurningRightOne_SB;
-	FSlateBrush* buttonFromLeftTurningRightTwo_SB;
-	FSlateBrush* buttonFromLeftTurningRightThree_SB;
-	FSlateBrush* buttonFromLeftTurningLeftZero_SB;
-	FSlateBrush* buttonFromLeftTurningLeftOne_SB;
-	FSlateBrush* buttonFromLeftTurningLeftTwo_SB;
-	FSlateBrush* buttonFromLeftTurningLeftThree_SB;
-	FSlateBrush* buttonFromRightTurningRightZero_SB;
-	FSlateBrush* buttonFromRightTurningRightOne_SB;
-	FSlateBrush* buttonFromRightTurningRightTwo_SB;
-	FSlateBrush* buttonFromRightTurningRightThree_SB;
-	FSlateBrush* buttonFromRightTurningLeftZero_SB;
-	FSlateBrush* buttonFromRightTurningLeftOne_SB;
-	FSlateBrush* buttonFromRightTurningLeftTwo_SB;
-	FSlateBrush* buttonFromRightTurningLeftThree_SB;
-	FSlateBrush* buttonFromUpTurningRightZero_SB;
-	FSlateBrush* buttonFromUpTurningRightOne_SB;
-	FSlateBrush* buttonFromUpTurningRightTwo_SB;
-	FSlateBrush* buttonFromUpTurningRightThree_SB;
-	FSlateBrush* buttonFromUpTurningLeftZero_SB;
-	FSlateBrush* buttonFromUpTurningLeftOne_SB;
-	FSlateBrush* buttonFromUpTurningLeftTwo_SB;
-	FSlateBrush* buttonFromUpTurningLeftThree_SB;
+	UPROPERTY() FSlateBrush* buttonFromDownTurningRightZero_SB;
+	UPROPERTY() FSlateBrush* buttonFromDownTurningRightOne_SB;
+	UPROPERTY() FSlateBrush* buttonFromDownTurningRightTwo_SB;
+	UPROPERTY() FSlateBrush* buttonFromDownTurningRightThree_SB;
+	UPROPERTY() FSlateBrush* buttonFromDownTurningLeftZero_SB;
+	UPROPERTY() FSlateBrush* buttonFromDownTurningLeftOne_SB;
+	UPROPERTY() FSlateBrush* buttonFromDownTurningLeftTwo_SB;
+	UPROPERTY() FSlateBrush* buttonFromDownTurningLeftThree_SB;
+	UPROPERTY() FSlateBrush* buttonFromLeftTurningRightZero_SB;
+	UPROPERTY() FSlateBrush* buttonFromLeftTurningRightOne_SB;
+	UPROPERTY() FSlateBrush* buttonFromLeftTurningRightTwo_SB;
+	UPROPERTY() FSlateBrush* buttonFromLeftTurningRightThree_SB;
+	UPROPERTY() FSlateBrush* buttonFromLeftTurningLeftZero_SB;
+	UPROPERTY() FSlateBrush* buttonFromLeftTurningLeftOne_SB;
+	UPROPERTY() FSlateBrush* buttonFromLeftTurningLeftTwo_SB;
+	UPROPERTY() FSlateBrush* buttonFromLeftTurningLeftThree_SB;
+	UPROPERTY() FSlateBrush* buttonFromRightTurningRightZero_SB;
+	UPROPERTY() FSlateBrush* buttonFromRightTurningRightOne_SB;
+	UPROPERTY() FSlateBrush* buttonFromRightTurningRightTwo_SB;
+	UPROPERTY() FSlateBrush* buttonFromRightTurningRightThree_SB;
+	UPROPERTY() FSlateBrush* buttonFromRightTurningLeftZero_SB;
+	UPROPERTY() FSlateBrush* buttonFromRightTurningLeftOne_SB;
+	UPROPERTY() FSlateBrush* buttonFromRightTurningLeftTwo_SB;
+	UPROPERTY() FSlateBrush* buttonFromRightTurningLeftThree_SB;
+	UPROPERTY() FSlateBrush* buttonFromUpTurningRightZero_SB;
+	UPROPERTY() FSlateBrush* buttonFromUpTurningRightOne_SB;
+	UPROPERTY() FSlateBrush* buttonFromUpTurningRightTwo_SB;
+	UPROPERTY() FSlateBrush* buttonFromUpTurningRightThree_SB;
+	UPROPERTY() FSlateBrush* buttonFromUpTurningLeftZero_SB;
+	UPROPERTY() FSlateBrush* buttonFromUpTurningLeftOne_SB;
+	UPROPERTY() FSlateBrush* buttonFromUpTurningLeftTwo_SB;
+	UPROPERTY() FSlateBrush* buttonFromUpTurningLeftThree_SB;
 
-	FSlateBrush* verticleRail_SB;
-	FSlateBrush* horizontalRail_SB;
+	UPROPERTY() FSlateBrush* verticleRail_SB;
+	UPROPERTY() FSlateBrush* horizontalRail_SB;
 
-	FSlateBrush* railTurningOne_SB;
-	FSlateBrush* railTurningTwo_SB;
-	FSlateBrush* railTurningThree_SB;
-	FSlateBrush* railTurningFour_SB;
+	UPROPERTY() FSlateBrush* railTurningOne_SB;
+	UPROPERTY() FSlateBrush* railTurningTwo_SB;
+	UPROPERTY() FSlateBrush* railTurningThree_SB;
+	UPROPERTY() FSlateBrush* railTurningFour_SB;
 
-	FSlateBrush* marble_SB_1;
-	FSlateBrush* marble_SB_2;
-	FSlateBrush* marble_SB_3;
-	FSlateBrush* marble_SB_4;
-	FSlateBrush* marble_SB_5;
-	FSlateBrush* marble_SB_6;
-	FSlateBrush* marble_SB_7;
-	FSlateBrush* marble_SB_8;
-	FSlateBrush* marble_SB_9;
-	FSlateBrush* marble_SB_10;
-	FSlateBrush* marble_SB_11;
-	FSlateBrush* marble_SB_12;
-	FSlateBrush* marble_SB_13;
-	FSlateBrush* marble_SB_14;
-	FSlateBrush* marble_SB_15;
-	FSlateBrush* marble_SB_16;
+	UPROPERTY() FSlateBrush* marble_SB_1;
+	UPROPERTY() FSlateBrush* marble_SB_2;
+	UPROPERTY() FSlateBrush* marble_SB_3;
+	UPROPERTY() FSlateBrush* marble_SB_4;
+	UPROPERTY() FSlateBrush* marble_SB_5;
+	UPROPERTY() FSlateBrush* marble_SB_6;
+	UPROPERTY() FSlateBrush* marble_SB_7;
+	UPROPERTY() FSlateBrush* marble_SB_8;
+	UPROPERTY() FSlateBrush* marble_SB_9;
+	UPROPERTY() FSlateBrush* marble_SB_10;
+	UPROPERTY() FSlateBrush* marble_SB_11;
+	UPROPERTY() FSlateBrush* marble_SB_12;
+	UPROPERTY() FSlateBrush* marble_SB_13;
+	UPROPERTY() FSlateBrush* marble_SB_14;
+	UPROPERTY() FSlateBrush* marble_SB_15;
+	UPROPERTY() FSlateBrush* marble_SB_16;
 
-	FSlateBrush* gameFrameColor_SB;
+	UPROPERTY() FSlateBrush* gameFrameColor_SB;
 
-	FSlateBrush* emptyImg_SB;
+	UPROPERTY() FSlateBrush* emptyImg_SB;
 
 	TArray<TArray<TArray<UMaterial*> > > intersectionButtons =
 	{ // 0 for right, 1 for left, 2 for straight(which means horizontal track for the even indices and verticle track for the odd indices
@@ -593,147 +603,156 @@ public:
 		}
 	};
 
-	TArray<FSlateBrush*> landscapeStuff;
-	TArray<FSlateBrush*> trackStuff;
-	TArray<FSlateBrush*> flags;
-	TArray<FSlateBrush*> relevantFlags;
-	TArray<FSlateBrush*> flagsRandomized;
-	TArray<FSlateBrush*> marbles;
-	TArray<FSlateBrush*> relevantMarbles;
-	TArray<FSlateBrush*> marblesRandomized;
+	UPROPERTY() TArray<FSlateBrush*> landscapeStuff;
+	UPROPERTY() TArray<FSlateBrush*> trackStuff;
+	UPROPERTY() TArray<FSlateBrush*> flags;
+	UPROPERTY() TArray<FSlateBrush*> relevantFlags;
+	UPROPERTY() TArray<FSlateBrush*> flagsRandomized;
+	UPROPERTY() TArray<FSlateBrush*> marbles;
+	UPROPERTY() TArray<FSlateBrush*> relevantMarbles;
+	UPROPERTY() TArray<FSlateBrush*> marblesRandomized;
 
-	UAudioComponent* intersectionDownAudioComponent;
-	UAudioComponent* intersectionUpAudioComponent;
+	UPROPERTY() UAudioComponent* intersectionDownAudioComponent;
+	UPROPERTY() UAudioComponent* intersectionUpAudioComponent;
 
 	UPROPERTY() TArray<UAudioComponent*> windAudioComponents;
 	UPROPERTY() TArray<UAudioComponent*> riverAudioComponents;
 	UPROPERTY() TArray<UAudioComponent*> waterfallAudioComponents;
 
-	FVector2D startingPos;
-	int startingDir;
+	UPROPERTY() UAudioComponent* songOneAudioComponent;
+	UPROPERTY() bool songPlaying;
+	UPROPERTY() bool songBool;
+
+	UPROPERTY() FVector2D startingPos;
+	UPROPERTY() int startingDir;
 
 	// misc variables and data structures
 
-	FString materialPath = FPaths::ProjectContentDir() / TEXT("/Game/Movies/videoMaterialsForUI/grass_VMUI_1");
+	UPROPERTY() FString materialPath = FPaths::ProjectContentDir() / TEXT("/Game/Movies/videoMaterialsForUI/grass_VMUI_1");
 
-	FVector2D viewportSize;
-	FVector2D adjustedViewportSize;
+	UPROPERTY() FVector2D viewportSize;
+	UPROPERTY() FVector2D adjustedViewportSize;
 
-	FMargin testFMargin;
+	UPROPERTY() FMargin testFMargin;
 
-	FButtonStyle* masterButtonStyle;
+	UPROPERTY() FButtonStyle* masterButtonStyle;
 
 public: 
-	TSharedPtr<class SWindow> windowOne;
-	TArray<TSharedPtr<class SBox>> activeMarbles;
-	TArray<TSharedPtr<class SBox>> marblesToBeDestroyed;
-	TArray<FSlateBrush*> activeMarblesContent;
-	TArray<FSlateBrush*> marblesThisGame;
-	TArray<int> marblesThisGameProxy;
-	TArray<int> marblesThisGameProxyTracker;
-	int marbleProxyIndexToAdd;
-	int marbleIndexToAdd;
-	int marbleIndexToSpawn;
-	int marbleIndexToDelete;
-	TArray <int> marbleIndexesBeingAdded;
-	TArray<double> marblesBeingDestroyedTime;
-	TArray<FMargin> marblesShrinking;
-	TSharedPtr<class STextBlock>  scoreText;
-	FText currentScore;
-	int playerScore = 0;
-	int maximumPossibleScore = 0;
-	FSlateFontInfo scoreTextStyle;
-	TSharedPtr<class STextBlock>  timeText;
-	FText currentTimeText;
-	TSharedPtr< class SOverlay> marbleOverlay;
-	TSharedPtr< class FOverlaySlot> marbleOneSlot;
-	TSharedPtr<class STextBlock>  countdownText;
-	TSharedPtr<class SBox>  countdownBox;
-	FSlateFontInfo countdownFont;
+	UPROPERTY() TSharedPtr<class SWindow> windowOne;
+	UPROPERTY() TArray<TSharedPtr<class SBox>> activeMarbles;
+	UPROPERTY() TArray<TSharedPtr<class SBox>> marblesToBeDestroyed;
+	UPROPERTY() TArray<FSlateBrush*> activeMarblesContent;
+	UPROPERTY() TArray<FSlateBrush*> marblesThisGame;
+	UPROPERTY() TArray<int> marblesThisGameProxy;
+	UPROPERTY() TArray<int> marblesThisGameProxyTracker;
+	UPROPERTY() int marbleProxyIndexToAdd;
+	UPROPERTY() int marbleIndexToAdd;
+	UPROPERTY() int marbleIndexToSpawn;
+	UPROPERTY() int marbleIndexToDelete;
+	UPROPERTY() TArray <int> marbleIndexesBeingAdded;
+	UPROPERTY() TArray<double> marblesBeingDestroyedTime;
+	UPROPERTY() TArray<FMargin> marblesShrinking;
+	UPROPERTY() TSharedPtr<class STextBlock>  scoreText;
+	UPROPERTY() FText currentScore;
+	UPROPERTY() int playerScore = 0;
+	UPROPERTY() int maximumPossibleScore = 0;
+	UPROPERTY() FSlateFontInfo scoreTextStyle;
+	UPROPERTY() TSharedPtr<class STextBlock>  timeText;
+	UPROPERTY() FText currentTimeText;
+	UPROPERTY() TSharedPtr< class SOverlay> marbleOverlay;
+	UPROPERTY() TSharedPtr< class FOverlaySlot> marbleOneSlot;
+	UPROPERTY() TSharedPtr<class STextBlock>  countdownText;
+	UPROPERTY() TSharedPtr<class SBox>  countdownBox;
+	UPROPERTY() FSlateFontInfo countdownFont;
 
-	TSharedPtr<class SOverlay> largeTilesOverlay;
-	TSharedPtr<class SOverlay> landscapeOverlay;
-	TSharedPtr<class SOverlay> trackOverlay;
-	TSharedPtr<class SOverlay> intersectionButtonsOverlay;
-	TSharedPtr<class SOverlay> flagsOverlay;
-	TSharedPtr<class SOverlay> frameColorOverlay;
-	TSharedPtr<class SOverlay> pauseOverlay;
-	TSharedPtr<class SOverlay> countdownOverlay;
+	UPROPERTY() TSharedPtr<class SOverlay> largeTilesOverlay;
+	UPROPERTY() TSharedPtr<class SOverlay> landscapeOverlay;
+	UPROPERTY() TSharedPtr<class SOverlay> trackOverlay;
+	UPROPERTY() TSharedPtr<class SOverlay> intersectionButtonsOverlay;
+	UPROPERTY() TSharedPtr<class SOverlay> flagsOverlay;
+	UPROPERTY() TSharedPtr<class SOverlay> frameColorOverlay;
+	UPROPERTY() TSharedPtr<class SOverlay> pauseOverlay;
+	UPROPERTY() TSharedPtr<class SOverlay> countdownOverlay;
 
-	TSharedPtr<class SBackgroundBlur> pauseBlur;
+	UPROPERTY() TSharedPtr<class SBackgroundBlur> pauseBlur;
 
-	TArray<TArray<FSlateBrush*> > intersections;
-	TArray<int> intersectionsKeys;
-	TArray<int> intersectionCycle;
-	TArray< TSharedPtr<class SImage> > intersectionImages;
-	TArray<FVector2D> intersectionPositions;
+	UPROPERTY() TArray<TArray<FSlateBrush*> > intersections;
+	UPROPERTY() TArray<int> intersectionsKeys;
+	UPROPERTY() TArray<int> intersectionCycle;
+	UPROPERTY() TArray< TSharedPtr<class SImage> > intersectionImages;
+	UPROPERTY() TArray<FVector2D> intersectionPositions;
 
-	float DPIScale;
+	UPROPERTY() float DPIScale;
 
 	UPROPERTY() FVector2D screenPosition;
 	UPROPERTY() FVector2D screenSize;
 
-	float viewportX = 0.0f;
-	float viewportY = 0.0f;
-	int deleteMe;
-	TArray<FVector2D> marblePositions;
-	TArray<FVector2D> marblesToBeDestroyedPosition;
-	TArray<FVector2D> marblePositionsCenters;//you need to change this from the center of the marbles "tile" to what appears to be the center of the marble
-	TArray<FVector2D> previousTickMarblePositionsCenters;
-	int currentIntersection = 1;
-	TArray<int> startingMarbleMovementTracker = { { 0, 0 } };
-	TArray<TArray<int> > marbleMovementTracker;
-	TArray<TArray<int> > marblesToBeDestroyedMovementTracker;
-	TArray<bool> marbleIsTurning;
-	TArray<int> turnToExecute;
-	TArray<int> dirOfMarbles;
-	TArray<FVector2D> deltaMarblePos;
-	int quantityOfMarbles;
+	UPROPERTY() float viewportX = 0.0f;
+	UPROPERTY() float viewportY = 0.0f;
+	UPROPERTY() int deleteMe;
+	UPROPERTY() TArray<FVector2D> marblePositions;
+	UPROPERTY() TArray<FVector2D> marblesToBeDestroyedPosition;
+	UPROPERTY() TArray<FVector2D> marblePositionsCenters;//you need to change this from the center of the marbles "tile" to what appears to be the center of the marble
+	UPROPERTY() TArray<FVector2D> previousTickMarblePositionsCenters;
+	UPROPERTY() int currentIntersection = 1;
+	UPROPERTY() TArray<int> startingMarbleMovementTracker = { { 0, 0 } };
+	UPROPERTY() TArray<TArray<int> > marbleMovementTracker;
+	UPROPERTY() TArray<TArray<int> > marblesToBeDestroyedMovementTracker;
+	UPROPERTY() TArray<bool> marbleIsTurning;
+	UPROPERTY() TArray<int> turnToExecute;
+	UPROPERTY() TArray<int> dirOfMarbles;
+	UPROPERTY() TArray<FVector2D> deltaMarblePos;
+	UPROPERTY() int quantityOfMarbles;
 
-	int timeOfGame = 120;
-	double startingTime = 0;
-	double fCurrentTime = 0;
-	int currentTime = 120;
-	double spawningWindow;
-	TArray<double> timeIntoWindowMarbleIsSpawned;
-	bool gameStarted = false;
-	bool gameEnded;
-	double speedMultiplier;
-	double timeToCoverOneTileDividedByTwo;
+	UPROPERTY() int timeOfGame = 120;
+	UPROPERTY() double startingTime = 0;
+	UPROPERTY() double fCurrentTime = 0;
+	UPROPERTY() int currentTime = 120;
+	UPROPERTY() double spawningWindow;
+	UPROPERTY() TArray<double> timeIntoWindowMarbleIsSpawned;
+	UPROPERTY() bool gameStarted = false;
+	UPROPERTY() bool gameEnded;
+	UPROPERTY() double speedMultiplier;
+	UPROPERTY() double timeToCoverOneTileDividedByTwo;
 
-	FMargin marbleToBeDestroyedPadding;
+	UPROPERTY() FMargin marbleToBeDestroyedPadding;
 
-	bool threeDisplayed;
-	bool twoDisplayed;
-	bool oneDisplayed;
-	bool goDisplayed;
+	UPROPERTY() bool threeDisplayed;
+	UPROPERTY() bool twoDisplayed;
+	UPROPERTY() bool oneDisplayed;
+	UPROPERTY() bool goDisplayed;
 
-	float standardFontSize;
-	float startingFontSize;
-	float growingFontSize;
-	float adjustedStartingFontSize;
-	float startingOpacity;
-	float growingOpacity;
-	float adjustedStartingOpacity;
-	FSlateFontInfo shiftingFont;
-	TSharedPtr<class STextBlock> growingText;
-	TSharedPtr<class SBox> growingBox;
-	FMargin countdownMargin;
-	FMargin startingMargin;
-	FMargin growingMargin;
-	float adjustedCountdownMargin;
-	float countdownEffectClock;
+	UPROPERTY() float standardFontSize;
+	UPROPERTY() float startingFontSize;
+	UPROPERTY() float growingFontSize;
+	UPROPERTY() float adjustedStartingFontSize;
+	UPROPERTY() float startingOpacity;
+	UPROPERTY() float growingOpacity;
+	UPROPERTY() float adjustedStartingOpacity;
+	UPROPERTY() FSlateFontInfo shiftingFont;
+	UPROPERTY() TSharedPtr<class STextBlock> growingText;
+	UPROPERTY() TSharedPtr<class SBox> growingBox;
+	UPROPERTY() FMargin countdownMargin;
+	UPROPERTY() FMargin startingMargin;
+	UPROPERTY() FMargin growingMargin;
+	UPROPERTY() float adjustedCountdownMargin;
+	UPROPERTY() float countdownEffectClock;
 
-	int finalScore;
-	TArray <int> highscores;
-	int maxLevel;
-	int highscoreDataOne;
-	int highscoreDataTwo;
-	int scoreThisGame;
+	UPROPERTY() int finalScore;
+	UPROPERTY() TArray <int> highscores;
+	UPROPERTY() int maxLevel;
+	UPROPERTY() int highscoreDataOne;
+	UPROPERTY() int highscoreDataTwo;
+	UPROPERTY() int scoreThisGame;
 
-	int environmentAudio;
-	float audioTimer;
-	int audioCycleTracker;
+	UPROPERTY() int environmentAudio;
+	UPROPERTY() float audioTimer;
+	UPROPERTY() int audioCycleTracker;
 
-	bool paused;
+	UPROPERTY() bool paused;
+
+	UPROPERTY() int masterCoefficient;
+	UPROPERTY() int musicCoefficient;
+	UPROPERTY() int atmosphereCoefficient;
+	UPROPERTY() int sfxCoefficient;
 };

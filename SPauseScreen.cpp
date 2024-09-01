@@ -365,6 +365,7 @@ FReply SPauseScreen::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InK
 	{
 		//in the final product the escape key will take the place of the tab key wherever the tab key is used
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "anything");
 
 	return FReply::Handled();
 }
@@ -867,19 +868,187 @@ void SPauseScreen::OnRestartReleased()
 
 void SPauseScreen::OnOptionsHovered()
 {
+	if (!destroyPauseScreen)
+	{
+		if (shrinkingBoxes.Find(optionsBox) + 1)
+		{
+			indexOfShrinkingSubject = shrinkingBoxes.Find(optionsBox);
+			extentOfGrowth = menuFont.Size * multiplierOfPerimeterExpansion / shrinkingTexts[indexOfShrinkingSubject].Size; //am I going to need multiple extentOfGrowths? if it is only implimented in growing and not in shrinking then no: just the one should suffice
+			growingOffset = shrinkingOffset[indexOfShrinkingSubject];
+			growingMargin = shrinkingMargins[indexOfShrinkingSubject];
+			growingFont = shrinkingTexts[indexOfShrinkingSubject];
+			growingLinearColor = shrinkingLinearColors[indexOfShrinkingSubject];
+			growingOpacity = shrinkingOpacities[indexOfShrinkingSubject];
 
+			hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+
+			shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
+			shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
+			startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
+			adjustedShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
+			shrinkingOffset.RemoveAt(indexOfShrinkingSubject);
+			startingShrinkingOffset.RemoveAt(indexOfShrinkingSubject);
+			adjustedShrinkingOffset.RemoveAt(indexOfShrinkingSubject);
+			shrinkingBoxes.RemoveAt(indexOfShrinkingSubject);
+			shrinkingTextBlocks.RemoveAt(indexOfShrinkingSubject);
+			shrinkingTexts.RemoveAt(indexOfShrinkingSubject);
+			shrinkingMargins.RemoveAt(indexOfShrinkingSubject);
+			shrinkingMarginsStartingPoints.RemoveAt(indexOfShrinkingSubject);
+			shrinkingAdjustedMarginSizesX.RemoveAt(indexOfShrinkingSubject);
+			shrinkingAdjustedMarginSizesY.RemoveAt(indexOfShrinkingSubject);
+			shrinkingFontSizes.RemoveAt(indexOfShrinkingSubject);
+			shrinkingFontSizesStartingPoints.RemoveAt(indexOfShrinkingSubject);
+			shrinkingAdjustedFontSizes.RemoveAt(indexOfShrinkingSubject);
+			shrinkingTimes.RemoveAt(indexOfShrinkingSubject);
+			completedMargins.RemoveAt(indexOfShrinkingSubject);
+			completedFonts.RemoveAt(indexOfShrinkingSubject);
+			completedOffsets.RemoveAt(indexOfShrinkingSubject);
+		}
+		else
+		{
+			extentOfGrowth = multiplierOfPerimeterExpansion;
+
+			growingFont = menuFont;
+			growingOffset = standardShadowOffset;
+			growingMargin = optionsMargin;
+			growingLinearColor = FLinearColor(0, 0, 0, standardOpacity);
+			growingOpacity = standardOpacity;
+		}
+
+		startingOpacity = growingOpacity;
+		adjustedGrowingOpacity = (grownOpacity - startingOpacity) / 2;
+		startingMargin = growingMargin;
+		startingFontSize = menuFont.Size;
+		startingShadowOffset = growingOffset;
+		adjustedGrowingOffset = ((multiplierOfOffset * standardShadowOffset) - growingOffset) / 2;
+		adjustedSizeX = CalculateGrownMarginX(startingMargin);
+		adjustedSizeY = CalculateGrownMarginY(startingMargin);
+		adjustedStartingFontSize = ((startingFontSize * extentOfGrowth) - startingFontSize) / 2;
+		growingBox.Add(optionsBox);
+		growingTextBlock = optionsText;
+		growTime = 0;
+
+		childrensCornerIndex = (childrensCornerIndex + 1) % 159;
+		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
+	}
 }
 void SPauseScreen::OnOptionsUnHovered()
 {
+	if (!destroyPauseScreen)
+	{
+		if (clicked)
+		{
+			clicked = false;
+		}
+		else
+		{
+			if (growingBox.Num() > 0)
+			{
+				shrinkingBoxes.Add(growingBox[0]);
 
+				growingBox.RemoveAt(0);
+			}
+			else
+			{
+				shrinkingBoxes.Add(grownBox[0]);
+				grownBox.RemoveAt(0);
+
+				growingMargin = GrownMargin(optionsMargin);
+				growingFont.Size = menuFont.Size * multiplierOfPerimeterExpansion;
+				growingOffset = standardShadowOffset * multiplierOfOffset;
+				growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
+				growingOpacity = grownOpacity;
+
+				hoverShrinkAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
+			}
+
+			shrinkingOpacities.Add(growingOpacity);
+			shrinkingLinearColors.Add(growingLinearColor);
+			startingShrinkingOpacities.Add(growingOpacity);
+			adjustedShrinkingOpacities.Add((1 - growingOpacity) / 2);
+			shrinkingOffset.Add(growingOffset);
+			startingShrinkingOffset.Add(growingOffset);
+			adjustedShrinkingOffset.Add((0.003 - growingOffset) / 2);
+			shrinkingTextBlocks.Add(growingTextBlock);
+			shrinkingTexts.Add(growingFont);
+			shrinkingMargins.Add(growingMargin);
+			shrinkingMarginsStartingPoints.Add(growingMargin);
+			shrinkingAdjustedMarginSizesX.Add((optionsMargin - growingMargin).Left / 2);
+			shrinkingAdjustedMarginSizesY.Add((optionsMargin - growingMargin).Top / 2);
+			shrinkingFontSizes.Add(growingFontSize);
+			shrinkingFontSizesStartingPoints.Add(growingFontSize);
+			shrinkingAdjustedFontSizes.Add((menuFont.Size - growingFont.Size) / 2);
+			shrinkingTimes.Add(0);
+			completedMargins.Add(optionsMargin);
+			completedFonts.Add(menuFont);
+			completedOffsets.Add(standardShadowOffset);
+
+			hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+		}
+	}
 }
 void SPauseScreen::OnOptionsPressed()
 {
+	if (!destroyPauseScreen)
+	{
+		activeNoteIndex = FMath::RandRange(0, 7);
+		purpleLullabyAudioComponents[activeNoteIndex]->Play();
 
+		optionsText->SetColorAndOpacity(FColor::White);
+	}
 }
 void SPauseScreen::OnOptionsReleased()
 {
+	if (!destroyPauseScreen)
+	{
+		PlayChordToActiveNote();
 
+		optionsText->SetColorAndOpacity(FColor::Orange);
+		optionsBox->SetPadding(optionsMargin);
+		optionsText->SetFont(menuFont);
+		optionsText->SetShadowOffset(FVector2D(standardShadowOffset * adjustedViewportSize.Y, standardShadowOffset * adjustedViewportSize.Y));
+		optionsText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity));
+
+		if (growingBox.Num() > 0)
+		{
+			growingBox.RemoveAt(0);
+			clicked = true;
+		}
+		else if (grownBox.Num() > 0)
+		{
+			grownBox.RemoveAt(0);
+			clicked = true;
+		}
+		else if (shrinkingBoxes.Find(optionsBox) + 1)
+		{
+			indexOfShrinkingSubject = shrinkingBoxes.Find(optionsBox);
+
+			shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
+			shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
+			startingShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
+			adjustedShrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
+			shrinkingOffset.RemoveAt(indexOfShrinkingSubject);
+			startingShrinkingOffset.RemoveAt(indexOfShrinkingSubject);
+			adjustedShrinkingOffset.RemoveAt(indexOfShrinkingSubject);
+			shrinkingBoxes.RemoveAt(indexOfShrinkingSubject);
+			shrinkingTextBlocks.RemoveAt(indexOfShrinkingSubject);
+			shrinkingTexts.RemoveAt(indexOfShrinkingSubject);
+			shrinkingMargins.RemoveAt(indexOfShrinkingSubject);
+			shrinkingMarginsStartingPoints.RemoveAt(indexOfShrinkingSubject);
+			shrinkingAdjustedMarginSizesX.RemoveAt(indexOfShrinkingSubject);
+			shrinkingAdjustedMarginSizesY.RemoveAt(indexOfShrinkingSubject);
+			shrinkingFontSizes.RemoveAt(indexOfShrinkingSubject);
+			shrinkingFontSizesStartingPoints.RemoveAt(indexOfShrinkingSubject);
+			shrinkingAdjustedFontSizes.RemoveAt(indexOfShrinkingSubject);
+			shrinkingTimes.RemoveAt(indexOfShrinkingSubject);
+			completedMargins.RemoveAt(indexOfShrinkingSubject);
+			completedFonts.RemoveAt(indexOfShrinkingSubject);
+			completedOffsets.RemoveAt(indexOfShrinkingSubject);
+		}
+	}
+
+	masterOverlay->RemoveSlot(1);
+	OwningHUD->DisplayOptionsMenu(true);
 }
 
 void SPauseScreen::OnQuitToMenuHovered()
@@ -1022,7 +1191,7 @@ void SPauseScreen::OnQuitToMenuReleased()
 
 		PlayChordToActiveNote();
 
-		quitToMenuText->SetColorAndOpacity(FColor::Orange);
+		quitToMenuText->SetColorAndOpacity(textColor);
 		quitToMenuBox->SetPadding(quitToMenuMargin);
 		quitToMenuText->SetFont(menuFont);
 		quitToMenuText->SetShadowOffset(FVector2D(standardShadowOffset * adjustedViewportSize.Y, standardShadowOffset * adjustedViewportSize.Y));
@@ -1065,6 +1234,16 @@ void SPauseScreen::OnQuitToMenuReleased()
 			completedOffsets.RemoveAt(indexOfShrinkingSubject);
 		}
 	}
+}
+
+void SPauseScreen::ReturnToLanding()
+{
+	masterOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			mainPauseOverlay.ToSharedRef()
+		];
 }
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION

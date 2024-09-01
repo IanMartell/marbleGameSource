@@ -26,289 +26,251 @@ public:
 	//stuff for accessing content browser assets
 	ATestHud();//resharper? visual assist check discord
 
-	UMaterial* grass_VMUI_1;// all uobject variables must be uproperty otherwise the garbage collecter will collect them
-	UMediaPlayer* grass_MP_1;//change the umaerial to material interface
-	UMaterial* grass_VMUI_2;
-	UMediaPlayer* grass_MP_2;
-	UMaterial* grass_VMUI_3;
-	UMediaPlayer* grass_MP_3;
-	UMaterial* pondHorizontal_VMUI;
-	UMediaPlayer* pondHorizontal_MP;
-	UMaterial* pondVerticleFlowingLeft_VMUI;
-	UMediaPlayer* pondVerticleFlowingLeft_MP;
-	UMaterial* pondVerticleFlowingRight_VMUI;
-	UMediaPlayer* pondVerticleFlowingRight_MP;
-	UMaterial* riverFlowingDown_VMUI_1;
-	UMediaPlayer* riverFlowingDown_MP_1;
-	UMaterial* riverFlowingDown_VMUI_2;
-	UMediaPlayer* riverFlowingDown_MP_2;
-	UMaterial* riverFlowingDown_VMUI_3;
-	UMediaPlayer* riverFlowingDown_MP_3;
-	UMaterial* riverFlowingLeft_VMUI_1;
-	UMediaPlayer* riverFlowingLeft_MP_1;
-	UMaterial* riverFlowingLeft_VMUI_2;
-	UMediaPlayer* riverFlowingLeft_MP_2;
-	UMaterial* riverFlowingLeft_VMUI_3;
-	UMediaPlayer* riverFlowingLeft_MP_3;
-	UMaterial* riverFlowingRight_VMUI_1;
-	UMediaPlayer* riverFlowingRight_MP_1;
-	UMaterial* riverFlowingRight_VMUI_2;
-	UMediaPlayer* riverFlowingRight_MP_2;
-	UMaterial* riverFlowingRight_VMUI_3;
-	UMediaPlayer* riverFlowingRight_MP_3;
-	UMaterial* tree_VMUI_1;
-	UMediaPlayer* tree_MP_1;
-	UMaterial* tree_VMUI_2;
-	UMediaPlayer* tree_MP_2;
-	UMaterial* tree_VMUI_3;
-	UMediaPlayer* tree_MP_3;
-	UMaterial* tree_VMUI_4;
-	UMediaPlayer* tree_MP_4;
-	UMaterial* tree_VMUI_5;
-	UMediaPlayer* tree_MP_5;
-	UMaterial* waterfall_VMUI;
-	UMediaPlayer* waterfall_MP;
-	UMaterial* riverTurning_VMUI_1;
-	UMediaPlayer* riverTurning_MP_1;
-	UMaterial* riverTurning_VMUI_2;
-	UMediaPlayer* riverTurning_MP_2;
-	UMaterial* riverTurning_VMUI_3;
-	UMediaPlayer* riverTurning_MP_3;
-	UMaterial* riverTurning_VMUI_4;
-	UMediaPlayer* riverTurning_MP_4;
-	UMaterial* mountain_VMUI_1;
-	UMediaPlayer* mountain_MP_1;
+	UPROPERTY() UMaterial* grass_VMUI_1;// all uobject variables must be uproperty otherwise the garbage collecter will collect them
+	UPROPERTY() UMediaPlayer* grass_MP_1;//change the umaerial to material interface
+	UPROPERTY() UMaterial* grass_VMUI_2;
+	UPROPERTY() UMediaPlayer* grass_MP_2;
+	UPROPERTY() UMaterial* grass_VMUI_3;
+	UPROPERTY() UMediaPlayer* grass_MP_3;
+	UPROPERTY() UMaterial* pondHorizontal_VMUI;
+	UPROPERTY() UMediaPlayer* pondHorizontal_MP;
+	UPROPERTY() UMaterial* pondVerticleFlowingLeft_VMUI;
+	UPROPERTY() UMediaPlayer* pondVerticleFlowingLeft_MP;
+	UPROPERTY() UMaterial* pondVerticleFlowingRight_VMUI;
+	UPROPERTY() UMediaPlayer* pondVerticleFlowingRight_MP;
+	UPROPERTY() UMaterial* riverFlowingDown_VMUI_1;
+	UPROPERTY() UMediaPlayer* riverFlowingDown_MP_1;
+	UPROPERTY() UMaterial* riverFlowingDown_VMUI_2;
+	UPROPERTY() UMediaPlayer* riverFlowingDown_MP_2;
+	UPROPERTY() UMaterial* riverFlowingDown_VMUI_3;
+	UPROPERTY() UMediaPlayer* riverFlowingDown_MP_3;
+	UPROPERTY() UMaterial* riverFlowingLeft_VMUI_1;
+	UPROPERTY() UMediaPlayer* riverFlowingLeft_MP_1;
+	UPROPERTY() UMaterial* riverFlowingLeft_VMUI_2;
+	UPROPERTY() UMediaPlayer* riverFlowingLeft_MP_2;
+	UPROPERTY() UMaterial* riverFlowingLeft_VMUI_3;
+	UPROPERTY() UMediaPlayer* riverFlowingLeft_MP_3;
+	UPROPERTY() UMaterial* riverFlowingRight_VMUI_1;
+	UPROPERTY() UMediaPlayer* riverFlowingRight_MP_1;
+	UPROPERTY() UMaterial* riverFlowingRight_VMUI_2;
+	UPROPERTY() UMediaPlayer* riverFlowingRight_MP_2;
+	UPROPERTY() UMaterial* riverFlowingRight_VMUI_3;
+	UPROPERTY() UMediaPlayer* riverFlowingRight_MP_3;
+	UPROPERTY() UMaterial* tree_VMUI_1;
+	UPROPERTY() UMediaPlayer* tree_MP_1;
+	UPROPERTY() UMaterial* tree_VMUI_2;
+	UPROPERTY() UMediaPlayer* tree_MP_2;
+	UPROPERTY() UMaterial* tree_VMUI_3;
+	UPROPERTY() UMediaPlayer* tree_MP_3;
+	UPROPERTY() UMaterial* tree_VMUI_4;
+	UPROPERTY() UMediaPlayer* tree_MP_4;
+	UPROPERTY() UMaterial* tree_VMUI_5;
+	UPROPERTY() UMediaPlayer* tree_MP_5;
+	UPROPERTY() UMaterial* waterfall_VMUI;
+	UPROPERTY() UMediaPlayer* waterfall_MP;
+	UPROPERTY() UMaterial* riverTurning_VMUI_1;
+	UPROPERTY() UMediaPlayer* riverTurning_MP_1;
+	UPROPERTY() UMaterial* riverTurning_VMUI_2;
+	UPROPERTY() UMediaPlayer* riverTurning_MP_2;
+	UPROPERTY() UMaterial* riverTurning_VMUI_3;
+	UPROPERTY() UMediaPlayer* riverTurning_MP_3;
+	UPROPERTY() UMaterial* riverTurning_VMUI_4;
+	UPROPERTY() UMediaPlayer* riverTurning_MP_4;
+	UPROPERTY() UMaterial* mountain_VMUI_1;
+	UPROPERTY() UMediaPlayer* mountain_MP_1;
 
-	UMaterial* holeFromDown_VMUI;
-	UMediaPlayer* holeFromDown_MP;
-	UMaterial* holeFromLeft_VMUI;
-	UMediaPlayer* holeFromLeft_MP;
-	UMaterial* holeFromRight_VMUI;
-	UMediaPlayer* holeFromRight_MP;
-	UMaterial* holeFromUp_VMUI;
-	UMediaPlayer* holeFromUp_MP;
+	UPROPERTY() UMaterial* holeFromDown_VMUI;
+	UPROPERTY() UMediaPlayer* holeFromDown_MP;
+	UPROPERTY() UMaterial* holeFromLeft_VMUI;
+	UPROPERTY() UMediaPlayer* holeFromLeft_MP;
+	UPROPERTY() UMaterial* holeFromRight_VMUI;
+	UPROPERTY() UMediaPlayer* holeFromRight_MP;
+	UPROPERTY() UMaterial* holeFromUp_VMUI;
+	UPROPERTY() UMediaPlayer* holeFromUp_MP;
 
-	UMaterial* flag_VMUI_1;
-	UMediaPlayer* flag_MP_1;
-	UMaterial* flag_VMUI_2;
-	UMediaPlayer* flag_MP_2;
-	UMaterial* flag_VMUI_3;
-	UMediaPlayer* flag_MP_3;
-	UMaterial* flag_VMUI_4;
-	UMediaPlayer* flag_MP_4;
-	UMaterial* flag_VMUI_5;
-	UMediaPlayer* flag_MP_5;
-	UMaterial* flag_VMUI_6;
-	UMediaPlayer* flag_MP_6;
-	UMaterial* flag_VMUI_7;
-	UMediaPlayer* flag_MP_7;
-	UMaterial* flag_VMUI_8;
-	UMediaPlayer* flag_MP_8;
-	UMaterial* flag_VMUI_9;
-	UMediaPlayer* flag_MP_9;
-	UMaterial* flag_VMUI_10;
-	UMediaPlayer* flag_MP_10;
-	UMaterial* flag_VMUI_11;
-	UMediaPlayer* flag_MP_11;
-	UMaterial* flag_VMUI_12;
-	UMediaPlayer* flag_MP_12;
-	UMaterial* flag_VMUI_13;
-	UMediaPlayer* flag_MP_13;
-	UMaterial* flag_VMUI_14;
-	UMediaPlayer* flag_MP_14;
-	UMaterial* flag_VMUI_15;
-	UMediaPlayer* flag_MP_15;
-	UMaterial* flag_VMUI_16;
-	UMediaPlayer* flag_MP_16;
+	UPROPERTY() UMaterial* flag_VMUI_1;
+	UPROPERTY() UMediaPlayer* flag_MP_1;
+	UPROPERTY() UMaterial* flag_VMUI_2;
+	UPROPERTY() UMediaPlayer* flag_MP_2;
+	UPROPERTY() UMaterial* flag_VMUI_3;
+	UPROPERTY() UMediaPlayer* flag_MP_3;
+	UPROPERTY() UMaterial* flag_VMUI_4;
+	UPROPERTY() UMediaPlayer* flag_MP_4;
+	UPROPERTY() UMaterial* flag_VMUI_5;
+	UPROPERTY() UMediaPlayer* flag_MP_5;
+	UPROPERTY() UMaterial* flag_VMUI_6;
+	UPROPERTY() UMediaPlayer* flag_MP_6;
+	UPROPERTY() UMaterial* flag_VMUI_7;
+	UPROPERTY() UMediaPlayer* flag_MP_7;
+	UPROPERTY() UMaterial* flag_VMUI_8;
+	UPROPERTY() UMediaPlayer* flag_MP_8;
+	UPROPERTY() UMaterial* flag_VMUI_9;
+	UPROPERTY() UMediaPlayer* flag_MP_9;
+	UPROPERTY() UMaterial* flag_VMUI_10;
+	UPROPERTY() UMediaPlayer* flag_MP_10;
+	UPROPERTY() UMaterial* flag_VMUI_11;
+	UPROPERTY() UMediaPlayer* flag_MP_11;
+	UPROPERTY() UMaterial* flag_VMUI_12;
+	UPROPERTY() UMediaPlayer* flag_MP_12;
+	UPROPERTY() UMaterial* flag_VMUI_13;
+	UPROPERTY() UMediaPlayer* flag_MP_13;
+	UPROPERTY() UMaterial* flag_VMUI_14;
+	UPROPERTY() UMediaPlayer* flag_MP_14;
+	UPROPERTY() UMaterial* flag_VMUI_15;
+	UPROPERTY() UMediaPlayer* flag_MP_15;
+	UPROPERTY() UMaterial* flag_VMUI_16;
+	UPROPERTY() UMediaPlayer* flag_MP_16;
 
-	UMaterial* curtains_VMUI;
-	UMediaPlayer* curtains_MP;
+	UPROPERTY() UMaterial* curtains_VMUI;
+	UPROPERTY() UMediaPlayer* curtains_MP;
 
-	UImgMediaSource* grass_IS_1;
-	UImgMediaSource* grass_IS_2;
-	UImgMediaSource* grass_IS_3;
-	UImgMediaSource* pondHorizontal_IS;
-	UImgMediaSource* pondVerticleFlowingLeft_IS;
-	UImgMediaSource* pondVerticleFlowingRight_IS;
-	UImgMediaSource* riverFlowingDown_IS_1;
-	UImgMediaSource* riverFlowingDown_IS_2;
-	UImgMediaSource* riverFlowingDown_IS_3;
-	UImgMediaSource* riverFlowingLeft_IS_1;
-	UImgMediaSource* riverFlowingLeft_IS_2;
-	UImgMediaSource* riverFlowingLeft_IS_3;
-	UImgMediaSource* riverFlowingRight_IS_1;
-	UImgMediaSource* riverFlowingRight_IS_2;
-	UImgMediaSource* riverFlowingRight_IS_3;
-	UImgMediaSource* tree_IS_1;
-	UImgMediaSource* tree_IS_2;
-	UImgMediaSource* tree_IS_3;
-	UImgMediaSource* tree_IS_4;
-	UImgMediaSource* tree_IS_5;
-	UImgMediaSource* waterfall_IS;
-	UImgMediaSource* riverTurning_IS_1;
-	UImgMediaSource* riverTurning_IS_2;
-	UImgMediaSource* riverTurning_IS_3;
-	UImgMediaSource* riverTurning_IS_4;
-	UImgMediaSource* mountain_IS_1;
+	UPROPERTY() UImgMediaSource* grass_IS_1;
+	UPROPERTY() UImgMediaSource* grass_IS_2;
+	UPROPERTY() UImgMediaSource* grass_IS_3;
+	UPROPERTY() UImgMediaSource* pondHorizontal_IS;
+	UPROPERTY() UImgMediaSource* pondVerticleFlowingLeft_IS;
+	UPROPERTY() UImgMediaSource* pondVerticleFlowingRight_IS;
+	UPROPERTY() UImgMediaSource* riverFlowingDown_IS_1;
+	UPROPERTY() UImgMediaSource* riverFlowingDown_IS_2;
+	UPROPERTY() UImgMediaSource* riverFlowingDown_IS_3;
+	UPROPERTY() UImgMediaSource* riverFlowingLeft_IS_1;
+	UPROPERTY() UImgMediaSource* riverFlowingLeft_IS_2;
+	UPROPERTY() UImgMediaSource* riverFlowingLeft_IS_3;
+	UPROPERTY() UImgMediaSource* riverFlowingRight_IS_1;
+	UPROPERTY() UImgMediaSource* riverFlowingRight_IS_2;
+	UPROPERTY() UImgMediaSource* riverFlowingRight_IS_3;
+	UPROPERTY() UImgMediaSource* tree_IS_1;
+	UPROPERTY() UImgMediaSource* tree_IS_2;
+	UPROPERTY() UImgMediaSource* tree_IS_3;
+	UPROPERTY() UImgMediaSource* tree_IS_4;
+	UPROPERTY() UImgMediaSource* tree_IS_5;
+	UPROPERTY() UImgMediaSource* waterfall_IS;
+	UPROPERTY() UImgMediaSource* riverTurning_IS_1;
+	UPROPERTY() UImgMediaSource* riverTurning_IS_2;
+	UPROPERTY() UImgMediaSource* riverTurning_IS_3;
+	UPROPERTY() UImgMediaSource* riverTurning_IS_4;
+	UPROPERTY() UImgMediaSource* mountain_IS_1;
 
-	UImgMediaSource* holeFromDown_IS;
-	UImgMediaSource* holeFromLeft_IS;
-	UImgMediaSource* holeFromRight_IS;
-	UImgMediaSource* holeFromUp_IS;
+	UPROPERTY() UImgMediaSource* holeFromDown_IS;
+	UPROPERTY() UImgMediaSource* holeFromLeft_IS;
+	UPROPERTY() UImgMediaSource* holeFromRight_IS;
+	UPROPERTY() UImgMediaSource* holeFromUp_IS;
 
-	UImgMediaSource* flag_IS_1;
-	UImgMediaSource* flag_IS_2;
-	UImgMediaSource* flag_IS_3;
-	UImgMediaSource* flag_IS_4;
-	UImgMediaSource* flag_IS_5;
-	UImgMediaSource* flag_IS_6;
-	UImgMediaSource* flag_IS_7;
-	UImgMediaSource* flag_IS_8;
-	UImgMediaSource* flag_IS_9;
-	UImgMediaSource* flag_IS_10;
-	UImgMediaSource* flag_IS_11;
-	UImgMediaSource* flag_IS_12;
-	UImgMediaSource* flag_IS_13;
-	UImgMediaSource* flag_IS_14;
-	UImgMediaSource* flag_IS_15;
-	UImgMediaSource* flag_IS_16;
+	UPROPERTY() UImgMediaSource* flag_IS_1;
+	UPROPERTY() UImgMediaSource* flag_IS_2;
+	UPROPERTY() UImgMediaSource* flag_IS_3;
+	UPROPERTY() UImgMediaSource* flag_IS_4;
+	UPROPERTY() UImgMediaSource* flag_IS_5;
+	UPROPERTY() UImgMediaSource* flag_IS_6;
+	UPROPERTY() UImgMediaSource* flag_IS_7;
+	UPROPERTY() UImgMediaSource* flag_IS_8;
+	UPROPERTY() UImgMediaSource* flag_IS_9;
+	UPROPERTY() UImgMediaSource* flag_IS_10;
+	UPROPERTY() UImgMediaSource* flag_IS_11;
+	UPROPERTY() UImgMediaSource* flag_IS_12;
+	UPROPERTY() UImgMediaSource* flag_IS_13;
+	UPROPERTY() UImgMediaSource* flag_IS_14;
+	UPROPERTY() UImgMediaSource* flag_IS_15;
+	UPROPERTY() UImgMediaSource* flag_IS_16;
 
-	UImgMediaSource* curtains_IS;
+	UPROPERTY() UImgMediaSource* curtains_IS;
 
-	UMaterial* buttonFromDownTurningRightZero_SMUI;
-	UMaterial* buttonFromDownTurningRightOne_SMUI;
-	UMaterial* buttonFromDownTurningRightTwo_SMUI;
-	UMaterial* buttonFromDownTurningRightThree_SMUI;
-	UMaterial* buttonFromDownTurningLeftZero_SMUI;
-	UMaterial* buttonFromDownTurningLeftOne_SMUI;
-	UMaterial* buttonFromDownTurningLeftTwo_SMUI;
-	UMaterial* buttonFromDownTurningLeftThree_SMUI;
-	UMaterial* buttonFromLeftTurningRightZero_SMUI;
-	UMaterial* buttonFromLeftTurningRightOne_SMUI;
-	UMaterial* buttonFromLeftTurningRightTwo_SMUI;
-	UMaterial* buttonFromLeftTurningRightThree_SMUI;
-	UMaterial* buttonFromLeftTurningLeftZero_SMUI;
-	UMaterial* buttonFromLeftTurningLeftOne_SMUI;
-	UMaterial* buttonFromLeftTurningLeftTwo_SMUI;
-	UMaterial* buttonFromLeftTurningLeftThree_SMUI;
-	UMaterial* buttonFromRightTurningRightZero_SMUI;
-	UMaterial* buttonFromRightTurningRightOne_SMUI;
-	UMaterial* buttonFromRightTurningRightTwo_SMUI;
-	UMaterial* buttonFromRightTurningRightThree_SMUI;
-	UMaterial* buttonFromRightTurningLeftZero_SMUI;
-	UMaterial* buttonFromRightTurningLeftOne_SMUI;
-	UMaterial* buttonFromRightTurningLeftTwo_SMUI;
-	UMaterial* buttonFromRightTurningLeftThree_SMUI;
-	UMaterial* buttonFromUpTurningRightZero_SMUI;
-	UMaterial* buttonFromUpTurningRightOne_SMUI;
-	UMaterial* buttonFromUpTurningRightTwo_SMUI;
-	UMaterial* buttonFromUpTurningRightThree_SMUI;
-	UMaterial* buttonFromUpTurningLeftZero_SMUI;
-	UMaterial* buttonFromUpTurningLeftOne_SMUI;
-	UMaterial* buttonFromUpTurningLeftTwo_SMUI;
-	UMaterial* buttonFromUpTurningLeftThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningRightZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningRightOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningRightTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningRightThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningLeftZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningLeftOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningLeftTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromDownTurningLeftThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningRightZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningRightOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningRightTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningRightThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningLeftZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningLeftOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningLeftTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromLeftTurningLeftThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningRightZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningRightOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningRightTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningRightThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningLeftZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningLeftOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningLeftTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromRightTurningLeftThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningRightZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningRightOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningRightTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningRightThree_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningLeftZero_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningLeftOne_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningLeftTwo_SMUI;
+	UPROPERTY() UMaterial* buttonFromUpTurningLeftThree_SMUI;
 
-	UMaterial* verticleRail_SMUI;
-	UMaterial* horizontalRail_SMUI;
+	UPROPERTY() UMaterial* verticleRail_SMUI;
+	UPROPERTY() UMaterial* horizontalRail_SMUI;
 
-	UMaterial* railTurningOne_SMUI;
-	UMaterial* railTurningTwo_SMUI;
-	UMaterial* railTurningThree_SMUI;
-	UMaterial* railTurningFour_SMUI;
+	UPROPERTY() UMaterial* railTurningOne_SMUI;
+	UPROPERTY() UMaterial* railTurningTwo_SMUI;
+	UPROPERTY() UMaterial* railTurningThree_SMUI;
+	UPROPERTY() UMaterial* railTurningFour_SMUI;
 
-	UMaterial* marble_SMUI_1;
-	UMaterial* marble_SMUI_2;
-	UMaterial* marble_SMUI_3;
-	UMaterial* marble_SMUI_4;
-	UMaterial* marble_SMUI_5;
-	UMaterial* marble_SMUI_6;
-	UMaterial* marble_SMUI_7;
-	UMaterial* marble_SMUI_8;
-	UMaterial* marble_SMUI_9;
-	UMaterial* marble_SMUI_10;
-	UMaterial* marble_SMUI_11;
-	UMaterial* marble_SMUI_12;
-	UMaterial* marble_SMUI_13;
-	UMaterial* marble_SMUI_14;
-	UMaterial* marble_SMUI_15;
-	UMaterial* marble_SMUI_16;
+	UPROPERTY() UMaterial* marble_SMUI_1;
+	UPROPERTY() UMaterial* marble_SMUI_2;
+	UPROPERTY() UMaterial* marble_SMUI_3;
+	UPROPERTY() UMaterial* marble_SMUI_4;
+	UPROPERTY() UMaterial* marble_SMUI_5;
+	UPROPERTY() UMaterial* marble_SMUI_6;
+	UPROPERTY() UMaterial* marble_SMUI_7;
+	UPROPERTY() UMaterial* marble_SMUI_8;
+	UPROPERTY() UMaterial* marble_SMUI_9;
+	UPROPERTY() UMaterial* marble_SMUI_10;
+	UPROPERTY() UMaterial* marble_SMUI_11;
+	UPROPERTY() UMaterial* marble_SMUI_12;
+	UPROPERTY() UMaterial* marble_SMUI_13;
+	UPROPERTY() UMaterial* marble_SMUI_14;
+	UPROPERTY() UMaterial* marble_SMUI_15;
+	UPROPERTY() UMaterial* marble_SMUI_16;
 
-	UMaterial* gameFrameColor_SMUI;
+	UPROPERTY() UMaterial* gameFrameColor_SMUI;
 
-	UMaterial* goodUseSplashBootNoGrass_SMUI;
-	UMaterial* goodUseSplashGrass_SMUI;
-	UMaterial* goodUseDigitalText_SMUI;
+	UPROPERTY() UMaterial* goodUseSplashBootNoGrass_SMUI;
+	UPROPERTY() UMaterial* goodUseSplashGrass_SMUI;
+	UPROPERTY() UMaterial* goodUseDigitalText_SMUI;
 
-	TArray <UMaterial*> splashGrassArr;
-	TArray <UMaterial*> splashBootArr;
+	UPROPERTY() TArray <UMaterial*> splashGrassArr;
+	UPROPERTY() TArray <UMaterial*> splashBootArr;
 
-	UMaterial* placeholderTrash;
-	UMaterial* emptyImg_SMUI;
-	//data structures of content browser assets
-	TArray<TArray<TArray<UMaterial*> > > intersectionButtons =
-	{ // 0 for right, 1 for left, 2 for straight(which means horizontal track for the even indices and verticle track for the odd indices
-		{//index 0
-			{ placeholderTrash }
-		},
-		{//index 1
-			{ buttonFromDownTurningRightZero_SMUI },
-			{ buttonFromDownTurningLeftZero_SMUI }
-		},
-		{//index 2
-			{ buttonFromLeftTurningRightZero_SMUI },
-			{ buttonFromLeftTurningLeftZero_SMUI }
-		},
-		{//index 3
-			{ buttonFromUpTurningRightZero_SMUI },
-			{ buttonFromUpTurningLeftZero_SMUI }
-		},
-		{//index 4
-			{ buttonFromRightTurningRightZero_SMUI },
-			{ buttonFromRightTurningLeftZero_SMUI }
-		}
-	};
+	UPROPERTY() UMaterial* placeholderTrash;
+	UPROPERTY() UMaterial* emptyImg_SMUI;
 
-	TArray<TArray<UMaterial*> > turningTrack =
-	{ //Ive only got 4 turning track sprites but I should set this up like I set up the intersectionButtons
-		// 0 for right, 1 for left, 2 for intersection, 3 for straight track (two for intersection?! really? how are you gonna do that)
-		{//index 0
-			{ placeholderTrash }
-		},
-		{//index 1 (from up?)
-			{ railTurningFour_SMUI, railTurningOne_SMUI, placeholderTrash, verticleRail_SMUI }
-		},
-		{//index 2 (from left?)
-			{ railTurningThree_SMUI, railTurningFour_SMUI, placeholderTrash, horizontalRail_SMUI }
-		},
-		{//index 3 (from down?)
-			{ railTurningTwo_SMUI, railTurningThree_SMUI, placeholderTrash, verticleRail_SMUI }
-		},
-		{//index 4 (from right?)
-			{ railTurningOne_SMUI, railTurningTwo_SMUI, placeholderTrash, horizontalRail_SMUI }
-		}
-	};
+	//sound effects stuff
 
-	USoundBase* intersectionButtonPressed;
-	USoundBase* intersectionButtonReleased;
-	USoundBase* hoverGrow;
-	USoundBase* hoverShrink;
-	USoundBase* curtainClosing;
-	USoundBase* curtainOpening;
-	USoundBase* rainstick;
-	USoundBase* wind;
-	USoundBase* windWithSheep;
-	USoundBase* river;
-	USoundBase* waterfall;
+	UPROPERTY() USoundBase* intersectionButtonPressed;
+	UPROPERTY() USoundBase* intersectionButtonReleased;
+	UPROPERTY() USoundBase* hoverGrow;
+	UPROPERTY() USoundBase* hoverShrink;
+	UPROPERTY() USoundBase* curtainClosing;
+	UPROPERTY() USoundBase* curtainOpening;
+	UPROPERTY() USoundBase* rainstick;
+	UPROPERTY() USoundBase* wind;
+	UPROPERTY() USoundBase* windWithSheep;
+	UPROPERTY() USoundBase* river;
+	UPROPERTY() USoundBase* waterfall;
 
-	TArray <USoundBase*> hoverGrows;
-	TArray <USoundBase*> hoverShrinks;
-	TArray <USoundBase*> purpleLullaby;
+	UPROPERTY() TArray <USoundBase*> hoverGrows;
+	UPROPERTY() TArray <USoundBase*> hoverShrinks;
+	UPROPERTY() TArray <USoundBase*> purpleLullaby;
+	UPROPERTY() TArray <USoundBase*> purpleLullabyTwo;
 
-	UAudioComponent* intersectionDownAudioComponent;
-	UAudioComponent* intersectionUpAudioComponent;
-	UAudioComponent* curtainClosingAudioComponent;
-	UAudioComponent* curtainOpeningAudioComponent;
-	UAudioComponent* rainstickAudioComponent;
+	UPROPERTY() USoundBase* songOne;
+
+	UPROPERTY() UAudioComponent* intersectionDownAudioComponent;
+	UPROPERTY() UAudioComponent* intersectionUpAudioComponent;
+	UPROPERTY() UAudioComponent* curtainClosingAudioComponent;
+	UPROPERTY() UAudioComponent* curtainOpeningAudioComponent;
+	UPROPERTY() UAudioComponent* rainstickAudioComponent;
 
 	UPROPERTY() TArray <UAudioComponent*> hoverGrowAudioComponents;
 	UPROPERTY() TArray <UAudioComponent*> hoverShrinkAudioComponents;
@@ -317,9 +279,13 @@ public:
 	UPROPERTY() TArray<UAudioComponent*> riverAudioComponents;
 	UPROPERTY() TArray<UAudioComponent*> waterfallAudioComponents;
 	UPROPERTY() TArray<UAudioComponent*> purpleLullabyAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> purpleLullabyTwoAudioComponents;
+
+	UPROPERTY() UAudioComponent* songOneAudioComponent;
 
 protected:
 	//protected init stuff
+	// I just realized if theres ever any variables which are getting garbage collected which I cannot designate as UPROPERTY such as these I could declare and initiliaze them on the stack. the code might run slower that way but it should work
 	TSharedPtr<class SLoadingScreenOne> loadingSlateWidget;
 	TSharedPtr<class SWidget> slateWidgetContainerOne;
 
@@ -344,47 +310,65 @@ protected:
 	TSharedPtr<class SPauseScreen> pauseScreenSlateWidget;
 	TSharedPtr<class SWidget> slateWidgetContainerEight;
 
+	TSharedPtr<class SOptions> optionsMenuSlateWidget;
+	TSharedPtr<class SWidget> slateWidgetContainerNine;
+
 	virtual void BeginPlay() override;
 
 public:
-	APlayerController* playerOnePlayerController;
-	UObject* standardWorldContextObject;
+	UPROPERTY() APlayerController* playerOnePlayerController;
+	UPROPERTY() UObject* standardWorldContextObject;
 
 	//level randomizer algorithm stuff
-	TArray<FVector2D> arrOfViableHoleCoordinates;
-	TArray<FVector2D> arrOfViableHoleCoordinatesBase = { FVector2D(12, 2), FVector2D(12, 1), FVector2D(11, 2), FVector2D(11, 1), FVector2D(10, 2), FVector2D(10, 1), FVector2D(9, 2), FVector2D(9, 1), FVector2D(8, 2), FVector2D(8, 1), FVector2D(7, 2), FVector2D(7, 1), FVector2D(6, 2), FVector2D(6, 1), FVector2D(5, 2), FVector2D(5, 1), FVector2D(4, 2), FVector2D(4, 1) };
-	TArray<FVector2D> holePositions;
-	TArray<FVector2D> convertedHolePositions;
+	UPROPERTY() TArray<FVector2D> arrOfViableHoleCoordinates;
+	UPROPERTY() TArray<FVector2D> arrOfViableHoleCoordinatesBase = { FVector2D(12, 2), FVector2D(12, 1), FVector2D(11, 2), FVector2D(11, 1), FVector2D(10, 2), FVector2D(10, 1), FVector2D(9, 2), FVector2D(9, 1), FVector2D(8, 2), FVector2D(8, 1), FVector2D(7, 2), FVector2D(7, 1), FVector2D(6, 2), FVector2D(6, 1), FVector2D(5, 2), FVector2D(5, 1), FVector2D(4, 2), FVector2D(4, 1) };
+	UPROPERTY() TArray<FVector2D> holePositions;
+	UPROPERTY() TArray<FVector2D> convertedHolePositions;
 
-	int negativeOneZeroOrOne;
+	UPROPERTY() int negativeOneZeroOrOne;
 
-	TArray<int> test;
-	TArray<int> listOfHolePositionGroupings;
+	UPROPERTY() TArray<int> test;
+	UPROPERTY() TArray<int> listOfHolePositionGroupings;
 
-	int holeCoordinateOrientation;
-	int numberOfHoles = 10;
-	int holesToGenerate;
+	UPROPERTY() int holeCoordinateOrientation;
+	UPROPERTY() int numberOfHoles = 10;
+	UPROPERTY() int holesToGenerate;
 
-	FVector2D startingPos;
-	int startingDir;
+	UPROPERTY() FVector2D startingPos;
+	UPROPERTY() int startingDir;
 
 	TArray<TArray<int>> nestedTArr;
 
-	int extentOfAdjustment = 2 - FMath::Clamp(numberOfHoles - 8, 0, 1);
+	UPROPERTY() int extentOfAdjustment = 2 - FMath::Clamp(numberOfHoles - 8, 0, 1);
 
-	TArray<int> regenerateLevel;
+	UPROPERTY() TArray<int> regenerateLevel;
 
-	TArray<UMaterial*> backgroundMaterials;
-	bool backgroundIsLargeTile;
-	bool inGame;
+	UPROPERTY() TArray<UMaterial*> backgroundMaterials;
+	UPROPERTY() bool backgroundIsLargeTile;
+	UPROPERTY() bool inGame;
 
-	bool goToResults;
+	UPROPERTY() bool goToResults;
+	UPROPERTY() bool fromGame;
 
-	int environmentAudio;
+	UPROPERTY() int environmentAudio;
 
-	TArray<UMediaPlayer*> mediaPlayersToClose;
+	UPROPERTY() double masterCoefficient;
+	UPROPERTY() double masterCoefficientM;
+	UPROPERTY() double masterCoefficientA;
+	UPROPERTY() double masterCoefficientS;
+	UPROPERTY() double musicCoefficient;
+	UPROPERTY() double atmosphereCoefficient;
+	UPROPERTY() double sfxCoefficient;
+	UPROPERTY() double pingCoefficient;
+	UPROPERTY() double destinationCoefficientM;
+	UPROPERTY() double destinationCoefficientA;
+	UPROPERTY() double destinationCoefficientS;
 
-	TArray<bool> activeMediaPlayers = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+	UPROPERTY() TArray<UMediaPlayer*> mediaPlayersToClose;
+
+	TArray< TArray <int> > chordIndexes = { { 0, 2, 4 }, { 1, 3, 5 }, { 2, 4, 6 }, { 4, 6, 7 } };// I could easily make this single dimensional if I need to
+
+	UPROPERTY() TArray<bool> activeMediaPlayers = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 
 	TArray<TArray<TArray<FVector2D> > > holeAndIntersectionPositions =
 	{
@@ -1698,19 +1682,19 @@ public:
 		}
 	};
 
-	TArray<int> landscapeArr = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	UPROPERTY() TArray<int> landscapeArr = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-	TArray<int> trackArr = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	UPROPERTY() TArray<int> trackArr = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-	TArray<bool> tileIsIntersection = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+	UPROPERTY() TArray<bool> tileIsIntersection = { false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
 
-	TArray<int> tileIsTrack = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	UPROPERTY() TArray<int> tileIsTrack = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-	TArray<int> backgroundArr = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	UPROPERTY() TArray<int> backgroundArr = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-	TArray<FVector2D> pondPositionArr;
-	TArray<int> pondSpecifierArr;
-	TArray<FVector2D> largeTreeOrMountainPosArr;
+	UPROPERTY() TArray<FVector2D> pondPositionArr;
+	UPROPERTY() TArray<int> pondSpecifierArr;
+	UPROPERTY() TArray<FVector2D> largeTreeOrMountainPosArr;
 
 	void MasterGenerateLevel(int numHoles);
 
@@ -1745,4 +1729,17 @@ public:
 	void DisplayPauseScreen();
 
 	void DestroyPauseScreen();
+
+	void PrepDestroyPauseScreen();
+
+	void DisplayOptionsMenu(bool cameFromGame);
+
+	void DestroyOptionsMenu();
+
+	void SetFocusToGame();
+
+	void CommitMaster(int newVol);
+	void CommitMusic(int newVol);
+	void CommitAtmosphere(int newVol);
+	void CommitSFX(int newVol);
 };

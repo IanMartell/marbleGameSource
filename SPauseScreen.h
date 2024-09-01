@@ -59,6 +59,7 @@ public:
 	FMargin GrownMargin(FMargin inMargin);
 	FMargin ShrinkMargin(FMargin inMargin, int marginIndex);
 	void PlayChordToActiveNote();
+	void ReturnToLanding();
 
 	TWeakObjectPtr<class ATestHud> OwningHUD;
 	USaveGameOne* currentSave;

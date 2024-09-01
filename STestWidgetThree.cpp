@@ -53,8 +53,8 @@ const FMargin CalculateLargeTilePosition(FVector2D tileCoords, FVector2D adjuste
 
 const FVector2D CalculateMarblePositionCenters(FVector2D tileCoords)
 {
-	int tileCoordsX = FMath::RoundToZero(tileCoords.X + 0.5);
-	int tileCoordsY = FMath::RoundToZero(tileCoords.Y + 0.4);
+	int tileCoordsX = FMath::RoundHalfToZero(tileCoords.X);
+	int tileCoordsY = FMath::RoundHalfToZero(tileCoords.Y);
 
 	return FVector2D(tileCoordsX, tileCoordsY);
 }
@@ -255,7 +255,12 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	windAudioComponents = InArgs._windAudioComponents;
 	riverAudioComponents = InArgs._riverAudioComponents;
 	waterfallAudioComponents = InArgs._waterfallAudioComponents;
+	songOneAudioComponent = InArgs._songOneAudioComponent;
 	environmentAudio = InArgs._environmentAudio;
+	masterCoefficient = InArgs._masterCoefficient;
+	musicCoefficient = InArgs._musicCoefficient;
+	atmosphereCoefficient = InArgs._atmosphereCoefficient;
+	sfxCoefficient = InArgs._sfxCoefficient;
 
 	grass_SB_1 = new FSlateBrush();
 	grass_SB_1->SetResourceObject(grass_VMUI_1);
@@ -526,18 +531,24 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	masterButtonStyle = new FButtonStyle();
 	masterButtonStyle->SetNormalPadding(FMargin());
 
-	intersectionDownAudioComponent->SetVolumeMultiplier(5.0);
-	intersectionUpAudioComponent->SetVolumeMultiplier(4.0);
+	songPlaying = false;
+	songBool = false;
+
+	intersectionDownAudioComponent->SetVolumeMultiplier(((double)90.0 * (double)sfxCoefficient) * (double)masterCoefficient);
+	intersectionUpAudioComponent->SetVolumeMultiplier(((double)80.0 * (double)sfxCoefficient) * (double)masterCoefficient);
 
 	for (int a = 0; a < 2; a++)
 	{
-		windAudioComponents[a]->SetVolumeMultiplier(2);
+		windAudioComponents[a]->SetVolumeMultiplier(((double)300 * (double)atmosphereCoefficient) * (double)masterCoefficient);
 		windAudioComponents[a]->Stop();
-		riverAudioComponents[a]->SetVolumeMultiplier(0.0833);
+		riverAudioComponents[a]->SetVolumeMultiplier(((double)0.16 * (double)atmosphereCoefficient) * (double)masterCoefficient);
 		riverAudioComponents[a]->Stop();
-		waterfallAudioComponents[a]->SetVolumeMultiplier(0.2);
+		waterfallAudioComponents[a]->SetVolumeMultiplier(((double)0.4 * (double)atmosphereCoefficient) * (double)masterCoefficient);
 		waterfallAudioComponents[a]->Stop();
 	}
+
+	songOneAudioComponent->SetVolumeMultiplier(((double)0.5 * (double)musicCoefficient) * (double)masterCoefficient);
+	songOneAudioComponent->Stop();
 
 	switch (environmentAudio)
 	{
@@ -572,6 +583,8 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	default:
 		break;
 	}
+
+	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "startingPos two: " + startingPos.ToString() + " | startingDir two: " + FString::FromInt(startingDir));
 	
 	quantityOfMarbles = 30 + holePositions.Num();
 	speedMultiplier = 0.8 * (1 + (0.023 * (holePositions.Num() - 3)));
@@ -1323,14 +1336,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			.HAlign(HAlign_Fill)
 			.VAlign(VAlign_Fill)
 			[
-				SNew(SImage)
-				.ColorAndOpacity(FColor::Orange)
-			]
-
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
 				largeTilesOverlay.ToSharedRef()
 			]
 
@@ -1419,6 +1424,7 @@ void STestWidgetThree::OnIntersectionReleasedOne()
 	intersectionCycle[0] = (intersectionCycle[0] + 1) % 4;
 	intersectionImages[0]->SetImage(intersections[intersectionsKeys[0]][intersectionCycle[0]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedTwo()
@@ -1432,6 +1438,7 @@ void STestWidgetThree::OnIntersectionReleasedTwo()
 	intersectionCycle[1] = (intersectionCycle[1] + 1) % 4;
 	intersectionImages[1]->SetImage(intersections[intersectionsKeys[1]][intersectionCycle[1]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedThree()
@@ -1445,6 +1452,7 @@ void STestWidgetThree::OnIntersectionReleasedThree()
 	intersectionCycle[2] = (intersectionCycle[2] + 1) % 4;
 	intersectionImages[2]->SetImage(intersections[intersectionsKeys[2]][intersectionCycle[2]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedFour()
@@ -1458,6 +1466,7 @@ void STestWidgetThree::OnIntersectionReleasedFour()
 	intersectionCycle[3] = (intersectionCycle[3] + 1) % 4;
 	intersectionImages[3]->SetImage(intersections[intersectionsKeys[3]][intersectionCycle[3]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedFive()
@@ -1471,6 +1480,7 @@ void STestWidgetThree::OnIntersectionReleasedFive()
 	intersectionCycle[4] = (intersectionCycle[4] + 1) % 4;
 	intersectionImages[4]->SetImage(intersections[intersectionsKeys[4]][intersectionCycle[4]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedSix()
@@ -1484,6 +1494,7 @@ void STestWidgetThree::OnIntersectionReleasedSix()
 	intersectionCycle[5] = (intersectionCycle[5] + 1) % 4;
 	intersectionImages[5]->SetImage(intersections[intersectionsKeys[5]][intersectionCycle[5]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedSeven()
@@ -1497,6 +1508,7 @@ void STestWidgetThree::OnIntersectionReleasedSeven()
 	intersectionCycle[6] = (intersectionCycle[6] + 1) % 4;
 	intersectionImages[6]->SetImage(intersections[intersectionsKeys[6]][intersectionCycle[6]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedEight()
@@ -1510,6 +1522,7 @@ void STestWidgetThree::OnIntersectionReleasedEight()
 	intersectionCycle[7] = (intersectionCycle[7] + 1) % 4;
 	intersectionImages[7]->SetImage(intersections[intersectionsKeys[7]][intersectionCycle[7]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedNine()
@@ -1523,6 +1536,7 @@ void STestWidgetThree::OnIntersectionReleasedNine()
 	intersectionCycle[8] = (intersectionCycle[8] + 1) % 4;
 	intersectionImages[8]->SetImage(intersections[intersectionsKeys[8]][intersectionCycle[8]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedTen()
@@ -1536,6 +1550,7 @@ void STestWidgetThree::OnIntersectionReleasedTen()
 	intersectionCycle[9] = (intersectionCycle[9] + 1) % 4;
 	intersectionImages[9]->SetImage(intersections[intersectionsKeys[9]][intersectionCycle[9]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedEleven()
@@ -1549,6 +1564,7 @@ void STestWidgetThree::OnIntersectionReleasedEleven()
 	intersectionCycle[10] = (intersectionCycle[10] + 1) % 4;
 	intersectionImages[10]->SetImage(intersections[intersectionsKeys[10]][intersectionCycle[10]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedTwelve()
@@ -1562,6 +1578,7 @@ void STestWidgetThree::OnIntersectionReleasedTwelve()
 	intersectionCycle[11] = (intersectionCycle[11] + 1) % 4;
 	intersectionImages[11]->SetImage(intersections[intersectionsKeys[11]][intersectionCycle[11]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedThirteen()
@@ -1575,6 +1592,7 @@ void STestWidgetThree::OnIntersectionReleasedThirteen()
 	intersectionCycle[12] = (intersectionCycle[12] + 1) % 4;
 	intersectionImages[12]->SetImage(intersections[intersectionsKeys[12]][intersectionCycle[12]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedFourteen()
@@ -1588,6 +1606,7 @@ void STestWidgetThree::OnIntersectionReleasedFourteen()
 	intersectionCycle[13] = (intersectionCycle[13] + 1) % 4;
 	intersectionImages[13]->SetImage(intersections[intersectionsKeys[13]][intersectionCycle[13]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedFifteen()
@@ -1601,6 +1620,7 @@ void STestWidgetThree::OnIntersectionReleasedFifteen()
 	intersectionCycle[14] = (intersectionCycle[14] + 1) % 4;
 	intersectionImages[14]->SetImage(intersections[intersectionsKeys[14]][intersectionCycle[14]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedSixteen()
@@ -1614,6 +1634,7 @@ void STestWidgetThree::OnIntersectionReleasedSixteen()
 	intersectionCycle[15] = (intersectionCycle[15] + 1) % 4;
 	intersectionImages[15]->SetImage(intersections[intersectionsKeys[15]][intersectionCycle[15]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedSeventeen()
@@ -1627,6 +1648,7 @@ void STestWidgetThree::OnIntersectionReleasedSeventeen()
 	intersectionCycle[16] = (intersectionCycle[16] + 1) % 4;
 	intersectionImages[16]->SetImage(intersections[intersectionsKeys[16]][intersectionCycle[16]]);
 	intersectionUpAudioComponent->Play();
+	OwningHUD->SetFocusToGame();
 }
 
 FReply STestWidgetThree::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent)
@@ -1638,33 +1660,46 @@ FReply STestWidgetThree::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent&
 
 	if (InKeyEvent.GetKey() == EKeys::Tab)
 	{
-		OwningHUD->DisplayPauseScreen();
-		paused = true;
-
-		switch (environmentAudio)
+		if (!paused)
 		{
-		case 0:
-			windAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+			OwningHUD->DisplayPauseScreen();
+			paused = true;
 
-			riverAudioComponents[audioCycleTracker % 2]->SetPaused(true);
-			break;
-		case 1:
-			windAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+			switch (environmentAudio)
+			{
+			case 0:
+				windAudioComponents[audioCycleTracker % 2]->SetPaused(true);
 
-			waterfallAudioComponents[audioCycleTracker % 2]->SetPaused(true);
-			break;
-		default:
-			break;
+				riverAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+				break;
+			case 1:
+				windAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+
+				waterfallAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+				break;
+			default:
+				break;
+			}
+
+			if (songPlaying)
+			{
+				songOneAudioComponent->SetPaused(true);
+			}
+		}
+		else
+		{
+			OwningHUD->PrepDestroyPauseScreen();
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "tabFromSTestWidget");
 		}
 	}
 
-	if (InKeyEvent.GetKey() == EKeys::Escape)
+	/*if (InKeyEvent.GetKey() == EKeys::Escape)
 	{
 		OwningHUD->HouseKeeping();
 		OwningHUD->ResetRegenLevel();
 
 		UKismetSystemLibrary::QuitGame(playerOnePlayerController, playerOnePlayerController, EQuitPreference::Quit, false);
-	}
+	}*/
 
 	return FReply::Handled();
 }
@@ -1687,7 +1722,7 @@ FVector2D STestWidgetThree::PrepTurnMarble(int currentMarble, FVector2d marblePo
 	case 1 :
 		deltaMarblePos[currentMarble] = marblePosition;
 		deltaMarblePos[currentMarble].Y = FMath::RoundToZero(deltaMarblePos[currentMarble].Y) + 0.5;
-
+		
 		if (turnBeingMade == 1 || turnBeingMade == 4)//1 is right, 2 is left, 4 is right, 5 is left
 		{
 			turnToExecute[currentMarble] = 0;// your current problem with these marbles is if a marble gets deleted while another is turning it screws everything up
@@ -1699,7 +1734,15 @@ FVector2D STestWidgetThree::PrepTurnMarble(int currentMarble, FVector2d marblePo
 		break;
 	case 2 :
 		deltaMarblePos[currentMarble] = marblePosition;
-		deltaMarblePos[currentMarble].X = FMath::RoundToZero(deltaMarblePos[currentMarble].X) + 0.5;
+
+		if (marblePosition.X < 0)
+		{
+			deltaMarblePos[currentMarble].X = -0.5;
+		}
+		else
+		{
+			deltaMarblePos[currentMarble].X = FMath::RoundToZero(deltaMarblePos[currentMarble].X) + 0.5;
+		}
 
 		if (turnBeingMade == 2 || turnBeingMade == 6)//2 is right, 3 is left, 6 is right, 7 is left
 		{
@@ -1712,7 +1755,15 @@ FVector2D STestWidgetThree::PrepTurnMarble(int currentMarble, FVector2d marblePo
 		break;
 	case 3 :
 		deltaMarblePos[currentMarble] = marblePosition;
-		deltaMarblePos[currentMarble].Y = FMath::RoundToZero(deltaMarblePos[currentMarble].Y) + 0.5;
+
+		if (marblePosition.Y < 0)
+		{
+			deltaMarblePos[currentMarble].Y = -0.5;
+		}
+		else
+		{
+			deltaMarblePos[currentMarble].Y = FMath::RoundToZero(deltaMarblePos[currentMarble].Y) + 0.5;
+		}
 
 		if (turnBeingMade == 3 || turnBeingMade == 10)//0 is left, 3 is right, 10 is right, 11 is left
 		{
@@ -1903,6 +1954,11 @@ void STestWidgetThree::PlayGame()
 	default:
 		break;
 	}
+
+	if (songPlaying)
+	{
+		songOneAudioComponent->SetPaused(false);
+	}
 }
 
 void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
@@ -1932,6 +1988,17 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 				break;
 			default:
 				break;
+			}
+		}
+
+		if (audioTimer > 20 && !songBool)
+		{
+			songBool = true;
+
+			if (FMath::RandRange(0, 2) == 2)
+			{
+				songOneAudioComponent->Play();
+				songPlaying = true;
 			}
 		}
 
@@ -2058,7 +2125,7 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 
 						OwningHUD->SaveGame(maxLevel, highscores, highscoreDataOne, highscoreDataTwo, scoreThisGame);
 
-						OwningHUD->DisplayCurtains(3, false, true);
+						OwningHUD->DisplayCurtains(0, false, true);
 					}
 				}
 			}

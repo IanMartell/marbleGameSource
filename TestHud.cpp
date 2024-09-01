@@ -14,6 +14,7 @@
 #include "SResultsBlur.h"
 #include "SCompanySplash.h"
 #include "SPauseScreen.h"
+#include "SOptions.h"
 #include "Math/UnrealMathUtility.h"
 #include<array>
 //#include "Engine/World.h"
@@ -27,7 +28,7 @@ FVector2D GetGameViewportSize()
 	return Result;
 }
 
-//PRAGMA_DISABLE_OPTIMIZATION
+//UE_DISABLE_OPTIMIZATION
 
 ATestHud::ATestHud()
 {
@@ -1376,6 +1377,33 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_8(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyD6.purpleLullabyD6'"));
 	purpleLullaby.Add((USoundBase*)tempVar_purpleLullaby_8.Object);
 
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_9(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyC52.purpleLullabyC52'"));
+	purpleLullabyTwo.Add((USoundBase*)tempVar_purpleLullaby_9.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_10(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyD52.purpleLullabyD52'"));
+	purpleLullabyTwo.Add((USoundBase*)tempVar_purpleLullaby_10.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_11(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyE52.purpleLullabyE52'"));
+	purpleLullabyTwo.Add((USoundBase*)tempVar_purpleLullaby_11.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_12(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyFSharp52.purpleLullabyFSharp52'"));
+	purpleLullabyTwo.Add((USoundBase*)tempVar_purpleLullaby_12.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_13(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyG52.purpleLullabyG52'"));
+	purpleLullabyTwo.Add((USoundBase*)tempVar_purpleLullaby_13.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_14(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyA52.purpleLullabyA52'"));
+	purpleLullabyTwo.Add((USoundBase*)tempVar_purpleLullaby_14.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_15(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyB52.purpleLullabyB52'"));
+	purpleLullabyTwo.Add((USoundBase*)tempVar_purpleLullaby_15.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_16(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyD62.purpleLullabyD62'"));
+	purpleLullabyTwo.Add((USoundBase*)tempVar_purpleLullaby_16.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_songOne(TEXT("'/Game/myAdditionsArcade/soundEffects/abundanceMixOne.abundanceMixOne'"));
+	songOne = (USoundBase*)tempVar_songOne.Object;
+
 	for (int a = 0; a < hoverGrows.Num(); a++)
 	{
 		hoverGrowAudioComponents.Add(CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass())));
@@ -1411,6 +1439,10 @@ ATestHud::ATestHud()
 		purpleLullabyAudioComponents.Add(CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass())));
 		purpleLullabyAudioComponents[a]->bAutoDestroy = false;
 		purpleLullabyAudioComponents[a]->SetSound(purpleLullaby[a]);
+
+		purpleLullabyTwoAudioComponents.Add(CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass())));
+		purpleLullabyTwoAudioComponents[a]->bAutoDestroy = false;
+		purpleLullabyTwoAudioComponents[a]->SetSound(purpleLullabyTwo[a]);
 	}
 
 	intersectionDownAudioComponent = CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass()));
@@ -1432,6 +1464,10 @@ ATestHud::ATestHud()
 	rainstickAudioComponent = CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass()));
 	rainstickAudioComponent->bAutoDestroy = false;
 	rainstickAudioComponent->SetSound(rainstick);
+
+	songOneAudioComponent = CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass()));
+	songOneAudioComponent->bAutoDestroy = false;
+	songOneAudioComponent->SetSound(songOne);
 }//to stagger the animations you could prolong the curtains and then open the assets at random intervals spaced over 6 seconds, but then the loading would take and extra 6 seconds
 
 void ATestHud::PreLoadCurtains()
@@ -1448,6 +1484,204 @@ void ATestHud::SaveGame(int maxLevel, TArray <int> highscores, int highscoreData
 	saveFile->SetHighscoreDataTwo(highscoreDataTwo);
 	saveFile->SetScoreThisGame(scoreThisGame);
 	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
+}
+
+void ATestHud::CommitMaster(int newVol)/*so the only math i havent vetted is how the masterCoefficient is going to interact with the subCoefficients.when masters 50 will changing sfx from 100 to 50 halve the volume by ear similarly enough to how setting master as 50 from 100 did ?
+if your different catagories of sound effects are being played at different decibals, which they are, you will need different masterCoefficient calculations one for each catagory. if each individual sound effect is beign played at different decibals you will need a unique masterCoefficient calculation for each sound effect as well as different subCoefficient calculations. which I am not going to do, but remember this for the next game(s)
+do I want it to be that when masterVol is 50 the subCatagoryVol creates inaudability at 1 or like I currently have it (that is basically just somewhere in the middle) then what about vice versa? would it be possible to make the masterCoefficients and the subCoefficients work toward a designated destination simultaneously?? that sounds fun*/
+{
+	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	saveFile->SetMaster(newVol);
+	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
+
+	double x = ((double)100 - (double)saveFile->GetMaster()) / (double)50;
+	//double y = ((double)100 - (double)newVol) / (double)50;
+	double g = 1;
+	double h = 1;
+	double i = 1;
+
+	if (newVol == 0)
+	{
+		double g = 0;
+		double h = 0;
+		double i = 0;
+	}
+	else if (saveFile->GetMusic() == 0)
+	{
+		g = 0;
+	}
+	else if (saveFile->GetAtmosphere() == 0)
+	{
+		h = 0;
+	}
+	else if (saveFile->GetSFX() == 0)
+	{
+		i = 0;
+	}
+
+	masterCoefficient = (double)pow((double)10, (double)-1 * (double)x);
+	masterCoefficientM = (double)pow((double)10, (double)-1 * (double)x);
+	masterCoefficientA = (double)pow((double)10, (double)-1 * (double)x);
+	masterCoefficientS = (double)pow((double)10, (double)-1 * (double)x);
+
+	songOneAudioComponent->SetVolumeMultiplier(((double)0.5 * (double)musicCoefficient) * (double)masterCoefficient);
+
+	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
+	{
+		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(((double)1.0 * (double)sfxCoefficient) * (double)masterCoefficient);
+	}
+
+	if (inGame)
+	{
+		intersectionDownAudioComponent->SetVolumeMultiplier(((double)90.0 * (double)sfxCoefficient) * (double)masterCoefficient);
+		intersectionUpAudioComponent->SetVolumeMultiplier(((double)80.0 * (double)sfxCoefficient) * (double)masterCoefficient);
+
+		for (int a = 0; a < 2; a++)
+		{
+			windAudioComponents[a]->SetVolumeMultiplier(((double)300 * (double)atmosphereCoefficient) * (double)masterCoefficient);
+			riverAudioComponents[a]->SetVolumeMultiplier(((double)0.16 * (double)atmosphereCoefficient) * (double)masterCoefficient);
+			waterfallAudioComponents[a]->SetVolumeMultiplier(((double)0.4 * (double)atmosphereCoefficient) * (double)masterCoefficient);
+		}
+
+		for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
+		{
+			hoverGrowAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
+			hoverShrinkAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
+		}
+	}
+	else
+	{
+		for (int a = 0; a < 2; a++)
+		{
+			windAudioComponents[a]->SetVolumeMultiplier(((double)1000.0 * (double)pow((double)10, (double)-2 * y)) * (double)pow((double)10, (double)-2 * x));
+			windWithSheepAudioComponents[a]->SetVolumeMultiplier(((double)1000.0 * (double)pow((double)10, (double)-2 * y)) * (double)pow((double)10, (double)-2 * x));
+			riverAudioComponents[a]->SetVolumeMultiplier(((double)0.33 * (double)atmosphereCoefficient) * (double)masterCoefficient);
+			waterfallAudioComponents[a]->SetVolumeMultiplier(((double)0.8 * (double)atmosphereCoefficient) * (double)masterCoefficient);
+		}
+
+		for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
+		{
+			hoverGrowAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
+			hoverShrinkAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
+		}
+	}
+
+	int p = FMath::RandRange(0, 3);
+	for (int a = 0; a < 3; a++)
+	{
+		purpleLullabyAudioComponents[chordIndexes[p][a]]->SetVolumeMultiplier(masterCoefficient);
+		purpleLullabyAudioComponents[chordIndexes[p][a]]->Play();
+	}
+}
+void ATestHud::CommitMusic(int newVol)
+{
+	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	saveFile->SetMusic(newVol);
+	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
+
+	if (newVol == 0)
+	{
+		musicCoefficient = 0;
+	}
+	else
+	{
+		double x = ((double)100 - (double)newVol) / (double)50;
+		musicCoefficient = (double)pow((double)10, (double)-x);
+	}
+
+	songOneAudioComponent->SetVolumeMultiplier(((double)0.5 * (double)musicCoefficient) * (double)masterCoefficient);
+
+	int z = FMath::RandRange(0, 3);
+	for (int a = 0; a < 3; a++)
+	{
+		purpleLullabyAudioComponents[chordIndexes[z][a]]->SetVolumeMultiplier(musicCoefficient);
+		purpleLullabyAudioComponents[chordIndexes[z][a]]->Play();
+	}
+}
+void ATestHud::CommitAtmosphere(int newVol)
+{
+	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	saveFile->SetAtmosphere(newVol);
+	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
+
+	//double x = ((double)100 - (double)saveFile->GetMaster()) / (double)50;
+	double y = ((double)100 - (double)newVol) / ((double)50 * (double)((double)100 / (double)saveFile->GetMaster()));
+	double f = 1;
+
+	if (newVol == 0)
+	{
+		f = 0;
+	}
+
+	atmosphereCoefficient = (double)pow((double)10, (double)-1 * (double)y);
+	//destinationCoefficientA = (double)pow((double)10, (double)-1 * (double)2/*(double)y*/);//this needs to be the same as the atmosphereCoefficient accept replace y with what y would be if newVol was 0
+
+	if (inGame)
+	{
+		for (int a = 0; a < 2; a++)
+		{//((300.0 * masterCoefficientA) - (((300.0 * masterCoefficientA) - destinationCoefficientA) * (1 - atmosphereCoefficient))) * f
+			windAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)300.0 * (double)masterCoefficientA) - (double)((double)((double)((double)300.0 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
+			riverAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)0.16 * (double)masterCoefficientA) - (double)((double)((double)((double)0.16 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
+			waterfallAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)0.4 * (double)masterCoefficientA) - (double)((double)((double)((double)0.4 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
+		}
+	}
+	else
+	{
+		for (int a = 0; a < 2; a++)
+		{
+			windAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)1000.0 * (double)masterCoefficientA) - (double)((double)((double)((double)1000.0 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
+			windWithSheepAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)1000.0 * (double)masterCoefficientA) - (double)((double)((double)((double)1000.0 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
+			riverAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)0.33 * (double)masterCoefficientA) - (double)((double)((double)((double)0.33 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
+			waterfallAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)0.8 * (double)masterCoefficientA) - (double)((double)((double)((double)0.8 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
+		}
+	}
+	
+	int z = FMath::RandRange(0, 3);
+	for (int a = 0; a < 3; a++)
+	{
+		purpleLullabyAudioComponents[chordIndexes[z][a]]->SetVolumeMultiplier(((double)1.0 * (double)masterCoefficient) * (double)atmosphereCoefficient);
+		purpleLullabyAudioComponents[chordIndexes[z][a]]->Play();
+	}
+}
+void ATestHud::CommitSFX(int newVol)
+{
+	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	saveFile->SetSFX(newVol);
+	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
+
+	if (newVol == 0)
+	{
+		sfxCoefficient = 0;
+	}
+	else
+	{
+		double x = ((double)100 - (double)newVol) / (double)50;
+		sfxCoefficient = (double)pow((double)10, (double)-x);
+	}
+
+	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
+	{
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
+	}
+
+	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
+	{
+		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(((double)1.0 * (double)sfxCoefficient) * (double)masterCoefficient);
+	}
+
+	if (inGame)
+	{
+		intersectionDownAudioComponent->SetVolumeMultiplier(((double)90.0 * (double)sfxCoefficient) * (double)masterCoefficient);
+		intersectionUpAudioComponent->SetVolumeMultiplier(((double)80.0 * (double)sfxCoefficient) * (double)masterCoefficient);
+	}
+
+	int z = FMath::RandRange(0, 3);
+	for (int a = 0; a < 3; a++)
+	{
+		purpleLullabyAudioComponents[chordIndexes[z][a]]->SetVolumeMultiplier(sfxCoefficient);
+		purpleLullabyAudioComponents[chordIndexes[z][a]]->Play();
+	}
 }
 
 void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play for testing, but once everything is ironed out everything will be recompartmentalized for flow control
@@ -1482,6 +1716,9 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 	{
 		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(0.0);
 		purpleLullabyAudioComponents[a]->Play();
+
+		purpleLullabyTwoAudioComponents[a]->SetVolumeMultiplier(0.0);
+		purpleLullabyTwoAudioComponents[a]->Play();
 	}
 
 	intersectionDownAudioComponent->SetVolumeMultiplier(0.0);
@@ -1499,18 +1736,79 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 	rainstickAudioComponent->SetVolumeMultiplier(0.0);
 	rainstickAudioComponent->Play();
 
-	/*USaveGameOne* LoadGameInstance = Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass()));
-	LoadGameInstance->SetMaxLevel(13);
-	LoadGameInstance->SetHighscores({ 0, 0, 0 });
-	LoadGameInstance->SetHighscoreDataOne(0);
-	LoadGameInstance->SetHighscoreDataTwo(0);
-	LoadGameInstance->SetScoreThisGame(0);
-	UGameplayStatics::SaveGameToSlot(LoadGameInstance, TEXT("saveGameOne"), 0);*/
-	//LoadGameInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, 0));//is this gonna be a problem? do I need to get the actual default LoadGameInstance->SaveSlotName and the actual LoadGameInstance->UserIndex?
+	songOneAudioComponent->SetVolumeMultiplier(0.0);
+	songOneAudioComponent->Play();
+
+	USaveGameOne* adjustedSave = Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass()));
+	adjustedSave->SetMaxLevel(13);
+	adjustedSave->SetHighscores({ 0, 0, 0 });
+	adjustedSave->SetHighscoreDataOne(0);
+	adjustedSave->SetHighscoreDataTwo(0);
+	adjustedSave->SetScoreThisGame(0);
+	adjustedSave->SetMaster(100);
+	adjustedSave->SetMusic(100);
+	adjustedSave->SetAtmosphere(100);
+	adjustedSave->SetSFX(100);
+	UGameplayStatics::SaveGameToSlot(adjustedSave, TEXT("saveGameOne"), 0);
+	//adjustedSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(adjustedSave->SaveSlotName, 0));//is this gonna be a problem? do I need to get the actual default adjustedSave->SaveSlotName and the actual adjustedSave->UserIndex?
 	if (UGameplayStatics::LoadGameFromSlot("saveGameOne", 0) == nullptr)
 	{
-		UGameplayStatics::SaveGameToSlot(Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass())), "saveGameOne", 0);
+		USaveGameOne* LoadGameInstance = Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass()));
+		LoadGameInstance->SetMaxLevel(0);
+		LoadGameInstance->SetHighscores({ 0, 0, 0 });
+		LoadGameInstance->SetHighscoreDataOne(0);
+		LoadGameInstance->SetHighscoreDataTwo(0);
+		LoadGameInstance->SetScoreThisGame(0);
+		LoadGameInstance->SetMaster(100);
+		LoadGameInstance->SetMusic(100);
+		LoadGameInstance->SetAtmosphere(100);
+		LoadGameInstance->SetSFX(100);
+		UGameplayStatics::SaveGameToSlot(LoadGameInstance, TEXT("saveGameOne"), 0);
 	}
+
+	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+
+	double w = (double)((double)100 - (double)referenceInstance->GetMaster()) / (double)50;
+	double x = (double)((double)100 - (double)referenceInstance->GetMusic()) / (double)50;
+	double y = (double)((double)100 - (double)referenceInstance->GetAtmosphere()) / (double)50;
+	double z = (double)((double)100 - (double)referenceInstance->GetSFX()) / (double)50;
+
+	if (referenceInstance->GetMaster() == 0)
+	{
+		masterCoefficient = 0;
+	}
+	else
+	{
+		masterCoefficient = (double)pow((double)10, (double)-w);
+	}
+	if (referenceInstance->GetMusic() == 0)
+	{
+		musicCoefficient = 0;
+	}
+	else
+	{
+		musicCoefficient = (double)pow((double)10, (double)-x);
+	}
+	if (referenceInstance->GetAtmosphere() == 0)
+	{
+		atmosphereCoefficient = 0;
+	}
+	else
+	{
+		atmosphereCoefficient = (double)pow((double)10, (double)-y);
+	}
+	if (referenceInstance->GetSFX() == 0)
+	{
+		sfxCoefficient = 0;
+	}
+	else
+	{
+		sfxCoefficient = (double)pow((double)10, (double)-z);
+	}
+
+	destinationCoefficientM = (double)pow((double)10, (double)-2/*(double)-x*/);//this needs to be the same as the atmosphereCoefficient accept replace x with what x would be if newVol, or saveFile->get..(), was 0
+	destinationCoefficientA = (double)pow((double)10, (double)-2);
+	destinationCoefficientS = (double)pow((double)10, (double)-2);
 
 	inGame = false;
 
@@ -1518,6 +1816,10 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 	{
 		playerOnePlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 		standardWorldContextObject = GetWorld();
+
+		/*UGameUserSettings* MyGameSettings = GEngine->GetGameUserSettings();
+		MyGameSettings->SetFullscreenMode(EWindowMode::Fullscreen);
+		MyGameSettings->ApplySettings(true);*/
 
 		splashScreenSlateWidget = SNew(SCompanySplash)
 			.OwningHUD(this)
@@ -1539,24 +1841,70 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 	}
 }
 
-void ATestHud::DisplayPauseScreen()
+void ATestHud::DisplayOptionsMenu(bool cameFromGame)
 {
-	pauseScreenSlateWidget = SNew(SPauseScreen)
+	fromGame = cameFromGame;
+
+	optionsMenuSlateWidget = SNew(SOptions)
 		.OwningHUD(this)
+		.playerOnePlayerController(playerOnePlayerController)
+		.standardWorldContextObject(standardWorldContextObject)
 		.hoverGrowAudioComponents(hoverGrowAudioComponents)
 		.hoverShrinkAudioComponents(hoverShrinkAudioComponents)
-		.purpleLullabyAudioComponents(purpleLullabyAudioComponents);
+		.purpleLullabyAudioComponents(purpleLullabyAudioComponents)
+		.gameFrameColor_SMUI(gameFrameColor_SMUI);
 
-	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerEight, SWeakWidget).PossiblyNullContent(pauseScreenSlateWidget.ToSharedRef()));
+	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerNine, SWeakWidget).PossiblyNullContent(optionsMenuSlateWidget.ToSharedRef()));
 
-	FInputModeUIOnly pauseScreenInputMode = FInputModeUIOnly();
-	pauseScreenInputMode.SetWidgetToFocus(pauseScreenSlateWidget);
-	pauseScreenInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	FInputModeUIOnly optionsInputMode = FInputModeUIOnly();//Im getting an error in the unreal engine log. do I need to set canSupportFocus within the widget before calling this?
+	optionsInputMode.SetWidgetToFocus(optionsMenuSlateWidget);
+	optionsInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 	//mainMenuInputMode.SetHideCursorDuringCapture(false);
-	playerOnePlayerController->SetInputMode(pauseScreenInputMode);
+	playerOnePlayerController->SetInputMode(optionsInputMode);
 	playerOnePlayerController->SetShowMouseCursor(true);
-	FSlateApplication::Get().SetKeyboardFocus(pauseScreenSlateWidget);
+	FSlateApplication::Get().SetKeyboardFocus(optionsMenuSlateWidget);
 
+	if (fromGame)
+	{
+
+	}
+	else 
+	{
+
+	}
+}
+
+void ATestHud::DestroyOptionsMenu()
+{
+	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerNine.ToSharedRef());
+
+	if (fromGame)
+	{
+		pauseScreenSlateWidget->ReturnToLanding();
+
+		FInputModeUIOnly pauseScreenInputMode = FInputModeUIOnly();
+		pauseScreenInputMode.SetWidgetToFocus(pauseScreenSlateWidget);
+		pauseScreenInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+		//mainMenuInputMode.SetHideCursorDuringCapture(false);
+		playerOnePlayerController->SetInputMode(pauseScreenInputMode);
+		playerOnePlayerController->SetShowMouseCursor(true);
+		FSlateApplication::Get().SetKeyboardFocus(pauseScreenSlateWidget);
+	}
+	else
+	{
+		mainMenuSlateWidget->ReturnToMenu();
+
+		FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();
+		mainMenuInputMode.SetWidgetToFocus(mainMenuSlateWidget);
+		mainMenuInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+		playerOnePlayerController->SetInputMode(mainMenuInputMode);
+		playerOnePlayerController->SetShowMouseCursor(true);
+		FSlateApplication::Get().SetKeyboardFocus(mainMenuSlateWidget);
+	}
+}
+
+void ATestHud::DisplayPauseScreen()
+{
 	for (int a = 0; a < numberOfHoles; a++)
 	{
 		switch (a)
@@ -1724,6 +2072,27 @@ void ATestHud::DisplayPauseScreen()
 			}
 		}
 	}
+
+	pauseScreenSlateWidget = SNew(SPauseScreen)
+		.OwningHUD(this)
+		.hoverGrowAudioComponents(hoverGrowAudioComponents)
+		.hoverShrinkAudioComponents(hoverShrinkAudioComponents)
+		.purpleLullabyAudioComponents(purpleLullabyAudioComponents);
+
+	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerEight, SWeakWidget).PossiblyNullContent(pauseScreenSlateWidget.ToSharedRef()));
+
+	FInputModeUIOnly pauseScreenInputMode = FInputModeUIOnly();
+	pauseScreenInputMode.SetWidgetToFocus(pauseScreenSlateWidget);
+	pauseScreenInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	//mainMenuInputMode.SetHideCursorDuringCapture(false);
+	playerOnePlayerController->SetInputMode(pauseScreenInputMode);
+	playerOnePlayerController->SetShowMouseCursor(true);
+	FSlateApplication::Get().SetKeyboardFocus(pauseScreenSlateWidget);
+}
+
+void ATestHud::PrepDestroyPauseScreen()
+{
+	pauseScreenSlateWidget->destroyPauseScreen = true;
 }
 
 void ATestHud::DestroyPauseScreen()
@@ -1733,7 +2102,7 @@ void ATestHud::DestroyPauseScreen()
 	gameSlateWidget->PlayGame();
 
 	FInputModeUIOnly gameInWidgetInputMode = FInputModeUIOnly();
-	gameInWidgetInputMode.SetWidgetToFocus(loadingSlateWidget);
+	gameInWidgetInputMode.SetWidgetToFocus(gameSlateWidget);
 	gameInWidgetInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 	playerOnePlayerController->SetInputMode(gameInWidgetInputMode);
 	playerOnePlayerController->SetShowMouseCursor(true);
@@ -1918,6 +2287,7 @@ void ATestHud::DestroySplash()
 
 	mainMenuSlateWidget = SNew(SSArcadeModeTitleScreen)
 		.OwningHUD(this)
+		.playerOnePlayerController(playerOnePlayerController)
 		.standardWorldContextObject(standardWorldContextObject)
 		.backgroundMaterials(backgroundMaterials)
 		.backgroundIsLargeTile(backgroundIsLargeTile)
@@ -1932,12 +2302,15 @@ void ATestHud::DestroySplash()
 		.riverAudioComponents(riverAudioComponents)
 		.waterfallAudioComponents(waterfallAudioComponents)
 		.purpleLullabyAudioComponents(purpleLullabyAudioComponents)
-		.environmentAudio(environmentAudio);
+		.environmentAudio(environmentAudio)
+		.masterCoefficient(masterCoefficient)
+		.atmosphereCoefficient(atmosphereCoefficient)
+		.sfxCoefficient(sfxCoefficient);
 
 	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerThree, SWeakWidget).PossiblyNullContent(mainMenuSlateWidget.ToSharedRef()));
 
 	//FSlateApplication::SetUserFocus(0, loadingSlateWidget);
-
+	
 	//FInputModeGameAndUI mainMenuInputMode = FInputModeGameAndUI();
 	FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();//Im getting an error in the unreal engine log. do I need to set canSupportFocus within the widget before calling this?
 	mainMenuInputMode.SetWidgetToFocus(mainMenuSlateWidget);
@@ -2364,6 +2737,7 @@ void ATestHud::ReturnToMainMenu()
 
 	mainMenuSlateWidget = SNew(SSArcadeModeTitleScreen)
 		.OwningHUD(this)
+		.playerOnePlayerController(playerOnePlayerController)
 		.standardWorldContextObject(standardWorldContextObject)
 		.backgroundMaterials(backgroundMaterials)
 		.backgroundIsLargeTile(backgroundIsLargeTile)
@@ -2378,7 +2752,10 @@ void ATestHud::ReturnToMainMenu()
 		.riverAudioComponents(riverAudioComponents)
 		.waterfallAudioComponents(waterfallAudioComponents)
 		.purpleLullabyAudioComponents(purpleLullabyAudioComponents)
-		.environmentAudio(environmentAudio);
+		.environmentAudio(environmentAudio)
+		.masterCoefficient(masterCoefficient)
+		.atmosphereCoefficient(atmosphereCoefficient)
+		.sfxCoefficient(sfxCoefficient);
 
 	slateWidgetContainerThree->SetContent(mainMenuSlateWidget.ToSharedRef());
 
@@ -2388,7 +2765,7 @@ void ATestHud::ReturnToMainMenu()
 			.OwningHUD(this)
 			.rainstickAudioComponent(rainstickAudioComponent);
 
-		slateWidgetContainerSix->SetContent(resultsBlurSlateWidget.ToSharedRef());
+		/*slateWidgetContainerSix->SetContent(resultsBlurSlateWidget.ToSharedRef());*/
 	}
 
 	inGame = false;
@@ -2460,7 +2837,6 @@ void ATestHud::MasterGenerateLevel(int numHoles)
 	else
 	{
 		//GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerTwo.ToSharedRef());//somehow removing slateWidget container 3 here was actually working fyi
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "RanHouseKeeping");
 		HouseKeeping();
 		ResetRegenLevel();
 	}
@@ -9392,10 +9768,16 @@ void ATestHud::BuildLevel()
 	int endOfSides = 8 + FMath::Clamp((numberOfHoles - 4) / 2, 0, 6);
 	bool canAddFlare = false;
 	int directionOfFlare;
-	int extentOfFlare;
+	int numHolesCoefficientOne = FMath::Clamp(FMath::DivideAndRoundDown((numberOfHoles - 8), 2), 0, 4);
+	int numHolesCoefficientTwo = FMath::Clamp(FMath::DivideAndRoundDown((numberOfHoles - 8), 2), 0, 3);
+	int extentOfFlare = FMath::RandRange(1 + numHolesCoefficientOne, 3 + numHolesCoefficientTwo);
 	int remainingDistanceAfterFlare;
 
-	if (listOfHolePositionGroupings.Num() == 1)
+	//now I need to impliment putting the flare on the furthest most tiles for any hole count greater than 12, test my alterations, then if they work delete the extraneous extent of flare code and other trash
+	//I could possibly get rid of a lot of repitition in this area by rearranging finalIntersectionDir conditional stuff
+	//extentOfFlare alterations need tested to see if they are working as expected (less looking for glitchyness more functionality)
+
+	if (listOfHolePositionGroupings.Num() == 1)//do I even need this conditional?
 	{
 		finalIntersectionPos = holeAndIntersectionPositions[4][0][0];
 		finalIntersectionDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[4][0][0];
@@ -9406,22 +9788,22 @@ void ATestHud::BuildLevel()
 		finalIntersectionDir = arrOfTrackDirectionsLeadingAwayFromEachHoleOrIntersection[FMath::Clamp(FMath::RoundHalfFromZero((float)listOfHolePositionGroupings.Num() / 2.0f), 1, 3) + 4][0][0];
 	}
 
-	if (15 - endOfSides > 2 && 14 > finalIntersectionPos.X && finalIntersectionPos.X > 2 && 14 > finalIntersectionPos.Y && finalIntersectionPos.Y > 2)
+	//if (15 - endOfSides > 2 && 14 > finalIntersectionPos.X && finalIntersectionPos.X > 2 && 14 > finalIntersectionPos.Y && finalIntersectionPos.Y > 2)
+	//{
+	if (numberOfHoles < 9)
 	{
-		if (numberOfHoles < 9)
-		{
-			float goatFloat = (float)((float)((float)0.5 * (float)sin((float)3.14 * ((float)((float)numberOfHoles / (float)9) - (float)0.5))) + (float)0.5) * (float)100;
+		float flareCoefficient = (float)((float)((float)0.5 * (float)sin((float)3.14 * ((float)((float)numberOfHoles / (float)9) - (float)0.5))) + (float)0.5) * (float)100; // I know this looks silly, its to create an exponential increase in probability so the lower number of holes probably wont but still might get flare and the higher number probably will but still might not
 
-			if (FMath::RandRange(1, 100) < goatFloat)
-			{
-				canAddFlare = true;
-			}
-		}
-		else
+		if (FMath::RandRange(1, 100) < flareCoefficient)
 		{
 			canAddFlare = true;
 		}
 	}
+	else
+	{
+		canAddFlare = true;
+	}
+	//}
 
 	switch (negativeOneZeroOrOne)
 	{
@@ -9431,515 +9813,183 @@ void ATestHud::BuildLevel()
 		case 1:
 			finalIntersectionPos.Y += 1;
 			newTrackPos = finalIntersectionPos;
-			distanceToEdgeOfBoard = 15 - finalIntersectionPos.X;
-
-			if (canAddFlare)
-			{
-				if (numberOfHoles < 11)
-				{
-					if (FMath::RandRange(0, 19) > 9)
-					{
-						if (newTrackPos.Y < 13)
-						{
-							directionOfFlare = 1;
-						}
-						else
-						{
-							directionOfFlare = 3;
-						}
-					}
-					else
-					{
-						if (newTrackPos.Y > 3)
-						{
-							directionOfFlare = 3;
-						}
-						else
-						{
-							directionOfFlare = 1;
-						}
-					}
-				}
-				else
-				{
-					if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
-					{
-						directionOfFlare = 1;
-					}
-					else
-					{
-						directionOfFlare = 3;
-					}
-				}
-
-				if (endOfSides >= newTrackPos.X)
-				{
-					distanceToEdgeOfBoard = endOfSides - newTrackPos.X + 1 + FMath::RandRange(0, 12 - endOfSides);
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
-				}
-				else
-				{
-					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.X));
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
-				}
-			}
 
 			convertedTrackPos.X = newTrackPos.X - 1;
 			convertedTrackPos.Y = 15 - newTrackPos.Y;
 			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
 			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 
-			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
-			{
-				newTrackPos = finalIntersectionPos + FVector2D(a, 0);
-
-				convertedTrackPos.X = newTrackPos.X - 1;
-				convertedTrackPos.Y = 15 - newTrackPos.Y;
-				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-			}
-
-			if (canAddFlare)
-			{
-				switch (directionOfFlare)
-				{
-				case 1:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.Y, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.X += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.Y += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
-					newTrackPos.Y += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.X += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				case 3:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.Y - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.X += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.Y -= 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
-					newTrackPos.Y -= 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.X += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				default:
-					break;
-				}
-			}
-
-			startingPos = convertedTrackPos;
-			startingDir = 4;
-
 			break;
 		case 2:
 			newTrackPos = finalIntersectionPos;
-			distanceToEdgeOfBoard = 15 - finalIntersectionPos.X;
-
-			if (canAddFlare)
-			{
-				if (numberOfHoles < 11)
-				{
-					if (FMath::RandRange(0, 19) > 9)
-					{
-						if (newTrackPos.Y < 13)
-						{
-							directionOfFlare = 1;
-						}
-						else
-						{
-							directionOfFlare = 3;
-						}
-					}
-					else
-					{
-						if (newTrackPos.Y > 3)
-						{
-							directionOfFlare = 3;
-						}
-						else
-						{
-							directionOfFlare = 1;
-						}
-					}
-				}
-				else
-				{
-					if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
-					{
-						directionOfFlare = 1;
-					}
-					else
-					{
-						directionOfFlare = 3;
-					}
-				}
-
-				if (endOfSides >= newTrackPos.X)
-				{
-					distanceToEdgeOfBoard = endOfSides - newTrackPos.X + 1 + FMath::RandRange(0, 12 - endOfSides);
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
-				}
-				else
-				{
-					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.X));
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
-				}
-			}
-
-			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
-			{
-				newTrackPos = finalIntersectionPos + FVector2D(a, 0);
-
-				convertedTrackPos.X = newTrackPos.X - 1;
-				convertedTrackPos.Y = 15 - newTrackPos.Y;
-				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-			}
-
-			if (canAddFlare)
-			{
-				switch (directionOfFlare)
-				{
-				case 1:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.Y, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.X += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.Y += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
-					newTrackPos.Y += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.X += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				case 3:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.Y - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.X += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.Y -= 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
-					newTrackPos.Y -= 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.X += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				default:
-					break;
-				}
-			}
-
-			startingPos = convertedTrackPos;
-			startingDir = 4;
 
 			break;
 		case 3:
 			finalIntersectionPos.Y -= 1;
 			newTrackPos = finalIntersectionPos;
-			distanceToEdgeOfBoard = 15 - finalIntersectionPos.X;
-
-			if (canAddFlare)
-			{
-				if (numberOfHoles < 11)
-				{
-					if (FMath::RandRange(0, 19) > 9)
-					{
-						if (newTrackPos.Y < 13)
-						{
-							directionOfFlare = 1;
-						}
-						else
-						{
-							directionOfFlare = 3;
-						}
-					}
-					else
-					{
-						if (newTrackPos.Y > 3)
-						{
-							directionOfFlare = 3;
-						}
-						else
-						{
-							directionOfFlare = 1;
-						}
-					}
-				}
-				else
-				{
-					if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
-					{
-						directionOfFlare = 1;
-					}
-					else
-					{
-						directionOfFlare = 3;
-					}
-				}
-
-				if (endOfSides >= newTrackPos.X)
-				{
-					distanceToEdgeOfBoard = endOfSides - newTrackPos.X + 1 + FMath::RandRange(0, 12 - endOfSides);
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
-				}
-				else
-				{
-					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.X));
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
-				}
-			}
 
 			convertedTrackPos.X = newTrackPos.X - 1;
 			convertedTrackPos.Y = 15 - newTrackPos.Y;
 			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
 			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 
-			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
-			{
-				newTrackPos = finalIntersectionPos + FVector2D(a, 0);
+			break;
+		}
 
-				convertedTrackPos.X = newTrackPos.X - 1;
-				convertedTrackPos.Y = 15 - newTrackPos.Y;
-				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-			}
+		distanceToEdgeOfBoard = 15 - finalIntersectionPos.X;
 
-			if (canAddFlare)
+		if (canAddFlare)
+		{
+			if (numberOfHoles < 11)
 			{
-				switch (directionOfFlare)
+				if (FMath::RandRange(0, 19) > 9)
 				{
-				case 1:
-					if (numberOfHoles < 11)
+					if (newTrackPos.Y < 12)
 					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
+						directionOfFlare = 1;
 					}
 					else
 					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.Y, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
+						directionOfFlare = 3;
 					}
-
-					newTrackPos.X += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
+				}
+				else
+				{
+					if (newTrackPos.Y > 4)
 					{
-						newTrackPos.Y += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+						directionOfFlare = 3;
 					}
+					else
+					{
+						directionOfFlare = 1;
+					}
+				}
+			}
+			else
+			{
+				if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
+				{
+					directionOfFlare = 1;
+				}
+				else
+				{
+					directionOfFlare = 3;
+				}
+			}
 
+			if (numberOfHoles < 14)
+			{
+				//why is end of sides coming into play here? because doesnt turn for the flair prematurely potentially causing an avoidable overlap
+				if (endOfSides >= newTrackPos.X)
+				{
+					distanceToEdgeOfBoard = endOfSides - newTrackPos.X + 1 + FMath::RandRange(0, 12 - endOfSides);
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
+				}
+				else
+				{
+					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.X));
+					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.X);
+				}
+			}
+			else
+			{
+				//is it possible for finalIntersectionPos to be too close to the side and cause a glitch? I dont think so
+				distanceToEdgeOfBoard = 14 - newTrackPos.X;
+				remainingDistanceAfterFlare = 0;
+			}
+		}
+
+		for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+		{
+			newTrackPos = finalIntersectionPos + FVector2D(a, 0);
+
+			convertedTrackPos.X = newTrackPos.X - 1;
+			convertedTrackPos.Y = 15 - newTrackPos.Y;
+			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+		}
+
+		if (canAddFlare)
+		{
+			switch (directionOfFlare)
+			{
+			case 1:
+				newTrackPos.X += 1;
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+				for (int a = 1; a <= extentOfFlare; a++)
+				{
 					newTrackPos.Y += 1;
 
 					convertedTrackPos.X = newTrackPos.X - 1;
 					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+				}
 
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.X += 1;
+				newTrackPos.Y += 1;
 
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				case 3:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
-					}
-					else
-					{
-						
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.Y - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 
+				for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+				{
 					newTrackPos.X += 1;
 
 					convertedTrackPos.X = newTrackPos.X - 1;
 					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+				}
+				break;
+			case 3:
+				newTrackPos.X += 1;
 
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.Y -= 1;
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
+				for (int a = 1; a <= extentOfFlare; a++)
+				{
 					newTrackPos.Y -= 1;
 
 					convertedTrackPos.X = newTrackPos.X - 1;
 					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.X += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				default:
-					break;
 				}
+
+				newTrackPos.Y -= 1;
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+				for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+				{
+					newTrackPos.X += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+				}
+				break;
+			default:
+				break;
 			}
-
-			startingPos = convertedTrackPos;
-			startingDir = 4;
-
-			break;
 		}
+
+		startingPos = convertedTrackPos;
+		startingDir = 4;
 
 		break;
 	case 0:
@@ -9947,377 +9997,51 @@ void ATestHud::BuildLevel()
 		{
 		case 1:
 			newTrackPos = finalIntersectionPos;
-			distanceToEdgeOfBoard = 15 - finalIntersectionPos.Y;
-
-			if (canAddFlare)
-			{
-				if (numberOfHoles < 11)
-				{
-					if (FMath::RandRange(0, 19) > 9)
-					{
-						if (newTrackPos.X > 3)
-						{
-							directionOfFlare = 4;
-						}
-						else
-						{
-							directionOfFlare = 2;
-						}
-					}
-					else
-					{
-						if (newTrackPos.X < 13)
-						{
-							directionOfFlare = 2;
-						}
-						else
-						{
-							directionOfFlare = 4;
-						}
-					}
-				}
-				else
-				{
-					if (15 - finalIntersectionPos.X > finalIntersectionPos.X)
-					{
-						directionOfFlare = 2;
-					}
-					else
-					{
-						directionOfFlare = 4;
-					}
-				}
-
-				if (endOfSides >= newTrackPos.Y)
-				{
-					distanceToEdgeOfBoard = endOfSides - newTrackPos.Y + 1 + FMath::RandRange(0, 12 - endOfSides);
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.Y);
-				}
-				else
-				{
-					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.Y));
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.Y);
-				}
-			}
-
-			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
-			{
-				newTrackPos = finalIntersectionPos + FVector2D(0, a);
-
-				convertedTrackPos.X = newTrackPos.X - 1;
-				convertedTrackPos.Y = 15 - newTrackPos.Y;
-				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-			}
-
-			if (canAddFlare)
-			{
-				switch (directionOfFlare)
-				{
-				case 2:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.X, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.X, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.Y += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.X += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
-					newTrackPos.X += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.Y += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				case 4:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.X - 3, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.X - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.Y += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.X -= 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
-					newTrackPos.X -= 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.Y += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				default:
-					break;
-				}
-			}
-
-			startingPos = convertedTrackPos;
-			startingDir = 3;
 
 			break;
 		case 2:
 			finalIntersectionPos.X += 1;
 			newTrackPos = finalIntersectionPos;
-			distanceToEdgeOfBoard = 15 - finalIntersectionPos.Y;
 
-			if (canAddFlare)
-			{
-				if (numberOfHoles < 11)
-				{
-					if (FMath::RandRange(0, 19) > 9)
-					{
-						if (newTrackPos.X > 3)
-						{
-							directionOfFlare = 4;
-						}
-						else
-						{
-							directionOfFlare = 2;
-						}
-					}
-					else
-					{
-						if (newTrackPos.X < 13)
-						{
-							directionOfFlare = 2;
-						}
-						else
-						{
-							directionOfFlare = 4;
-						}
-					}
-				}
-				else
-				{
-					if (15 - finalIntersectionPos.X > finalIntersectionPos.X)
-					{
-						directionOfFlare = 2;
-					}
-					else
-					{
-						directionOfFlare = 4;
-					}
-				}
-
-				if (endOfSides >= newTrackPos.Y)
-				{
-					distanceToEdgeOfBoard = endOfSides - newTrackPos.Y + 1 + FMath::RandRange(0, 12 - endOfSides);
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.Y);
-				}
-				else
-				{
-					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.Y));
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.Y);
-				}
-			}
 
 			convertedTrackPos.X = newTrackPos.X - 1;
 			convertedTrackPos.Y = 15 - newTrackPos.Y;
 			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
 			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 
-			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
-			{
-				newTrackPos = finalIntersectionPos + FVector2D(0, a);
-
-				convertedTrackPos.X = newTrackPos.X - 1;
-				convertedTrackPos.Y = 15 - newTrackPos.Y;
-				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-			}
-
-			if (canAddFlare)
-			{
-				switch (directionOfFlare)
-				{
-				case 2:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.X, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.X, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.Y += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.X += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
-					newTrackPos.X += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.Y += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				case 4:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.X - 3, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.X - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.Y += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.X -= 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
-					newTrackPos.X -= 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.Y += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				default:
-					break;
-				}
-			}
-
-			startingPos = convertedTrackPos;
-			startingDir = 3;
-
 			break;
 		case 4:
 			finalIntersectionPos.X -= 1;
 			newTrackPos = finalIntersectionPos;
-			distanceToEdgeOfBoard = 15 - finalIntersectionPos.Y;
 
-			if (canAddFlare)
+			convertedTrackPos.X = newTrackPos.X - 1;
+			convertedTrackPos.Y = 15 - newTrackPos.Y;
+			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+			break;
+		}
+
+		distanceToEdgeOfBoard = 15 - finalIntersectionPos.Y;
+
+		if (canAddFlare)
+		{
+			if (numberOfHoles < 11)
 			{
-				if (numberOfHoles < 11)
+				if (FMath::RandRange(0, 19) > 9)
 				{
-					if (FMath::RandRange(0, 19) > 9)
+					if (newTrackPos.X > 4)
 					{
-						if (newTrackPos.X > 3)
-						{
-							directionOfFlare = 4;
-						}
-						else
-						{
-							directionOfFlare = 2;
-						}
+						directionOfFlare = 4;
 					}
 					else
 					{
-						if (newTrackPos.X < 13)
-						{
-							directionOfFlare = 2;
-						}
-						else
-						{
-							directionOfFlare = 4;
-						}
+						directionOfFlare = 2;
 					}
 				}
 				else
 				{
-					if (15 - finalIntersectionPos.X > finalIntersectionPos.X)
+					if (newTrackPos.X < 12)
 					{
 						directionOfFlare = 2;
 					}
@@ -10326,7 +10050,21 @@ void ATestHud::BuildLevel()
 						directionOfFlare = 4;
 					}
 				}
+			}
+			else
+			{
+				if (15 - finalIntersectionPos.X > finalIntersectionPos.X)
+				{
+					directionOfFlare = 2;
+				}
+				else
+				{
+					directionOfFlare = 4;
+				}
+			}
 
+			if (numberOfHoles < 14)
+			{
 				if (endOfSides >= newTrackPos.Y)
 				{
 					distanceToEdgeOfBoard = endOfSides - newTrackPos.Y + 1 + FMath::RandRange(0, 12 - endOfSides);
@@ -10337,125 +10075,106 @@ void ATestHud::BuildLevel()
 					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - newTrackPos.Y));
 					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + newTrackPos.Y);
 				}
+
 			}
+			else
+			{
+				distanceToEdgeOfBoard = 14 - newTrackPos.Y;
+				remainingDistanceAfterFlare = 0;
+			}
+		}
+
+		for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+		{
+			newTrackPos = finalIntersectionPos + FVector2D(0, a);
 
 			convertedTrackPos.X = newTrackPos.X - 1;
 			convertedTrackPos.Y = 15 - newTrackPos.Y;
-			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+		}
 
-			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+		if (canAddFlare)
+		{
+			switch (directionOfFlare)
 			{
-				newTrackPos = finalIntersectionPos + FVector2D(0, a);
+			case 2:
+				newTrackPos.Y += 1;
 
 				convertedTrackPos.X = newTrackPos.X - 1;
 				convertedTrackPos.Y = 15 - newTrackPos.Y;
-				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
 				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-			}
 
-			if (canAddFlare)
-			{
-				switch (directionOfFlare)
+				for (int a = 1; a <= extentOfFlare; a++)
 				{
-				case 2:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.X, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.X, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.Y += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.X += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
 					newTrackPos.X += 1;
 
 					convertedTrackPos.X = newTrackPos.X - 1;
 					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+				}
 
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.Y += 1;
+				newTrackPos.X += 1;
 
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				case 4:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.X - 3, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.X - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 
+				for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+				{
 					newTrackPos.Y += 1;
 
 					convertedTrackPos.X = newTrackPos.X - 1;
 					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+				}
+				break;
+			case 4:
+				newTrackPos.Y += 1;
 
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.X -= 1;
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
+				for (int a = 1; a <= extentOfFlare; a++)
+				{
 					newTrackPos.X -= 1;
 
 					convertedTrackPos.X = newTrackPos.X - 1;
 					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.Y += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				default:
-					break;
 				}
+
+				newTrackPos.X -= 1;
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+				for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+				{
+					newTrackPos.Y += 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+				}
+				break;
+			default:
+				break;
 			}
-
-			startingPos = convertedTrackPos;
-			startingDir = 3;
-
-			break;
 		}
+
+		startingPos = convertedTrackPos;
+		startingDir = 3;
 
 		break;
 	case 1:
@@ -10464,381 +10183,49 @@ void ATestHud::BuildLevel()
 		case 1:
 			finalIntersectionPos.Y += 1;
 			newTrackPos = finalIntersectionPos;
-			distanceToEdgeOfBoard = finalIntersectionPos.X - 1;
-
-			if (canAddFlare)
-			{
-				if (numberOfHoles < 11)
-				{
-					if (FMath::RandRange(0, 19) > 9)
-					{
-						if (newTrackPos.Y > 3)
-						{
-							directionOfFlare = 3;
-						}
-						else
-						{
-							directionOfFlare = 1;
-						}
-					}
-					else
-					{
-						if (newTrackPos.Y < 13)
-						{
-							directionOfFlare = 1;
-						}
-						else
-						{
-							directionOfFlare = 3;
-						}
-					}
-				}
-				else
-				{
-					if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
-					{
-						directionOfFlare = 1;
-					}
-					else
-					{
-						directionOfFlare = 3;
-					}
-				}
-
-				if (endOfSides >= 16 - newTrackPos.X)
-				{
-					distanceToEdgeOfBoard = endOfSides - (16 - newTrackPos.X) + 1 + FMath::RandRange(0, 12 - endOfSides);
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + (16 - newTrackPos.X));
-				}
-				else
-				{
-					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - (16 - newTrackPos.X)));
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + (16 - newTrackPos.X));
-				}
-			}
 
 			convertedTrackPos.X = newTrackPos.X - 1;
 			convertedTrackPos.Y = 15 - newTrackPos.Y;
 			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
 			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 
-			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
-			{
-				newTrackPos = finalIntersectionPos - FVector2D(a, 0);
-
-				convertedTrackPos.X = newTrackPos.X - 1;
-				convertedTrackPos.Y = 15 - newTrackPos.Y;
-				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-			}
-
-			if (canAddFlare)
-			{
-				switch (directionOfFlare)
-				{
-				case 1:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.Y, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.X -= 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.Y += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
-					newTrackPos.Y += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.X -= 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				case 3:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.Y - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.X -= 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.Y -= 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
-					newTrackPos.Y -= 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.X -= 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				default:
-					break;
-				}
-			}
-
-			startingPos = convertedTrackPos;
-			startingDir = 2;
-
 			break;
 		case 3:
 			finalIntersectionPos.Y -= 1;
 			newTrackPos = finalIntersectionPos;
-			distanceToEdgeOfBoard = finalIntersectionPos.X - 1;
-
-			if (canAddFlare)
-			{
-				if (numberOfHoles < 11)
-				{
-					if (FMath::RandRange(0, 19) > 9)
-					{
-						if (newTrackPos.Y > 3)
-						{
-							directionOfFlare = 3;
-						}
-						else
-						{
-							directionOfFlare = 1;
-						}
-					}
-					else
-					{
-						if (newTrackPos.Y < 13)
-						{
-							directionOfFlare = 1;
-						}
-						else
-						{
-							directionOfFlare = 3;
-						}
-					}
-				}
-				else
-				{
-					if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
-					{
-						directionOfFlare = 1;
-					}
-					else
-					{
-						directionOfFlare = 3;
-					}
-				}
-
-				if (endOfSides >= 16 - newTrackPos.X)
-				{
-					distanceToEdgeOfBoard = endOfSides - (16 - newTrackPos.X) + 1 + FMath::RandRange(0, 12 - endOfSides);
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + (16 - newTrackPos.X));
-				}
-				else
-				{
-					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - (16 - newTrackPos.X)));
-					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + (16 - newTrackPos.X));
-				}
-			}
 
 			convertedTrackPos.X = newTrackPos.X - 1;
 			convertedTrackPos.Y = 15 - newTrackPos.Y;
 			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
 			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 
-			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
-			{
-				newTrackPos = finalIntersectionPos - FVector2D(a, 0);
-
-				convertedTrackPos.X = newTrackPos.X - 1;
-				convertedTrackPos.Y = 15 - newTrackPos.Y;
-				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-			}
-
-			if (canAddFlare)
-			{
-				switch (directionOfFlare)
-				{
-				case 1:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.Y, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.X -= 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.Y += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
-					newTrackPos.Y += 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.X -= 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				case 3:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.Y - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.X -= 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.Y -= 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
-					newTrackPos.Y -= 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.X -= 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				default:
-					break;
-				}
-			}
-
-			startingPos = convertedTrackPos;
-			startingDir = 2;
-
 			break;
 		case 4:
 			newTrackPos = finalIntersectionPos;
-			distanceToEdgeOfBoard = finalIntersectionPos.X - 1;
 
-			if (canAddFlare)
+			break;
+		}
+		
+		distanceToEdgeOfBoard = finalIntersectionPos.X - 1;
+
+		if (canAddFlare)
+		{
+			if (numberOfHoles < 11)
 			{
-				if (numberOfHoles < 11)
+				if (FMath::RandRange(0, 19) > 9)
 				{
-					if (FMath::RandRange(0, 19) > 9)
+					if (newTrackPos.Y > 4)
 					{
-						if (newTrackPos.Y > 3)
-						{
-							directionOfFlare = 3;
-						}
-						else
-						{
-							directionOfFlare = 1;
-						}
+						directionOfFlare = 3;
 					}
 					else
 					{
-						if (newTrackPos.Y < 13)
-						{
-							directionOfFlare = 1;
-						}
-						else
-						{
-							directionOfFlare = 3;
-						}
+						directionOfFlare = 1;
 					}
 				}
 				else
 				{
-					if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
+					if (newTrackPos.Y < 12)
 					{
 						directionOfFlare = 1;
 					}
@@ -10847,7 +10234,21 @@ void ATestHud::BuildLevel()
 						directionOfFlare = 3;
 					}
 				}
+			}
+			else
+			{
+				if (15 - finalIntersectionPos.Y > finalIntersectionPos.Y)
+				{
+					directionOfFlare = 1;
+				}
+				else
+				{
+					directionOfFlare = 3;
+				}
+			}
 
+			if (numberOfHoles < 14)
+			{
 				if (endOfSides >= 16 - newTrackPos.X)
 				{
 					distanceToEdgeOfBoard = endOfSides - (16 - newTrackPos.X) + 1 + FMath::RandRange(0, 12 - endOfSides);
@@ -10858,125 +10259,112 @@ void ATestHud::BuildLevel()
 					distanceToEdgeOfBoard = FMath::RandRange(0, (int)(13 - (16 - newTrackPos.X)));
 					remainingDistanceAfterFlare = 14 - (distanceToEdgeOfBoard + (16 - newTrackPos.X));
 				}
-			}
 
-			for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+			}
+			else
 			{
-				newTrackPos = finalIntersectionPos - FVector2D(a, 0);
+				distanceToEdgeOfBoard = newTrackPos.X - 2;
+				remainingDistanceAfterFlare = 0;
+			}
+		}
+
+		for (int a = 1; a <= distanceToEdgeOfBoard; a++)
+		{
+			newTrackPos = finalIntersectionPos - FVector2D(a, 0);
+
+			convertedTrackPos.X = newTrackPos.X - 1;
+			convertedTrackPos.Y = 15 - newTrackPos.Y;
+			trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+			tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+		}
+
+		if (canAddFlare)
+		{
+			switch (directionOfFlare)
+			{
+			case 1:
+				newTrackPos.X -= 1;
 
 				convertedTrackPos.X = newTrackPos.X - 1;
 				convertedTrackPos.Y = 15 - newTrackPos.Y;
-				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
 				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-			}
 
-			if (canAddFlare)
-			{
-				switch (directionOfFlare)
+				for (int a = 1; a <= extentOfFlare; a++)
 				{
-				case 1:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(13 - newTrackPos.Y, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(13 - newTrackPos.Y, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
-
-					newTrackPos.X -= 1;
-
-					convertedTrackPos.X = newTrackPos.X - 1;
-					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 3;
-					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.Y += 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
 					newTrackPos.Y += 1;
 
 					convertedTrackPos.X = newTrackPos.X - 1;
 					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+				}
 
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.X -= 1;
+				newTrackPos.Y += 1;
 
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				case 3:
-					if (numberOfHoles < 11)
-					{
-						extentOfFlare = FMath::RandRange(1, (int)FMath::Clamp(newTrackPos.Y - 3, 1, 3));
-					}
-					else
-					{
-						extentOfFlare = FMath::RandRange(FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, (int)FMath::Clamp(newTrackPos.Y - 3, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 1, FMath::DivideAndRoundUp(numberOfHoles - 10, 2) + 3));
-					}
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 5;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 
+				for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+				{
 					newTrackPos.X -= 1;
 
 					convertedTrackPos.X = newTrackPos.X - 1;
 					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
 					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+				}
+				break;
+			case 3:
+				newTrackPos.X -= 1;
 
-					for (int a = 1; a <= extentOfFlare; a++)
-					{
-						newTrackPos.Y -= 1;
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 4;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
 
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-
+				for (int a = 1; a <= extentOfFlare; a++)
+				{
 					newTrackPos.Y -= 1;
 
 					convertedTrackPos.X = newTrackPos.X - 1;
 					convertedTrackPos.Y = 15 - newTrackPos.Y;
-					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 1;
 					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-
-					for (int a = 1; a <= remainingDistanceAfterFlare; a++)
-					{
-						newTrackPos.X -= 1;
-
-						convertedTrackPos.X = newTrackPos.X - 1;
-						convertedTrackPos.Y = 15 - newTrackPos.Y;
-						trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
-						tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
-					}
-					break;
-				default:
-					break;
 				}
+
+				newTrackPos.Y -= 1;
+
+				convertedTrackPos.X = newTrackPos.X - 1;
+				convertedTrackPos.Y = 15 - newTrackPos.Y;
+				trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 6;
+				tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+
+				for (int a = 1; a <= remainingDistanceAfterFlare; a++)
+				{
+					newTrackPos.X -= 1;
+
+					convertedTrackPos.X = newTrackPos.X - 1;
+					convertedTrackPos.Y = 15 - newTrackPos.Y;
+					trackArr[convertedTrackPos.Y * 15 + convertedTrackPos.X] = 2;
+					tileIsTrack[convertedTrackPos.Y * 15 + convertedTrackPos.X] += 1;
+				}
+				break;
+			default:
+				break;
 			}
-
-			startingPos = convertedTrackPos;
-			startingDir = 2;
-
-			break;
 		}
+
+		startingPos = convertedTrackPos;
+		startingDir = 2;
 
 		break;
 	default:
 		break;
 	}
+
 
 	//LANDSCAPE DATA
 
@@ -12022,15 +11410,24 @@ void ATestHud::BuildLevel()
 		}
 	}
 
-	for (int a : tileIsTrack)
+	if (finalIntersectionPos.Y > 14 || finalIntersectionPos.X < 2 || finalIntersectionPos.X > 14)
 	{
-		if (a > 1)
+		regenerateLevel.Add(1);
+		return;
+	}
+	else 
+	{
+		for (int a : tileIsTrack)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED ");
-			regenerateLevel.Add(1);
-			return;
+			if (a > 1)
+			{
+				//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "REGENERATION TRIGGERED ");
+				regenerateLevel.Add(1);
+				return;
+			}
 		}
 	}
+
 
 	if (GEngine && GEngine->GameViewport)
 	{
@@ -12153,12 +11550,17 @@ void ATestHud::BuildLevel()
 			.windAudioComponents(windAudioComponents)
 			.riverAudioComponents(riverAudioComponents)
 			.waterfallAudioComponents(waterfallAudioComponents)
-			.environmentAudio(environmentAudio);
+			.songOneAudioComponent(songOneAudioComponent)
+			.environmentAudio(environmentAudio)
+			.masterCoefficient(masterCoefficient)
+			.musicCoefficient(musicCoefficient)
+			.atmosphereCoefficient(atmosphereCoefficient)
+			.sfxCoefficient(sfxCoefficient);
 
 			slateWidgetContainerTwo->SetContent(gameSlateWidget.ToSharedRef());
 
 		FInputModeUIOnly gameInWidgetInputMode = FInputModeUIOnly();
-		gameInWidgetInputMode.SetWidgetToFocus(loadingSlateWidget);
+		gameInWidgetInputMode.SetWidgetToFocus(gameSlateWidget);
 		gameInWidgetInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 		playerOnePlayerController->SetInputMode(gameInWidgetInputMode);
 		playerOnePlayerController->SetShowMouseCursor(true);
@@ -12173,6 +11575,16 @@ void ATestHud::GenerateLevel()
 	GenerateTrackShape();
 
 	BuildLevel();
+}
+
+void ATestHud::SetFocusToGame()
+{
+	FInputModeUIOnly gameInWidgetInputMode = FInputModeUIOnly();
+	gameInWidgetInputMode.SetWidgetToFocus(gameSlateWidget);
+	gameInWidgetInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	playerOnePlayerController->SetInputMode(gameInWidgetInputMode);
+	playerOnePlayerController->SetShowMouseCursor(true);
+	FSlateApplication::Get().SetKeyboardFocus(gameSlateWidget);
 }
 
 void ATestHud::HouseKeeping()

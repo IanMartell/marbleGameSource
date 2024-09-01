@@ -158,11 +158,12 @@ BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 {
 	SetCanTick(true);
-	bCanSupportFocus = true;
+	bCanSupportFocus = true; //this widget is currently failing to accept focus. my theory is either I need to change the setup to calling a function in the hud to designate focus from this file only after setting bCanSupportFocus = true, set canSupportFocus from the hud
 	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, FString::FromInt(currentSave->GetHighscores()[1]));
 
 	OwningHUD = InArgs._OwningHUD;
+	playerOnePlayerController = InArgs._playerOnePlayerController;
 	standardWorldContextObject = InArgs._standardWorldContextObject;
 	gameFrameColor_SMUI = InArgs._gameFrameColor_SMUI;
 	backgroundMaterials = InArgs._backgroundMaterials;
@@ -178,6 +179,9 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 	waterfallAudioComponents = InArgs._waterfallAudioComponents;
 	purpleLullabyAudioComponents = InArgs._purpleLullabyAudioComponents;
 	environmentAudio = InArgs._environmentAudio;
+	masterCoefficient = InArgs._masterCoefficient;
+	atmosphereCoefficient = InArgs._atmosphereCoefficient;
+	sfxCoefficient = InArgs._sfxCoefficient;
 
 	gameFrameColor_SB = new FSlateBrush();
 	gameFrameColor_SB->SetResourceObject(gameFrameColor_SMUI);
@@ -211,7 +215,7 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 
 	titleFont = FCoreStyle::Get().GetFontStyle("EmbossedText");
 	titleFont.Size = 0.06 * adjustedViewportSize.Y;
-	titleText = FText::FromString("Mind Marbles");
+	titleText = FText::FromString("Sorting Your Marbles");
 	subTitleFont = FCoreStyle::Get().GetFontStyle("Roboto");
 	subTitleFont.Size = 0.05 * adjustedViewportSize.Y;
 	menuFont = FCoreStyle::Get().GetFontStyle("Roboto");
@@ -252,27 +256,30 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 
 	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
 	{
-		hoverGrowAudioComponents[a]->SetVolumeMultiplier(4.0);
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
 		hoverGrowAudioComponents[a]->Stop();
-		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(4.0);
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
 		hoverShrinkAudioComponents[a]->Stop();
 	}
 
+	double x = ((double)100 - (double)currentSave->GetMaster()) / (double)50;
+	double y = ((double)100 - (double)currentSave->GetAtmosphere()) / (double)50;
+
 	for (int a = 0; a < 2; a++)
 	{
-		windAudioComponents[a]->SetVolumeMultiplier(8.0);
+		windAudioComponents[a]->SetVolumeMultiplier(((double)1000.0 * (double)pow((double)10, (double)-2 * y)) * (double)pow((double)10, (double)-2 * x));
 		windAudioComponents[a]->Stop();
-		windWithSheepAudioComponents[a]->SetVolumeMultiplier(8.0);
+		windWithSheepAudioComponents[a]->SetVolumeMultiplier(((double)1000.0 * (double)pow((double)10, (double)-2 * y)) * (double)pow((double)10, (double)-2 * x));
 		windWithSheepAudioComponents[a]->Stop();
-		riverAudioComponents[a]->SetVolumeMultiplier(0.166);
+		riverAudioComponents[a]->SetVolumeMultiplier(((double)0.33 * (double)atmosphereCoefficient) * (double)masterCoefficient);
 		riverAudioComponents[a]->Stop();
-		waterfallAudioComponents[a]->SetVolumeMultiplier(0.4);
+		waterfallAudioComponents[a]->SetVolumeMultiplier(((double)0.8 * (double)atmosphereCoefficient) * (double)masterCoefficient);
 		waterfallAudioComponents[a]->Stop();
 	}
 
 	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
 	{
-		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(0.6);
+		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(((double)1.0 * (double)sfxCoefficient) * (double)masterCoefficient);
 		purpleLullabyAudioComponents[a]->Stop();
 	}
 
@@ -1674,14 +1681,6 @@ void SSArcadeModeTitleScreen::OnOptionsReleased()
 	optionsText->SetShadowOffset(FVector2D(standardShadowOffset * adjustedViewportSize.Y, standardShadowOffset * adjustedViewportSize.Y));
 	optionsText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity));
 
-	/*masterOverlay->RemoveSlot(0);
-	masterOverlay->AddSlot()
-		.HAlign(HAlign_Fill)
-		.VAlign(VAlign_Fill)
-		[
-			levelSelectionOverlay.ToSharedRef()
-		];*/
-
 	if (growingBox.Num() > 0)
 	{
 		growingBox.RemoveAt(0);
@@ -1718,6 +1717,9 @@ void SSArcadeModeTitleScreen::OnOptionsReleased()
 		completedFonts.RemoveAt(indexOfShrinkingSubject);
 		completedOffsets.RemoveAt(indexOfShrinkingSubject);
 	}
+
+	masterOverlay->RemoveSlot(0);
+	OwningHUD->DisplayOptionsMenu(false);//is there anywhere where positioning this kind of logic where I used to position it will cause a problem or is secretly already causeing a problem?
 }
 
 void SSArcadeModeTitleScreen::OnQuitHovered()
@@ -1854,6 +1856,11 @@ void SSArcadeModeTitleScreen::OnQuitReleased()
 	quitText->SetFont(menuFont);
 	quitText->SetShadowOffset(FVector2D(standardShadowOffset * adjustedViewportSize.Y, standardShadowOffset * adjustedViewportSize.Y));
 	quitText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity));
+
+	OwningHUD->HouseKeeping();
+	OwningHUD->ResetRegenLevel();
+
+	UKismetSystemLibrary::QuitGame(playerOnePlayerController, playerOnePlayerController, EQuitPreference::Quit, false);
 
 	/*masterOverlay->RemoveSlot(0);
 	masterOverlay->AddSlot()
@@ -4501,5 +4508,15 @@ void SSArcadeModeTitleScreen::PlayUnHovered_16()
 
 		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
+}
+
+void SSArcadeModeTitleScreen::ReturnToMenu()
+{
+	masterOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			mainMenuOverlay.ToSharedRef()
+		];
 }
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION

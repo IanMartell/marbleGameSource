@@ -8,6 +8,8 @@ USaveGameOne::USaveGameOne()
 
 }
 
+//Getters
+
 TArray<int> USaveGameOne::GetHighscores()
 {
 	return highscores;
@@ -33,6 +35,25 @@ int USaveGameOne::GetScoreThisGame()
 	return scoreThisGame;
 }
 
+double USaveGameOne::GetMaster()
+{
+	return masterVolume;
+}
+double USaveGameOne::GetMusic()
+{
+	return musicVolume;
+}
+double USaveGameOne::GetAtmosphere()
+{
+	return atmosphereVolume;
+}
+double USaveGameOne::GetSFX()
+{
+	return sfxVolume;
+}
+
+//Setters
+
 void USaveGameOne::SetHighscores(TArray<int> newHighscores)
 {
 	highscores = newHighscores;
@@ -57,3 +78,21 @@ void USaveGameOne::SetScoreThisGame(int score)
 {
 	scoreThisGame = score;
 }
+
+void USaveGameOne::SetMaster(double newVol)
+{
+	masterVolume = newVol;
+}
+void USaveGameOne::SetMusic(double newVol)
+{
+	musicVolume = newVol;
+}
+void USaveGameOne::SetAtmosphere(double newVol)
+{
+	atmosphereVolume = newVol;
+}
+void USaveGameOne::SetSFX(double newVol)
+{
+	sfxVolume = newVol;
+}
+
