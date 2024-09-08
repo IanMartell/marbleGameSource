@@ -49,12 +49,6 @@ public:
 
 	SLATE_ARGUMENT(int, environmentAudio)
 
-	SLATE_ARGUMENT(int, masterCoefficient)
-
-	SLATE_ARGUMENT(int, atmosphereCoefficient)
-
-	SLATE_ARGUMENT(int, sfxCoefficient)
-
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
@@ -302,8 +296,5 @@ public:
 	UPROPERTY() int activeNoteIndex;
 	TArray< TArray <int> > correspondingChordsToNotes = { { 0 }, { 1 }, { 0, 3}, { 1 }, { 0, 2, 3}, { 1 }, { 2, 3}, { 3 } };
 	TArray< TArray <int> > chordIndexes = { { 0, 2, 4 }, { 1, 3, 5 }, { 2, 4, 6 }, { 4, 6, 7 } };
-
-	UPROPERTY() int masterCoefficient;
-	UPROPERTY() int atmosphereCoefficient;
-	UPROPERTY() int sfxCoefficient;
+	UPROPERTY() bool sheep;
 };

@@ -268,14 +268,6 @@ public:
 
 	SLATE_ARGUMENT(int, environmentAudio)
 
-	SLATE_ARGUMENT(int, masterCoefficient)
-
-	SLATE_ARGUMENT(int, musicCoefficient)
-
-	SLATE_ARGUMENT(int, atmosphereCoefficient)
-
-	SLATE_ARGUMENT(int, sfxCoefficient)
-
 	//SLATE_ARGUMENT(FVector2D, viewportSize)
 
 	SLATE_END_ARGS()
@@ -750,9 +742,4 @@ public:
 	UPROPERTY() int audioCycleTracker;
 
 	UPROPERTY() bool paused;
-
-	UPROPERTY() int masterCoefficient;
-	UPROPERTY() int musicCoefficient;
-	UPROPERTY() int atmosphereCoefficient;
-	UPROPERTY() int sfxCoefficient;
 };

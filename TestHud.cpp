@@ -1486,25 +1486,30 @@ void ATestHud::SaveGame(int maxLevel, TArray <int> highscores, int highscoreData
 	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
 }
 
-void ATestHud::CommitMaster(int newVol)/*so the only math i havent vetted is how the masterCoefficient is going to interact with the subCoefficients.when masters 50 will changing sfx from 100 to 50 halve the volume by ear similarly enough to how setting master as 50 from 100 did ?
-if your different catagories of sound effects are being played at different decibals, which they are, you will need different masterCoefficient calculations one for each catagory. if each individual sound effect is beign played at different decibals you will need a unique masterCoefficient calculation for each sound effect as well as different subCoefficient calculations. which I am not going to do, but remember this for the next game(s)
-do I want it to be that when masterVol is 50 the subCatagoryVol creates inaudability at 1 or like I currently have it (that is basically just somewhere in the middle) then what about vice versa? would it be possible to make the masterCoefficients and the subCoefficients work toward a designated destination simultaneously?? that sounds fun*/
+void ATestHud::CommitMaster(int newVol)/*so the only math i havent vetted is how the masterCoefficient is going to interact with the subCoefficients.when masters 50 will changing sfx from 100 to 50 halve the volume by ear similarly enough to how setting master as 50 from 100 did ? should do, needs testing
+
+if your different catagories of sound effects are being played at different decibals, which they are, you will need different masterCoefficient calculations one for each catagory. if each individual sound effect is beign played at different decibals you will need a unique masterCoefficient calculation for each sound effect as well as different subCoefficient calculations. which I am not going to do, but remember this for the next game(s) SOLVED actually I did make unique coefficient pairs for each sound effect it was the only way
+
+do I want it to be that when masterVol is 50 the subCatagoryVol creates inaudability at 1 or like I currently have it (that is basically just somewhere in the middle) then what about vice versa? would it be possible to make the masterCoefficients and the subCoefficients work toward a designated destination simultaneously?? that sounds fun SOLVED yes this was done
+
+now when I adjust each coefficient pair I will also need to adjust the destination coefficients.. maybe I only need one destination coefficient SOLVED
+
+you need to check if the playgame function in the gameSlateWidget works once youve finished with all this shit EDIT it 99% does I was experiencing a concerning problem here but it turned out to just be a clerical error*/
 {
 	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 	saveFile->SetMaster(newVol);
 	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
 
-	double x = ((double)100 - (double)saveFile->GetMaster()) / (double)50;
-	//double y = ((double)100 - (double)newVol) / (double)50;
+	double w = ((double)100 - (double)newVol) / (double)50;
 	double g = 1;
 	double h = 1;
 	double i = 1;
 
 	if (newVol == 0)
 	{
-		double g = 0;
-		double h = 0;
-		double i = 0;
+		g = 0;
+		h = 0;
+		i = 0;
 	}
 	else if (saveFile->GetMusic() == 0)
 	{
@@ -1519,58 +1524,60 @@ do I want it to be that when masterVol is 50 the subCatagoryVol creates inaudabi
 		i = 0;
 	}
 
-	masterCoefficient = (double)pow((double)10, (double)-1 * (double)x);
-	masterCoefficientM = (double)pow((double)10, (double)-1 * (double)x);
-	masterCoefficientA = (double)pow((double)10, (double)-1 * (double)x);
-	masterCoefficientS = (double)pow((double)10, (double)-1 * (double)x);
+	masterCoefficientM = (double)pow((double)10, (double)-1 * (double)w);
+	masterCoefficientAOne = (double)pow((double)10, (double)-1.8 * (double)w);
+	masterCoefficientATwo = (double)pow((double)10, (double)-0.8 * (double)w);
+	masterCoefficientAThree = (double)pow((double)10, (double)-1 * (double)w);
+	masterCoefficientSOne = (double)pow((double)10, (double)-1.25 * (double)w);
+	masterCoefficientSTwo = (double)pow((double)10, (double)-1.6 * (double)w);
+	masterCoefficientSThree = (double)pow((double)10, (double)-1.9 * (double)w);
+	masterCoefficientP = (double)pow((double)10, (double)-1.25 * (double)w);
 
-	songOneAudioComponent->SetVolumeMultiplier(((double)0.5 * (double)musicCoefficient) * (double)masterCoefficient);
+	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "ping: " + FString::SanitizeFloat(FMath::Clamp(((double)1.0 * (double)masterCoefficientP) * (double)h, (double)0.001, (double)1.0)) + "purpleLullaby: " + FString::SanitizeFloat(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientP))) * (double)i, (double)0.001, (double)1.0)));
+
+	songOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)musicCoefficient) - (double)((double)((double)((double)0.5 * (double)musicCoefficient) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.5));
 
 	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
 	{
-		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(((double)1.0 * (double)sfxCoefficient) * (double)masterCoefficient);
+		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
 	}
+
+	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
+	{
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
+	}
+
+	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)90.0 * (double)sfxCoefficientThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)90.0));
+	intersectionUpAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)80.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)80.0 * (double)sfxCoefficientThree) - ((double)80.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)80.0));
 
 	if (inGame)
 	{
-		intersectionDownAudioComponent->SetVolumeMultiplier(((double)90.0 * (double)sfxCoefficient) * (double)masterCoefficient);
-		intersectionUpAudioComponent->SetVolumeMultiplier(((double)80.0 * (double)sfxCoefficient) * (double)masterCoefficient);
-
 		for (int a = 0; a < 2; a++)
 		{
-			windAudioComponents[a]->SetVolumeMultiplier(((double)300 * (double)atmosphereCoefficient) * (double)masterCoefficient);
-			riverAudioComponents[a]->SetVolumeMultiplier(((double)0.16 * (double)atmosphereCoefficient) * (double)masterCoefficient);
-			waterfallAudioComponents[a]->SetVolumeMultiplier(((double)0.4 * (double)atmosphereCoefficient) * (double)masterCoefficient);
-		}
-
-		for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
-		{
-			hoverGrowAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
-			hoverShrinkAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
+			windAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)300.0 * (double)atmosphereCoefficientOne) - (double)((double)((double)((double)300.0 * (double)atmosphereCoefficientOne) - ((double)300.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientAOne))) * (double)h, (double)0.001, (double)300.0));
+			riverAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.16 * (double)atmosphereCoefficientTwo) - (double)((double)((double)((double)0.16 * (double)atmosphereCoefficientTwo) - ((double)0.16 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientATwo))) * (double)h, (double)0.001, (double)0.16));
+			waterfallAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.4 * (double)atmosphereCoefficientThree) - (double)((double)((double)((double)0.4 * (double)atmosphereCoefficientThree) - ((double)0.4 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientAThree))) * (double)h, (double)0.001, (double)0.4));
 		}
 	}
 	else
 	{
 		for (int a = 0; a < 2; a++)
 		{
-			windAudioComponents[a]->SetVolumeMultiplier(((double)1000.0 * (double)pow((double)10, (double)-2 * y)) * (double)pow((double)10, (double)-2 * x));
-			windWithSheepAudioComponents[a]->SetVolumeMultiplier(((double)1000.0 * (double)pow((double)10, (double)-2 * y)) * (double)pow((double)10, (double)-2 * x));
-			riverAudioComponents[a]->SetVolumeMultiplier(((double)0.33 * (double)atmosphereCoefficient) * (double)masterCoefficient);
-			waterfallAudioComponents[a]->SetVolumeMultiplier(((double)0.8 * (double)atmosphereCoefficient) * (double)masterCoefficient);
-		}
+			windAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1000.0 * (double)atmosphereCoefficientOne) - (double)((double)((double)((double)1000.0 * (double)atmosphereCoefficientOne) - ((double)1000.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientAOne))) * (double)h, (double)0.001, (double)1000.0));
+			windWithSheepAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1000.0 * (double)atmosphereCoefficientOne) - (double)((double)((double)((double)1000.0 * (double)atmosphereCoefficientOne) - ((double)1000.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientAOne))) * (double)h, (double)0.001, (double)1000.0));
 
-		for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
-		{
-			hoverGrowAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
-			hoverShrinkAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
+			riverAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.33 * (double)atmosphereCoefficientTwo) - (double)((double)((double)((double)0.33 * (double)atmosphereCoefficientTwo) - ((double)0.33 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientATwo))) * (double)h, (double)0.001, (double)0.33));
+			waterfallAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.8 * (double)atmosphereCoefficientThree) - (double)((double)((double)((double)0.8 * (double)atmosphereCoefficientThree) - ((double)0.8 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientAThree))) * (double)h, (double)0.001, (double)0.8));
 		}
 	}
 
 	int p = FMath::RandRange(0, 3);
 	for (int a = 0; a < 3; a++)
 	{
-		purpleLullabyAudioComponents[chordIndexes[p][a]]->SetVolumeMultiplier(masterCoefficient);
-		purpleLullabyAudioComponents[chordIndexes[p][a]]->Play();
+		purpleLullabyTwoAudioComponents[chordIndexes[p][a]]->Stop();
+		purpleLullabyTwoAudioComponents[chordIndexes[p][a]]->SetVolumeMultiplier(FMath::Clamp((double)1.0 * (double)masterCoefficientP, (double)0.001, (double)1.0));
+		purpleLullabyTwoAudioComponents[chordIndexes[p][a]]->Play();
 	}
 }
 void ATestHud::CommitMusic(int newVol)
@@ -1578,24 +1585,25 @@ void ATestHud::CommitMusic(int newVol)
 	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 	saveFile->SetMusic(newVol);
 	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
+	double x = ((double)100 - (double)newVol) / (double)50;
+	double g = 1;
 
-	if (newVol == 0)
+	if (newVol == 0 || saveFile->GetMaster() == 0)
 	{
-		musicCoefficient = 0;
-	}
-	else
-	{
-		double x = ((double)100 - (double)newVol) / (double)50;
-		musicCoefficient = (double)pow((double)10, (double)-x);
+		g = 0;
 	}
 
-	songOneAudioComponent->SetVolumeMultiplier(((double)0.5 * (double)musicCoefficient) * (double)masterCoefficient);
+	musicCoefficient = (double)pow((double)10, (double)-1 * (double)x);
+	pingCoefficient = (double)pow((double)10, (double)-1.25 * (double)x);
 
-	int z = FMath::RandRange(0, 3);
+	songOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)masterCoefficientM) - (double)((double)((double)((double)0.5 * (double)masterCoefficientM) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)musicCoefficient))) * (double)g, (double)0.001, (double)0.5));
+
+	int p = FMath::RandRange(0, 3);
 	for (int a = 0; a < 3; a++)
 	{
-		purpleLullabyAudioComponents[chordIndexes[z][a]]->SetVolumeMultiplier(musicCoefficient);
-		purpleLullabyAudioComponents[chordIndexes[z][a]]->Play();
+		purpleLullabyTwoAudioComponents[chordIndexes[p][a]]->Stop();
+		purpleLullabyTwoAudioComponents[chordIndexes[p][a]]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)masterCoefficientP) - (double)((double)((double)((double)1.0 * (double)masterCoefficientP) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)pingCoefficient))) * (double)g, (double)0.001, (double)1.0));
+		purpleLullabyTwoAudioComponents[chordIndexes[p][a]]->Play();
 	}
 }
 void ATestHud::CommitAtmosphere(int newVol)
@@ -1604,43 +1612,46 @@ void ATestHud::CommitAtmosphere(int newVol)
 	saveFile->SetAtmosphere(newVol);
 	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
 
-	//double x = ((double)100 - (double)saveFile->GetMaster()) / (double)50;
-	double y = ((double)100 - (double)newVol) / ((double)50 * (double)((double)100 / (double)saveFile->GetMaster()));
-	double f = 1;
+	double y = (double)((double)100 - (double)newVol) / (double)50;
+	double h = 1;
 
-	if (newVol == 0)
+	if (newVol == 0 || saveFile->GetMaster() == 0)
 	{
-		f = 0;
+		h = 0;
 	}
 
-	atmosphereCoefficient = (double)pow((double)10, (double)-1 * (double)y);
-	//destinationCoefficientA = (double)pow((double)10, (double)-1 * (double)2/*(double)y*/);//this needs to be the same as the atmosphereCoefficient accept replace y with what y would be if newVol was 0
-
+	atmosphereCoefficientOne = (double)pow((double)10, (double)-1.8 * (double)y);
+	atmosphereCoefficientTwo = (double)pow((double)10, (double)-0.8 * (double)y);
+	atmosphereCoefficientThree = (double)pow((double)10, (double)-1.0 * (double)y);
+	pingCoefficient = (double)pow((double)10, (double)-1.25 * (double)y);
+	
 	if (inGame)
 	{
 		for (int a = 0; a < 2; a++)
-		{//((300.0 * masterCoefficientA) - (((300.0 * masterCoefficientA) - destinationCoefficientA) * (1 - atmosphereCoefficient))) * f
-			windAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)300.0 * (double)masterCoefficientA) - (double)((double)((double)((double)300.0 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
-			riverAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)0.16 * (double)masterCoefficientA) - (double)((double)((double)((double)0.16 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
-			waterfallAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)0.4 * (double)masterCoefficientA) - (double)((double)((double)((double)0.4 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
+		{
+			windAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)300.0 * (double)masterCoefficientAOne) - (double)((double)((double)((double)300.0 * (double)masterCoefficientAOne) - ((double)300.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)atmosphereCoefficientOne))) * (double)h, (double)0.001, (double)300.0));
+			riverAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.16 * (double)masterCoefficientATwo) - (double)((double)((double)((double)0.16 * (double)masterCoefficientATwo) - ((double)0.16 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)atmosphereCoefficientTwo))) * (double)h, (double)0.001, (double)0.16));
+			waterfallAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.4 * (double)masterCoefficientAThree) - (double)((double)((double)((double)0.4 * (double)masterCoefficientAThree) - ((double)0.4 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)atmosphereCoefficientThree))) * (double)h, (double)0.001, (double)0.4));
 		}
 	}
 	else
 	{
 		for (int a = 0; a < 2; a++)
 		{
-			windAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)1000.0 * (double)masterCoefficientA) - (double)((double)((double)((double)1000.0 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
-			windWithSheepAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)1000.0 * (double)masterCoefficientA) - (double)((double)((double)((double)1000.0 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
-			riverAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)0.33 * (double)masterCoefficientA) - (double)((double)((double)((double)0.33 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
-			waterfallAudioComponents[a]->SetVolumeMultiplier((double)((double)((double)0.8 * (double)masterCoefficientA) - (double)((double)((double)((double)0.8 * (double)masterCoefficientA) - (double)destinationCoefficientA) * (double)((double)1 - (double)atmosphereCoefficient))) * (double)f);
+			windAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1000.0 * (double)masterCoefficientAOne) - (double)((double)((double)((double)1000.0 * (double)masterCoefficientAOne) - ((double)1000.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)atmosphereCoefficientOne))) * (double)h, (double)0.001, (double)1000.0));
+			windWithSheepAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1000.0 * (double)masterCoefficientAOne) - (double)((double)((double)((double)1000.0 * (double)masterCoefficientAOne) - ((double)1000.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)atmosphereCoefficientOne))) * (double)h, (double)0.001, (double)1000.0));
+
+			riverAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.33 * (double)masterCoefficientATwo) - (double)((double)((double)((double)0.33 * (double)masterCoefficientATwo) - ((double)0.33 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)atmosphereCoefficientTwo))) * (double)h, (double)0.001, (double)0.33));
+			waterfallAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.8 * (double)masterCoefficientAThree) - (double)((double)((double)((double)0.8 * (double)masterCoefficientAThree) - ((double)0.8 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)atmosphereCoefficientThree))) * (double)h, (double)0.001, (double)0.8));
 		}
 	}
 	
-	int z = FMath::RandRange(0, 3);
+	int p = FMath::RandRange(0, 3);
 	for (int a = 0; a < 3; a++)
 	{
-		purpleLullabyAudioComponents[chordIndexes[z][a]]->SetVolumeMultiplier(((double)1.0 * (double)masterCoefficient) * (double)atmosphereCoefficient);
-		purpleLullabyAudioComponents[chordIndexes[z][a]]->Play();
+		purpleLullabyTwoAudioComponents[chordIndexes[p][a]]->Stop();
+		purpleLullabyTwoAudioComponents[chordIndexes[p][a]]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)masterCoefficientP) - (double)((double)((double)((double)1.0 * (double)masterCoefficientP) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)pingCoefficient))) * (double)h, (double)0.001, (double)1.0));
+		purpleLullabyTwoAudioComponents[chordIndexes[p][a]]->Play();
 	}
 }
 void ATestHud::CommitSFX(int newVol)
@@ -1648,39 +1659,39 @@ void ATestHud::CommitSFX(int newVol)
 	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 	saveFile->SetSFX(newVol);
 	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
+	double z = ((double)100 - (double)newVol) / (double)50;
+	double i = 1;
 
-	if (newVol == 0)
+	if (newVol == 0 || saveFile->GetMaster() == 0)
 	{
-		sfxCoefficient = 0;
+		i = 0;
 	}
-	else
-	{
-		double x = ((double)100 - (double)newVol) / (double)50;
-		sfxCoefficient = (double)pow((double)10, (double)-x);
-	}
+
+	sfxCoefficientOne = (double)pow((double)10, (double)-1.25 * (double)z);
+	sfxCoefficientTwo = (double)pow((double)10, (double)-1.6 * (double)z);
+	sfxCoefficientThree = (double)pow((double)10, (double)-1.9 * (double)z);
+	pingCoefficient = (double)pow((double)10, (double)-1.25 * (double)z);
 
 	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
 	{
-		hoverGrowAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
-		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)masterCoefficientSTwo) - (double)((double)((double)((double)7.6 * (double)masterCoefficientSTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientTwo))) * (double)i, (double)0.001, (double)7.6));
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)masterCoefficientSTwo) - (double)((double)((double)((double)7.6 * (double)masterCoefficientSTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientTwo))) * (double)i, (double)0.001, (double)7.6));
 	}
 
 	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
 	{
-		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(((double)1.0 * (double)sfxCoefficient) * (double)masterCoefficient);
+		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)masterCoefficientSOne) - (double)((double)((double)((double)1.0 * (double)masterCoefficientSOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientOne))) * (double)i, (double)0.001, (double)1.0));
 	}
 
-	if (inGame)
-	{
-		intersectionDownAudioComponent->SetVolumeMultiplier(((double)90.0 * (double)sfxCoefficient) * (double)masterCoefficient);
-		intersectionUpAudioComponent->SetVolumeMultiplier(((double)80.0 * (double)sfxCoefficient) * (double)masterCoefficient);
-	}
+	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)masterCoefficientSThree) - (double)((double)((double)((double)90.0 * (double)masterCoefficientSThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)sfxCoefficientThree))) * (double)i, (double)0.001, (double)90.0));
+	intersectionUpAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)80.0 * (double)masterCoefficientSThree) - (double)((double)((double)((double)80.0 * (double)masterCoefficientSThree) - ((double)80.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)sfxCoefficientThree))) * (double)i, (double)0.001, (double)80.0));
 
-	int z = FMath::RandRange(0, 3);
+	int p = FMath::RandRange(0, 3);
 	for (int a = 0; a < 3; a++)
 	{
-		purpleLullabyAudioComponents[chordIndexes[z][a]]->SetVolumeMultiplier(sfxCoefficient);
-		purpleLullabyAudioComponents[chordIndexes[z][a]]->Play();
+		purpleLullabyTwoAudioComponents[chordIndexes[p][a]]->Stop();
+		purpleLullabyTwoAudioComponents[chordIndexes[p][a]]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)masterCoefficientP) - (double)((double)((double)((double)1.0 * (double)masterCoefficientP) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)pingCoefficient))) * (double)i, (double)0.001, (double)1.0));
+		purpleLullabyTwoAudioComponents[chordIndexes[p][a]]->Play();
 	}
 }
 
@@ -1773,42 +1784,28 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 	double y = (double)((double)100 - (double)referenceInstance->GetAtmosphere()) / (double)50;
 	double z = (double)((double)100 - (double)referenceInstance->GetSFX()) / (double)50;
 
-	if (referenceInstance->GetMaster() == 0)
-	{
-		masterCoefficient = 0;
-	}
-	else
-	{
-		masterCoefficient = (double)pow((double)10, (double)-w);
-	}
-	if (referenceInstance->GetMusic() == 0)
-	{
-		musicCoefficient = 0;
-	}
-	else
-	{
-		musicCoefficient = (double)pow((double)10, (double)-x);
-	}
-	if (referenceInstance->GetAtmosphere() == 0)
-	{
-		atmosphereCoefficient = 0;
-	}
-	else
-	{
-		atmosphereCoefficient = (double)pow((double)10, (double)-y);
-	}
-	if (referenceInstance->GetSFX() == 0)
-	{
-		sfxCoefficient = 0;
-	}
-	else
-	{
-		sfxCoefficient = (double)pow((double)10, (double)-z);
-	}
+	masterCoefficientM = (double)pow((double)10, (double)-1 * (double)w);
+	musicCoefficient = (double)pow((double)10, (double)-1 * (double)x);
 
-	destinationCoefficientM = (double)pow((double)10, (double)-2/*(double)-x*/);//this needs to be the same as the atmosphereCoefficient accept replace x with what x would be if newVol, or saveFile->get..(), was 0
-	destinationCoefficientA = (double)pow((double)10, (double)-2);
-	destinationCoefficientS = (double)pow((double)10, (double)-2);
+	masterCoefficientAOne = (double)pow((double)10, (double)-1.8 * (double)w);;
+	atmosphereCoefficientOne = (double)pow((double)10, (double)-1.8 * (double)y);
+	masterCoefficientATwo = (double)pow((double)10, (double)-0.8 * (double)w);
+	atmosphereCoefficientTwo = (double)pow((double)10, (double)-0.8 * (double)y);
+	masterCoefficientAThree = (double)pow((double)10, (double)-1 * (double)w);
+	atmosphereCoefficientThree = (double)pow((double)10, (double)-1 * (double)y);
+
+	masterCoefficientSOne = (double)pow((double)10, (double)-1.25 * (double)w);
+	sfxCoefficientOne = (double)pow((double)10, (double)-1.25 * (double)z);
+	masterCoefficientSTwo = (double)pow((double)10, (double)-1.6 * (double)w);
+	sfxCoefficientTwo = (double)pow((double)10, (double)-1.6 * (double)z);
+	masterCoefficientSThree = (double)pow((double)10, (double)-1.9 * (double)w);
+	sfxCoefficientThree = (double)pow((double)10, (double)-1.9 * (double)z);
+
+	masterCoefficientP = (double)pow((double)10, (double)-1.25 * (double)w);
+
+	destinationCoefficient = (double)pow((double)10, (double)-4);
+	destinationCoefficientTwo = (double)pow((double)10, (double)-3/*(double)-x*/);//this needs to be the same as the atmosphereCoefficient accept replace x with what x would be if newVol, or saveFile->get..(), was 0
+	destinationCoefficientThree = (double)pow((double)10, (double)-2);//all the volumes will need to be set here just after this because Im centralizing volume control here and removing volume control within the sub files. But then I will need to alter volume to adjust for whether in game or in menu from this master file. write this first after work
 
 	inGame = false;
 
@@ -1863,15 +1860,6 @@ void ATestHud::DisplayOptionsMenu(bool cameFromGame)
 	playerOnePlayerController->SetInputMode(optionsInputMode);
 	playerOnePlayerController->SetShowMouseCursor(true);
 	FSlateApplication::Get().SetKeyboardFocus(optionsMenuSlateWidget);
-
-	if (fromGame)
-	{
-
-	}
-	else 
-	{
-
-	}
 }
 
 void ATestHud::DestroyOptionsMenu()
@@ -2302,10 +2290,7 @@ void ATestHud::DestroySplash()
 		.riverAudioComponents(riverAudioComponents)
 		.waterfallAudioComponents(waterfallAudioComponents)
 		.purpleLullabyAudioComponents(purpleLullabyAudioComponents)
-		.environmentAudio(environmentAudio)
-		.masterCoefficient(masterCoefficient)
-		.atmosphereCoefficient(atmosphereCoefficient)
-		.sfxCoefficient(sfxCoefficient);
+		.environmentAudio(environmentAudio);
 
 	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerThree, SWeakWidget).PossiblyNullContent(mainMenuSlateWidget.ToSharedRef()));
 
@@ -2319,6 +2304,55 @@ void ATestHud::DestroySplash()
 	playerOnePlayerController->SetInputMode(mainMenuInputMode);
 	playerOnePlayerController->SetShowMouseCursor(true);
 	FSlateApplication::Get().SetKeyboardFocus(mainMenuSlateWidget);
+
+	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	double g = 1;
+	double h = 1;
+	double i = 1;
+
+	if (referenceInstance->GetMaster() == 0)
+	{
+		g = 0.001;
+		h = 0.001;
+		i = 0.001;
+	}
+	else if (referenceInstance->GetMusic() == 0)
+	{
+		g = 0.001;
+	}
+	else if (referenceInstance->GetAtmosphere() == 0)
+	{
+		h = 0.001;
+	}
+	else if (referenceInstance->GetSFX() == 0)
+	{
+		i = 0.001;
+	}
+
+	songOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)musicCoefficient) - (double)((double)((double)((double)0.5 * (double)musicCoefficient) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.5));
+
+	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
+	{
+		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	}
+
+	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
+	{
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
+	}
+
+	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)90.0 * (double)sfxCoefficientThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)90.0));
+	intersectionUpAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)80.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)80.0 * (double)sfxCoefficientThree) - ((double)80.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)80.0));
+
+	for (int a = 0; a < 2; a++)
+	{
+		windAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1000.0 * (double)atmosphereCoefficientOne) - (double)((double)((double)((double)1000.0 * (double)atmosphereCoefficientOne) - ((double)1000.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientAOne))) * (double)h, (double)0.001, (double)1000.0));
+		windWithSheepAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1000.0 * (double)atmosphereCoefficientOne) - (double)((double)((double)((double)1000.0 * (double)atmosphereCoefficientOne) - ((double)1000.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientAOne))) * (double)h, (double)0.001, (double)1000.0));
+
+		riverAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.33 * (double)atmosphereCoefficientTwo) - (double)((double)((double)((double)0.33 * (double)atmosphereCoefficientTwo) - ((double)0.33 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientATwo))) * (double)h, (double)0.001, (double)0.33));
+		waterfallAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.8 * (double)atmosphereCoefficientThree) - (double)((double)((double)((double)0.8 * (double)atmosphereCoefficientThree) - ((double)0.8 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientAThree))) * (double)h, (double)0.001, (double)0.8));
+	}
 }
 
 void ATestHud::GenerateMainMenuBackground()
@@ -2752,10 +2786,7 @@ void ATestHud::ReturnToMainMenu()
 		.riverAudioComponents(riverAudioComponents)
 		.waterfallAudioComponents(waterfallAudioComponents)
 		.purpleLullabyAudioComponents(purpleLullabyAudioComponents)
-		.environmentAudio(environmentAudio)
-		.masterCoefficient(masterCoefficient)
-		.atmosphereCoefficient(atmosphereCoefficient)
-		.sfxCoefficient(sfxCoefficient);
+		.environmentAudio(environmentAudio);
 
 	slateWidgetContainerThree->SetContent(mainMenuSlateWidget.ToSharedRef());
 
@@ -2769,6 +2800,55 @@ void ATestHud::ReturnToMainMenu()
 	}
 
 	inGame = false;
+
+	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	double g = 1;
+	double h = 1;
+	double i = 1;
+
+	if (referenceInstance->GetMaster() == 0)
+	{
+		g = 0.001;
+		h = 0.001;
+		i = 0.001;
+	}
+	else if (referenceInstance->GetMusic() == 0)
+	{
+		g = 0.001;
+	}
+	else if (referenceInstance->GetAtmosphere() == 0)
+	{
+		h = 0.001;
+	}
+	else if (referenceInstance->GetSFX() == 0)
+	{
+		i = 0.001;
+	}
+
+	songOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)musicCoefficient) - (double)((double)((double)((double)0.5 * (double)musicCoefficient) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.5));
+
+	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
+	{
+		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	}
+
+	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
+	{
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
+	}
+
+	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)90.0 * (double)sfxCoefficientThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)90.0));
+	intersectionUpAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)80.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)80.0 * (double)sfxCoefficientThree) - ((double)80.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)80.0));
+
+	for (int a = 0; a < 2; a++)
+	{
+		windAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1000.0 * (double)atmosphereCoefficientOne) - (double)((double)((double)((double)1000.0 * (double)atmosphereCoefficientOne) - ((double)1000.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientAOne))) * (double)h, (double)0.001, (double)1000.0));
+		windWithSheepAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1000.0 * (double)atmosphereCoefficientOne) - (double)((double)((double)((double)1000.0 * (double)atmosphereCoefficientOne) - ((double)1000.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientAOne))) * (double)h, (double)0.001, (double)1000.0));
+
+		riverAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.33 * (double)atmosphereCoefficientTwo) - (double)((double)((double)((double)0.33 * (double)atmosphereCoefficientTwo) - ((double)0.33 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientATwo))) * (double)h, (double)0.001, (double)0.33));
+		waterfallAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.8 * (double)atmosphereCoefficientThree) - (double)((double)((double)((double)0.8 * (double)atmosphereCoefficientThree) - ((double)0.8 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientAThree))) * (double)h, (double)0.001, (double)0.8));
+	}
 }
 
 void ATestHud::RemoveResultsBlur()
@@ -11551,11 +11631,7 @@ void ATestHud::BuildLevel()
 			.riverAudioComponents(riverAudioComponents)
 			.waterfallAudioComponents(waterfallAudioComponents)
 			.songOneAudioComponent(songOneAudioComponent)
-			.environmentAudio(environmentAudio)
-			.masterCoefficient(masterCoefficient)
-			.musicCoefficient(musicCoefficient)
-			.atmosphereCoefficient(atmosphereCoefficient)
-			.sfxCoefficient(sfxCoefficient);
+			.environmentAudio(environmentAudio);
 
 			slateWidgetContainerTwo->SetContent(gameSlateWidget.ToSharedRef());
 
@@ -11565,6 +11641,53 @@ void ATestHud::BuildLevel()
 		playerOnePlayerController->SetInputMode(gameInWidgetInputMode);
 		playerOnePlayerController->SetShowMouseCursor(true);
 		FSlateApplication::Get().SetKeyboardFocus(gameSlateWidget);
+	}
+
+	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	double g = 1;
+	double h = 1;
+	double i = 1;
+
+	if (referenceInstance->GetMaster() == 0)
+	{
+		g = 0.001;
+		h = 0.001;
+		i = 0.001;
+	}
+	else if (referenceInstance->GetMusic() == 0)
+	{
+		g = 0.001;
+	}
+	else if (referenceInstance->GetAtmosphere() == 0)
+	{
+		h = 0.001;
+	}
+	else if (referenceInstance->GetSFX() == 0)
+	{
+		i = 0.001;
+	}
+
+	songOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)musicCoefficient) - (double)((double)((double)((double)0.5 * (double)musicCoefficient) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.5));
+
+	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
+	{
+		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	}
+
+	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
+	{
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
+	}
+
+	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)90.0 * (double)sfxCoefficientThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)90.0));
+	intersectionUpAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)80.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)80.0 * (double)sfxCoefficientThree) - ((double)80.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)80.0));
+
+	for (int a = 0; a < 2; a++)
+	{
+		windAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)300.0 * (double)atmosphereCoefficientOne) - (double)((double)((double)((double)300.0 * (double)atmosphereCoefficientOne) - ((double)300.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientAOne))) * (double)h, (double)0.001, (double)300.0));
+		riverAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.16 * (double)atmosphereCoefficientTwo) - (double)((double)((double)((double)0.16 * (double)atmosphereCoefficientTwo) - ((double)0.16 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientATwo))) * (double)h, (double)0.001, (double)0.16));
+		waterfallAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.4 * (double)atmosphereCoefficientThree) - (double)((double)((double)((double)0.4 * (double)atmosphereCoefficientThree) - ((double)0.4 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientAThree))) * (double)h, (double)0.001, (double)0.4));
 	}
 }
 

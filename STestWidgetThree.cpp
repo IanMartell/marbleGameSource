@@ -257,10 +257,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	waterfallAudioComponents = InArgs._waterfallAudioComponents;
 	songOneAudioComponent = InArgs._songOneAudioComponent;
 	environmentAudio = InArgs._environmentAudio;
-	masterCoefficient = InArgs._masterCoefficient;
-	musicCoefficient = InArgs._musicCoefficient;
-	atmosphereCoefficient = InArgs._atmosphereCoefficient;
-	sfxCoefficient = InArgs._sfxCoefficient;
 
 	grass_SB_1 = new FSlateBrush();
 	grass_SB_1->SetResourceObject(grass_VMUI_1);
@@ -534,20 +530,13 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	songPlaying = false;
 	songBool = false;
 
-	intersectionDownAudioComponent->SetVolumeMultiplier(((double)90.0 * (double)sfxCoefficient) * (double)masterCoefficient);
-	intersectionUpAudioComponent->SetVolumeMultiplier(((double)80.0 * (double)sfxCoefficient) * (double)masterCoefficient);
-
 	for (int a = 0; a < 2; a++)
 	{
-		windAudioComponents[a]->SetVolumeMultiplier(((double)300 * (double)atmosphereCoefficient) * (double)masterCoefficient);
 		windAudioComponents[a]->Stop();
-		riverAudioComponents[a]->SetVolumeMultiplier(((double)0.16 * (double)atmosphereCoefficient) * (double)masterCoefficient);
 		riverAudioComponents[a]->Stop();
-		waterfallAudioComponents[a]->SetVolumeMultiplier(((double)0.4 * (double)atmosphereCoefficient) * (double)masterCoefficient);
 		waterfallAudioComponents[a]->Stop();
 	}
 
-	songOneAudioComponent->SetVolumeMultiplier(((double)0.5 * (double)musicCoefficient) * (double)masterCoefficient);
 	songOneAudioComponent->Stop();
 
 	switch (environmentAudio)

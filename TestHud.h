@@ -352,17 +352,27 @@ public:
 
 	UPROPERTY() int environmentAudio;
 
-	UPROPERTY() double masterCoefficient;
 	UPROPERTY() double masterCoefficientM;
-	UPROPERTY() double masterCoefficientA;
-	UPROPERTY() double masterCoefficientS;
+	UPROPERTY() double masterCoefficientAOne;
+	UPROPERTY() double masterCoefficientATwo;
+	UPROPERTY() double masterCoefficientAThree;
+	UPROPERTY() double masterCoefficientSOne;
+	UPROPERTY() double masterCoefficientSTwo;
+	UPROPERTY() double masterCoefficientSThree;
+	UPROPERTY() double masterCoefficientP;
 	UPROPERTY() double musicCoefficient;
-	UPROPERTY() double atmosphereCoefficient;
-	UPROPERTY() double sfxCoefficient;
+	UPROPERTY() double atmosphereCoefficientOne;
+	UPROPERTY() double atmosphereCoefficientTwo;
+	UPROPERTY() double atmosphereCoefficientThree;
+	UPROPERTY() double sfxCoefficientOne;
+	UPROPERTY() double sfxCoefficientTwo;
+	UPROPERTY() double sfxCoefficientThree;
 	UPROPERTY() double pingCoefficient;
-	UPROPERTY() double destinationCoefficientM;
-	UPROPERTY() double destinationCoefficientA;
-	UPROPERTY() double destinationCoefficientS;
+	UPROPERTY() double destinationCoefficient;
+	UPROPERTY() double destinationCoefficientTwo;
+	UPROPERTY() double destinationCoefficientThree;
+	//UPROPERTY() int audioCycleTrackerFromGame;
+	//UPROPERTY() int audioCycleTrackerFromMenu;
 
 	UPROPERTY() TArray<UMediaPlayer*> mediaPlayersToClose;
 

@@ -179,9 +179,6 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 	waterfallAudioComponents = InArgs._waterfallAudioComponents;
 	purpleLullabyAudioComponents = InArgs._purpleLullabyAudioComponents;
 	environmentAudio = InArgs._environmentAudio;
-	masterCoefficient = InArgs._masterCoefficient;
-	atmosphereCoefficient = InArgs._atmosphereCoefficient;
-	sfxCoefficient = InArgs._sfxCoefficient;
 
 	gameFrameColor_SB = new FSlateBrush();
 	gameFrameColor_SB->SetResourceObject(gameFrameColor_SMUI);
@@ -256,30 +253,20 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 
 	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
 	{
-		hoverGrowAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
 		hoverGrowAudioComponents[a]->Stop();
-		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(((double)7.6 * (double)sfxCoefficient) * (double)masterCoefficient);
 		hoverShrinkAudioComponents[a]->Stop();
 	}
 
-	double x = ((double)100 - (double)currentSave->GetMaster()) / (double)50;
-	double y = ((double)100 - (double)currentSave->GetAtmosphere()) / (double)50;
-
 	for (int a = 0; a < 2; a++)
 	{
-		windAudioComponents[a]->SetVolumeMultiplier(((double)1000.0 * (double)pow((double)10, (double)-2 * y)) * (double)pow((double)10, (double)-2 * x));
 		windAudioComponents[a]->Stop();
-		windWithSheepAudioComponents[a]->SetVolumeMultiplier(((double)1000.0 * (double)pow((double)10, (double)-2 * y)) * (double)pow((double)10, (double)-2 * x));
 		windWithSheepAudioComponents[a]->Stop();
-		riverAudioComponents[a]->SetVolumeMultiplier(((double)0.33 * (double)atmosphereCoefficient) * (double)masterCoefficient);
 		riverAudioComponents[a]->Stop();
-		waterfallAudioComponents[a]->SetVolumeMultiplier(((double)0.8 * (double)atmosphereCoefficient) * (double)masterCoefficient);
 		waterfallAudioComponents[a]->Stop();
 	}
 
 	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
 	{
-		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(((double)1.0 * (double)sfxCoefficient) * (double)masterCoefficient);
 		purpleLullabyAudioComponents[a]->Stop();
 	}
 
@@ -289,20 +276,24 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 		if (FMath::RandRange(0, 4) == 4)
 		{
 			windWithSheepAudioComponents[0]->Play();
+			sheep = true;
 		}
 		else
 		{
 			windAudioComponents[0]->Play();
+			sheep = false;
 		}
 		break;
 	case 1 :
 		if (FMath::RandRange(0, 4) == 4)
 		{
 			windWithSheepAudioComponents[0]->Play();
+			sheep = true;
 		}
 		else
 		{
 			windAudioComponents[0]->Play();
+			sheep = false;
 		}
 
 		riverAudioComponents[0]->Play();
@@ -311,10 +302,12 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 		if (FMath::RandRange(0, 4) == 4)
 		{
 			windWithSheepAudioComponents[0]->Play();
+			sheep = true;
 		}
 		else
 		{
 			windAudioComponents[0]->Play();
+			sheep = false;
 		}
 
 		waterfallAudioComponents[0]->Play();
@@ -1077,20 +1070,24 @@ void SSArcadeModeTitleScreen::Tick(const FGeometry& AllottedGeometry, const doub
 			if (FMath::RandRange(0, 4) == 4)
 			{
 				windWithSheepAudioComponents[audioCycleTracker % 2]->Play();
+				sheep = true;
 			}
 			else
 			{
 				windAudioComponents[audioCycleTracker % 2]->Play();
+				sheep = false;
 			}
 			break;
 		case 1:
 			if (FMath::RandRange(0, 4) == 4)
 			{
 				windWithSheepAudioComponents[audioCycleTracker % 2]->Play();
+				sheep = true;
 			}
 			else
 			{
 				windAudioComponents[audioCycleTracker % 2]->Play();
+				sheep = false;
 			}
 
 			riverAudioComponents[audioCycleTracker % 2]->Play();
@@ -1099,10 +1096,12 @@ void SSArcadeModeTitleScreen::Tick(const FGeometry& AllottedGeometry, const doub
 			if (FMath::RandRange(0, 4) == 4)
 			{
 				windWithSheepAudioComponents[audioCycleTracker % 2]->Play();
+				sheep = true;
 			}
 			else
 			{
 				windAudioComponents[audioCycleTracker % 2]->Play();
+				sheep = false;
 			}
 
 			waterfallAudioComponents[audioCycleTracker % 2]->Play();

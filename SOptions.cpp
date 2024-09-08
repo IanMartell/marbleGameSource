@@ -1811,6 +1811,7 @@ void SOptions::OnMasterCommitted(const FText& InText, const ETextCommit::Type In
 {
 	bool textIsValid = false;
 	int newVolume;
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "runs");
 	//for some reason these functions run twice for every commit, who can say.
 
@@ -1837,6 +1838,7 @@ void SOptions::OnMusicCommitted(const FText& InText, const ETextCommit::Type InT
 {
 	bool textIsValid = false;
 	int newVolume;
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 
 	for (int a = 0; a < 101; a++)
 	{
@@ -1861,6 +1863,7 @@ void SOptions::OnAtmosphereCommitted(const FText& InText, const ETextCommit::Typ
 {
 	bool textIsValid = false;
 	int newVolume;
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 
 	for (int a = 0; a < 101; a++)
 	{
@@ -1885,6 +1888,7 @@ void SOptions::OnSFXCommitted(const FText& InText, const ETextCommit::Type InTex
 {
 	bool textIsValid = false;
 	int newVolume;
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 
 	for (int a = 0; a < 101; a++)
 	{
