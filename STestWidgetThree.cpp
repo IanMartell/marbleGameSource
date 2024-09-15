@@ -256,6 +256,8 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	riverAudioComponents = InArgs._riverAudioComponents;
 	waterfallAudioComponents = InArgs._waterfallAudioComponents;
 	songOneAudioComponent = InArgs._songOneAudioComponent;
+	scoringAudioComponents = InArgs._scoringAudioComponents;
+	missAudioComponent = InArgs._missAudioComponent;
 	environmentAudio = InArgs._environmentAudio;
 
 	grass_SB_1 = new FSlateBrush();
@@ -529,6 +531,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 
 	songPlaying = false;
 	songBool = false;
+	scoringSoundEffectIndex = FMath::RandRange(0, 2);
 
 	for (int a = 0; a < 2; a++)
 	{
@@ -2036,12 +2039,36 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 							maximumPossibleScore += 1;
 							currentScore = FText::FromString("Score: " + FString::FromInt(playerScore) + " of " + FString::FromInt(maximumPossibleScore));
 							scoreText->SetText(currentScore);
+							scoringAudioComponents[scoringSoundEffectIndex]->Stop();
+
+							switch (scoringSoundEffectIndex)
+							{
+							case 0:
+								scoringSoundEffectIndex = FMath::RandRange(1, 2);
+								break;
+							case 1:
+								scoringSoundEffectIndex = FMath::RandRange(1, 2);
+
+								if (scoringSoundEffectIndex == 1)
+								{
+									scoringSoundEffectIndex = 0;
+								}
+								break;
+							case 2:
+								scoringSoundEffectIndex = FMath::RandRange(0, 1);
+								break;
+							default:
+								break;
+							}
+							scoringAudioComponents[scoringSoundEffectIndex]->Play();
 						}
 						else
 						{
 							maximumPossibleScore += 1;
 							currentScore = FText::FromString("Score: " + FString::FromInt(playerScore) + " of " + FString::FromInt(maximumPossibleScore));
 							scoreText->SetText(currentScore);
+							missAudioComponent->Stop();
+							missAudioComponent->Play();
 						}
 						marblesToBeDestroyed.Add(activeMarbles[a]);
 						marblesToBeDestroyedMovementTracker.Add(marbleMovementTracker[a]);
@@ -2090,11 +2117,12 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 					{//curtains into main menu results screen and update the save file
 						finalScore = playerScore * pow(1.2, holePositions.Num() - 3);
 
-						if (playerScore >= maximumPossibleScore - 1)
+						if (playerScore >= maximumPossibleScore - 1 && holePositions.Num() < 16)
 						{
 							if (holePositions.Num() - 2 > maxLevel)
 							{
 								maxLevel += 1;
+								OwningHUD->newMaxLevel = true;
 							}
 						}
 

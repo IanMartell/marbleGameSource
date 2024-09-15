@@ -53,20 +53,20 @@ void SCurtainsTwo::Tick(const FGeometry& AllottedGeometry, const double InCurren
 	{
 		OwningHUD->ReturnToMainMenu();
 		canLoad = false;
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "1");
+		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "1");
 	}
 
 	if (timeToLoadStage > 0.666 && canPlaySoundEffect)
 	{
 		curtainOpeningAudioComponent->Play();
 		canPlaySoundEffect = false;
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "2");
+		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "2");
 	}
 
 	if (timeToLoadStage > 1)
 	{
 		OwningHUD->HideCurtains(false);
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "3");
+		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "3");
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, FString::SanitizeFloat(timeToLoadStage));
 }

@@ -26,6 +26,10 @@ public:
 
 	SLATE_ARGUMENT(TArray <UMaterial*>, splashBootArr)
 
+	SLATE_ARGUMENT(UMaterial*, black_SMUI)
+
+	SLATE_ARGUMENT(UAudioComponent*, shovelingDirtAudioComponent)
+
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
@@ -43,10 +47,12 @@ public:
 	UMaterial* goodUseDigitalText_SMUI;
 	TArray <UMaterial*> splashGrassArr;
 	TArray <UMaterial*> splashBootArr;
+	UMaterial* black_SMUI;
 
 	UPROPERTY() TArray <FSlateBrush*> splashBootSBArr;
 	UPROPERTY() TArray <FSlateBrush*> splashGrassSBArr;
 	FSlateBrush* goodUseDigitalText_SB;
+	FSlateBrush* black_SB;
 
 	FVector2D viewportSize;
 	UPROPERTY() FVector2D adjustedViewportSize;
@@ -67,4 +73,7 @@ public:
 	FMargin startingTextMargin;
 	float adjustedMarginFloat;
 	double shiftingMargin;
+	bool canTick;
+
+	UAudioComponent* shovelingDirtAudioComponent;
 };

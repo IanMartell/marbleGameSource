@@ -244,6 +244,7 @@ public:
 
 	UPROPERTY() UMaterial* placeholderTrash;
 	UPROPERTY() UMaterial* emptyImg_SMUI;
+	UPROPERTY() UMaterial* black_SMUI;
 
 	//sound effects stuff
 
@@ -258,6 +259,10 @@ public:
 	UPROPERTY() USoundBase* windWithSheep;
 	UPROPERTY() USoundBase* river;
 	UPROPERTY() USoundBase* waterfall;
+	UPROPERTY() USoundBase* shovelingDirt;
+	UPROPERTY() USoundBase* miss;
+	UPROPERTY() TArray <USoundBase*> scoring;
+	UPROPERTY() TArray <USoundBase*> victory;
 
 	UPROPERTY() TArray <USoundBase*> hoverGrows;
 	UPROPERTY() TArray <USoundBase*> hoverShrinks;
@@ -271,6 +276,10 @@ public:
 	UPROPERTY() UAudioComponent* curtainClosingAudioComponent;
 	UPROPERTY() UAudioComponent* curtainOpeningAudioComponent;
 	UPROPERTY() UAudioComponent* rainstickAudioComponent;
+	UPROPERTY() UAudioComponent* shovelingDirtAudioComponent;
+	UPROPERTY() UAudioComponent* missAudioComponent;
+	UPROPERTY() TArray <UAudioComponent*> scoringAudioComponents;
+	UPROPERTY() TArray <UAudioComponent*> victoryAudioComponents;
 
 	UPROPERTY() TArray <UAudioComponent*> hoverGrowAudioComponents;
 	UPROPERTY() TArray <UAudioComponent*> hoverShrinkAudioComponents;
@@ -359,6 +368,11 @@ public:
 	UPROPERTY() double masterCoefficientSOne;
 	UPROPERTY() double masterCoefficientSTwo;
 	UPROPERTY() double masterCoefficientSThree;
+	UPROPERTY() double masterCoefficientSFour;
+	UPROPERTY() double masterCoefficientSFive;
+	UPROPERTY() double masterCoefficientSSix;
+	UPROPERTY() double masterCoefficientSSeven;
+	UPROPERTY() double masterCoefficientSEight;
 	UPROPERTY() double masterCoefficientP;
 	UPROPERTY() double musicCoefficient;
 	UPROPERTY() double atmosphereCoefficientOne;
@@ -367,10 +381,17 @@ public:
 	UPROPERTY() double sfxCoefficientOne;
 	UPROPERTY() double sfxCoefficientTwo;
 	UPROPERTY() double sfxCoefficientThree;
+	UPROPERTY() double sfxCoefficientFour;
+	UPROPERTY() double sfxCoefficientFive;
+	UPROPERTY() double sfxCoefficientSix;
+	UPROPERTY() double sfxCoefficientSeven;
+	UPROPERTY() double sfxCoefficientEight;
 	UPROPERTY() double pingCoefficient;
 	UPROPERTY() double destinationCoefficient;
 	UPROPERTY() double destinationCoefficientTwo;
 	UPROPERTY() double destinationCoefficientThree;
+
+	UPROPERTY() bool newMaxLevel;
 	//UPROPERTY() int audioCycleTrackerFromGame;
 	//UPROPERTY() int audioCycleTrackerFromMenu;
 

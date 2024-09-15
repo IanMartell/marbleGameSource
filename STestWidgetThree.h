@@ -264,6 +264,10 @@ public:
 
 	SLATE_ARGUMENT(TArray <UAudioComponent*>, waterfallAudioComponents)
 
+	SLATE_ARGUMENT(TArray <UAudioComponent*>, scoringAudioComponents)
+
+	SLATE_ARGUMENT(UAudioComponent*, missAudioComponent)
+
 	SLATE_ARGUMENT(UAudioComponent*, songOneAudioComponent)
 
 	SLATE_ARGUMENT(int, environmentAudio)
@@ -610,6 +614,9 @@ public:
 	UPROPERTY() TArray<UAudioComponent*> windAudioComponents;
 	UPROPERTY() TArray<UAudioComponent*> riverAudioComponents;
 	UPROPERTY() TArray<UAudioComponent*> waterfallAudioComponents;
+	UPROPERTY() TArray<UAudioComponent*> scoringAudioComponents;
+
+	UPROPERTY() UAudioComponent* missAudioComponent;
 
 	UPROPERTY() UAudioComponent* songOneAudioComponent;
 	UPROPERTY() bool songPlaying;
@@ -740,6 +747,8 @@ public:
 	UPROPERTY() int environmentAudio;
 	UPROPERTY() float audioTimer;
 	UPROPERTY() int audioCycleTracker;
+
+	UPROPERTY() int scoringSoundEffectIndex;
 
 	UPROPERTY() bool paused;
 };

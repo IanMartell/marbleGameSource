@@ -3,6 +3,7 @@
 
 #include "SCompanySplash.h"
 #include "SlateOptMacros.h"
+#include "Components/AudioComponent.h"
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
@@ -40,6 +41,10 @@ void SCompanySplash::Construct(const FArguments& InArgs)
 	goodUseDigitalText_SMUI = InArgs._goodUseDigitalText_SMUI;
 	splashGrassArr = InArgs._splashGrassArr;
 	splashBootArr = InArgs._splashBootArr;
+	black_SMUI = InArgs._black_SMUI;
+	shovelingDirtAudioComponent = InArgs._shovelingDirtAudioComponent;
+
+	shovelingDirtAudioComponent->Stop();
 
 	for (int a = 0; a < 5; a++)
 	{
@@ -55,6 +60,9 @@ void SCompanySplash::Construct(const FArguments& InArgs)
 
 	goodUseDigitalText_SB = new FSlateBrush();
 	goodUseDigitalText_SB->SetResourceObject(goodUseDigitalText_SMUI);
+
+	black_SB = new FSlateBrush();
+	black_SB->SetResourceObject(black_SMUI);
 
 	masterButtonStyle = new FButtonStyle();
 	masterButtonStyle->SetNormalPadding(FMargin());
@@ -73,7 +81,8 @@ void SCompanySplash::Construct(const FArguments& InArgs)
 			.ColorAndOpacity(FLinearColor(0, 0, 0, 1))
 		];
 
-	imageOne = SNew(SImage);
+	imageOne = SNew(SImage)
+		.Image(black_SB);
 
 	imageBoxOne = SNew(SBox)
 		.HAlign(HAlign_Fill)
@@ -130,18 +139,58 @@ void SCompanySplash::Released()
 
 void SCompanySplash::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
-	timer += InDeltaTime;
-
-	intOne = FMath::DivideAndRoundDown((double)timer - 0.5, 0.0194);
-
-	if (trackerOne < intOne && trackerOne < 17)
+	if (canTick)
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "tracker before: " + FString::FromInt(trackerOne));
-		trackerOne = intOne;
+		timer += InDeltaTime;
 
-		if (trackerOne == 1)
+		intOne = FMath::DivideAndRoundDown((double)timer - 0.5, 0.0194);
+
+		if (trackerOne < intOne && trackerOne < 17)
 		{
-			GEngine->GameViewport->GetViewportSize(viewportSize);
+			//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "tracker before: " + FString::FromInt(trackerOne));
+			trackerOne = intOne;
+
+			imageOne->SetImage(splashGrassSBArr[trackerOne - 1]);
+
+			if (trackerOne > 12)
+			{
+				if (trackerOne == 13)
+				{
+					textBox->SetContent(SNew(SImage).Image(goodUseDigitalText_SB));
+				}
+
+				shiftingMargin = ((double)adjustedMarginFloat * (double)sin((double)31.4159 * (double)((double)((double)timer - (double)0.7329) - (double)0.05))) + (double)adjustedMarginFloat;
+				textBox->SetPadding(FMargin((double)startingTextMargin.Left, (double)((double)startingTextMargin.Top - (double)shiftingMargin), (double)startingTextMargin.Right, (double)((double)startingTextMargin.Bottom + (double)shiftingMargin)));
+			}
+
+			//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "tracker after: " + FString::FromInt(trackerOne));
+			//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "timer: " + FString::SanitizeFloat(timer));
+		}
+
+		intTwo = FMath::DivideAndRoundDown((double)timer - 1.5, (double)0.1);
+
+		if (trackerTwo < intTwo && trackerTwo < 5)
+		{
+			trackerTwo = intTwo;
+
+			imageOne->SetImage(splashBootSBArr[trackerTwo - 1]);
+
+			if (trackerTwo == 4)
+			{
+				shovelingDirtAudioComponent->Play();
+			}
+		}
+
+		if (timer > 5)
+		{
+			OwningHUD->DestroySplash();
+		}
+	}
+	else
+	{
+		GEngine->GameViewport->GetViewportSize(viewportSize);
+		if (viewportSize.Y > 10 && viewportSize.X > 10)//testing required
+		{
 			int32 X = FGenericPlatformMath::FloorToInt(viewportSize.X);
 			int32 Y = FGenericPlatformMath::FloorToInt(viewportSize.Y);
 			DPIScale = GetDefault<UUserInterfaceSettings>(UUserInterfaceSettings::StaticClass())->GetDPIScaleBasedOnSize(FIntPoint(X, Y));
@@ -152,36 +201,9 @@ void SCompanySplash::Tick(const FGeometry& AllottedGeometry, const double InCurr
 
 			imageBoxOne->SetPadding(CalculateSplashMarginOne());
 			imageBoxOne->SetContent(imageOne.ToSharedRef());
+
+			canTick = true;
 		}
-		imageOne->SetImage(splashGrassSBArr[trackerOne - 1]);
-
-		if (trackerOne > 12)
-		{
-			if (trackerOne == 13)
-			{
-				textBox->SetContent(SNew(SImage).Image(goodUseDigitalText_SB));
-			}
-
-			shiftingMargin = ((double)adjustedMarginFloat * (double)sin((double)31.4159 * (double)((double)((double)timer - (double)0.7329) - (double)0.05))) + (double)adjustedMarginFloat;
-			textBox->SetPadding(FMargin((double)startingTextMargin.Left, (double)((double)startingTextMargin.Top - (double)shiftingMargin), (double)startingTextMargin.Right, (double)((double)startingTextMargin.Bottom + (double)shiftingMargin)));
-		}
-
-		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "tracker after: " + FString::FromInt(trackerOne));
-		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "timer: " + FString::SanitizeFloat(timer));
-	}
-
-	intTwo = FMath::DivideAndRoundDown((double)timer - 1.5, (double)0.1);
-
-	if (trackerTwo < intTwo && trackerTwo < 5)
-	{
-		trackerTwo = intTwo;
-
-		imageOne->SetImage(splashBootSBArr[trackerTwo - 1]);
-	}
-
-	if (timer > 5)
-	{
-		OwningHUD->DestroySplash();
 	}
 }
 

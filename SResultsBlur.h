@@ -20,6 +20,10 @@ public:
 
 	SLATE_ARGUMENT(UAudioComponent*, rainstickAudioComponent)
 
+	SLATE_ARGUMENT(TArray <UAudioComponent*>, victoryAudioComponents)
+
+	SLATE_ARGUMENT(bool, newMaxLevel)
+
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
@@ -33,6 +37,7 @@ public:
 	USaveGameOne* currentSave;
 
 	UAudioComponent* rainstickAudioComponent;
+	TArray <UAudioComponent*> victoryAudioComponents;
 
 	TSharedPtr< class SOverlay> resultsOverlay;
 	TSharedPtr<class STextBlock> resultsTextOne;
@@ -54,6 +59,7 @@ public:
 	float DPIScale;
 
 	bool destroySelf;
+	bool newMaxLevel;
 
 	float timer;
 	float standardBlur;

@@ -29,6 +29,8 @@ void SResultsBlur::Construct(const FArguments& InArgs)
 
 	OwningHUD = InArgs._OwningHUD;
 	rainstickAudioComponent = InArgs._rainstickAudioComponent;
+	victoryAudioComponents = InArgs._victoryAudioComponents;
+	newMaxLevel = InArgs._newMaxLevel;
 
 	GEngine->GameViewport->GetViewportSize(viewportSize);
 	int32 X = FGenericPlatformMath::FloorToInt(viewportSize.X);
@@ -65,7 +67,16 @@ void SResultsBlur::Construct(const FArguments& InArgs)
 
 	if (currentSave->GetScoreThisGame() > currentSave->GetHighscores()[1])
 	{
-		resultsTextOne->SetText(FText::FromString("New Highscore!"));
+		if (newMaxLevel)
+		{
+			resultsTextOne->SetText(FText::FromString("Level " + FString::FromInt(currentSave->GetMaxLevel() + 3) + " Unlocked!"));
+			victoryAudioComponents[FMath::RandRange(0, 2)]->Play();
+			OwningHUD->newMaxLevel = false;
+		}
+		else
+		{
+			resultsTextOne->SetText(FText::FromString("New Highscore!"));
+		}
 	}
 	else
 	{

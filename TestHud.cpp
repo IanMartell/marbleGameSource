@@ -1181,6 +1181,12 @@ ATestHud::ATestHud()
 		emptyImg_SMUI = (UMaterial*)tempVar_emptyImg_SMUI.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UMaterial> tempVar_black_SMUI(TEXT("'/Game/Movies/spriteMaterialsForUI/black_SMUI.black_SMUI'"));
+	if (tempVar_black_SMUI.Object != NULL)
+	{
+		black_SMUI = (UMaterial*)tempVar_black_SMUI.Object;
+	}
+
 	//now onto the sound effects, starting with intersection button sound effects. notice they do not impliment the isvalid conditional. will this be a problem?
 	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_intersectionButtonPressed(TEXT("'/Game/myAdditionsArcade/soundEffects/intersectionDownClick.intersectionDownClick'"));
 	intersectionButtonPressed = (USoundBase*)tempVar_intersectionButtonPressed.Object;
@@ -1353,6 +1359,30 @@ ATestHud::ATestHud()
 	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_waterfall(TEXT("'/Game/myAdditionsArcade/soundEffects/waterfall.waterfall'"));
 	waterfall = (USoundBase*)tempVar_waterfall.Object;
 
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_shovelingDirt(TEXT("'/Game/myAdditionsArcade/soundEffects/shovelingDirt.shovelingDirt'"));
+	shovelingDirt = (USoundBase*)tempVar_shovelingDirt.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_miss(TEXT("'/Game/myAdditionsArcade/soundEffects/miss.miss'"));
+	miss = (USoundBase*)tempVar_miss.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_scoring01(TEXT("'/Game/myAdditionsArcade/soundEffects/scoring01.scoring01'"));
+	scoring.Add((USoundBase*)tempVar_scoring01.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_scoring02(TEXT("'/Game/myAdditionsArcade/soundEffects/scoring02.scoring02'"));
+	scoring.Add((USoundBase*)tempVar_scoring02.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_scoring03(TEXT("'/Game/myAdditionsArcade/soundEffects/scoring03.scoring03'"));
+	scoring.Add((USoundBase*)tempVar_scoring03.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_victory01(TEXT("'/Game/myAdditionsArcade/soundEffects/victory01.victory01'"));
+	victory.Add((USoundBase*)tempVar_victory01.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_victory02(TEXT("'/Game/myAdditionsArcade/soundEffects/victory02.victory02'"));
+	victory.Add((USoundBase*)tempVar_victory02.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_victory03(TEXT("'/Game/myAdditionsArcade/soundEffects/victory03.victory03'"));
+	victory.Add((USoundBase*)tempVar_victory03.Object);
+
 	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_purpleLullaby_1(TEXT("'/Game/myAdditionsArcade/soundEffects/purpleLullabyC5.purpleLullabyC5'"));
 	purpleLullaby.Add((USoundBase*)tempVar_purpleLullaby_1.Object);
 
@@ -1465,6 +1495,25 @@ ATestHud::ATestHud()
 	rainstickAudioComponent->bAutoDestroy = false;
 	rainstickAudioComponent->SetSound(rainstick);
 
+	shovelingDirtAudioComponent = CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass()));
+	shovelingDirtAudioComponent->bAutoDestroy = false;
+	shovelingDirtAudioComponent->SetSound(shovelingDirt);
+
+	missAudioComponent = CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass()));
+	missAudioComponent->bAutoDestroy = false;
+	missAudioComponent->SetSound(miss);
+
+	for (int a = 0; a < 3; a++)
+	{
+		scoringAudioComponents.Add(CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass())));
+		scoringAudioComponents[a]->bAutoDestroy = false;
+		scoringAudioComponents[a]->SetSound(scoring[a]);
+
+		victoryAudioComponents.Add(CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass())));
+		victoryAudioComponents[a]->bAutoDestroy = false;
+		victoryAudioComponents[a]->SetSound(victory[a]);
+	}
+
 	songOneAudioComponent = CreateDefaultSubobject<UAudioComponent>(MakeUniqueObjectName(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0), UAudioComponent::StaticClass()));
 	songOneAudioComponent->bAutoDestroy = false;
 	songOneAudioComponent->SetSound(songOne);
@@ -1477,7 +1526,7 @@ void ATestHud::PreLoadCurtains()
 
 void ATestHud::SaveGame(int maxLevel, TArray <int> highscores, int highscoreDataOne, int highscoreDataTwo, int scoreThisGame)
 {
-	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass()));
+	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 	saveFile->SetMaxLevel(maxLevel);
 	saveFile->SetHighscores(highscores);
 	saveFile->SetHighscoreDataOne(highscoreDataOne);
@@ -1525,12 +1574,17 @@ you need to check if the playgame function in the gameSlateWidget works once you
 	}
 
 	masterCoefficientM = (double)pow((double)10, (double)-1 * (double)w);
-	masterCoefficientAOne = (double)pow((double)10, (double)-1.8 * (double)w);
+	masterCoefficientAOne = (double)pow((double)10, (double)-2.6 * (double)w);
 	masterCoefficientATwo = (double)pow((double)10, (double)-0.8 * (double)w);
 	masterCoefficientAThree = (double)pow((double)10, (double)-1 * (double)w);
 	masterCoefficientSOne = (double)pow((double)10, (double)-1.25 * (double)w);
 	masterCoefficientSTwo = (double)pow((double)10, (double)-1.6 * (double)w);
 	masterCoefficientSThree = (double)pow((double)10, (double)-1.9 * (double)w);
+	masterCoefficientSFour = (double)pow((double)10, (double)-1.3 * (double)w);
+	masterCoefficientSFive = (double)pow((double)10, (double)-0.9 * (double)w);
+	masterCoefficientSSix = (double)pow((double)10, (double)-0.8 * (double)w);
+	masterCoefficientSSeven = (double)pow((double)10, (double)-1.0 * (double)w);
+	masterCoefficientSEight = (double)pow((double)10, (double)-1.2 * (double)w);
 	masterCoefficientP = (double)pow((double)10, (double)-1.25 * (double)w);
 
 	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "ping: " + FString::SanitizeFloat(FMath::Clamp(((double)1.0 * (double)masterCoefficientP) * (double)h, (double)0.001, (double)1.0)) + "purpleLullaby: " + FString::SanitizeFloat(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientP))) * (double)i, (double)0.001, (double)1.0)));
@@ -1550,6 +1604,20 @@ you need to check if the playgame function in the gameSlateWidget works once you
 
 	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)90.0 * (double)sfxCoefficientThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)90.0));
 	intersectionUpAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)80.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)80.0 * (double)sfxCoefficientThree) - ((double)80.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)80.0));
+
+	shovelingDirtAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.8 * (double)sfxCoefficientFour) - (double)((double)((double)((double)0.8 * (double)sfxCoefficientFour) - ((double)0.8 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSFour))) * (double)i, (double)0.001, (double)0.8));
+
+	curtainClosingAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)4.0 * (double)sfxCoefficientFive) - (double)((double)((double)((double)4.0 * (double)sfxCoefficientFive) - ((double)4.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSFive))) * (double)i, (double)0.001, (double)4.0));
+	curtainOpeningAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)4.0 * (double)sfxCoefficientFive) - (double)((double)((double)((double)4.0 * (double)sfxCoefficientFive) - ((double)4.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSFive))) * (double)i, (double)0.001, (double)4.0));
+
+	missAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.6 * (double)sfxCoefficientSix) - (double)((double)((double)((double)1.6 * (double)sfxCoefficientSix) - ((double)1.6 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientSSix))) * (double)i, (double)0.001, (double)1.6));
+
+	for (int a = 0; a < 3; a++)
+	{
+		scoringAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)3.0 * (double)sfxCoefficientSeven) - (double)((double)((double)((double)3.0 * (double)sfxCoefficientSeven) - ((double)3.0 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientSSeven))) * (double)i, (double)0.001, (double)3.0));
+
+		victoryAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.6 * (double)sfxCoefficientEight) - (double)((double)((double)((double)1.6 * (double)sfxCoefficientEight) - ((double)1.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSEight))) * (double)i, (double)0.001, (double)1.6));
+	}
 
 	if (inGame)
 	{
@@ -1620,7 +1688,7 @@ void ATestHud::CommitAtmosphere(int newVol)
 		h = 0;
 	}
 
-	atmosphereCoefficientOne = (double)pow((double)10, (double)-1.8 * (double)y);
+	atmosphereCoefficientOne = (double)pow((double)10, (double)-2.6 * (double)y);
 	atmosphereCoefficientTwo = (double)pow((double)10, (double)-0.8 * (double)y);
 	atmosphereCoefficientThree = (double)pow((double)10, (double)-1.0 * (double)y);
 	pingCoefficient = (double)pow((double)10, (double)-1.25 * (double)y);
@@ -1670,6 +1738,11 @@ void ATestHud::CommitSFX(int newVol)
 	sfxCoefficientOne = (double)pow((double)10, (double)-1.25 * (double)z);
 	sfxCoefficientTwo = (double)pow((double)10, (double)-1.6 * (double)z);
 	sfxCoefficientThree = (double)pow((double)10, (double)-1.9 * (double)z);
+	sfxCoefficientFour = (double)pow((double)10, (double)-1.3 * (double)z);
+	sfxCoefficientFive = (double)pow((double)10, (double)-0.9 * (double)z);
+	sfxCoefficientSix = (double)pow((double)10, (double)-0.8 * (double)z);
+	sfxCoefficientSeven = (double)pow((double)10, (double)-1.0 * (double)z);
+	sfxCoefficientEight = (double)pow((double)10, (double)-1.2 * (double)z);
 	pingCoefficient = (double)pow((double)10, (double)-1.25 * (double)z);
 
 	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
@@ -1686,6 +1759,20 @@ void ATestHud::CommitSFX(int newVol)
 	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)masterCoefficientSThree) - (double)((double)((double)((double)90.0 * (double)masterCoefficientSThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)sfxCoefficientThree))) * (double)i, (double)0.001, (double)90.0));
 	intersectionUpAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)80.0 * (double)masterCoefficientSThree) - (double)((double)((double)((double)80.0 * (double)masterCoefficientSThree) - ((double)80.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)sfxCoefficientThree))) * (double)i, (double)0.001, (double)80.0));
 
+	shovelingDirtAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.8 * (double)masterCoefficientSFour) - (double)((double)((double)((double)0.8 * (double)masterCoefficientSFour) - ((double)0.8 * (double)destinationCoefficient)) * (double)((double)1 - (double)sfxCoefficientFour))) * (double)i, (double)0.001, (double)0.8));
+
+	curtainClosingAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)4.0 * (double)masterCoefficientSFive) - (double)((double)((double)((double)4.0 * (double)masterCoefficientSFive) - ((double)4.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)sfxCoefficientFive))) * (double)i, (double)0.001, (double)4.0));
+	curtainOpeningAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)4.0 * (double)masterCoefficientSFive) - (double)((double)((double)((double)4.0 * (double)masterCoefficientSFive) - ((double)4.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)sfxCoefficientFive))) * (double)i, (double)0.001, (double)4.0));
+
+	missAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.6 * (double)masterCoefficientSSix) - (double)((double)((double)((double)1.6 * (double)masterCoefficientSSix) - ((double)1.6 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)sfxCoefficientSix))) * (double)i, (double)0.001, (double)1.6));
+
+	for (int a = 0; a < 3; a++)
+	{
+		scoringAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)3.0 * (double)sfxCoefficientSeven) - (double)((double)((double)((double)3.0 * (double)sfxCoefficientSeven) - ((double)3.0 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientSSeven))) * (double)i, (double)0.001, (double)3.0));
+
+		victoryAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.6 * (double)masterCoefficientSEight) - (double)((double)((double)((double)1.6 * (double)masterCoefficientSEight) - ((double)1.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientEight))) * (double)i, (double)0.001, (double)1.6));
+	}
+
 	int p = FMath::RandRange(0, 3);
 	for (int a = 0; a < 3; a++)
 	{
@@ -1699,59 +1786,71 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 {
 	Super::BeginPlay();
 
+	missAudioComponent->Stop();
+
+	for (int a = 0; a < 3; a++)
+	{
+		scoringAudioComponents[a]->Stop();
+		victoryAudioComponents[a]->Stop();
+	}
+
 	for (int a = 0; a < hoverGrows.Num(); a++)
 	{
-		hoverGrowAudioComponents[a]->SetVolumeMultiplier(0.0);
-		hoverGrowAudioComponents[a]->Play();
+		//hoverGrowAudioComponents[a]->SetVolumeMultiplier(0.001);
+		hoverGrowAudioComponents[a]->Stop();
 
-		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(0.0);
-		hoverShrinkAudioComponents[a]->Play();
+		//hoverShrinkAudioComponents[a]->SetVolumeMultiplier(0.001);
+		hoverShrinkAudioComponents[a]->Stop();
 	}
 
 	for (int a = 0; a < 2; a++)
 	{
-		windAudioComponents[a]->SetVolumeMultiplier(0.0);
-		windAudioComponents[a]->Play();
+		//windAudioComponents[a]->SetVolumeMultiplier(0.001);
+		windAudioComponents[a]->Stop();
 
-		windWithSheepAudioComponents[a]->SetVolumeMultiplier(0.0);
-		windWithSheepAudioComponents[a]->Play();
+		//windWithSheepAudioComponents[a]->SetVolumeMultiplier(0.001);
+		windWithSheepAudioComponents[a]->Stop();
 
-		riverAudioComponents[a]->SetVolumeMultiplier(0.0);
-		riverAudioComponents[a]->Play();
+		//riverAudioComponents[a]->SetVolumeMultiplier(0.001);
+		riverAudioComponents[a]->Stop();
 
-		waterfallAudioComponents[a]->SetVolumeMultiplier(0.0);
-		waterfallAudioComponents[a]->Play();
+		//waterfallAudioComponents[a]->SetVolumeMultiplier(0.001);
+		waterfallAudioComponents[a]->Stop();
 	}
 
 	for (int a = 0; a < 8; a++)
 	{
-		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(0.0);
-		purpleLullabyAudioComponents[a]->Play();
+		//purpleLullabyAudioComponents[a]->SetVolumeMultiplier(0.001);
+		purpleLullabyAudioComponents[a]->Stop();
 
-		purpleLullabyTwoAudioComponents[a]->SetVolumeMultiplier(0.0);
-		purpleLullabyTwoAudioComponents[a]->Play();
+		//purpleLullabyTwoAudioComponents[a]->SetVolumeMultiplier(0.001);
+		purpleLullabyTwoAudioComponents[a]->Stop();
 	}
 
-	intersectionDownAudioComponent->SetVolumeMultiplier(0.0);
-	intersectionDownAudioComponent->Play();
+	//intersectionDownAudioComponent->SetVolumeMultiplier(0.001);
+	intersectionDownAudioComponent->Stop();
 
-	intersectionUpAudioComponent->SetVolumeMultiplier(0.0);
-	intersectionUpAudioComponent->Play();
+	//intersectionUpAudioComponent->SetVolumeMultiplier(0.001);
+	intersectionUpAudioComponent->Stop();
 
-	curtainClosingAudioComponent->SetVolumeMultiplier(0.0);
-	curtainClosingAudioComponent->Play();
+	//curtainClosingAudioComponent->SetVolumeMultiplier(0.001);
+	curtainClosingAudioComponent->Stop();
 
-	curtainOpeningAudioComponent->SetVolumeMultiplier(0.0);
-	curtainOpeningAudioComponent->Play();
+	//curtainOpeningAudioComponent->SetVolumeMultiplier(0.001);
+	curtainOpeningAudioComponent->Stop();
 
-	rainstickAudioComponent->SetVolumeMultiplier(0.0);
-	rainstickAudioComponent->Play();
+	//rainstickAudioComponent->SetVolumeMultiplier(0.001);
+	rainstickAudioComponent->Stop();
 
-	songOneAudioComponent->SetVolumeMultiplier(0.0);
-	songOneAudioComponent->Play();
+	//shovelingDirtAudioComponent->SetVolumeMultiplier(0.001);
+	shovelingDirtAudioComponent->Stop();
+
+	//songOneAudioComponent->SetVolumeMultiplier(0.001);
+	songOneAudioComponent->Stop();//trying to buffer the audioComponents like this actually wasnt working because they couldnt play with a volume multiplier of zero. I fixed it so it should work now but will it cause new problems?.. well you can slightly hear some sound effects with the volume turned all the way up. also there was some stuttering.
+	//it does seem kinda dumb to try to buffer things like this. it would be nice to properly buffer the sound effects but this probably isnt correct.
 
 	USaveGameOne* adjustedSave = Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass()));
-	adjustedSave->SetMaxLevel(13);
+	adjustedSave->SetMaxLevel(0);
 	adjustedSave->SetHighscores({ 0, 0, 0 });
 	adjustedSave->SetHighscoreDataOne(0);
 	adjustedSave->SetHighscoreDataTwo(0);
@@ -1787,8 +1886,8 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 	masterCoefficientM = (double)pow((double)10, (double)-1 * (double)w);
 	musicCoefficient = (double)pow((double)10, (double)-1 * (double)x);
 
-	masterCoefficientAOne = (double)pow((double)10, (double)-1.8 * (double)w);;
-	atmosphereCoefficientOne = (double)pow((double)10, (double)-1.8 * (double)y);
+	masterCoefficientAOne = (double)pow((double)10, (double)-2.6 * (double)w);;
+	atmosphereCoefficientOne = (double)pow((double)10, (double)-2.6 * (double)y);
 	masterCoefficientATwo = (double)pow((double)10, (double)-0.8 * (double)w);
 	atmosphereCoefficientTwo = (double)pow((double)10, (double)-0.8 * (double)y);
 	masterCoefficientAThree = (double)pow((double)10, (double)-1 * (double)w);
@@ -1800,6 +1899,16 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 	sfxCoefficientTwo = (double)pow((double)10, (double)-1.6 * (double)z);
 	masterCoefficientSThree = (double)pow((double)10, (double)-1.9 * (double)w);
 	sfxCoefficientThree = (double)pow((double)10, (double)-1.9 * (double)z);
+	masterCoefficientSFour = (double)pow((double)10, (double)-1.3 * (double)w);
+	sfxCoefficientFour = (double)pow((double)10, (double)-1.3 * (double)z);
+	masterCoefficientSFive = (double)pow((double)10, (double)-0.9 * (double)w);
+	sfxCoefficientFive = (double)pow((double)10, (double)-0.9 * (double)z);
+	masterCoefficientSSix = (double)pow((double)10, (double)-0.8 * (double)w);
+	sfxCoefficientSix = (double)pow((double)10, (double)-0.8 * (double)z);
+	masterCoefficientSSeven = (double)pow((double)10, (double)-1.0 * (double)w);
+	sfxCoefficientSeven = (double)pow((double)10, (double)-1.0 * (double)z);
+	masterCoefficientSEight = (double)pow((double)10, (double)-1.2 * (double)w);
+	sfxCoefficientEight = (double)pow((double)10, (double)-1.2 * (double)z);
 
 	masterCoefficientP = (double)pow((double)10, (double)-1.25 * (double)w);
 
@@ -1807,7 +1916,55 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 	destinationCoefficientTwo = (double)pow((double)10, (double)-3/*(double)-x*/);//this needs to be the same as the atmosphereCoefficient accept replace x with what x would be if newVol, or saveFile->get..(), was 0
 	destinationCoefficientThree = (double)pow((double)10, (double)-2);//all the volumes will need to be set here just after this because Im centralizing volume control here and removing volume control within the sub files. But then I will need to alter volume to adjust for whether in game or in menu from this master file. write this first after work
 
+	double g = 1;
+	double i = 1;
+
+	if (referenceInstance->GetMaster() == 0)
+	{
+		g = 0.001;
+		i = 0.001;
+	}
+	else if (referenceInstance->GetMusic() == 0)
+	{
+		g = 0.001;
+	}
+	else if (referenceInstance->GetSFX() == 0)
+	{
+		i = 0.001;
+	}
+
+	songOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)musicCoefficient) - (double)((double)((double)((double)0.5 * (double)musicCoefficient) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.5));
+
+	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
+	{
+		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	}
+
+	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
+	{
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
+	}
+
+	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)90.0 * (double)sfxCoefficientThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)90.0));
+	intersectionUpAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)80.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)80.0 * (double)sfxCoefficientThree) - ((double)80.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)80.0));
+
+	shovelingDirtAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.8 * (double)sfxCoefficientFour) - (double)((double)((double)((double)0.8 * (double)sfxCoefficientFour) - ((double)0.8 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSFour))) * (double)i, (double)0.001, (double)0.8));
+
+	curtainClosingAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)4.0 * (double)sfxCoefficientFive) - (double)((double)((double)((double)4.0 * (double)sfxCoefficientFive) - ((double)4.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSFive))) * (double)i, (double)0.001, (double)4.0));
+	curtainOpeningAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)4.0 * (double)sfxCoefficientFive) - (double)((double)((double)((double)4.0 * (double)sfxCoefficientFive) - ((double)4.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSFive))) * (double)i, (double)0.001, (double)4.0));
+
+	missAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.6 * (double)sfxCoefficientSix) - (double)((double)((double)((double)1.6 * (double)sfxCoefficientSix) - ((double)1.6 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientSSix))) * (double)i, (double)0.001, (double)1.6));
+
+	for (int a = 0; a < 3; a++)
+	{
+		scoringAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)3.0 * (double)sfxCoefficientSeven) - (double)((double)((double)((double)3.0 * (double)sfxCoefficientSeven) - ((double)3.0 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientSSeven))) * (double)i, (double)0.001, (double)3.0));
+
+		victoryAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.6 * (double)sfxCoefficientEight) - (double)((double)((double)((double)1.6 * (double)sfxCoefficientEight) - ((double)1.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSEight))) * (double)i, (double)0.001, (double)1.6));
+	}
+
 	inGame = false;
+	newMaxLevel = false;
 
 	if (GEngine && GEngine->GameViewport)
 	{
@@ -1824,7 +1981,9 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 			.goodUseSplashGrass_SMUI(goodUseSplashGrass_SMUI)
 			.goodUseDigitalText_SMUI(goodUseDigitalText_SMUI)
 			.splashGrassArr(splashGrassArr)
-			.splashBootArr(splashBootArr);
+			.splashBootArr(splashBootArr)
+			.black_SMUI(black_SMUI)
+			.shovelingDirtAudioComponent(shovelingDirtAudioComponent);
 
 		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerSeven, SWeakWidget).PossiblyNullContent(splashScreenSlateWidget.ToSharedRef()));
 
@@ -1837,6 +1996,11 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 		FSlateApplication::Get().SetKeyboardFocus(splashScreenSlateWidget);
 	}
 }
+
+/*RELEASE NOTES*/
+/*
+can you exit the game by pressing esc in the wrong place in the packaged version?
+*/
 
 void ATestHud::DisplayOptionsMenu(bool cameFromGame)
 {
@@ -2268,6 +2432,7 @@ void ATestHud::DestroyPauseScreen()
 void ATestHud::DestroySplash()
 {
 	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerSeven.ToSharedRef());
+	shovelingDirtAudioComponent->Stop();
 
 	GenerateMainMenuBackground();
 
@@ -2306,44 +2471,12 @@ void ATestHud::DestroySplash()
 	FSlateApplication::Get().SetKeyboardFocus(mainMenuSlateWidget);
 
 	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
-	double g = 1;
 	double h = 1;
-	double i = 1;
 
-	if (referenceInstance->GetMaster() == 0)
-	{
-		g = 0.001;
-		h = 0.001;
-		i = 0.001;
-	}
-	else if (referenceInstance->GetMusic() == 0)
-	{
-		g = 0.001;
-	}
-	else if (referenceInstance->GetAtmosphere() == 0)
+	if (referenceInstance->GetMaster() == 0 || referenceInstance->GetAtmosphere() == 0)
 	{
 		h = 0.001;
 	}
-	else if (referenceInstance->GetSFX() == 0)
-	{
-		i = 0.001;
-	}
-
-	songOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)musicCoefficient) - (double)((double)((double)((double)0.5 * (double)musicCoefficient) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.5));
-
-	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
-	{
-		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
-	}
-
-	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
-	{
-		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
-		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
-	}
-
-	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)90.0 * (double)sfxCoefficientThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)90.0));
-	intersectionUpAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)80.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)80.0 * (double)sfxCoefficientThree) - ((double)80.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)80.0));
 
 	for (int a = 0; a < 2; a++)
 	{
@@ -2756,6 +2889,7 @@ void ATestHud::DisplayCurtains(int integerOne, bool goingToGame, bool displayRes
 		if (goToResults)
 		{
 			GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerSix, SWeakWidget));
+			//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "slateWidgetContainerSix added to hud");
 		}
 		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerFive, SWeakWidget).PossiblyNullContent(curtainsTwoSlateWidget.ToSharedRef()));
 	}
@@ -2794,52 +2928,23 @@ void ATestHud::ReturnToMainMenu()
 	{
 		resultsBlurSlateWidget = SNew(SResultsBlur)
 			.OwningHUD(this)
-			.rainstickAudioComponent(rainstickAudioComponent);
+			.rainstickAudioComponent(rainstickAudioComponent)
+			.victoryAudioComponents(victoryAudioComponents)
+			.newMaxLevel(newMaxLevel);
+		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "SResultsBlur initialized");
 
-		/*slateWidgetContainerSix->SetContent(resultsBlurSlateWidget.ToSharedRef());*/
+		slateWidgetContainerSix->SetContent(resultsBlurSlateWidget.ToSharedRef());
 	}
 
 	inGame = false;
 
 	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
-	double g = 1;
 	double h = 1;
-	double i = 1;
 
-	if (referenceInstance->GetMaster() == 0)
-	{
-		g = 0.001;
-		h = 0.001;
-		i = 0.001;
-	}
-	else if (referenceInstance->GetMusic() == 0)
-	{
-		g = 0.001;
-	}
-	else if (referenceInstance->GetAtmosphere() == 0)
+	if (referenceInstance->GetMaster() == 0 || referenceInstance->GetAtmosphere())
 	{
 		h = 0.001;
 	}
-	else if (referenceInstance->GetSFX() == 0)
-	{
-		i = 0.001;
-	}
-
-	songOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)musicCoefficient) - (double)((double)((double)((double)0.5 * (double)musicCoefficient) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.5));
-
-	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
-	{
-		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
-	}
-
-	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
-	{
-		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
-		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
-	}
-
-	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)90.0 * (double)sfxCoefficientThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)90.0));
-	intersectionUpAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)80.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)80.0 * (double)sfxCoefficientThree) - ((double)80.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)80.0));
 
 	for (int a = 0; a < 2; a++)
 	{
@@ -11630,6 +11735,8 @@ void ATestHud::BuildLevel()
 			.windAudioComponents(windAudioComponents)
 			.riverAudioComponents(riverAudioComponents)
 			.waterfallAudioComponents(waterfallAudioComponents)
+			.scoringAudioComponents(scoringAudioComponents)
+			.missAudioComponent(missAudioComponent)
 			.songOneAudioComponent(songOneAudioComponent)
 			.environmentAudio(environmentAudio);
 
@@ -11644,44 +11751,12 @@ void ATestHud::BuildLevel()
 	}
 
 	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
-	double g = 1;
 	double h = 1;
-	double i = 1;
 
-	if (referenceInstance->GetMaster() == 0)
-	{
-		g = 0.001;
-		h = 0.001;
-		i = 0.001;
-	}
-	else if (referenceInstance->GetMusic() == 0)
-	{
-		g = 0.001;
-	}
-	else if (referenceInstance->GetAtmosphere() == 0)
+	if (referenceInstance->GetMaster() == 0 || referenceInstance->GetAtmosphere() == 0)
 	{
 		h = 0.001;
 	}
-	else if (referenceInstance->GetSFX() == 0)
-	{
-		i = 0.001;
-	}
-
-	songOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)musicCoefficient) - (double)((double)((double)((double)0.5 * (double)musicCoefficient) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.5));
-
-	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
-	{
-		purpleLullabyAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
-	}
-
-	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
-	{
-		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
-		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
-	}
-
-	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)90.0 * (double)sfxCoefficientThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)90.0));
-	intersectionUpAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)80.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)80.0 * (double)sfxCoefficientThree) - ((double)80.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)80.0));
 
 	for (int a = 0; a < 2; a++)
 	{
