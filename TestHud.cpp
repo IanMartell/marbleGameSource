@@ -1638,6 +1638,7 @@ you need to check if the playgame function in the gameSlateWidget works once you
 			riverAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.33 * (double)atmosphereCoefficientTwo) - (double)((double)((double)((double)0.33 * (double)atmosphereCoefficientTwo) - ((double)0.33 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientATwo))) * (double)h, (double)0.001, (double)0.33));
 			waterfallAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.8 * (double)atmosphereCoefficientThree) - (double)((double)((double)((double)0.8 * (double)atmosphereCoefficientThree) - ((double)0.8 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientAThree))) * (double)h, (double)0.001, (double)0.8));
 		}
+		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "savemaster, windAudioComponents[0] volume multiplier: " + FString::SanitizeFloat(windAudioComponents[0]->VolumeMultiplier));
 	}
 
 	int p = FMath::RandRange(0, 3);
@@ -1849,7 +1850,7 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 	songOneAudioComponent->Stop();//trying to buffer the audioComponents like this actually wasnt working because they couldnt play with a volume multiplier of zero. I fixed it so it should work now but will it cause new problems?.. well you can slightly hear some sound effects with the volume turned all the way up. also there was some stuttering.
 	//it does seem kinda dumb to try to buffer things like this. it would be nice to properly buffer the sound effects but this probably isnt correct.
 
-	USaveGameOne* adjustedSave = Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass()));
+	/*USaveGameOne* adjustedSave = Cast<USaveGameOne>(UGameplayStatics::CreateSaveGameObject(USaveGameOne::StaticClass()));
 	adjustedSave->SetMaxLevel(0);
 	adjustedSave->SetHighscores({ 0, 0, 0 });
 	adjustedSave->SetHighscoreDataOne(0);
@@ -1859,7 +1860,7 @@ void ATestHud::BeginPlay() // Ive got to put all of the code in this begin play 
 	adjustedSave->SetMusic(100);
 	adjustedSave->SetAtmosphere(100);
 	adjustedSave->SetSFX(100);
-	UGameplayStatics::SaveGameToSlot(adjustedSave, TEXT("saveGameOne"), 0);
+	UGameplayStatics::SaveGameToSlot(adjustedSave, TEXT("saveGameOne"), 0);*/
 	//adjustedSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(adjustedSave->SaveSlotName, 0));//is this gonna be a problem? do I need to get the actual default adjustedSave->SaveSlotName and the actual adjustedSave->UserIndex?
 	if (UGameplayStatics::LoadGameFromSlot("saveGameOne", 0) == nullptr)
 	{
@@ -2941,7 +2942,7 @@ void ATestHud::ReturnToMainMenu()
 	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 	double h = 1;
 
-	if (referenceInstance->GetMaster() == 0 || referenceInstance->GetAtmosphere())
+	if (referenceInstance->GetMaster() == 0 || referenceInstance->GetAtmosphere() == 0)
 	{
 		h = 0.001;
 	}
