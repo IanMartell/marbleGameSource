@@ -5,10 +5,9 @@
 #include "SlateOptMacros.h"
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
 #include "Components/AudioComponent.h"
-#include "Widgets/Input/SSlider.h"
 #include "Widgets/Input/SEditableText.h"
+#include "InputCoreTypes.h"
 
-UE_DISABLE_OPTIMIZATION
 FMargin SOptions::CalculateTitlePosition(FVector2D funcViewportSize)
 {//your sub titles will use this same positioning but the a different text style
 	float leftPad = funcViewportSize.X * 0.1;
@@ -45,7 +44,7 @@ FMargin SOptions::CalculateBackButtonPosition(FVector2D paramViewportSize)
 FMargin SOptions::CalculateLeftColumnPos(int textIndex, int numberOfLetters)
 {
 	float fOne = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + (adjustedViewportSize.Y * 0.3);
-	float fThree = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + ((adjustedViewportSize.Y / 10) * 5);
+	//float fThree = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + ((adjustedViewportSize.Y / 10) * 5);
 	float fTwo = FMath::DivideAndRoundUp(numberOfLetters, 5);
 	float leftPad = fOne - ((adjustedViewportSize.Y / 10) * fTwo);
 	float topPad = adjustedViewportSize.Y * (0.35 + (0.1 * textIndex));
@@ -58,12 +57,23 @@ FMargin SOptions::CalculateLeftColumnPos(int textIndex, int numberOfLetters)
 FMargin SOptions::CalculateRightColumnPos(int textIndex, int numberOfLetters)
 {
 	float fOne = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + (adjustedViewportSize.Y * 0.7);
-	float fThree = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + ((adjustedViewportSize.Y / 10) * 5);
+	//float fThree = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + ((adjustedViewportSize.Y / 10) * 5);
 	float fTwo = FMath::DivideAndRoundUp(numberOfLetters, 5);
 	float leftPad = fOne - ((adjustedViewportSize.Y / 10) * fTwo);
 	float topPad = adjustedViewportSize.Y * (0.35 + (0.1 * textIndex));
 	float rightPad = adjustedViewportSize.X - (leftPad + ((adjustedViewportSize.Y / 5) * fTwo));
 	float bottomPad = adjustedViewportSize.Y * (0.575 - (0.1 * textIndex));
+
+	return FMargin(leftPad, topPad, rightPad, bottomPad);
+}
+
+FMargin SOptions::CalculateMiddleColumnPos(int textIndex)
+{
+	float fOne = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + (adjustedViewportSize.Y * 0.05);
+	float leftPad = fOne;
+	float topPad = adjustedViewportSize.Y * (0.1 + (0.1 * textIndex));
+	float rightPad = fOne;
+	float bottomPad = adjustedViewportSize.Y * (.82 - (0.1 * textIndex));
 
 	return FMargin(leftPad, topPad, rightPad, bottomPad);
 }
@@ -149,7 +159,9 @@ void SOptions::Construct(const FArguments& InArgs)
 	hoverGrowAudioComponents = InArgs._hoverGrowAudioComponents;
 	hoverShrinkAudioComponents = InArgs._hoverShrinkAudioComponents;
 	purpleLullabyAudioComponents = InArgs._purpleLullabyAudioComponents;
+	songAudioComponents = InArgs._songAudioComponents;
 	gameFrameColor_SMUI = InArgs._gameFrameColor_SMUI;
+	songPlayingIndex = InArgs._songPlayingIndex;
 
 	gameFrameColor_SB = new FSlateBrush();
 	gameFrameColor_SB->SetResourceObject(gameFrameColor_SMUI);
@@ -166,6 +178,8 @@ void SOptions::Construct(const FArguments& InArgs)
 	subTitleFont.Size = 0.05 * adjustedViewportSize.Y;
 	menuFont = FCoreStyle::Get().GetFontStyle("Roboto");
 	menuFont.Size = 0.04 * adjustedViewportSize.Y;
+	textFont = FCoreStyle::Get().GetFontStyle("Roboto");
+	textFont.Size = 0.02 * adjustedViewportSize.Y;
 
 	standardShadowOffset = 0.003;
 	standardOpacity = 1.0;
@@ -176,7 +190,7 @@ void SOptions::Construct(const FArguments& InArgs)
 	audioMargin = CalculateMenuTextPos(0, 4);
 	graphicsMargin = CalculateMenuTextPos(1, 7);
 	controlsMargin = CalculateMenuTextPos(2, 7);
-	accessabilityMargin = CalculateMenuTextPos(3, 7);
+	creditsMargin = CalculateMenuTextPos(3, 7);
 	backMargin = CalculateBackButtonPosition(adjustedViewportSize);
 
 	transparentButtonStyle = new FButtonStyle();
@@ -186,6 +200,9 @@ void SOptions::Construct(const FArguments& InArgs)
 	childrensCornerIndex = -1;
 
 	audioCycleTracker = 0;
+
+	replaceKey = false;
+	keyToReplace = -1;
 
 	audioText = SNew(STextBlock)
 		.Margin(FMargin())
@@ -277,33 +294,33 @@ void SOptions::Construct(const FArguments& InArgs)
 				]
 		];
 
-	accessabilityText = SNew(STextBlock)
+	creditsText = SNew(STextBlock)
 		.Margin(FMargin())
 		.Justification(ETextJustify::Center)
 		.ColorAndOpacity(FColor::Orange)
 		.Font(menuFont)
-		.Text(FText::FromString("Accessability"))
+		.Text(FText::FromString("Credits"))
 		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
 		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity));
 
-	accessabilityBox = SNew(SBox)
+	creditsBox = SNew(SBox)
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
-		.Padding(accessabilityMargin)
+		.Padding(creditsMargin)
 		[
 			SNew(SButton)
 				.HAlign(HAlign_Fill)
 				.VAlign(VAlign_Fill)
-				.OnPressed(this, &SOptions::OnAccessabilityPressed)
-				.OnReleased(this, &SOptions::OnAccessabilityReleased)
-				.OnHovered(this, &SOptions::OnAccessabilityHovered)
-				.OnUnhovered(this, &SOptions::OnAccessabilityUnHovered)
+				.OnPressed(this, &SOptions::OnCreditsPressed)
+				.OnReleased(this, &SOptions::OnCreditsReleased)
+				.OnHovered(this, &SOptions::OnCreditsHovered)
+				.OnUnhovered(this, &SOptions::OnCreditsUnHovered)
 				.ContentPadding(FMargin())
 				.IsEnabled(true)
 				.ButtonColorAndOpacity(FLinearColor::Transparent)
 				.ButtonStyle(transparentButtonStyle)
 				[
-					accessabilityText.ToSharedRef()
+					creditsText.ToSharedRef()
 				]
 		];
 
@@ -372,12 +389,21 @@ void SOptions::Construct(const FArguments& InArgs)
 		[
 			controlsBox.ToSharedRef()
 		];
+	//when new controls are bound check if inGame and if so have STestWidgetThree reload the save file
+	//by figuring out how to rebind the "click" button on your mouse you may find some insight on how to rebind "click" to a gamepad. If thats the case you will then only need to figure out how to bind the cursor to a joystick.
+	//when it comes to the options interface for rebindings just stack the keyboard bindings on top of the controller bindings. Then just do a check to make sure whatever binding your swapping to is a key/mouse binding if your switching keyboard bindings and the same for controller bindings
+	// I just noticed the space key seems to affect buttons!! is this a development?
+	// you can do a little more hunting but it appears for mouse cursor controls your only going to ever be able to bind them to the mouse. However it does appear there are ways to traverse the SButtons using a keyboard. if true would this also work for a controller? maybe there arent good ways to use SButtons without a mouse but youd think there would be
+	//I dont need to support non mouse interaction, I just need to make sure if a mouse isn't present: there aren't any glitches, the consumer is informed a mouse/track pad is required, and its as easy as possible to connect a mouse/trackpad from there. 
+	//I will also need to confirm the game works automatically with a track pad as it would a mouse, it should but double check
+	//I should continue to support a keyboard key as a pause key but I should also a mouse button as a pause trigger so the game can be played entirely with a mouse
+	//I will also need to double check how a gamepad interacts with this game. maybe do this last so you can backup and upload before leaving your apt again.
 
 	mainOptionsOverlay->AddSlot()
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
 		[
-			accessabilityBox.ToSharedRef()
+			creditsBox.ToSharedRef()
 		];
 
 	mainOptionsOverlay->AddSlot()
@@ -428,7 +454,7 @@ void SOptions::Construct(const FArguments& InArgs)
 		.Padding(CalculateRightColumnPos(0, 1))
 		[
 			SNew(SImage)
-			.Image(gameFrameColor_SB)
+				.Image(gameFrameColor_SB)
 		];
 
 	masterEditableTextBox = SNew(SEditableText)
@@ -649,6 +675,482 @@ void SOptions::Construct(const FArguments& InArgs)
 			firstFloorBackBox.ToSharedRef()
 		];
 
+	keyboardBindingsTextBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateLeftColumnPos(-3, 15))
+		[
+			SNew(STextBlock)
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(subTitleFont)
+				.Text(FText::FromString("Keyboard Bindings"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+		];
+
+	pause1TextBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateLeftColumnPos(-2, 1))
+		[
+			SNew(STextBlock)
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(menuFont)
+				.Text(FText::FromString("Pause 1"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+		];
+
+	pauseKeyBackground = SNew(SImage)
+		.Image(gameFrameColor_SB);
+
+	pauseKeyBackgroundBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateRightColumnPos(-2, 6))
+		[
+			pauseKeyBackground.ToSharedRef()
+		];
+
+	pauseKeyText = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(menuFont)
+		.Text(currentSave->GetPauseKey().GetDisplayName())//if this doesnt work I can create a struct to store the name of the key along with the EKey
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	pauseKeyButton = SNew(SButton)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.OnPressed(this, &SOptions::OnPauseBindingResetPressed)
+		.OnReleased(this, &SOptions::OnPauseBindingResetReleased)
+		.ContentPadding(FMargin())
+		.IsEnabled(true)
+		.ButtonColorAndOpacity(FLinearColor::Transparent)
+		.ButtonStyle(transparentButtonStyle)
+		[
+			pauseKeyText.ToSharedRef()
+		];
+
+	pauseKeyBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateRightColumnPos(-2, 6))
+		[
+			pauseKeyButton.ToSharedRef()
+		];
+
+	pause2TextBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateLeftColumnPos(-1, 1))
+		[
+			SNew(STextBlock)
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(menuFont)
+				.Text(FText::FromString("Pause 2"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+		];
+
+	pauseMouseBackground = SNew(SImage)
+		.Image(gameFrameColor_SB);
+
+	pauseMouseBackgroundBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateRightColumnPos(-1, 6))
+		[
+			pauseMouseBackground.ToSharedRef()
+		];
+
+	pauseMouseText = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(menuFont)
+		.Text(currentSave->GetPauseMouse().GetDisplayName())//if this doesnt work I can create a struct to store the name of the key along with the EKey
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	pauseMouseButton = SNew(SButton)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.OnPressed(this, &SOptions::OnPauseMouseBindingResetPressed)
+		.OnReleased(this, &SOptions::OnPauseMouseBindingResetReleased)
+		.ContentPadding(FMargin())
+		.IsEnabled(true)
+		.ButtonColorAndOpacity(FLinearColor::Transparent)
+		.ButtonStyle(transparentButtonStyle)
+		[
+			pauseMouseText.ToSharedRef()
+		];
+
+	pauseMouseBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateRightColumnPos(-1, 11))
+		[
+			pauseMouseButton.ToSharedRef()
+		];
+
+	controlsOverlay = SNew(SOverlay);
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			keyboardBindingsTextBox.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			pause1TextBox.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			pauseKeyBackgroundBox.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			pauseKeyBox.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			pause2TextBox.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			pauseMouseBackgroundBox.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			pauseMouseBox.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			firstFloorBackBox.ToSharedRef()
+		];
+
+	creditTextOne = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(textFont)
+		.Text(FText::FromString("Abundance Of Love by Mike Berger"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	creditBoxOne = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(0))
+		[
+			SNew(SButton)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.OnPressed(this, &SOptions::OnSongCreditOnePressed)
+				.OnReleased(this, &SOptions::OnSongCreditOneReleased)
+				.OnHovered(this, &SOptions::OnSongCreditOneHovered)
+				.OnUnhovered(this, &SOptions::OnSongCreditOneUnHovered)
+				.ContentPadding(FMargin())
+				.IsEnabled(true)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.ButtonStyle(transparentButtonStyle)
+				[
+					creditTextOne.ToSharedRef()
+				]
+		];
+
+	creditTextTwo = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(textFont)
+		.Text(FText::FromString("Karatine by Alpha Hydrae | License: CC0"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	creditBoxTwo = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(1))
+		[
+			SNew(SButton)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.OnPressed(this, &SOptions::OnSongCreditTwoPressed)
+				.OnReleased(this, &SOptions::OnSongCreditTwoReleased)
+				.OnHovered(this, &SOptions::OnSongCreditTwoHovered)
+				.OnUnhovered(this, &SOptions::OnSongCreditTwoUnHovered)
+				.ContentPadding(FMargin())
+				.IsEnabled(true)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.ButtonStyle(transparentButtonStyle)
+				[
+					creditTextTwo.ToSharedRef()
+				]
+		];
+
+	creditTextThree = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(textFont)
+		.Text(FText::FromString("Variatio 13 by Kimiko Ishizaka | License: CC0"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	creditBoxThree = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(2))
+		[
+			SNew(SButton)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.OnPressed(this, &SOptions::OnSongCreditThreePressed)
+				.OnReleased(this, &SOptions::OnSongCreditThreeReleased)
+				.OnHovered(this, &SOptions::OnSongCreditThreeHovered)
+				.OnUnhovered(this, &SOptions::OnSongCreditThreeUnHovered)
+				.ContentPadding(FMargin())
+				.IsEnabled(true)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.ButtonStyle(transparentButtonStyle)
+				[
+					creditTextThree.ToSharedRef()
+				]
+		];
+
+	creditTextFour = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(textFont)
+		.Text(FText::FromString("Variatio 19 by Kimiko Ishizaka | License: CC0"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	creditBoxFour = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(3))
+		[
+			SNew(SButton)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.OnPressed(this, &SOptions::OnSongCreditFourPressed)
+				.OnReleased(this, &SOptions::OnSongCreditFourReleased)
+				.OnHovered(this, &SOptions::OnSongCreditFourHovered)
+				.OnUnhovered(this, &SOptions::OnSongCreditFourUnHovered)
+				.ContentPadding(FMargin())
+				.IsEnabled(true)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.ButtonStyle(transparentButtonStyle)
+				[
+					creditTextFour.ToSharedRef()
+				]
+		];
+
+	creditTextFive = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(textFont)
+		.Text(FText::FromString("Variatio 29 by Kimiko Ishizaka | License: CC0"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	creditBoxFive = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(4))
+		[
+			SNew(SButton)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.OnPressed(this, &SOptions::OnSongCreditFivePressed)
+				.OnReleased(this, &SOptions::OnSongCreditFiveReleased)
+				.OnHovered(this, &SOptions::OnSongCreditFiveHovered)
+				.OnUnhovered(this, &SOptions::OnSongCreditFiveUnHovered)
+				.ContentPadding(FMargin())
+				.IsEnabled(true)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.ButtonStyle(transparentButtonStyle)
+				[
+					creditTextFive.ToSharedRef()
+				]
+		];
+
+	creditTextSix = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(textFont)
+		.Text(FText::FromString("Insomnia by Josh Woodward | license: CC BY at freemusicarchive.org"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	creditBoxSix = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(5))
+		[
+			SNew(SButton)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.OnPressed(this, &SOptions::OnSongCreditSixPressed)
+				.OnReleased(this, &SOptions::OnSongCreditSixReleased)
+				.OnHovered(this, &SOptions::OnSongCreditSixHovered)
+				.OnUnhovered(this, &SOptions::OnSongCreditSixUnHovered)
+				.ContentPadding(FMargin())
+				.IsEnabled(true)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.ButtonStyle(transparentButtonStyle)
+				[
+					creditTextSix.ToSharedRef()
+				]
+		];
+
+	creditTextSeven = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(textFont)
+		.Text(FText::FromString("Bowsie Sessions by Kira Daily | license: CC BY at freemusicarchive.org"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	creditBoxSeven = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(6))
+		[
+			SNew(SButton)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.OnPressed(this, &SOptions::OnSongCreditSevenPressed)
+				.OnReleased(this, &SOptions::OnSongCreditSevenReleased)
+				.OnHovered(this, &SOptions::OnSongCreditSevenHovered)
+				.OnUnhovered(this, &SOptions::OnSongCreditSevenUnHovered)
+				.ContentPadding(FMargin())
+				.IsEnabled(true)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.ButtonStyle(transparentButtonStyle)
+				[
+					creditTextSeven.ToSharedRef()
+				]
+		];
+
+	creditTextEight = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(textFont)
+		.Text(FText::FromString("The Circle by Kira Daily | license: CC BY at freemusicarchive.org"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	creditBoxEight = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(7))
+		[
+			SNew(SButton)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.OnPressed(this, &SOptions::OnSongCreditEightPressed)
+				.OnReleased(this, &SOptions::OnSongCreditEightReleased)
+				.OnHovered(this, &SOptions::OnSongCreditEightHovered)
+				.OnUnhovered(this, &SOptions::OnSongCreditEightUnHovered)
+				.ContentPadding(FMargin())
+				.IsEnabled(true)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.ButtonStyle(transparentButtonStyle)
+				[
+					creditTextEight.ToSharedRef()
+				]
+		];
+
+	creditsOverlay = SNew(SOverlay);
+
+	creditsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			creditBoxOne.ToSharedRef()
+		];
+
+	creditsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			creditBoxTwo.ToSharedRef()
+		];
+
+	creditsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			creditBoxThree.ToSharedRef()
+		];
+
+	creditsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			creditBoxFour.ToSharedRef()
+		];
+
+	creditsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			creditBoxFive.ToSharedRef()
+		];
+
+	creditsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			creditBoxSix.ToSharedRef()
+		];
+
+	creditsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			creditBoxSeven.ToSharedRef()
+		];
+
+	creditsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			creditBoxEight.ToSharedRef()
+		];
+
+	creditsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			firstFloorBackBox.ToSharedRef()
+		];
 
 	masterOverlay = SNew(SOverlay);
 
@@ -659,21 +1161,107 @@ void SOptions::Construct(const FArguments& InArgs)
 			mainOptionsOverlay.ToSharedRef()
 		];
 
-	
+
 	ChildSlot
-	[
-		SNew(SOverlay)
-		+ SOverlay::Slot()
-		.HAlign(HAlign_Fill)
-		.VAlign(VAlign_Fill)
 		[
-			masterOverlay.ToSharedRef()
-		]
-	];
+			SNew(SOverlay)
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					masterOverlay.ToSharedRef()
+				]
+		];
+}
+
+FReply SOptions::OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& InMouseEvent)
+{//when I calculate the pause mouse in the saveFile creation in the hud i will not need to double check if the users mouse even has that button. just set it to scroll wheel by default then give them the ability to change it in the settings
+	if (replaceKey)
+	{
+		currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+		FKey inButton = InMouseEvent.GetEffectingButton();
+
+		switch (keyToReplace)
+		{
+		case 0:
+			pauseKeyText->SetText(currentSave->GetPauseKey().GetDisplayName());
+			break;
+		case 1:
+			if (inButton.IsBindableToActions() && !inButton.IsGamepadKey() && !inButton.IsModifierKey() && inButton.IsMouseButton() && inButton != EKeys::Mouse2D && inButton.IsValid() && inButton != currentSave->GetSelectKey())
+			{
+				pauseMouseText->SetText(inButton.GetDisplayName());
+				OwningHUD->CommitKey(1, inButton);
+			}
+			else
+			{
+				pauseMouseText->SetText(currentSave->GetPauseMouse().GetDisplayName());
+			}
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		default:
+			break;
+		}
+
+		replaceKey = false;
+	}
+
+	return FReply::Handled();
+}
+
+FReply SOptions::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent)
+{
+	if (replaceKey)
+	{
+		currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+		FKey inKey = InKeyEvent.GetKey();
+
+		switch (keyToReplace)
+		{
+		case 0:
+			if (inKey.IsBindableToActions() && !inKey.IsGamepadKey() && !inKey.IsModifierKey() && !inKey.IsMouseButton() && !inKey.IsAxis1D() && !inKey.IsAxis2D() && !inKey.IsAxis3D() && inKey.IsValid() && !inKey.IsDeprecated() && inKey != EKeys::F1 && inKey != EKeys::F2 && inKey != EKeys::F3 && inKey != EKeys::F4 && inKey != EKeys::F5 && inKey != EKeys::F6 && inKey != EKeys::F7 && inKey != EKeys::F8 && inKey != EKeys::F9 && inKey != EKeys::F10 && inKey != EKeys::F11 && inKey != EKeys::F12 && inKey != EKeys::Tilde)//I need to make sure I cannot bind pause functionality to a movement key or movement functionality to a potential pause key. also double check mouse buttons are catagorized as mouse buttons
+			{//Some keys/buttons do have pre-designated functionality. check to make sure the inKey is not a key which is already in use like f11 or tildae
+				//also f10 does not work to open the options in game. maybe i should just eliminate all f keys from the possibilities. what else needs eliminated?
+				pauseKeyText->SetText(inKey.GetDisplayName());
+				OwningHUD->CommitKey(0, inKey);
+			}
+			else {
+				pauseKeyText->SetText(currentSave->GetPauseKey().GetDisplayName());//there is a crash where some keys appear to being recorded as null !!!SOLVE NOW!!!
+			}//so it appears sometimes unexpectedly currentSave->GetPauseKey() returns none, it seems to have been solved by re-initializing current in the replace key scope
+			break;
+		case 1:
+			pauseMouseText->SetText(currentSave->GetPauseMouse().GetDisplayName());
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		default:
+			break;
+		}
+
+		replaceKey = false;
+	}
+
+	return FReply::Handled();
 }
 
 void SOptions::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
-{
+{//what if the mouse cursor teleports from one button to the next and onHovered gets called on the next button before onUnHovered gets called on the first? I think it will be okay ultimately because of the implementation of completedMargins and completedOffsets but this is unconfirmed and even if it does work it would look funny
 	for (int a = 0; a < shrinkingBoxes.Num(); a++)
 	{
 		shrinkingTimes[a] += InDeltaTime;
@@ -1233,13 +1821,13 @@ void SOptions::OnControlsReleased()
 	controlsText->SetShadowOffset(FVector2D(standardShadowOffset * adjustedViewportSize.Y, standardShadowOffset * adjustedViewportSize.Y));
 	controlsText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity));
 
-	/*masterOverlay->RemoveSlot(0);
+	masterOverlay->RemoveSlot(0);
 	masterOverlay->AddSlot()
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
 		[
-			levelSelectionOverlay.ToSharedRef()
-		];*/
+			controlsOverlay.ToSharedRef()
+		];
 
 	if (growingBox.Num() > 0)
 	{
@@ -1279,11 +1867,11 @@ void SOptions::OnControlsReleased()
 	}
 }
 
-void SOptions::OnAccessabilityHovered()
+void SOptions::OnCreditsHovered()
 {
-	if (shrinkingBoxes.Find(accessabilityBox) + 1)
+	if (shrinkingBoxes.Find(creditsBox) + 1)
 	{
-		indexOfShrinkingSubject = shrinkingBoxes.Find(accessabilityBox);
+		indexOfShrinkingSubject = shrinkingBoxes.Find(creditsBox);
 		extentOfGrowth = menuFont.Size * multiplierOfPerimeterExpansion / shrinkingTexts[indexOfShrinkingSubject].Size;
 		growingOffset = shrinkingOffset[indexOfShrinkingSubject];
 		growingMargin = shrinkingMargins[indexOfShrinkingSubject];
@@ -1321,7 +1909,7 @@ void SOptions::OnAccessabilityHovered()
 
 		growingFont = menuFont;
 		growingOffset = standardShadowOffset;
-		growingMargin = accessabilityMargin;
+		growingMargin = creditsMargin;
 		growingLinearColor = FLinearColor(0, 0, 0, standardOpacity);
 		growingOpacity = standardOpacity;
 	}
@@ -1335,14 +1923,14 @@ void SOptions::OnAccessabilityHovered()
 	adjustedSizeX = CalculateGrownMarginX(startingMargin);
 	adjustedSizeY = CalculateGrownMarginY(startingMargin);
 	adjustedStartingFontSize = ((startingFontSize * extentOfGrowth) - startingFontSize) / 2;
-	growingBox.Add(accessabilityBox);
-	growingTextBlock = accessabilityText;
+	growingBox.Add(creditsBox);
+	growingTextBlock = creditsText;
 	growTime = 0;
 
 	childrensCornerIndex = (childrensCornerIndex + 1) % 159;
 	hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Play();
 }
-void SOptions::OnAccessabilityUnHovered()
+void SOptions::OnCreditsUnHovered()
 {
 	if (clicked)
 	{
@@ -1361,7 +1949,7 @@ void SOptions::OnAccessabilityUnHovered()
 			shrinkingBoxes.Add(grownBox[0]);
 			grownBox.RemoveAt(0);
 
-			growingMargin = GrownMargin(accessabilityMargin);
+			growingMargin = GrownMargin(creditsMargin);
 			growingFont.Size = menuFont.Size * multiplierOfPerimeterExpansion;
 			growingOffset = standardShadowOffset * multiplierOfOffset;
 			growingLinearColor = FLinearColor(0, 0, 0, grownOpacity);
@@ -1381,43 +1969,43 @@ void SOptions::OnAccessabilityUnHovered()
 		shrinkingTexts.Add(growingFont);
 		shrinkingMargins.Add(growingMargin);
 		shrinkingMarginsStartingPoints.Add(growingMargin);
-		shrinkingAdjustedMarginSizesX.Add((accessabilityMargin - growingMargin).Left / 2);
-		shrinkingAdjustedMarginSizesY.Add((accessabilityMargin - growingMargin).Top / 2);
+		shrinkingAdjustedMarginSizesX.Add((creditsMargin - growingMargin).Left / 2);
+		shrinkingAdjustedMarginSizesY.Add((creditsMargin - growingMargin).Top / 2);
 		shrinkingFontSizes.Add(growingFontSize);
 		shrinkingFontSizesStartingPoints.Add(growingFontSize);
 		shrinkingAdjustedFontSizes.Add((menuFont.Size - growingFont.Size) / 2);
 		shrinkingTimes.Add(0);
-		completedMargins.Add(accessabilityMargin);
+		completedMargins.Add(creditsMargin);
 		completedFonts.Add(menuFont);
 		completedOffsets.Add(standardShadowOffset);
 
 		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
 	}
 }
-void SOptions::OnAccessabilityPressed()
+void SOptions::OnCreditsPressed()
 {
 	activeNoteIndex = FMath::RandRange(0, 7);
 	purpleLullabyAudioComponents[activeNoteIndex]->Play();
 
-	accessabilityText->SetColorAndOpacity(FColor::White);
+	creditsText->SetColorAndOpacity(FColor::White);
 }
-void SOptions::OnAccessabilityReleased()
+void SOptions::OnCreditsReleased()
 {
 	PlayChordToActiveNote();
 
-	accessabilityText->SetColorAndOpacity(FColor::Orange);
-	accessabilityBox->SetPadding(accessabilityMargin);
-	accessabilityText->SetFont(menuFont);
-	accessabilityText->SetShadowOffset(FVector2D(standardShadowOffset * adjustedViewportSize.Y, standardShadowOffset * adjustedViewportSize.Y));
-	accessabilityText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity));
+	creditsText->SetColorAndOpacity(FColor::Orange);
+	creditsBox->SetPadding(creditsMargin);
+	creditsText->SetFont(menuFont);
+	creditsText->SetShadowOffset(FVector2D(standardShadowOffset * adjustedViewportSize.Y, standardShadowOffset * adjustedViewportSize.Y));
+	creditsText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity));
 
-	/*masterOverlay->RemoveSlot(0);
+	masterOverlay->RemoveSlot(0);
 	masterOverlay->AddSlot()
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
 		[
-			levelSelectionOverlay.ToSharedRef()
-		];*/
+			creditsOverlay.ToSharedRef()
+		];
 
 	if (growingBox.Num() > 0)
 	{
@@ -1429,9 +2017,9 @@ void SOptions::OnAccessabilityReleased()
 		grownBox.RemoveAt(0);
 		clicked = true;
 	}
-	else if (shrinkingBoxes.Find(accessabilityBox) + 1)
+	else if (shrinkingBoxes.Find(creditsBox) + 1)
 	{
-		indexOfShrinkingSubject = shrinkingBoxes.Find(accessabilityBox);
+		indexOfShrinkingSubject = shrinkingBoxes.Find(creditsBox);
 
 		shrinkingOpacities.RemoveAt(indexOfShrinkingSubject);
 		shrinkingLinearColors.RemoveAt(indexOfShrinkingSubject);
@@ -1581,6 +2169,33 @@ void SOptions::OnBackFloorOnePressed()
 }
 void SOptions::OnBackFloorOneReleased()
 {
+	if (replaceKey)
+	{
+		currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+
+		switch (keyToReplace)
+		{
+		case 0:
+			pauseKeyText->SetText(currentSave->GetPauseKey().GetDisplayName());
+			break;
+		case 1:
+			pauseMouseText->SetText(currentSave->GetPauseMouse().GetDisplayName());
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		default:
+			break;
+		}
+
+		replaceKey = false;
+	}
+
 	PlayChordToActiveNote();
 
 	backText->SetColorAndOpacity(FColor::Orange);
@@ -1755,7 +2370,7 @@ void SOptions::OnBackToMenuPressed()
 	activeNoteIndex = FMath::RandRange(0, 7);
 	purpleLullabyAudioComponents[activeNoteIndex]->Play();
 
-	backText->SetColorAndOpacity(FColor::White); 
+	backText->SetColorAndOpacity(FColor::White);
 }
 void SOptions::OnBackToMenuReleased()
 {
@@ -1804,7 +2419,319 @@ void SOptions::OnBackToMenuReleased()
 		completedOffsets.RemoveAt(indexOfShrinkingSubject);
 	}
 
-	OwningHUD->DestroyOptionsMenu(); 
+	OwningHUD->DestroyOptionsMenu();
+}
+
+void SOptions::OnPauseBindingResetPressed()
+{
+	if (replaceKey)
+	{
+		currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+
+		switch (keyToReplace)
+		{
+		case 0:
+			pauseKeyText->SetText(currentSave->GetPauseKey().GetDisplayName());
+			break;
+		case 1:
+			pauseMouseText->SetText(currentSave->GetPauseMouse().GetDisplayName());
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		default:
+			break;
+		}
+	}
+	replaceKey = false;
+
+	pauseKeyBackground->SetColorAndOpacity(FSlateColor(FColor().FromHex("7f7f7f")));
+}
+void SOptions::OnPauseBindingResetReleased()
+{
+	pauseKeyBackground->SetColorAndOpacity(FSlateColor(FLinearColor::White));
+	pauseKeyText->SetText(FText::FromString("press any key"));
+	replaceKey = true;
+	keyToReplace = 0;
+}
+
+void SOptions::OnPauseMouseBindingResetPressed()
+{
+	if (replaceKey)
+	{
+		currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+
+		switch (keyToReplace)
+		{
+		case 0:
+			pauseKeyText->SetText(currentSave->GetPauseKey().GetDisplayName());
+			break;
+		case 1:
+			pauseMouseText->SetText(currentSave->GetPauseMouse().GetDisplayName());
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		default:
+			break;
+		}
+	}
+	replaceKey = false;
+
+	pauseMouseBackground->SetColorAndOpacity(FSlateColor(FColor().FromHex("7f7f7f")));
+}
+void SOptions::OnPauseMouseBindingResetReleased()
+{
+	pauseMouseBackground->SetColorAndOpacity(FSlateColor(FLinearColor::White));
+	pauseMouseText->SetText(FText::FromString("press any key"));
+	replaceKey = true;
+	keyToReplace = 1;
+}
+
+void SOptions::OnSongCreditOneHovered()
+{
+	creditTextOne->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnSongCreditOneUnHovered()
+{
+	creditTextOne->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnSongCreditOnePressed()
+{
+	creditTextOne->SetColorAndOpacity(FColor::White);
+
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+}
+void SOptions::OnSongCreditOneReleased()
+{
+	creditTextOne->SetColorAndOpacity(FColor::Orange);
+
+	songAudioComponents[songPlayingIndex]->Stop();
+
+	songPlayingIndex = 0;
+	OwningHUD->songPlaying = true;
+	OwningHUD->songPlayingIndex = songPlayingIndex;
+	songAudioComponents[0]->Play();
+
+	PlayChordToActiveNote();
+}
+
+void SOptions::OnSongCreditTwoHovered()
+{
+	creditTextTwo->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnSongCreditTwoUnHovered()
+{
+	creditTextTwo->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnSongCreditTwoPressed()
+{
+	creditTextTwo->SetColorAndOpacity(FColor::White);
+
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+}
+void SOptions::OnSongCreditTwoReleased()
+{
+	creditTextTwo->SetColorAndOpacity(FColor::Orange);
+
+	songAudioComponents[songPlayingIndex]->Stop();
+
+	songPlayingIndex = 1;
+	OwningHUD->songPlaying = true;
+	OwningHUD->songPlayingIndex = songPlayingIndex;
+	songAudioComponents[1]->Play();
+
+	PlayChordToActiveNote();
+}
+
+void SOptions::OnSongCreditThreeHovered()
+{
+	creditTextThree->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnSongCreditThreeUnHovered()
+{
+	creditTextThree->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnSongCreditThreePressed()
+{
+	creditTextThree->SetColorAndOpacity(FColor::White);
+
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+}
+void SOptions::OnSongCreditThreeReleased()
+{
+	creditTextThree->SetColorAndOpacity(FColor::Orange);
+
+	songAudioComponents[songPlayingIndex]->Stop();
+
+	songPlayingIndex = 2;
+	OwningHUD->songPlaying = true;
+	OwningHUD->songPlayingIndex = songPlayingIndex;
+	songAudioComponents[2]->Play();
+
+	PlayChordToActiveNote();
+}
+
+void SOptions::OnSongCreditFourHovered()
+{
+	creditTextFour->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnSongCreditFourUnHovered()
+{
+	creditTextFour->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnSongCreditFourPressed()
+{
+	creditTextFour->SetColorAndOpacity(FColor::White);
+
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+}
+void SOptions::OnSongCreditFourReleased()
+{
+	creditTextFour->SetColorAndOpacity(FColor::Orange);
+
+	songAudioComponents[songPlayingIndex]->Stop();
+
+	songPlayingIndex = 3;
+	OwningHUD->songPlaying = true;
+	OwningHUD->songPlayingIndex = songPlayingIndex;
+	songAudioComponents[3]->Play();
+
+	PlayChordToActiveNote();
+}
+
+void SOptions::OnSongCreditFiveHovered()
+{
+	creditTextFive->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnSongCreditFiveUnHovered()
+{
+	creditTextFive->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnSongCreditFivePressed()
+{
+	creditTextFive->SetColorAndOpacity(FColor::White);
+
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+}
+void SOptions::OnSongCreditFiveReleased()
+{
+	creditTextFive->SetColorAndOpacity(FColor::Orange);
+
+	songAudioComponents[songPlayingIndex]->Stop();
+
+	songPlayingIndex = 4;
+	OwningHUD->songPlaying = true;
+	OwningHUD->songPlayingIndex = songPlayingIndex;
+	songAudioComponents[4]->Play();
+
+	PlayChordToActiveNote();
+}
+
+void SOptions::OnSongCreditSixHovered()
+{
+	creditTextSix->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnSongCreditSixUnHovered()
+{
+	creditTextSix->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnSongCreditSixPressed()
+{
+	creditTextSix->SetColorAndOpacity(FColor::White);
+
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+}
+void SOptions::OnSongCreditSixReleased()
+{
+	creditTextSix->SetColorAndOpacity(FColor::Orange);
+
+	songAudioComponents[songPlayingIndex]->Stop();
+
+	songPlayingIndex = 5;
+	OwningHUD->songPlaying = true;
+	OwningHUD->songPlayingIndex = songPlayingIndex;
+	songAudioComponents[5]->Play();
+
+	PlayChordToActiveNote();
+}
+
+void SOptions::OnSongCreditSevenHovered()
+{
+	creditTextSeven->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnSongCreditSevenUnHovered()
+{
+	creditTextSeven->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnSongCreditSevenPressed()
+{
+	creditTextSeven->SetColorAndOpacity(FColor::White);
+
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+}
+void SOptions::OnSongCreditSevenReleased()
+{
+	creditTextSeven->SetColorAndOpacity(FColor::Orange);
+
+	songAudioComponents[songPlayingIndex]->Stop();
+
+	songPlayingIndex = 6;
+	OwningHUD->songPlaying = true;
+	OwningHUD->songPlayingIndex = songPlayingIndex;
+	songAudioComponents[6]->Play();
+
+	PlayChordToActiveNote();
+}
+
+void SOptions::OnSongCreditEightHovered()
+{
+	creditTextEight->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnSongCreditEightUnHovered()
+{
+	creditTextEight->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnSongCreditEightPressed()
+{
+	creditTextEight->SetColorAndOpacity(FColor::White);
+
+	activeNoteIndex = FMath::RandRange(0, 7);
+	purpleLullabyAudioComponents[activeNoteIndex]->Play();
+}
+void SOptions::OnSongCreditEightReleased()
+{
+	creditTextEight->SetColorAndOpacity(FColor::Orange);
+
+	songAudioComponents[songPlayingIndex]->Stop();
+
+	songPlayingIndex = 7;
+	OwningHUD->songPlaying = true;
+	OwningHUD->songPlayingIndex = songPlayingIndex;
+	songAudioComponents[7]->Play();
+
+	PlayChordToActiveNote();
 }
 
 void SOptions::OnMasterCommitted(const FText& InText, const ETextCommit::Type InTextAction)
@@ -1909,4 +2836,5 @@ void SOptions::OnSFXCommitted(const FText& InText, const ETextCommit::Type InTex
 		sfxEditableTextBox->SetText(FText::FromString(FString::FromInt(currentSave->GetSFX())));
 	}
 }
+
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION

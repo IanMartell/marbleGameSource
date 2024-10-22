@@ -1,6 +1,10 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
 #include "SSArcadeModeTitleScreen.h"
-#include "SlateOptMacros.h"
+#include "Components/AudioComponent.h"
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
+#include "SlateOptMacros.h"
 
 FMargin SSArcadeModeTitleScreen::CalculateTitlePosition(FVector2D funcViewportSize)
 {//your sub titles will use this same positioning but the a different text style
@@ -169,8 +173,6 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 	backgroundMaterials = InArgs._backgroundMaterials;
 	backgroundIsLargeTile = InArgs._backgroundIsLargeTile;
 	displayResults = InArgs._displayResults;
-	hoverGrow = InArgs._hoverGrow;
-	hoverShrink = InArgs._hoverShrink;
 	hoverGrowAudioComponents = InArgs._hoverGrowAudioComponents;
 	hoverShrinkAudioComponents = InArgs._hoverShrinkAudioComponents;
 	windAudioComponents = InArgs._windAudioComponents;
@@ -243,14 +245,6 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 
 	audioCycleTracker = 0;
 
-	hoverGrowAudioComponent = NewObject<UAudioComponent>(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0));
-	hoverGrowAudioComponent->bAutoDestroy = false;
-	//testAudioComponent->AutoAttachParent = UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0);
-	hoverGrowAudioComponent->SetSound(hoverGrow);
-	hoverShrinkAudioComponent = NewObject<UAudioComponent>(UGameplayStatics::GetPlayerPawn(standardWorldContextObject, 0));
-	hoverShrinkAudioComponent->bAutoDestroy = false;
-	hoverShrinkAudioComponent->SetSound(hoverShrink);
-
 	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
 	{
 		hoverGrowAudioComponents[a]->Stop();
@@ -272,7 +266,7 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 
 	switch (environmentAudio)
 	{
-	case 0 :
+	case 0:
 		if (FMath::RandRange(0, 4) == 4)
 		{
 			windWithSheepAudioComponents[0]->Play();
@@ -284,7 +278,7 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 			sheep = false;
 		}
 		break;
-	case 1 :
+	case 1:
 		if (FMath::RandRange(0, 4) == 4)
 		{
 			windWithSheepAudioComponents[0]->Play();
@@ -298,7 +292,7 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 
 		riverAudioComponents[0]->Play();
 		break;
-	case 2 :
+	case 2:
 		if (FMath::RandRange(0, 4) == 4)
 		{
 			windWithSheepAudioComponents[0]->Play();
@@ -323,7 +317,7 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 		.Padding(FMargin(0, 0, 0, 0))
 		[
 			SNew(SImage)
-			.Image(gameFrameColor_SB)
+				.Image(gameFrameColor_SB)
 		];
 
 	backgroundOverlay = SNew(SOverlay);
@@ -335,7 +329,7 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 			.Padding(FMargin((adjustedViewportSize.X - adjustedViewportSize.Y) / 2, 0, (adjustedViewportSize.X - adjustedViewportSize.Y) / 2, 0))
 			[
 				SNew(SImage)
-				.Image(backgroundStuff[0])
+					.Image(backgroundStuff[0])
 			];
 	}
 	else
@@ -348,7 +342,7 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 				.Padding(CalculateBackgroundPositions(adjustedViewportSize, a))
 				[
 					SNew(SImage)
-					.Image(backgroundStuff[a])
+						.Image(backgroundStuff[a])
 				];
 		}
 	}
@@ -821,7 +815,7 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
 				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1)));
 
-			levelSelectionBoxes[a-2]->SetContent(
+			levelSelectionBoxes[a - 2]->SetContent(
 				SNew(SButton)
 				.OnPressed(this, &SSArcadeModeTitleScreen::PlayPressed_15)
 				.OnReleased(this, &SSArcadeModeTitleScreen::PlayReleased_15)
@@ -862,10 +856,10 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 			break;
 		}
 		levelSelectionMargins.Add(CalculateLevelSelectionButtonsPositions(adjustedViewportSize, a));
-		
+
 		levelSelectionBoxes[a - 2]->SetHAlign(HAlign_Fill);
 		levelSelectionBoxes[a - 2]->SetVAlign(VAlign_Fill);
-		levelSelectionBoxes[a - 2]->SetPadding(levelSelectionMargins[a-2]);
+		levelSelectionBoxes[a - 2]->SetPadding(levelSelectionMargins[a - 2]);
 
 		levelSelectionOverlay->AddSlot()
 			.HAlign(HAlign_Fill)
@@ -890,19 +884,19 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 		.Padding(backMargin)
 		[
 			SNew(SButton)
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			.OnPressed(this, &SSArcadeModeTitleScreen::OnBackFloorOnePressed)
-			.OnReleased(this, &SSArcadeModeTitleScreen::OnBackFloorOneReleased)
-			.OnHovered(this, &SSArcadeModeTitleScreen::OnBackFloorOneHovered)
-			.OnUnhovered(this, &SSArcadeModeTitleScreen::OnBackFloorOneUnHovered)
-			.ContentPadding(FMargin())
-			.IsEnabled(true)
-			.ButtonColorAndOpacity(FLinearColor::Transparent)
-			.ButtonStyle(transparentButtonStyle)
-			[
-				backText.ToSharedRef()
-			]
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.OnPressed(this, &SSArcadeModeTitleScreen::OnBackFloorOnePressed)
+				.OnReleased(this, &SSArcadeModeTitleScreen::OnBackFloorOneReleased)
+				.OnHovered(this, &SSArcadeModeTitleScreen::OnBackFloorOneHovered)
+				.OnUnhovered(this, &SSArcadeModeTitleScreen::OnBackFloorOneUnHovered)
+				.ContentPadding(FMargin())
+				.IsEnabled(true)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.ButtonStyle(transparentButtonStyle)
+				[
+					backText.ToSharedRef()
+				]
 		];
 
 	levelSelectionOverlay->AddSlot()
@@ -918,12 +912,12 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 		.Padding(CalculateTitlePosition(adjustedViewportSize))
 		[
 			SNew(STextBlock)
-			.Justification(ETextJustify::Center)
-			.ColorAndOpacity(FColor::Orange)
-			.Font(subTitleFont)
-			.Text(FText::FromString("Select Level"))
-			.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
-			.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(subTitleFont)
+				.Text(FText::FromString("Select Level"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
 		];
 
 	resultsOverlay = SNew(SOverlay);
@@ -933,12 +927,12 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 		.Padding(CalculateTitlePosition(adjustedViewportSize))
 		[
 			SNew(STextBlock)
-			.Justification(ETextJustify::Center)
-			.ColorAndOpacity(FColor::Orange)
-			.Font(subTitleFont)
-			.Text(FText::FromString("Results"))
-			.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
-			.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(subTitleFont)
+				.Text(FText::FromString("Results"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
 		];
 
 	resultsOverlay->AddSlot()
@@ -947,12 +941,12 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 		.Padding(CalculateHighscorePos(0, 9))
 		[
 			SNew(STextBlock)
-			.Justification(ETextJustify::Center)
-			.ColorAndOpacity(FColor::Orange)
-			.Font(menuFont)//italic
-			.Text(FText::FromString("Highscores"))
-			.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
-			.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(menuFont)//italic
+				.Text(FText::FromString("Highscores"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
 		];
 
 	for (int a = 0; a < currentSave->GetHighscores().Num(); a++)
@@ -963,12 +957,12 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 			.Padding(CalculateHighscorePos(a + 2, 4))
 			[
 				SNew(STextBlock)
-				.Justification(ETextJustify::Center)
-				.ColorAndOpacity(FColor::Orange)
-				.Font(menuFont)
-				.Text(FText::FromString(FString::FromInt(a + 1) + ":   " + FString::FromInt(currentSave->GetHighscores()[a])))
-				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
-				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+					.Justification(ETextJustify::Center)
+					.ColorAndOpacity(FColor::Orange)
+					.Font(menuFont)
+					.Text(FText::FromString(FString::FromInt(a + 1) + ":   " + FString::FromInt(currentSave->GetHighscores()[a])))
+					.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+					.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
 			];
 	}
 
@@ -978,12 +972,12 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 		.Padding(CalculateLastGamePos(0, 9))
 		[
 			SNew(STextBlock)
-			.Justification(ETextJustify::Center)
-			.ColorAndOpacity(FColor::Orange)
-			.Font(menuFont)
-			.Text(FText::FromString("Last Game"))
-			.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
-			.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(menuFont)
+				.Text(FText::FromString("Last Game"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
 		];
 
 	resultsOverlay->AddSlot()

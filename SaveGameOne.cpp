@@ -52,6 +52,40 @@ double USaveGameOne::GetSFX()
 	return sfxVolume;
 }
 
+FKey USaveGameOne::GetPauseKey()
+{
+	return pauseKey;
+}
+FKey USaveGameOne::GetPauseMouse()
+{
+	return pauseMouse;
+}
+FKey USaveGameOne::GetSelectKey()
+{
+	return selectKey;
+}
+FKey USaveGameOne::GetMoveKey()
+{
+	return moveKey;
+}
+FKey USaveGameOne::GetPauseController()
+{
+	return pauseController;
+}
+FKey USaveGameOne::GetSelectController()
+{
+	return selectController;
+}
+FKey USaveGameOne::GetMoveController()
+{
+	return moveController;
+}
+
+TArray<int> USaveGameOne::GetSongIndexArr()
+{
+	return songIndexArr;
+}
+
 //Setters
 
 void USaveGameOne::SetHighscores(TArray<int> newHighscores)
@@ -94,5 +128,39 @@ void USaveGameOne::SetAtmosphere(double newVol)
 void USaveGameOne::SetSFX(double newVol)
 {
 	sfxVolume = newVol;
+}
+
+void USaveGameOne::SetPauseKey(FKey newKey)
+{
+	pauseKey = newKey;
+}
+void USaveGameOne::SetPauseMouse(FKey newKey)
+{
+	pauseMouse = newKey;
+}
+void USaveGameOne::SetSelectKey(FKey newKey)
+{
+	selectKey = newKey;
+}
+void USaveGameOne::SetMoveKey(FKey newKey)
+{
+	moveKey = newKey;
+}
+void USaveGameOne::SetPauseController(FKey newKey)
+{
+	pauseController = newKey;
+}
+void USaveGameOne::SetSelectController(FKey newKey)
+{
+	selectController = newKey;
+}
+void USaveGameOne::SetMoveController(FKey newKey)
+{
+	moveController = newKey;
+}
+
+void USaveGameOne::SetSongIndexArr(TArray<int> newArr)
+{
+	songIndexArr = newArr;
 }
 

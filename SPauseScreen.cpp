@@ -3,10 +3,8 @@
 
 #include "SPauseScreen.h"
 #include "Widgets/Layout/SBackgroundBlur.h"
-#include "Components/AudioComponent.h"
-#include "SaveGameOne.h"
-#include "Widgets/Layout/SBackgroundBlur.h"
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
+#include "Components/AudioComponent.h"
 #include "SlateOptMacros.h"
 
 FMargin SPauseScreen::CalculateTitlePosition(FVector2D funcViewportSize)
@@ -271,7 +269,7 @@ void SPauseScreen::Construct(const FArguments& InArgs)
 		];
 
 
-	mainPauseOverlay = SNew(SOverlay); 
+	mainPauseOverlay = SNew(SOverlay);
 
 	titleTextBlock = SNew(STextBlock)
 		.Justification(ETextJustify::Center)
@@ -334,18 +332,18 @@ void SPauseScreen::Construct(const FArguments& InArgs)
 		[
 			mainPauseOverlay.ToSharedRef()
 		];
-	
+
 	ChildSlot
-	[
-		SNew(SOverlay)
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
-				masterOverlay.ToSharedRef()
-			]
-	];
-	
+		[
+			SNew(SOverlay)
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					masterOverlay.ToSharedRef()
+				]
+		];
+
 }
 
 FReply SPauseScreen::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent)
@@ -446,7 +444,7 @@ void SPauseScreen::Tick(const FGeometry& AllottedGeometry, const double InCurren
 	{
 		clock += InDeltaTime;
 
-		blur->SetBlurStrength( ( (standardBlur / 2) * sin(37.7 * (clock - 0.04166)) ) + (standardBlur / 2) );
+		blur->SetBlurStrength(((standardBlur / 2) * sin(37.7 * (clock - 0.04166))) + (standardBlur / 2));
 
 		textColor = FLinearColor(255, 165, 0, (0.5 * sin(37.7 * (clock - 0.04166))) + 0.5);
 		shadowColor = FLinearColor(0, 0, 0, (0.5 * sin(37.7 * (clock - 0.04166))) + 0.5);
@@ -466,13 +464,13 @@ void SPauseScreen::Tick(const FGeometry& AllottedGeometry, const double InCurren
 		{
 			spawnPauseScreen = false;
 		}
-	} 
+	}
 
 	if (destroyPauseScreen)
 	{
 		deathClock += InDeltaTime;
 
-		blur->SetBlurStrength(standardBlur - ( ( (standardBlur / 2) * sin(37.7 * (clock - 0.04166))) + (standardBlur / 2) ) );
+		blur->SetBlurStrength(standardBlur - (((standardBlur / 2) * sin(37.7 * (clock - 0.04166))) + (standardBlur / 2)));
 
 		newOpacity = 1 - ((0.5 * sin(37.7 * (deathClock - 0.04166))) + 0.5);
 
@@ -1187,6 +1185,7 @@ void SPauseScreen::OnQuitToMenuReleased()
 	if (!destroyPauseScreen)
 	{
 		destroyPauseScreen = true;
+		OwningHUD->songPlaying = false;
 		OwningHUD->DisplayCurtains(0, false, false);
 
 		PlayChordToActiveNote();
@@ -1247,3 +1246,4 @@ void SPauseScreen::ReturnToLanding()
 }
 
 END_SLATE_FUNCTION_BUILD_OPTIMIZATION
+

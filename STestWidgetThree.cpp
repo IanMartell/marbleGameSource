@@ -1,15 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+
 #include "STestWidgetThree.h"
-#include <string>
+#include "SlateOptMacros.h"
 #include "GameFramework/Actor.h"
-#include "UObject/ConstructorHelpers.h"
 #include "Math/Vector2D.h"
 #include "Layout/Geometry.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/AudioComponent.h"
 #include "Engine/World.h"
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
+
+BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
 #define LOCTEXT_NAMESPACE "TestSlate"
 //UE_DISABLE_OPTIMIZATION
@@ -255,10 +257,12 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	windAudioComponents = InArgs._windAudioComponents;
 	riverAudioComponents = InArgs._riverAudioComponents;
 	waterfallAudioComponents = InArgs._waterfallAudioComponents;
-	songOneAudioComponent = InArgs._songOneAudioComponent;
 	scoringAudioComponents = InArgs._scoringAudioComponents;
 	missAudioComponent = InArgs._missAudioComponent;
+	songAudioComponents = InArgs._songAudioComponents;
 	environmentAudio = InArgs._environmentAudio;
+	songPlaying = InArgs._songPlaying;
+	songPlayingIndex = InArgs._songPlayingIndex;
 
 	grass_SB_1 = new FSlateBrush();
 	grass_SB_1->SetResourceObject(grass_VMUI_1);
@@ -312,7 +316,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	riverTurning_SB_4->SetResourceObject(riverTurning_VMUI_4);
 	mountain_SB_1 = new FSlateBrush();
 	mountain_SB_1->SetResourceObject(mountain_VMUI_1);
-	
+
 	holeFromDown_SB = new FSlateBrush();
 	holeFromLeft_SB = new FSlateBrush();
 	holeFromRight_SB = new FSlateBrush();
@@ -473,7 +477,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	emptyImg_SB->SetResourceObject(emptyImg_SMUI);
 
 	landscapeStuff = { grass_SB_1, holeFromDown_SB, holeFromLeft_SB, holeFromRight_SB, holeFromUp_SB, grass_SB_2, grass_SB_3, pondHorizontal_SB, pondVerticleFlowingLeft_SB, pondVerticleFlowingRight_SB, waterfall_SB, riverFlowingDown_SB_1, riverFlowingDown_SB_2, riverFlowingDown_SB_3, riverFlowingLeft_SB_1, riverFlowingLeft_SB_2, riverFlowingLeft_SB_3, riverFlowingRight_SB_1, riverFlowingRight_SB_2, riverFlowingRight_SB_3, tree_SB_1, tree_SB_2, tree_SB_3, tree_SB_4, tree_SB_5, riverTurning_SB_1, riverTurning_SB_2, riverTurning_SB_3, riverTurning_SB_4, emptyImg_SB, grass_SB_1, grass_SB_2, grass_SB_3, mountain_SB_1 };
-	trackStuff = { emptyImg_SB, verticleRail_SB, horizontalRail_SB, railTurningOne_SB, railTurningTwo_SB, railTurningThree_SB, railTurningFour_SB, buttonFromDownTurningRightZero_SB, buttonFromDownTurningLeftZero_SB, buttonFromLeftTurningRightZero_SB, buttonFromLeftTurningLeftZero_SB, buttonFromRightTurningRightZero_SB, buttonFromRightTurningLeftZero_SB, buttonFromUpTurningRightZero_SB, buttonFromUpTurningLeftZero_SB};//the first element for this arr is an empty image ALSO I should change this to an array of fully assembled widget structures with the intersection having their logic built in
+	trackStuff = { emptyImg_SB, verticleRail_SB, horizontalRail_SB, railTurningOne_SB, railTurningTwo_SB, railTurningThree_SB, railTurningFour_SB, buttonFromDownTurningRightZero_SB, buttonFromDownTurningLeftZero_SB, buttonFromLeftTurningRightZero_SB, buttonFromLeftTurningLeftZero_SB, buttonFromRightTurningRightZero_SB, buttonFromRightTurningLeftZero_SB, buttonFromUpTurningRightZero_SB, buttonFromUpTurningLeftZero_SB };//the first element for this arr is an empty image ALSO I should change this to an array of fully assembled widget structures with the intersection having their logic built in
 
 	flags = { flag_SB_1, flag_SB_2, flag_SB_3, flag_SB_4, flag_SB_5, flag_SB_6, flag_SB_7, flag_SB_8, flag_SB_9, flag_SB_10, flag_SB_11, flag_SB_12, flag_SB_13, flag_SB_14, flag_SB_15, flag_SB_16, };
 	marbles = { marble_SB_1, marble_SB_2, marble_SB_3, marble_SB_4, marble_SB_5, marble_SB_6, marble_SB_7, marble_SB_8, marble_SB_9, marble_SB_10, marble_SB_11, marble_SB_12, marble_SB_13, marble_SB_14, marble_SB_15, marble_SB_16, };
@@ -529,8 +533,11 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	masterButtonStyle = new FButtonStyle();
 	masterButtonStyle->SetNormalPadding(FMargin());
 
-	songPlaying = false;
-	songBool = false;
+	if (!songPlaying)
+	{
+		songAudioComponents[songPlayingIndex]->Stop();
+	}
+
 	scoringSoundEffectIndex = FMath::RandRange(0, 2);
 
 	for (int a = 0; a < 2; a++)
@@ -539,8 +546,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 		riverAudioComponents[a]->Stop();
 		waterfallAudioComponents[a]->Stop();
 	}
-
-	songOneAudioComponent->Stop();
 
 	switch (environmentAudio)
 	{
@@ -560,15 +565,15 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 
 	switch (startingDir)
 	{
-	case 2 :
+	case 2:
 		startingPos.X = -1;
 		startingMarbleMovementTracker[0] = 1;
 		break;
-	case 3 :
+	case 3:
 		startingPos.Y = -1;
 		startingMarbleMovementTracker[1] = 1;
-		break; 
-	case 4 :
+		break;
+	case 4:
 		startingPos.X = 15;//does this need to be 15 or 16?
 		startingMarbleMovementTracker[0] = -1;
 		break;
@@ -577,7 +582,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	}
 
 	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "startingPos two: " + startingPos.ToString() + " | startingDir two: " + FString::FromInt(startingDir));
-	
+
 	quantityOfMarbles = 30 + holePositions.Num();
 	speedMultiplier = 0.8 * (1 + (0.023 * (holePositions.Num() - 3)));
 	// s = 0.8 and i = 33 is 0.0242424
@@ -684,7 +689,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			.Padding(CalculateLargeTilePosition(pondPositionArr[a], adjustedViewportSize))
 			[
 				SNew(SImage)
-				.Image(landscapeStuff[pondSpecifierArr[a]])
+					.Image(landscapeStuff[pondSpecifierArr[a]])
 			];
 	}
 
@@ -697,7 +702,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 			[
 				SNew(SImage)
-				.Image(landscapeStuff[landscapeArr[a]])
+					.Image(landscapeStuff[landscapeArr[a]])
 			];
 	}
 
@@ -710,7 +715,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			.Padding(CalculateTilePosition(holePositions[a], adjustedViewportSize))
 			[
 				SNew(SImage)
-				.Image(flagsRandomized[a])
+					.Image(flagsRandomized[a])
 			];
 	}
 
@@ -729,7 +734,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 		.Padding(FMargin((adjustedViewportSize.X - adjustedViewportSize.Y) / 2 + adjustedViewportSize.Y, 0, 0, 0))
 		[
 			SNew(SImage)
-			.Image(gameFrameColor_SB)
+				.Image(gameFrameColor_SB)
 		];
 
 	trackOverlay = SNew(SOverlay);
@@ -744,14 +749,14 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 				.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 				[
 					SNew(SImage)
-					.Image(trackStuff[trackArr[a]])
+						.Image(trackStuff[trackArr[a]])
 				];
 		}
 		else
 		{
 			switch (currentIntersection)
 			{
-			case 1 :
+			case 1:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[0]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -771,18 +776,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedOne)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedOne)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedOne)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedOne)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 2 :
+			case 2:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[1]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -802,18 +807,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTwo)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTwo)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTwo)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTwo)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 3 :
+			case 3:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[2]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -833,18 +838,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedThree)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedThree)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedThree)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedThree)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 4 :
+			case 4:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[3]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -864,18 +869,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFour)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFour)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFour)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFour)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 5 :
+			case 5:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[4]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -895,18 +900,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFive)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFive)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFive)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFive)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 6 :
+			case 6:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[5]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -926,18 +931,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSix)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSix)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSix)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSix)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 7 :
+			case 7:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[6]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -957,18 +962,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSeven)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSeven)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSeven)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSeven)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 8 :
+			case 8:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[7]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -988,18 +993,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedEight)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedEight)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedEight)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedEight)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 9 :
+			case 9:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[8]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -1019,18 +1024,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedNine)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedNine)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedNine)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedNine)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 10 :
+			case 10:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[9]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -1050,18 +1055,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTen)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTen)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 11 :
+			case 11:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[10]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -1081,18 +1086,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedEleven)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedEleven)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedEleven)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedEleven)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 12 :
+			case 12:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[11]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -1112,18 +1117,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTwelve)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTwelve)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTwelve)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTwelve)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 13 :
+			case 13:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[12]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -1143,18 +1148,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedThirteen)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedThirteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedThirteen)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedThirteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 14 :
+			case 14:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[13]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -1174,18 +1179,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFourteen)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFourteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFourteen)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFourteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 15 :
+			case 15:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[14]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -1205,18 +1210,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFifteen)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFifteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFifteen)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFifteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 16 :
+			case 16:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[15]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -1236,18 +1241,18 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSixteen)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSixteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSixteen)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSixteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
 
 				break;
-			case 17 :
+			case 17:
 				intersectionImages.Add(SNew(SImage));
 				intersectionImages[16]->SetImage(intersections[trackArr[a]][0]);
 				intersectionCycle.Add(0);
@@ -1267,12 +1272,12 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
 						SNew(SButton)
-						.ContentPadding(FMargin())
-						.ButtonStyle(masterButtonStyle)
-						.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSeventeen)
-						.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSeventeen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-						.ButtonColorAndOpacity(FLinearColor::Transparent)
-						.IsEnabled(true)
+							.ContentPadding(FMargin())
+							.ButtonStyle(masterButtonStyle)
+							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSeventeen)
+							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSeventeen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+							.ButtonColorAndOpacity(FLinearColor::Transparent)
+							.IsEnabled(true)
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1294,7 +1299,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 
 	countdownOverlay = SNew(SOverlay);
 	countdownFont = FCoreStyle::Get().GetFontStyle("Roboto"); //test italic
-	countdownFont.Size = 0.0866 *adjustedViewportSize.Y;
+	countdownFont.Size = 0.0866 * adjustedViewportSize.Y;
 	adjustedStartingFontSize = ((1.155 * countdownFont.Size) - countdownFont.Size) / 2;
 	countdownMargin = CalculateCountdownPos(adjustedViewportSize);
 	adjustedCountdownMargin = CalculateAdjustedCountdownMargin(countdownMargin);
@@ -1324,84 +1329,84 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	ChildSlot //so it appears I cannot write code to systematically build only as much widget as necessary and will instead need to list out 225 landscape SImages and 225 track SImages and fill them as needed. but hold on, there is still some testing to be done, what if I store the initial SOverlay so I can reference it directly. ( this will mean potentially creating a new SOverlay sub class? no nvm I will just need to check through the childSlot logic to see if theres a way to display an already existing SOverlay, or to assign the SNew(SOverlay to an identity
 		[
 			SNew(SOverlay)
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
-				largeTilesOverlay.ToSharedRef()
-			]
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					largeTilesOverlay.ToSharedRef()
+				]
 
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
-				landscapeOverlay.ToSharedRef()
-			]
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					landscapeOverlay.ToSharedRef()
+				]
 
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
-				trackOverlay.ToSharedRef()
-			]
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					trackOverlay.ToSharedRef()
+				]
 
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
-				marbleOverlay.ToSharedRef()
-			]
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					marbleOverlay.ToSharedRef()
+				]
 
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
-				flagsOverlay.ToSharedRef()
-			]
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					flagsOverlay.ToSharedRef()
+				]
 
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
-				countdownOverlay.ToSharedRef()
-			]
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					countdownOverlay.ToSharedRef()
+				]
 
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
-				intersectionButtonsOverlay.ToSharedRef()
-			]
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					intersectionButtonsOverlay.ToSharedRef()
+				]
 
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
-				frameColorOverlay.ToSharedRef()
-			]
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					frameColorOverlay.ToSharedRef()
+				]
 
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			.Padding(CalculateScorePos(adjustedViewportSize))
-			[
-				scoreText.ToSharedRef()
-			]
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.Padding(CalculateScorePos(adjustedViewportSize))
+				[
+					scoreText.ToSharedRef()
+				]
 
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			.Padding(CalculateTimePos(adjustedViewportSize))
-			[
-				timeText.ToSharedRef()
-			]
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.Padding(CalculateTimePos(adjustedViewportSize))
+				[
+					timeText.ToSharedRef()
+				]
 
-			+ SOverlay::Slot()
-			.HAlign(HAlign_Fill)
-			.VAlign(VAlign_Fill)
-			[
-				pauseOverlay.ToSharedRef()
-			]
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					pauseOverlay.ToSharedRef()
+				]
 		];
 }
 
@@ -1645,12 +1650,13 @@ void STestWidgetThree::OnIntersectionReleasedSeventeen()
 
 FReply STestWidgetThree::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent)
 {
-	if (InKeyEvent.GetKey() == EKeys::Q)
+	/*if (InKeyEvent.GetKey() == EKeys::Q)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "q");
-	}
+	}*/
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 
-	if (InKeyEvent.GetKey() == EKeys::Tab)
+	if (InKeyEvent.GetKey() == currentSave->GetPauseKey())
 	{
 		if (!paused)
 		{
@@ -1673,9 +1679,9 @@ FReply STestWidgetThree::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent&
 				break;
 			}
 
-			if (songPlaying)
+			if (songAudioComponents[songPlayingIndex]->IsPlaying())
 			{
-				songOneAudioComponent->SetPaused(true);
+				songAudioComponents[songPlayingIndex]->SetPaused(true);
 			}
 		}
 		else
@@ -1711,10 +1717,10 @@ FVector2D STestWidgetThree::PrepTurnMarble(int currentMarble, FVector2d marblePo
 
 	switch (dirOfMarble)
 	{
-	case 1 :
+	case 1:
 		deltaMarblePos[currentMarble] = marblePosition;
 		deltaMarblePos[currentMarble].Y = FMath::RoundToZero(deltaMarblePos[currentMarble].Y) + 0.5;
-		
+
 		if (turnBeingMade == 1 || turnBeingMade == 4)//1 is right, 2 is left, 4 is right, 5 is left
 		{
 			turnToExecute[currentMarble] = 0;// your current problem with these marbles is if a marble gets deleted while another is turning it screws everything up
@@ -1724,7 +1730,7 @@ FVector2D STestWidgetThree::PrepTurnMarble(int currentMarble, FVector2d marblePo
 			turnToExecute[currentMarble] = 1;
 		}
 		break;
-	case 2 :
+	case 2:
 		deltaMarblePos[currentMarble] = marblePosition;
 
 		if (marblePosition.X < 0)
@@ -1745,7 +1751,7 @@ FVector2D STestWidgetThree::PrepTurnMarble(int currentMarble, FVector2d marblePo
 			turnToExecute[currentMarble] = 3;
 		}
 		break;
-	case 3 :
+	case 3:
 		deltaMarblePos[currentMarble] = marblePosition;
 
 		if (marblePosition.Y < 0)
@@ -1766,7 +1772,7 @@ FVector2D STestWidgetThree::PrepTurnMarble(int currentMarble, FVector2d marblePo
 			turnToExecute[currentMarble] = 5;
 		}
 		break;
-	case 4 :
+	case 4:
 		deltaMarblePos[currentMarble] = marblePosition;
 		deltaMarblePos[currentMarble].X = FMath::RoundToZero(deltaMarblePos[currentMarble].X) + 0.5;
 
@@ -1792,7 +1798,7 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 
 	switch (turnToExecute[currentMarble])
 	{
-	case 0 :
+	case 0:
 		if (deltaMarblePos[currentMarble].Y - marblePosition.Y >= 0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
@@ -1808,7 +1814,7 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y - 0.5 * sin(((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 0.7854) * 1.57079);
 
 		break;
-	case 1 :
+	case 1:
 		if (deltaMarblePos[currentMarble].Y - marblePosition.Y >= 0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
@@ -1824,7 +1830,7 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y - 0.5 * sin(((deltaMarblePos[currentMarble].Y - marblePosition.Y) / 0.7854) * 1.57079);
 
 		break;
-	case 2 :
+	case 2:
 		if (deltaMarblePos[currentMarble].X - marblePosition.X <= -0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
@@ -1840,7 +1846,7 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + 0.5 - (0.5 * (sin(1.57079 - (((marblePosition.X - deltaMarblePos[currentMarble].X) / 0.7854) * 1.57079))));
 
 		break;
-	case 3 :
+	case 3:
 		if (deltaMarblePos[currentMarble].X - marblePosition.X <= -0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
@@ -1856,7 +1862,7 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y - (0.5 - (0.5 * sin(1.57079 - (((marblePosition.X - deltaMarblePos[currentMarble].X) / 0.7854) * 1.57079))));
 
 		break;
-	case 4 :
+	case 4:
 		if (deltaMarblePos[currentMarble].Y - marblePosition.Y <= -0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
@@ -1872,7 +1878,7 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + 0.5 * sin(((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 0.7854) * 1.57079);
 
 		break;
-	case 5 :
+	case 5:
 		if (deltaMarblePos[currentMarble].Y - marblePosition.Y <= -0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
@@ -1888,7 +1894,7 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y + 0.5 * sin(((marblePosition.Y - deltaMarblePos[currentMarble].Y) / 0.7854) * 1.57079);
 
 		break;
-	case 6 :
+	case 6:
 		if (deltaMarblePos[currentMarble].X - marblePosition.X >= 0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
@@ -1904,7 +1910,7 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 		convertedMarblePos.Y = deltaMarblePos[currentMarble].Y - (0.5 - (0.5 * (sin(1.57079 - (((deltaMarblePos[currentMarble].X - marblePosition.X) / 0.7854) * 1.57079)))));
 
 		break;
-	case 7 :
+	case 7:
 		if (deltaMarblePos[currentMarble].X - marblePosition.X >= 0.7854)
 		{
 			marbleIsTurning[currentMarble] = false;
@@ -1947,9 +1953,9 @@ void STestWidgetThree::PlayGame()
 		break;
 	}
 
-	if (songPlaying)
+	if (songAudioComponents[songPlayingIndex]->IsPlaying())
 	{
-		songOneAudioComponent->SetPaused(false);
+		songAudioComponents[songPlayingIndex]->SetPaused(false);
 	}
 }
 
@@ -1983,15 +1989,36 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 			}
 		}
 
-		if (audioTimer > 20 && !songBool)
+		if (!songBool)
 		{
-			songBool = true;
-
-			if (FMath::RandRange(0, 2) == 2)
+			if (audioTimer > 20)
 			{
-				songOneAudioComponent->Play();
-				songPlaying = true;
+				currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+
+				if (songPlaying)
+				{
+					if (!songAudioComponents[songPlayingIndex]->IsPlaying())//I need to check if this works as expected but Im guessing it does
+					{//to test if all of this song credits programming complexity actually worked go into credits, play song. go into game, keep restarting until song ends. then see if new song picks up 
+						songPlayingIndex = currentSave->GetSongIndexArr().Last();
+						songAudioComponents[songPlayingIndex]->Play();
+						OwningHUD->songPlayingIndex = songPlayingIndex;
+						OwningHUD->songPlaying = false;
+
+						OwningHUD->UpdateSongArr();
+					}
+				}
+				else
+				{
+					songPlayingIndex = currentSave->GetSongIndexArr().Last();
+					songAudioComponents[songPlayingIndex]->Play();
+					OwningHUD->songPlayingIndex = songPlayingIndex;
+
+					OwningHUD->UpdateSongArr();
+				}
+
+				songBool = true;
 			}
+
 		}
 
 
@@ -2141,6 +2168,9 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 						scoreThisGame = finalScore;
 
 						OwningHUD->SaveGame(maxLevel, highscores, highscoreDataOne, highscoreDataTwo, scoreThisGame);
+
+						OwningHUD->songPlaying = false;
+						OwningHUD->songPlayingIndex = songPlayingIndex;
 
 						OwningHUD->DisplayCurtains(0, false, true);
 					}
@@ -2317,3 +2347,5 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 }
 
 #undef LOCTEXT_NAMESPACE
+
+END_SLATE_FUNCTION_BUILD_OPTIMIZATION

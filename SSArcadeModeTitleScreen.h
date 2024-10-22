@@ -1,53 +1,49 @@
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Widgets/SCompoundWidget.h"
-#include "TestHud.h"
-#include "Components/AudioComponent.h"
 #include "SaveGameOne.h"
+#include "MyHUD.h"
+#include "Widgets/SCompoundWidget.h"
 
 /**
- *
+ * 
  */
 class SSArcadeModeTitleScreen : public SCompoundWidget
 {
 public:
 	SLATE_BEGIN_ARGS(SSArcadeModeTitleScreen) {}
 
-	SLATE_ARGUMENT(TWeakObjectPtr<class ATestHud>, OwningHUD)
+		SLATE_ARGUMENT(TWeakObjectPtr<class AMyHUD>, OwningHUD)
 
-	SLATE_ARGUMENT(APlayerController*, playerOnePlayerController)
+		SLATE_ARGUMENT(APlayerController*, playerOnePlayerController)
 
-	SLATE_ARGUMENT(UObject*, standardWorldContextObject)
+		SLATE_ARGUMENT(UObject*, standardWorldContextObject)
 
-	SLATE_ARGUMENT(TArray<UMaterial*>, backgroundMaterials)
+		SLATE_ARGUMENT(TArray<UMaterial*>, backgroundMaterials)
 
-	SLATE_ARGUMENT(bool, backgroundIsLargeTile)
+		SLATE_ARGUMENT(bool, backgroundIsLargeTile)
 
-	SLATE_ARGUMENT(bool, displayResults)
+		SLATE_ARGUMENT(bool, displayResults)
 
-	SLATE_ARGUMENT(UMaterial*, gameFrameColor_SMUI)
+		SLATE_ARGUMENT(UMaterial*, gameFrameColor_SMUI)
 
-	SLATE_ARGUMENT(USoundBase*, hoverGrow)
+		SLATE_ARGUMENT(TArray<UAudioComponent*>, hoverGrowAudioComponents)
 
-	SLATE_ARGUMENT(USoundBase*, hoverShrink)
+		SLATE_ARGUMENT(TArray<UAudioComponent*>, hoverShrinkAudioComponents)
 
-	SLATE_ARGUMENT(TArray<UAudioComponent*>, hoverGrowAudioComponents)
+		SLATE_ARGUMENT(TArray <UAudioComponent*>, windAudioComponents)
 
-	SLATE_ARGUMENT(TArray<UAudioComponent*>, hoverShrinkAudioComponents)
+		SLATE_ARGUMENT(TArray <UAudioComponent*>, windWithSheepAudioComponents)
 
-	SLATE_ARGUMENT(TArray <UAudioComponent*>, windAudioComponents)
+		SLATE_ARGUMENT(TArray <UAudioComponent*>, riverAudioComponents)
 
-	SLATE_ARGUMENT(TArray <UAudioComponent*>, windWithSheepAudioComponents)
+		SLATE_ARGUMENT(TArray <UAudioComponent*>, waterfallAudioComponents)
 
-	SLATE_ARGUMENT(TArray <UAudioComponent*>, riverAudioComponents)
+		SLATE_ARGUMENT(TArray <UAudioComponent*>, purpleLullabyAudioComponents)
 
-	SLATE_ARGUMENT(TArray <UAudioComponent*>, waterfallAudioComponents)
-
-	SLATE_ARGUMENT(TArray <UAudioComponent*>, purpleLullabyAudioComponents)
-
-	SLATE_ARGUMENT(int, environmentAudio)
+		SLATE_ARGUMENT(int, environmentAudio)
 
 	SLATE_END_ARGS()
 
@@ -151,7 +147,7 @@ public:
 	UPROPERTY() FMargin GrownMargin(FMargin inMargin);
 	UPROPERTY() FMargin ShrinkMargin(FMargin inMargin, int marginIndex);
 
-	UPROPERTY() TWeakObjectPtr<class ATestHud> OwningHUD;
+	UPROPERTY() TWeakObjectPtr<class AMyHUD> OwningHUD;
 	UPROPERTY() APlayerController* playerOnePlayerController;
 	UPROPERTY() UObject* standardWorldContextObject;
 	UPROPERTY() USaveGameOne* currentSave;
@@ -172,9 +168,6 @@ public:
 	UPROPERTY() FSlateBrush* background_SB_7;
 	UPROPERTY() FSlateBrush* background_SB_8;
 	UPROPERTY() FSlateBrush* background_SB_9;
-
-	UPROPERTY() USoundBase* hoverGrow;
-	UPROPERTY() USoundBase* hoverShrink;
 
 	UPROPERTY() TSharedPtr< class SOverlay> backgroundOverlay;
 	UPROPERTY() TSharedPtr< class SOverlay> frameColorOverlay;
@@ -281,9 +274,6 @@ public:
 	UPROPERTY() int environmentAudio;
 	UPROPERTY() float audioTimer;
 	UPROPERTY() int audioCycleTracker;
-
-	UPROPERTY() UAudioComponent* hoverGrowAudioComponent;
-	UPROPERTY() UAudioComponent* hoverShrinkAudioComponent;
 
 	UPROPERTY() TArray<UAudioComponent*> hoverGrowAudioComponents;
 	UPROPERTY() TArray<UAudioComponent*> hoverShrinkAudioComponents;

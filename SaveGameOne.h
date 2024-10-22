@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
-#include "GameFramework/SaveGame.h"
 #include "SaveGameOne.generated.h"
+
 /**
  * 
  */
 UCLASS()
-class USaveGameOne : public USaveGame
+class FIVEPOINTFOURREBUILD_API USaveGameOne : public USaveGame
 {
 	GENERATED_BODY()
 public:
@@ -27,6 +27,14 @@ protected:
 	UPROPERTY(SaveGame) double musicVolume;
 	UPROPERTY(SaveGame) double atmosphereVolume;
 	UPROPERTY(SaveGame) double sfxVolume;
+	UPROPERTY(SaveGame) FKey pauseKey;
+	UPROPERTY(SaveGame) FKey pauseMouse;
+	UPROPERTY(SaveGame) FKey selectKey;
+	UPROPERTY(SaveGame) FKey moveKey;
+	UPROPERTY(SaveGame) FKey pauseController;
+	UPROPERTY(SaveGame) FKey selectController;
+	UPROPERTY(SaveGame) FKey moveController;
+	UPROPERTY(SaveGame) TArray<int> songIndexArr;
 
 public:
 	TArray<int> GetHighscores();
@@ -38,6 +46,14 @@ public:
 	double GetMusic();
 	double GetAtmosphere();
 	double GetSFX();
+	FKey GetPauseKey();
+	FKey GetPauseMouse();
+	FKey GetSelectKey();
+	FKey GetMoveKey();
+	FKey GetPauseController();
+	FKey GetSelectController();
+	FKey GetMoveController();
+	TArray<int> GetSongIndexArr();
 
 	void SetHighscores(TArray<int> newHighscores);
 	void SetHighscoreDataOne(int newHighscoreData);
@@ -48,4 +64,12 @@ public:
 	void SetMusic(double newVol);
 	void SetAtmosphere(double newVol);
 	void SetSFX(double newVol);
+	void SetPauseKey(FKey newKey);
+	void SetPauseMouse(FKey newKey);
+	void SetSelectKey(FKey newKey);
+	void SetMoveKey(FKey newKey);
+	void SetPauseController(FKey newKey);
+	void SetSelectController(FKey newKey);
+	void SetMoveController(FKey newKey);
+	void SetSongIndexArr(TArray<int> newArr);
 };

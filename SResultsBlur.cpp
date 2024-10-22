@@ -2,9 +2,10 @@
 
 
 #include "SResultsBlur.h"
-#include "SlateOptMacros.h"
+#include "Widgets/Layout/SBackgroundBlur.h"
 #include "Components/AudioComponent.h"
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
+#include "SlateOptMacros.h"
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 
@@ -190,24 +191,24 @@ void SResultsBlur::Construct(const FArguments& InArgs)
 		.VAlign(VAlign_Fill)
 		[
 			SNew(SButton)
-			.ContentPadding(FMargin())
-			.ButtonStyle(masterButtonStyle)
-			.OnReleased(this, &SResultsBlur::Released)
-			.ButtonColorAndOpacity(FLinearColor::Transparent)
-			.IsEnabled(true)
+				.ContentPadding(FMargin())
+				.ButtonStyle(masterButtonStyle)
+				.OnReleased(this, &SResultsBlur::Released)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.IsEnabled(true)
 		];
-		
-	
+
+
 	ChildSlot
-	[
-		SNew(SOverlay)
-		+ SOverlay::Slot()
-		.HAlign(HAlign_Fill)
-		.VAlign(VAlign_Fill)
 		[
-			resultsOverlay.ToSharedRef()
-		]
-	];	
+			SNew(SOverlay)
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					resultsOverlay.ToSharedRef()
+				]
+		];
 }
 
 FReply SResultsBlur::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent)
@@ -244,8 +245,8 @@ void SResultsBlur::Tick(const FGeometry& AllottedGeometry, const double InCurren
 	if (destroySelf)
 	{
 		timer += InDeltaTime;
-		shrinkingOpacityWhite = FLinearColor( 1, 1, 1, standardOpacity - ((0.5 * sin(37.7 * (timer - 0.04166))) + 0.5));
-		shrinkingOpacityBlack = FLinearColor( 0, 0, 0, standardOpacity - ((0.5 * sin(37.7 * (timer - 0.04166))) + 0.5));
+		shrinkingOpacityWhite = FLinearColor(1, 1, 1, standardOpacity - ((0.5 * sin(37.7 * (timer - 0.04166))) + 0.5));
+		shrinkingOpacityBlack = FLinearColor(0, 0, 0, standardOpacity - ((0.5 * sin(37.7 * (timer - 0.04166))) + 0.5));
 
 		blur->SetBlurStrength(standardBlur - ((15 * sin(37.7 * (timer - 0.04166))) + 15));
 		resultsTextOne->SetColorAndOpacity(shrinkingOpacityWhite);

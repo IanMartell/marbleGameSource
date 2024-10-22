@@ -3,7 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "TestHud.h"
+#include "MyHUD.h"
+#include "SaveGameOne.h"
 #include "Widgets/SCompoundWidget.h"
 
 /**
@@ -14,13 +15,13 @@ class SPauseScreen : public SCompoundWidget
 public:
 	SLATE_BEGIN_ARGS(SPauseScreen) {}
 
-	SLATE_ARGUMENT(TWeakObjectPtr<class ATestHud>, OwningHUD)
+		SLATE_ARGUMENT(TWeakObjectPtr<class AMyHUD>, OwningHUD)
 
-	SLATE_ARGUMENT(TArray<UAudioComponent*>, hoverGrowAudioComponents)
+		SLATE_ARGUMENT(TArray<UAudioComponent*>, hoverGrowAudioComponents)
 
-	SLATE_ARGUMENT(TArray<UAudioComponent*>, hoverShrinkAudioComponents)
+		SLATE_ARGUMENT(TArray<UAudioComponent*>, hoverShrinkAudioComponents)
 
-	SLATE_ARGUMENT(TArray <UAudioComponent*>, purpleLullabyAudioComponents)
+		SLATE_ARGUMENT(TArray <UAudioComponent*>, purpleLullabyAudioComponents)
 
 	SLATE_END_ARGS()
 
@@ -61,7 +62,7 @@ public:
 	void PlayChordToActiveNote();
 	void ReturnToLanding();
 
-	TWeakObjectPtr<class ATestHud> OwningHUD;
+	TWeakObjectPtr<class AMyHUD> OwningHUD;
 	USaveGameOne* currentSave;
 
 	TSharedPtr< class SOverlay> masterOverlay;

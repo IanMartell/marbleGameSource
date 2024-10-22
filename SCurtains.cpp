@@ -23,27 +23,27 @@ void SCurtains::Construct(const FArguments& InArgs)
 
 	curtainOpeningAudioComponent->SetVolumeMultiplier(1.0);
 	canPlaySoundEffect = true;
-	
+
 	curtainOverlay = SNew(SOverlay);
 	curtainOverlay->AddSlot()
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
 		[
 			SNew(SImage)
-			.Image(curtains_SB)
+				.Image(curtains_SB)
 		];
 
 	ChildSlot
-	[
-		SNew(SOverlay)
-		+ SOverlay::Slot()
-		.HAlign(HAlign_Fill)
-		.VAlign(VAlign_Fill)
 		[
-			curtainOverlay.ToSharedRef()
-		]
-	];
-	
+			SNew(SOverlay)
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					curtainOverlay.ToSharedRef()
+				]
+		];
+
 }
 
 void SCurtains::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)

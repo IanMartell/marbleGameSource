@@ -3,10 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Widgets/SCompoundWidget.h"
-#include "Widgets/Layout/SBackgroundBlur.h"
 #include "SaveGameOne.h"
-#include "TestHud.h"
+#include "MyHUD.h"
+#include "Widgets/SCompoundWidget.h"
 
 /**
  * 
@@ -16,7 +15,7 @@ class SResultsBlur : public SCompoundWidget
 public:
 	SLATE_BEGIN_ARGS(SResultsBlur) {}
 
-	SLATE_ARGUMENT(TWeakObjectPtr<class ATestHud>, OwningHUD)
+	SLATE_ARGUMENT(TWeakObjectPtr<class AMyHUD>, OwningHUD)
 
 	SLATE_ARGUMENT(UAudioComponent*, rainstickAudioComponent)
 
@@ -33,7 +32,7 @@ public:
 	FReply OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent);
 	FMargin CalculateHighscorePos(int textIndex, int numberOfLetters);
 
-	TWeakObjectPtr<class ATestHud> OwningHUD;
+	TWeakObjectPtr<class AMyHUD> OwningHUD;
 	USaveGameOne* currentSave;
 
 	UAudioComponent* rainstickAudioComponent;
@@ -49,7 +48,7 @@ public:
 	FSlateFontInfo scoreFont;
 	FSlateFontInfo titleFont;
 	TSharedPtr<class SBackgroundBlur> blur;
-	
+
 	float standardOpacity;
 	FLinearColor shrinkingOpacityWhite;
 	FLinearColor shrinkingOpacityBlack;

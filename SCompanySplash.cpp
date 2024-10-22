@@ -11,7 +11,7 @@ BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 FMargin SCompanySplash::CalculateSplashMarginOne()
 {
 	float fOne = (adjustedViewportSize.X - adjustedViewportSize.Y) / 2;
-	
+
 	return FMargin(fOne, 0, fOne, 0);
 }
 
@@ -27,7 +27,7 @@ FMargin SCompanySplash::CalculateStartingTextMargin()
 	float fOne = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + (adjustedViewportSize.Y * 0.2125);
 	float fTwo = ((adjustedViewportSize.Y * 0.075) * -1.0);
 
-	return FMargin(fOne, adjustedViewportSize.Y, fOne,  fTwo);
+	return FMargin(fOne, adjustedViewportSize.Y, fOne, fTwo);
 }
 
 void SCompanySplash::Construct(const FArguments& InArgs)
@@ -78,7 +78,7 @@ void SCompanySplash::Construct(const FArguments& InArgs)
 		.VAlign(VAlign_Fill)
 		[
 			SNew(SImage)
-			.ColorAndOpacity(FLinearColor(0, 0, 0, 1))
+				.ColorAndOpacity(FLinearColor(0, 0, 0, 1))
 		];
 
 	imageOne = SNew(SImage)
@@ -113,23 +113,23 @@ void SCompanySplash::Construct(const FArguments& InArgs)
 		.VAlign(VAlign_Fill)
 		[
 			SNew(SButton)
-			.ContentPadding(FMargin())
-			.ButtonStyle(masterButtonStyle)
-			.OnReleased(this, &SCompanySplash::Released)
-			.ButtonColorAndOpacity(FLinearColor::Transparent)
-			.IsEnabled(true)
+				.ContentPadding(FMargin())
+				.ButtonStyle(masterButtonStyle)
+				.OnReleased(this, &SCompanySplash::Released)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.IsEnabled(true)
 		];
 
 	ChildSlot
-	[
-		SNew(SOverlay)
-		+ SOverlay::Slot()
-		.HAlign(HAlign_Fill)
-		.VAlign(VAlign_Fill)
 		[
-			splashScreenOverlay.ToSharedRef()
-		]
-	];
+			SNew(SOverlay)
+				+ SOverlay::Slot()
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				[
+					splashScreenOverlay.ToSharedRef()
+				]
+		];
 }
 
 void SCompanySplash::Released()
@@ -145,9 +145,9 @@ void SCompanySplash::Tick(const FGeometry& AllottedGeometry, const double InCurr
 
 		intOne = FMath::DivideAndRoundDown((double)timer - 0.5, 0.0194);
 
-		if (trackerOne < intOne && trackerOne < 17)
+		if (trackerOne < intOne && intOne < 17)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "tracker before: " + FString::FromInt(trackerOne));
+			//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "intOne: " + FString::FromInt(intOne));
 			trackerOne = intOne;
 
 			imageOne->SetImage(splashGrassSBArr[trackerOne - 1]);

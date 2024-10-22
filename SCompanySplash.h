@@ -4,17 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
-#include "TestHud.h"
+#include "MyHUD.h"
 
 /**
  * 
  */
-class MARBLEGAMEBLUEPRINT_API SCompanySplash : public SCompoundWidget
+class SCompanySplash : public SCompoundWidget
 {
 public:
 	SLATE_BEGIN_ARGS(SCompanySplash) {}
 
-	SLATE_ARGUMENT(TWeakObjectPtr<class ATestHud>, OwningHUD)
+	SLATE_ARGUMENT(TWeakObjectPtr<class AMyHUD>, OwningHUD)
 
 	SLATE_ARGUMENT(UMaterial*, goodUseSplashBootNoGrass_SMUI)
 
@@ -40,7 +40,7 @@ public:
 	FMargin CalculateSplashMarginTwo();
 	FMargin CalculateStartingTextMargin();
 
-	TWeakObjectPtr<class ATestHud> OwningHUD;
+	TWeakObjectPtr<class AMyHUD> OwningHUD;
 
 	UMaterial* goodUseSplashBootNoGrass_SMUI;
 	UMaterial* goodUseSplashGrass_SMUI;

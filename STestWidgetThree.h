@@ -2,9 +2,11 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
+#include "Widgets/SCompoundWidget.h"
 #include "SlateBasics.h"
 #include "SlateExtras.h"
-#include "TestHud.h"
+#include "MyHUD.h"
 #include "GameFramework/PlayerController.h"
 #include "Engine/Engine.h"
 #include "Widgets/SPanel.h"
@@ -17,10 +19,10 @@
 #include "Widgets/Layout/SBackgroundBlur.h"
 #include "Materials/MaterialInterface.h"
 #include "Framework/Application/SlateApplication.h"
-#include "Engine/Classes/Materials/Material.h"
+//#include "Engine/Classes/Materials/Material.h"
 
 /**
- *
+ * 
  */
 class STestWidgetThree : public SCompoundWidget
 {
@@ -28,7 +30,7 @@ public:
 
 	SLATE_BEGIN_ARGS(STestWidgetThree) {}
 
-	SLATE_ARGUMENT(TWeakObjectPtr<class ATestHud>, OwningHUD)
+	SLATE_ARGUMENT(TWeakObjectPtr<class AMyHUD>, OwningHUD)
 
 	SLATE_ARGUMENT(UObject*, standardWorldContextObject)
 
@@ -268,9 +270,13 @@ public:
 
 	SLATE_ARGUMENT(UAudioComponent*, missAudioComponent)
 
-	SLATE_ARGUMENT(UAudioComponent*, songOneAudioComponent)
+	SLATE_ARGUMENT(TArray <UAudioComponent*>, songAudioComponents)
 
 	SLATE_ARGUMENT(int, environmentAudio)
+
+	SLATE_ARGUMENT(bool, songPlaying)
+
+	SLATE_ARGUMENT(int, songPlayingIndex)
 
 	//SLATE_ARGUMENT(FVector2D, viewportSize)
 
@@ -336,7 +342,7 @@ public:
 
 	// constructor variables
 
-	UPROPERTY() TWeakObjectPtr<class ATestHud> OwningHUD;
+	UPROPERTY() TWeakObjectPtr<class AMyHUD> OwningHUD;
 	UPROPERTY() UObject* standardWorldContextObject;
 
 	UPROPERTY() TArray<int> landscapeArr;
@@ -617,8 +623,9 @@ public:
 	UPROPERTY() TArray<UAudioComponent*> scoringAudioComponents;
 
 	UPROPERTY() UAudioComponent* missAudioComponent;
+	UPROPERTY() TArray<UAudioComponent*> songAudioComponents;
 
-	UPROPERTY() UAudioComponent* songOneAudioComponent;
+	//UPROPERTY() UAudioComponent* songOneAudioComponent;
 	UPROPERTY() bool songPlaying;
 	UPROPERTY() bool songBool;
 
@@ -751,4 +758,5 @@ public:
 	UPROPERTY() int scoringSoundEffectIndex;
 
 	UPROPERTY() bool paused;
+	UPROPERTY() int songPlayingIndex;
 };

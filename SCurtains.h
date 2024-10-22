@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
-#include "TestHud.h"
+#include "MyHUD.h"
 
 /**
  * 
@@ -14,7 +14,7 @@ class SCurtains : public SCompoundWidget
 public:
 	SLATE_BEGIN_ARGS(SCurtains) {}
 
-	SLATE_ARGUMENT(TWeakObjectPtr<class ATestHud>, OwningHUD)
+	SLATE_ARGUMENT(TWeakObjectPtr<class AMyHUD>, OwningHUD)
 
 	SLATE_ARGUMENT(UMaterial*, curtains_VMUI)
 
@@ -29,7 +29,7 @@ public:
 
 	void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime);
 
-	TWeakObjectPtr<class ATestHud> OwningHUD;
+	TWeakObjectPtr<class AMyHUD> OwningHUD;
 
 	UAudioComponent* curtainOpeningAudioComponent;
 
