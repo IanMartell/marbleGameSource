@@ -10208,7 +10208,7 @@ void AMyHUD::BuildLevel()
 
 		if (canAddFlare)
 		{
-			if (numberOfHoles < 11)
+			if (numberOfHoles < 10)
 			{
 				if (FMath::RandRange(0, 19) > 9)
 				{
@@ -10394,7 +10394,7 @@ void AMyHUD::BuildLevel()
 
 		if (canAddFlare)
 		{
-			if (numberOfHoles < 11)
+			if (numberOfHoles < 10)
 			{
 				if (FMath::RandRange(0, 19) > 9)
 				{
@@ -10578,7 +10578,7 @@ void AMyHUD::BuildLevel()
 
 		if (canAddFlare)
 		{
-			if (numberOfHoles < 11)
+			if (numberOfHoles < 10)
 			{
 				if (FMath::RandRange(0, 19) > 9)
 				{

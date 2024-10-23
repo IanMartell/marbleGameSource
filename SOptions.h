@@ -120,6 +120,8 @@ public:
 	void OnPauseMouseBindingResetPressed();
 	void OnPauseMouseBindingResetReleased();
 
+	void OnVSyncChecked(ECheckBoxState InState);
+
 	void OnMasterCommitted(const FText& InText, const ETextCommit::Type InTextAction);
 	void OnMusicCommitted(const FText& InText, const ETextCommit::Type InTextAction);
 	void OnAtmosphereCommitted(const FText& InText, const ETextCommit::Type InTextAction);
@@ -136,6 +138,7 @@ public:
 	FMargin CalculateLeftColumnPos(int textIndex, int numberOfLetters);
 	FMargin CalculateRightColumnPos(int textIndex, int numberOfLetters);
 	FMargin CalculateMiddleColumnPos(int textIndex);
+	FMargin CalculateCheckBoxPos(int textIndex);
 	void PlayChordToActiveNote();
 
 	UPROPERTY() TWeakObjectPtr<class AMyHUD> OwningHUD;
@@ -147,6 +150,11 @@ public:
 
 	UPROPERTY() FSlateBrush* gameFrameColor_SB;
 
+	UPROPERTY() FSlateBrush* checkboxBackground_SB;
+	UPROPERTY() FSlateBrush* checkboxBackgroundHovered_SB;
+	UPROPERTY() FSlateBrush* checkboxCheckedBackground_SB;
+	UPROPERTY() FSlateBrush* checkboxCheckedBackgroundHovered_SB;
+
 	UPROPERTY() FVector2D viewportSize;
 	UPROPERTY() FVector2D adjustedViewportSize;
 	UPROPERTY() float DPIScale;
@@ -156,6 +164,7 @@ public:
 	UPROPERTY() TSharedPtr< class SOverlay> audioOverlay;
 	UPROPERTY() TSharedPtr< class SOverlay> controlsOverlay;
 	UPROPERTY() TSharedPtr< class SOverlay> creditsOverlay;
+	UPROPERTY() TSharedPtr< class SOverlay> graphicsOverlay;
 
 	UPROPERTY() TSharedPtr<class SBox> audioBox;
 	UPROPERTY() TSharedPtr<class SBox> graphicsBox;
@@ -221,7 +230,13 @@ public:
 	UPROPERTY() TSharedPtr<class SButton> pauseMouseButton;
 	UPROPERTY() TSharedPtr<class SImage> pauseMouseBackground;
 	UPROPERTY() TSharedPtr<class SBox> pauseMouseBackgroundBox;
+
 	UPROPERTY() TSharedPtr<class SToolTip> songListToolTip;
+
+	UPROPERTY() TSharedPtr<class SBox> vsyncBoxOne;
+	UPROPERTY() TSharedPtr<class SBox> vsyncBoxTwo;
+	UPROPERTY() TSharedPtr<class SCheckBox> vsyncCheckBox;
+	UPROPERTY() TSharedPtr<class SBox> VSyncCheckBoxBackground;
 
 	UPROPERTY() FSlateFontInfo titleFont;
 	UPROPERTY() FSlateFontInfo subTitleFont;

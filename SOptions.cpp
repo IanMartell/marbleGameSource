@@ -7,7 +7,9 @@
 #include "Components/AudioComponent.h"
 #include "Widgets/Input/SEditableText.h"
 #include "Widgets/SToolTip.h"
+#include "Widgets/Input/SCheckBox.h"
 #include "InputCoreTypes.h"
+#include "GameFramework/GameUserSettings.h"
 
 FMargin SOptions::CalculateTitlePosition(FVector2D funcViewportSize)
 {//your sub titles will use this same positioning but the a different text style
@@ -75,6 +77,17 @@ FMargin SOptions::CalculateMiddleColumnPos(int textIndex)
 	float topPad = adjustedViewportSize.Y * (0.1 + (0.1 * textIndex));
 	float rightPad = fOne;
 	float bottomPad = adjustedViewportSize.Y * (.82 - (0.1 * textIndex));
+
+	return FMargin(leftPad, topPad, rightPad, bottomPad);
+}
+
+FMargin SOptions::CalculateCheckBoxPos(int textIndex)
+{
+	float fOne = (adjustedViewportSize.X - adjustedViewportSize.Y) / 2;
+	float leftPad = fOne + (adjustedViewportSize.Y * 0.675);
+	float topPad = adjustedViewportSize.Y * (0.35 + (0.1 * textIndex));
+	float rightPad = fOne + (adjustedViewportSize.Y * 0.25);
+	float bottomPad = adjustedViewportSize.Y * (0.575 - (0.1 * textIndex));
 
 	return FMargin(leftPad, topPad, rightPad, bottomPad);
 }
@@ -1188,6 +1201,73 @@ void SOptions::Construct(const FArguments& InArgs)
 			firstFloorBackBox.ToSharedRef()
 		];
 
+	vsyncBoxOne = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateLeftColumnPos(-2, 1))
+		[
+			SNew(STextBlock)
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(menuFont)
+				.Text(FText::FromString("VSync"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+		];
+
+	vsyncCheckBox = SNew(SCheckBox)
+		.HAlign(HAlign_Fill)
+		.Padding(FMargin())
+		.Type(ESlateCheckBoxType::ToggleButton)
+		.OnCheckStateChanged(this, &SOptions::OnVSyncChecked);
+
+	vsyncBoxTwo = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateCheckBoxPos(-2))
+		[
+			vsyncCheckBox.ToSharedRef()
+		];
+
+	VSyncCheckBoxBackground = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateCheckBoxPos(-2))
+		[
+			SNew(SImage)
+				.Image(gameFrameColor_SB)
+		];
+
+	graphicsOverlay = SNew(SOverlay);
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			vsyncBoxOne.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			VSyncCheckBoxBackground.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			vsyncBoxTwo.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			firstFloorBackBox.ToSharedRef()
+		];
+
 	masterOverlay = SNew(SOverlay);
 
 	masterOverlay->AddSlot()
@@ -1679,13 +1759,13 @@ void SOptions::OnGraphicsReleased()
 	graphicsText->SetShadowOffset(FVector2D(standardShadowOffset * adjustedViewportSize.Y, standardShadowOffset * adjustedViewportSize.Y));
 	graphicsText->SetShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity));
 
-	/*masterOverlay->RemoveSlot(0);
+	masterOverlay->RemoveSlot(0);
 	masterOverlay->AddSlot()
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
 		[
-			levelSelectionOverlay.ToSharedRef()
-		];*/
+			graphicsOverlay.ToSharedRef()
+		];
 
 	if (growingBox.Num() > 0)
 	{
@@ -2952,6 +3032,24 @@ void SOptions::OnSongCreditEightReleased()
 	}
 
 	PlayChordToActiveNote();
+}
+
+void SOptions::OnVSyncChecked(ECheckBoxState InState)
+{
+	if (InState == ECheckBoxState::Checked)
+	{
+		UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+		Settings->SetVSyncEnabled(true);
+		Settings->ApplySettings(true);
+		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "checked");
+	}
+	else if (InState == ECheckBoxState::Unchecked)
+	{
+		UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+		Settings->SetVSyncEnabled(false);
+		Settings->ApplySettings(false);
+		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "unchecked");
+	}
 }
 
 void SOptions::OnMasterCommitted(const FText& InText, const ETextCommit::Type InTextAction)
