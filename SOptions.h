@@ -122,6 +122,21 @@ public:
 
 	void OnVSyncChecked(ECheckBoxState InState);
 
+	void OnGammaOneReleased();
+	void OnGammaOnePressed();
+	void OnGammaOneHovered();
+	void OnGammaOneUnHovered();
+
+	void OnGammaTwoReleased();
+	void OnGammaTwoPressed();
+	void OnGammaTwoHovered();
+	void OnGammaTwoUnHovered();
+
+	void OnResetGammaReleased();
+	void OnResetGammaPressed();
+	void OnResetGammaHovered();
+	void OnResetGammaUnHovered();
+
 	void OnMasterCommitted(const FText& InText, const ETextCommit::Type InTextAction);
 	void OnMusicCommitted(const FText& InText, const ETextCommit::Type InTextAction);
 	void OnAtmosphereCommitted(const FText& InText, const ETextCommit::Type InTextAction);
@@ -139,6 +154,7 @@ public:
 	FMargin CalculateRightColumnPos(int textIndex, int numberOfLetters);
 	FMargin CalculateMiddleColumnPos(int textIndex);
 	FMargin CalculateCheckBoxPos(int textIndex);
+	FMargin TwinButtonsCenter(int verticleIndex, int buttonIndex);
 	void PlayChordToActiveNote();
 
 	UPROPERTY() TWeakObjectPtr<class AMyHUD> OwningHUD;
@@ -237,6 +253,14 @@ public:
 	UPROPERTY() TSharedPtr<class SBox> vsyncBoxTwo;
 	UPROPERTY() TSharedPtr<class SCheckBox> vsyncCheckBox;
 	UPROPERTY() TSharedPtr<class SBox> VSyncCheckBoxBackground;
+
+	UPROPERTY() TSharedPtr<class SBox> gammaBox;
+	UPROPERTY() TSharedPtr<class SBox> gammaOptionBoxOne;
+	UPROPERTY() TSharedPtr<class SBox> gammaOptionBoxTwo;
+	UPROPERTY() TSharedPtr<class SBox> gammaResetBox;
+	UPROPERTY() TSharedPtr<class STextBlock> gammaTextOne;
+	UPROPERTY() TSharedPtr<class STextBlock> gammaTextTwo;
+	UPROPERTY() TSharedPtr<class STextBlock> gammaResetText;
 
 	UPROPERTY() FSlateFontInfo titleFont;
 	UPROPERTY() FSlateFontInfo subTitleFont;

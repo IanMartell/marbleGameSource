@@ -46,7 +46,7 @@ FMargin SOptions::CalculateBackButtonPosition(FVector2D paramViewportSize)
 
 FMargin SOptions::CalculateLeftColumnPos(int textIndex, int numberOfLetters)
 {
-	float fOne = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + (adjustedViewportSize.Y * 0.3);
+	float fOne = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + (adjustedViewportSize.Y * 0.25);
 	//float fThree = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + ((adjustedViewportSize.Y / 10) * 5);
 	float fTwo = FMath::DivideAndRoundUp(numberOfLetters, 5);
 	float leftPad = fOne - ((adjustedViewportSize.Y / 10) * fTwo);
@@ -59,7 +59,7 @@ FMargin SOptions::CalculateLeftColumnPos(int textIndex, int numberOfLetters)
 
 FMargin SOptions::CalculateRightColumnPos(int textIndex, int numberOfLetters)
 {
-	float fOne = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + (adjustedViewportSize.Y * 0.7);
+	float fOne = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + (adjustedViewportSize.Y * 0.75);
 	//float fThree = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + ((adjustedViewportSize.Y / 10) * 5);
 	float fTwo = FMath::DivideAndRoundUp(numberOfLetters, 5);
 	float leftPad = fOne - ((adjustedViewportSize.Y / 10) * fTwo);
@@ -77,6 +77,17 @@ FMargin SOptions::CalculateMiddleColumnPos(int textIndex)
 	float topPad = adjustedViewportSize.Y * (0.1 + (0.1 * textIndex));
 	float rightPad = fOne;
 	float bottomPad = adjustedViewportSize.Y * (.82 - (0.1 * textIndex));
+
+	return FMargin(leftPad, topPad, rightPad, bottomPad);
+}
+
+FMargin SOptions::TwinButtonsCenter(int verticleIndex, int buttonIndex)
+{
+	float fOne = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + (adjustedViewportSize.Y * 0.4);
+	float leftPad = fOne + (adjustedViewportSize.Y * (buttonIndex * 0.125));
+	float topPad = adjustedViewportSize.Y * (0.35 + (0.1 * verticleIndex));
+	float rightPad = fOne + (adjustedViewportSize.Y * (((buttonIndex + 1) % 2) * 0.125));
+	float bottomPad = adjustedViewportSize.Y * (0.575 - (0.1 * verticleIndex));
 
 	return FMargin(leftPad, topPad, rightPad, bottomPad);
 }
@@ -1221,6 +1232,11 @@ void SOptions::Construct(const FArguments& InArgs)
 		.Type(ESlateCheckBoxType::ToggleButton)
 		.OnCheckStateChanged(this, &SOptions::OnVSyncChecked);
 
+	if (UGameUserSettings::GetGameUserSettings()->IsVSyncEnabled())
+	{
+		vsyncCheckBox->SetIsChecked(ECheckBoxState::Checked);
+	}
+
 	vsyncBoxTwo = SNew(SBox)
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
@@ -1236,6 +1252,107 @@ void SOptions::Construct(const FArguments& InArgs)
 		[
 			SNew(SImage)
 				.Image(gameFrameColor_SB)
+		];
+
+	gammaBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateLeftColumnPos(-1, 1))
+		[
+			SNew(STextBlock)
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(menuFont)
+				.Text(FText::FromString("Gamma"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+		];
+
+	gammaTextOne = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(menuFont)
+		.Text(FText::FromString("<-"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	gammaOptionBoxOne = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(TwinButtonsCenter(-1, 0))
+		[
+			SNew(SButton)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.OnPressed(this, &SOptions::OnGammaOnePressed)
+				.OnReleased(this, &SOptions::OnGammaOneReleased)
+				.OnHovered(this, &SOptions::OnGammaOneHovered)
+				.OnUnhovered(this, &SOptions::OnGammaOneUnHovered)
+				.ContentPadding(FMargin())
+				.IsEnabled(true)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.ButtonStyle(transparentButtonStyle)
+				[
+					gammaTextOne.ToSharedRef()
+				]
+		];
+
+	gammaTextTwo = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(menuFont)
+		.Text(FText::FromString("->"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	gammaOptionBoxTwo = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(TwinButtonsCenter(-1, 1))
+		[
+			SNew(SButton)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.OnPressed(this, &SOptions::OnGammaTwoPressed)
+				.OnReleased(this, &SOptions::OnGammaTwoReleased)
+				.OnHovered(this, &SOptions::OnGammaTwoHovered)
+				.OnUnhovered(this, &SOptions::OnGammaTwoUnHovered)
+				.ContentPadding(FMargin())
+				.IsEnabled(true)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.ButtonStyle(transparentButtonStyle)
+				[
+					gammaTextTwo.ToSharedRef()
+				]
+		];
+
+	gammaResetText = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(menuFont)
+		.Text(FText::FromString("Reset"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	gammaResetBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateRightColumnPos(-1, 1))
+		[
+			SNew(SButton)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.OnPressed(this, &SOptions::OnResetGammaPressed)
+				.OnReleased(this, &SOptions::OnResetGammaReleased)
+				.OnHovered(this, &SOptions::OnResetGammaHovered)
+				.OnUnhovered(this, &SOptions::OnResetGammaUnHovered)
+				.ContentPadding(FMargin())
+				.IsEnabled(true)
+				.ButtonColorAndOpacity(FLinearColor::Transparent)
+				.ButtonStyle(transparentButtonStyle)
+				[
+					gammaResetText.ToSharedRef()
+				]
 		];
 
 	graphicsOverlay = SNew(SOverlay);
@@ -1259,6 +1376,34 @@ void SOptions::Construct(const FArguments& InArgs)
 		.VAlign(VAlign_Fill)
 		[
 			vsyncBoxTwo.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			gammaBox.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			gammaOptionBoxOne.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			gammaOptionBoxTwo.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			gammaResetBox.ToSharedRef()
 		];
 
 	graphicsOverlay->AddSlot()
@@ -3036,20 +3181,117 @@ void SOptions::OnSongCreditEightReleased()
 
 void SOptions::OnVSyncChecked(ECheckBoxState InState)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "runs");
 	if (InState == ECheckBoxState::Checked)
 	{
 		UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
 		Settings->SetVSyncEnabled(true);
 		Settings->ApplySettings(true);
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "checked");
 	}
 	else if (InState == ECheckBoxState::Unchecked)
 	{
 		UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
 		Settings->SetVSyncEnabled(false);
-		Settings->ApplySettings(false);
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "unchecked");
+		Settings->ApplySettings(true);
 	}
+}
+
+void SOptions::OnGammaOneHovered()
+{
+	gammaTextOne->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnGammaOneUnHovered()
+{
+	gammaTextOne->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnGammaOnePressed()
+{
+	gammaTextOne->SetColorAndOpacity(FColor::White);
+}
+void SOptions::OnGammaOneReleased()
+{
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+
+	float currentGamma = currentSave->GetGamma();
+	currentGamma -= 0.2;
+
+	if (GEngine)
+	{
+		if (standardWorldContextObject->GetWorld() != NULL)
+		{
+			GEngine->Exec(standardWorldContextObject->GetWorld(), *(FString)("gamma " + FString::SanitizeFloat(currentGamma)));
+		}
+	}
+
+	currentSave->SetGamma(currentGamma);
+	UGameplayStatics::SaveGameToSlot(currentSave, TEXT("saveGameOne"), 0);
+
+	gammaTextOne->SetColorAndOpacity(FColor::Orange);
+}
+
+void SOptions::OnGammaTwoHovered()
+{
+	gammaTextTwo->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnGammaTwoUnHovered()
+{
+	gammaTextTwo->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnGammaTwoPressed()
+{
+	gammaTextTwo->SetColorAndOpacity(FColor::White);
+}
+void SOptions::OnGammaTwoReleased()
+{
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+
+	float currentGamma = currentSave->GetGamma();
+	currentGamma += 0.2;
+
+	if (GEngine)
+	{
+		if (standardWorldContextObject->GetWorld() != NULL)
+		{
+			GEngine->Exec(standardWorldContextObject->GetWorld(), *(FString)("gamma " + FString::SanitizeFloat(currentGamma)));
+		}
+	}
+
+	currentSave->SetGamma(currentGamma);
+	UGameplayStatics::SaveGameToSlot(currentSave, TEXT("saveGameOne"), 0);
+
+	gammaTextTwo->SetColorAndOpacity(FColor::Orange);
+}
+
+void SOptions::OnResetGammaHovered()
+{
+	gammaResetText->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnResetGammaUnHovered()
+{
+	gammaResetText->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnResetGammaPressed()
+{
+	gammaResetText->SetColorAndOpacity(FColor::White);
+}
+void SOptions::OnResetGammaReleased()
+{
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+
+	float currentGamma = 2.2;
+
+	if (GEngine)
+	{
+		if (standardWorldContextObject->GetWorld() != NULL)
+		{
+			GEngine->Exec(standardWorldContextObject->GetWorld(), *(FString)("gamma " + FString::SanitizeFloat(currentGamma)));
+		}
+	}
+
+	currentSave->SetGamma(currentGamma);
+	UGameplayStatics::SaveGameToSlot(currentSave, TEXT("saveGameOne"), 0);
+
+	gammaResetText->SetColorAndOpacity(FColor::Orange);
 }
 
 void SOptions::OnMasterCommitted(const FText& InText, const ETextCommit::Type InTextAction)

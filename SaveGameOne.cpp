@@ -90,6 +90,11 @@ TArray<int> USaveGameOne::GetSongCycles()
 	return songCycles;
 }
 
+float USaveGameOne::GetGamma()
+{
+	return gamma;
+}
+
 //Setters
 
 void USaveGameOne::SetHighscores(TArray<int> newHighscores)
@@ -172,3 +177,7 @@ void USaveGameOne::SetSongCycles(TArray<int> newArr)
 	songCycles = newArr;
 }
 
+void USaveGameOne::SetGamma(float newGamma)
+{
+	gamma = newGamma;
+}

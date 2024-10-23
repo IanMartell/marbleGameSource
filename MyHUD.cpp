@@ -2015,10 +2015,11 @@ void AMyHUD::BeginPlay()
 		LoadGameInstance->SetMoveController(EKeys::Gamepad_Left2D);
 		LoadGameInstance->SetSongIndexArr(newSongIndexArr);
 		LoadGameInstance->SetSongCycles({ 0, 0, 0, 0, 0, 0, 0, 0 });
+		LoadGameInstance->SetGamma(2.2);
 		UGameplayStatics::SaveGameToSlot(LoadGameInstance, TEXT("saveGameOne"), 0);
 	}
 
-	/*newSongIndexArr.Empty();
+	newSongIndexArr.Empty();
 	TArray<int> freshArr = { 0, 1, 2, 3, 4, 5, 6, 7 };
 	for (int a = 0; a < 8; a++)
 	{
@@ -2046,7 +2047,8 @@ void AMyHUD::BeginPlay()
 	adjustedSave->SetMoveController(EKeys::Gamepad_Left2D);
 	adjustedSave->SetSongIndexArr(newSongIndexArr);
 	adjustedSave->SetSongCycles({ 0, 0, 0, 0, 0, 0, 0, 0 });
-	UGameplayStatics::SaveGameToSlot(adjustedSave, TEXT("saveGameOne"), 0);*/
+	adjustedSave->SetGamma(2.2);
+	UGameplayStatics::SaveGameToSlot(adjustedSave, TEXT("saveGameOne"), 0);
 	//adjustedSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(adjustedSave->SaveSlotName, 0));//is this gonna be a problem? do I need to get the actual default adjustedSave->SaveSlotName and the actual adjustedSave->UserIndex?
 
 	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
@@ -2150,10 +2152,18 @@ void AMyHUD::BeginPlay()
 	songPlaying = false;
 	songPlayingIndex = 0;
 
+	UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+	Settings->SetFrameRateLimit(60);
+	Settings->ApplySettings(true);
+
 	if (GEngine && GEngine->GameViewport)
 	{
 		playerOnePlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-		standardWorldContextObject = GetWorld();//do I actually need this?! its being used before its being initialized wtf?
+
+		if (GetWorld() != NULL) // is this going to create a crash?
+		{
+			standardWorldContextObject = GetWorld();//do I actually need this?! its being used before its being initialized wtf?
+		} // if it is null then what would happen??
 
 		/*UGameUserSettings* MyGameSettings = GEngine->GetGameUserSettings();
 		MyGameSettings->SetFullscreenMode(EWindowMode::Fullscreen);
