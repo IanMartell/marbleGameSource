@@ -35,6 +35,7 @@ protected:
 	UPROPERTY(SaveGame) FKey selectController;
 	UPROPERTY(SaveGame) FKey moveController;
 	UPROPERTY(SaveGame) TArray<int> songIndexArr;
+	UPROPERTY(SaveGame) TArray<int> songCycles;
 
 public:
 	TArray<int> GetHighscores();
@@ -54,6 +55,7 @@ public:
 	FKey GetSelectController();
 	FKey GetMoveController();
 	TArray<int> GetSongIndexArr();
+	TArray<int> GetSongCycles();
 
 	void SetHighscores(TArray<int> newHighscores);
 	void SetHighscoreDataOne(int newHighscoreData);
@@ -72,4 +74,5 @@ public:
 	void SetSelectController(FKey newKey);
 	void SetMoveController(FKey newKey);
 	void SetSongIndexArr(TArray<int> newArr);
+	void SetSongCycles(TArray<int> newArr);
 };

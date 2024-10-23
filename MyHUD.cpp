@@ -1435,16 +1435,16 @@ AMyHUD::AMyHUD()
 	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_song_2(TEXT("'/Game/myAdditionsArcade/soundEffects/Alpha_Hydrae_-_Keratine__rust_and_a_clear_soul.Alpha_Hydrae_-_Keratine__rust_and_a_clear_soul'"));
 	songs.Add((USoundBase*)tempVar_song_2.Object);
 
-	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_song_3(TEXT("'/Game/myAdditionsArcade/soundEffects/Josh_Woodward_-_Insomnia__No_Vocals_.Josh_Woodward_-_Insomnia__No_Vocals_'"));
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_song_3(TEXT("'/Game/myAdditionsArcade/soundEffects/Kimiko_Ishizaka_-_Variatio_13_a_2_Clav_.Kimiko_Ishizaka_-_Variatio_13_a_2_Clav_'"));
 	songs.Add((USoundBase*)tempVar_song_3.Object);
 
-	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_song_4(TEXT("'/Game/myAdditionsArcade/soundEffects/Kimiko_Ishizaka_-_Variatio_13_a_2_Clav_.Kimiko_Ishizaka_-_Variatio_13_a_2_Clav_'"));
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_song_4(TEXT("'/Game/myAdditionsArcade/soundEffects/Kimiko_Ishizaka_-_Variatio_19_a_1_Clav_.Kimiko_Ishizaka_-_Variatio_19_a_1_Clav_'"));
 	songs.Add((USoundBase*)tempVar_song_4.Object);
 
-	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_song_5(TEXT("'/Game/myAdditionsArcade/soundEffects/Kimiko_Ishizaka_-_Variatio_19_a_1_Clav_.Kimiko_Ishizaka_-_Variatio_19_a_1_Clav_'"));
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_song_5(TEXT("'/Game/myAdditionsArcade/soundEffects/Kimiko_Ishizaka_-_Variatio_29_a_1_ovvero_2_Clav_.Kimiko_Ishizaka_-_Variatio_29_a_1_ovvero_2_Clav_'"));
 	songs.Add((USoundBase*)tempVar_song_5.Object);
 
-	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_song_6(TEXT("'/Game/myAdditionsArcade/soundEffects/Kimiko_Ishizaka_-_Variatio_29_a_1_ovvero_2_Clav_.Kimiko_Ishizaka_-_Variatio_29_a_1_ovvero_2_Clav_'"));
+	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_song_6(TEXT("'/Game/myAdditionsArcade/soundEffects/Josh_Woodward_-_Insomnia__No_Vocals_.Josh_Woodward_-_Insomnia__No_Vocals_'"));
 	songs.Add((USoundBase*)tempVar_song_6.Object);
 
 	static ConstructorHelpers::FObjectFinder<USoundBase> tempVar_song_7(TEXT("'/Game/myAdditionsArcade/soundEffects/Kira_Daly_-_The_Bowsie_Sessions.Kira_Daly_-_The_Bowsie_Sessions'"));
@@ -1607,8 +1607,18 @@ void AMyHUD::UpdateSongArr()
 	if (saveFile->GetSongIndexArr().Num() < 2)
 	{
 		newSongIndexArr.Empty();
-		TArray<int> freshArr = { 0, 1, 2, 3, 4, 5, 6, 7 };
+		TArray<int> freshArr;
+
 		for (int a = 0; a < 8; a++)
+		{
+			if (saveFile->GetSongCycles()[a] != 2)
+			{
+				freshArr.Add(a);
+			}
+		}
+
+		int freshArrLength = freshArr.Num();//will this keep beig reset every loop? it really shouldnt
+		for (int a = 0; a < freshArrLength; a++)
 		{
 			int songIndexIndex = FMath::RandRange(0, freshArr.Num() - 1);
 			newSongIndexArr.Add(freshArr[songIndexIndex]);
@@ -1623,6 +1633,34 @@ void AMyHUD::UpdateSongArr()
 		integerArr.RemoveAt(integerArr.Num() - 1);
 		saveFile->SetSongIndexArr(integerArr);
 	}
+
+	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
+}
+
+void AMyHUD::ToggleSong(int songToToggle)
+{
+	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+
+	TArray<int> tempSongCycles = saveFile->GetSongCycles();
+	TArray<int> tempSongIndexArr = saveFile->GetSongIndexArr();
+
+	if (tempSongCycles[songToToggle])
+	{
+		tempSongCycles[songToToggle] = 0;
+		songCycles[songToToggle] = 0;
+
+		tempSongIndexArr.Insert(songToToggle, FMath::RandRange(0, tempSongIndexArr.Num() - 1));//does this work? prolly
+	}
+	else
+	{
+		tempSongCycles[songToToggle] = 2;
+		songCycles[songToToggle] = 2;
+
+		tempSongIndexArr.RemoveSingle(songToToggle);
+	}
+
+	saveFile->SetSongCycles(tempSongCycles);
+	saveFile->SetSongIndexArr(tempSongIndexArr);
 
 	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
 }
@@ -1976,6 +2014,7 @@ void AMyHUD::BeginPlay()
 		LoadGameInstance->SetSelectController(EKeys::Gamepad_Special_Right);
 		LoadGameInstance->SetMoveController(EKeys::Gamepad_Left2D);
 		LoadGameInstance->SetSongIndexArr(newSongIndexArr);
+		LoadGameInstance->SetSongCycles({ 0, 0, 0, 0, 0, 0, 0, 0 });
 		UGameplayStatics::SaveGameToSlot(LoadGameInstance, TEXT("saveGameOne"), 0);
 	}
 
@@ -2006,10 +2045,13 @@ void AMyHUD::BeginPlay()
 	adjustedSave->SetSelectController(EKeys::Gamepad_Special_Right);
 	adjustedSave->SetMoveController(EKeys::Gamepad_Left2D);
 	adjustedSave->SetSongIndexArr(newSongIndexArr);
+	adjustedSave->SetSongCycles({ 0, 0, 0, 0, 0, 0, 0, 0 });
 	UGameplayStatics::SaveGameToSlot(adjustedSave, TEXT("saveGameOne"), 0);*/
 	//adjustedSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(adjustedSave->SaveSlotName, 0));//is this gonna be a problem? do I need to get the actual default adjustedSave->SaveSlotName and the actual adjustedSave->UserIndex?
 
 	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+
+	songCycles = referenceInstance->GetSongCycles();
 
 	double w = (double)((double)100 - (double)referenceInstance->GetMaster()) / (double)50;
 	double x = (double)((double)100 - (double)referenceInstance->GetMusic()) / (double)50;
@@ -2579,7 +2621,8 @@ void AMyHUD::DisplayOptionsMenu(bool cameFromGame)
 		.purpleLullabyAudioComponents(purpleLullabyAudioComponents)
 		.songAudioComponents(songAudioComponents)
 		.gameFrameColor_SMUI(gameFrameColor_SMUI)
-		.songPlayingIndex(songPlayingIndex);
+		.songPlayingIndex(songPlayingIndex)
+		.songCycles(songCycles);
 
 	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerNine, SWeakWidget).PossiblyNullContent(optionsMenuSlateWidget.ToSharedRef()));
 

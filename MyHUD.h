@@ -398,6 +398,7 @@ public:
 	UPROPERTY() bool newMaxLevel;
 	UPROPERTY() bool songPlaying;
 	UPROPERTY() int songPlayingIndex;
+	UPROPERTY() TArray<int> songCycles;
 	//UPROPERTY() int audioCycleTrackerFromGame;
 	//UPROPERTY() int audioCycleTrackerFromMenu;
 
@@ -1784,4 +1785,6 @@ public:
 	void CommitKey(int keyToReplace, FKey newKey);
 
 	void UpdateSongArr();
+
+	void ToggleSong(int songToToggle);
 };

@@ -85,6 +85,10 @@ TArray<int> USaveGameOne::GetSongIndexArr()
 {
 	return songIndexArr;
 }
+TArray<int> USaveGameOne::GetSongCycles()
+{
+	return songCycles;
+}
 
 //Setters
 
@@ -162,5 +166,9 @@ void USaveGameOne::SetMoveController(FKey newKey)
 void USaveGameOne::SetSongIndexArr(TArray<int> newArr)
 {
 	songIndexArr = newArr;
+}
+void USaveGameOne::SetSongCycles(TArray<int> newArr)
+{
+	songCycles = newArr;
 }
 

@@ -6,6 +6,7 @@
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
 #include "Components/AudioComponent.h"
 #include "Widgets/Input/SEditableText.h"
+#include "Widgets/SToolTip.h"
 #include "InputCoreTypes.h"
 
 FMargin SOptions::CalculateTitlePosition(FVector2D funcViewportSize)
@@ -162,6 +163,7 @@ void SOptions::Construct(const FArguments& InArgs)
 	songAudioComponents = InArgs._songAudioComponents;
 	gameFrameColor_SMUI = InArgs._gameFrameColor_SMUI;
 	songPlayingIndex = InArgs._songPlayingIndex;
+	songCycles = InArgs._songCycles;
 
 	gameFrameColor_SB = new FSlateBrush();
 	gameFrameColor_SB->SetResourceObject(gameFrameColor_SMUI);
@@ -195,6 +197,14 @@ void SOptions::Construct(const FArguments& InArgs)
 
 	transparentButtonStyle = new FButtonStyle();
 	transparentButtonStyle->SetNormalPadding(FMargin());
+
+	songTextColors = { FColor::Orange, FColor::Red, FColor::Silver };
+
+	if (!songAudioComponents[songPlayingIndex]->IsPlaying() && songCycles[songPlayingIndex] == 1)
+	{
+		songCycles[songPlayingIndex] = 0;
+		OwningHUD->songCycles[songPlayingIndex] = 0;
+	}
 
 	childrensCornerNotes = { 8, 11, 12, 13, 8, 11, 13, 12, 7, 11, 12, 14, 9, 10, 14, 13, 8, 11, 13, 15, 10, 11, 15, 14, 9, 11, 14, 16, 9, 14, 16, 15, 11, 13, 15, 18, 13, 15, 18, 19, 13, 15, 19, 18, 13, 15, 18, 17, 13, 15, 17, 16, 13, 15, 16, 15, 11, 13, 15, 14, 11, 13, 14, 13, 10, 11, 13, 12, 9, 11, 12, 15, 10, 13, 15, 16, 11, 13, 16, 13, 9, 11, 13, 12, 9, 11, 12, 11, 8, 9, 11, 10, 7, 8, 10, 0, 4, 5, 6, 7, 9, 11, 12, 13, 12, 11, 9, 7, 6, 5, 4, 0, 4, 5, 6, 7, 9, 11, 12, 13, 12, 11, 9, 7, 6, 5, 4, 0, 4, 5, 6, 7, 22, 11, 12, 13, 12, 11, 9, 7, 6, 5, 4, 0, 4, 5, 6, 7, 22, 11, 12, 13, 12, 11, 10, 7, 6, 5, 4 };
 	childrensCornerIndex = -1;
@@ -299,7 +309,7 @@ void SOptions::Construct(const FArguments& InArgs)
 		.Justification(ETextJustify::Center)
 		.ColorAndOpacity(FColor::Orange)
 		.Font(menuFont)
-		.Text(FText::FromString("Credits"))
+		.Text(FText::FromString("Songs"))
 		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
 		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, standardOpacity));
 
@@ -857,7 +867,7 @@ void SOptions::Construct(const FArguments& InArgs)
 
 	creditTextOne = SNew(STextBlock)
 		.Justification(ETextJustify::Center)
-		.ColorAndOpacity(FColor::Orange)
+		.ColorAndOpacity(songTextColors[songCycles[0]])
 		.Font(textFont)
 		.Text(FText::FromString("Abundance Of Love by Mike Berger"))
 		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
@@ -884,9 +894,21 @@ void SOptions::Construct(const FArguments& InArgs)
 				]
 		];
 
+	songListToolTip = SNew(SToolTip)
+		[
+			SNew(STextBlock)
+				.Text(FText::FromString("orange means enabled, red means playing, grey means disabled"))
+				.Font(textFont)
+				.ColorAndOpacity(FColor::Silver)
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		];
+
+	creditBoxOne->SetToolTip(songListToolTip);
+	
 	creditTextTwo = SNew(STextBlock)
 		.Justification(ETextJustify::Center)
-		.ColorAndOpacity(FColor::Orange)
+		.ColorAndOpacity(songTextColors[songCycles[1]])
 		.Font(textFont)
 		.Text(FText::FromString("Karatine by Alpha Hydrae | License: CC0"))
 		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
@@ -913,9 +935,11 @@ void SOptions::Construct(const FArguments& InArgs)
 				]
 		];
 
+	creditBoxTwo->SetToolTip(songListToolTip);
+
 	creditTextThree = SNew(STextBlock)
 		.Justification(ETextJustify::Center)
-		.ColorAndOpacity(FColor::Orange)
+		.ColorAndOpacity(songTextColors[songCycles[2]])
 		.Font(textFont)
 		.Text(FText::FromString("Variatio 13 by Kimiko Ishizaka | License: CC0"))
 		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
@@ -942,9 +966,11 @@ void SOptions::Construct(const FArguments& InArgs)
 				]
 		];
 
+	creditBoxThree->SetToolTip(songListToolTip);
+
 	creditTextFour = SNew(STextBlock)
 		.Justification(ETextJustify::Center)
-		.ColorAndOpacity(FColor::Orange)
+		.ColorAndOpacity(songTextColors[songCycles[3]])
 		.Font(textFont)
 		.Text(FText::FromString("Variatio 19 by Kimiko Ishizaka | License: CC0"))
 		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
@@ -971,9 +997,11 @@ void SOptions::Construct(const FArguments& InArgs)
 				]
 		];
 
+	creditBoxFour->SetToolTip(songListToolTip);
+
 	creditTextFive = SNew(STextBlock)
 		.Justification(ETextJustify::Center)
-		.ColorAndOpacity(FColor::Orange)
+		.ColorAndOpacity(songTextColors[songCycles[4]])
 		.Font(textFont)
 		.Text(FText::FromString("Variatio 29 by Kimiko Ishizaka | License: CC0"))
 		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
@@ -1000,9 +1028,11 @@ void SOptions::Construct(const FArguments& InArgs)
 				]
 		];
 
+	creditBoxFive->SetToolTip(songListToolTip);
+
 	creditTextSix = SNew(STextBlock)
 		.Justification(ETextJustify::Center)
-		.ColorAndOpacity(FColor::Orange)
+		.ColorAndOpacity(songTextColors[songCycles[5]])
 		.Font(textFont)
 		.Text(FText::FromString("Insomnia by Josh Woodward | license: CC BY at freemusicarchive.org"))
 		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
@@ -1029,9 +1059,11 @@ void SOptions::Construct(const FArguments& InArgs)
 				]
 		];
 
+	creditBoxSix->SetToolTip(songListToolTip);
+
 	creditTextSeven = SNew(STextBlock)
 		.Justification(ETextJustify::Center)
-		.ColorAndOpacity(FColor::Orange)
+		.ColorAndOpacity(songTextColors[songCycles[6]])
 		.Font(textFont)
 		.Text(FText::FromString("Bowsie Sessions by Kira Daily | license: CC BY at freemusicarchive.org"))
 		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
@@ -1058,9 +1090,11 @@ void SOptions::Construct(const FArguments& InArgs)
 				]
 		];
 
+	creditBoxSeven->SetToolTip(songListToolTip);
+
 	creditTextEight = SNew(STextBlock)
 		.Justification(ETextJustify::Center)
-		.ColorAndOpacity(FColor::Orange)
+		.ColorAndOpacity(songTextColors[songCycles[7]])
 		.Font(textFont)
 		.Text(FText::FromString("The Circle by Kira Daily | license: CC BY at freemusicarchive.org"))
 		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
@@ -1086,6 +1120,8 @@ void SOptions::Construct(const FArguments& InArgs)
 					creditTextEight.ToSharedRef()
 				]
 		];
+
+	creditBoxEight->SetToolTip(songListToolTip);
 
 	creditsOverlay = SNew(SOverlay);
 
@@ -2508,7 +2544,7 @@ void SOptions::OnSongCreditOneHovered()
 }
 void SOptions::OnSongCreditOneUnHovered()
 {
-	creditTextOne->SetColorAndOpacity(FColor::Orange);
+	creditTextOne->SetColorAndOpacity(songTextColors[songCycles[0]]);
 }
 void SOptions::OnSongCreditOnePressed()
 {
@@ -2519,14 +2555,37 @@ void SOptions::OnSongCreditOnePressed()
 }
 void SOptions::OnSongCreditOneReleased()
 {
-	creditTextOne->SetColorAndOpacity(FColor::Orange);
+	int i = 0;
+	songCycles[i] = (songCycles[i] + 1) % 3;
 
-	songAudioComponents[songPlayingIndex]->Stop();
+	switch (songCycles[i])
+	{
+	case 0:
+		OwningHUD->ToggleSong(i);
 
-	songPlayingIndex = 0;
-	OwningHUD->songPlaying = true;
-	OwningHUD->songPlayingIndex = songPlayingIndex;
-	songAudioComponents[0]->Play();
+		creditTextOne->SetColorAndOpacity(songTextColors[0]);
+		break;
+	case 1:
+		songAudioComponents[songPlayingIndex]->Stop();
+
+		songPlayingIndex = i;
+		OwningHUD->songPlaying = true;
+		OwningHUD->songPlayingIndex = songPlayingIndex;
+		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->Play();
+
+		creditTextOne->SetColorAndOpacity(songTextColors[1]);
+		break;
+	case 2:
+		OwningHUD->ToggleSong(i);
+		OwningHUD->songPlaying = false;
+		songAudioComponents[i]->Stop();
+
+		creditTextOne->SetColorAndOpacity(songTextColors[2]);
+		break;
+	default:
+		break;
+	}
 
 	PlayChordToActiveNote();
 }
@@ -2537,7 +2596,7 @@ void SOptions::OnSongCreditTwoHovered()
 }
 void SOptions::OnSongCreditTwoUnHovered()
 {
-	creditTextTwo->SetColorAndOpacity(FColor::Orange);
+	creditTextTwo->SetColorAndOpacity(songTextColors[songCycles[1]]);
 }
 void SOptions::OnSongCreditTwoPressed()
 {
@@ -2548,14 +2607,37 @@ void SOptions::OnSongCreditTwoPressed()
 }
 void SOptions::OnSongCreditTwoReleased()
 {
-	creditTextTwo->SetColorAndOpacity(FColor::Orange);
+	int i = 1;
+	songCycles[i] = (songCycles[i] + 1) % 3;
 
-	songAudioComponents[songPlayingIndex]->Stop();
+	switch (songCycles[i])
+	{
+	case 0:
+		OwningHUD->ToggleSong(i);
 
-	songPlayingIndex = 1;
-	OwningHUD->songPlaying = true;
-	OwningHUD->songPlayingIndex = songPlayingIndex;
-	songAudioComponents[1]->Play();
+		creditTextTwo->SetColorAndOpacity(songTextColors[0]);
+		break;
+	case 1:
+		songAudioComponents[songPlayingIndex]->Stop();
+
+		songPlayingIndex = i;
+		OwningHUD->songPlaying = true;
+		OwningHUD->songPlayingIndex = songPlayingIndex;
+		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->Play();
+
+		creditTextTwo->SetColorAndOpacity(songTextColors[1]);
+		break;
+	case 2:
+		OwningHUD->ToggleSong(i);
+		OwningHUD->songPlaying = false;
+		songAudioComponents[i]->Stop();
+
+		creditTextTwo->SetColorAndOpacity(songTextColors[2]);
+		break;
+	default:
+		break;
+	}
 
 	PlayChordToActiveNote();
 }
@@ -2566,7 +2648,7 @@ void SOptions::OnSongCreditThreeHovered()
 }
 void SOptions::OnSongCreditThreeUnHovered()
 {
-	creditTextThree->SetColorAndOpacity(FColor::Orange);
+	creditTextThree->SetColorAndOpacity(songTextColors[songCycles[2]]);
 }
 void SOptions::OnSongCreditThreePressed()
 {
@@ -2577,14 +2659,37 @@ void SOptions::OnSongCreditThreePressed()
 }
 void SOptions::OnSongCreditThreeReleased()
 {
-	creditTextThree->SetColorAndOpacity(FColor::Orange);
+	int i = 2;
+	songCycles[i] = (songCycles[i] + 1) % 3;
 
-	songAudioComponents[songPlayingIndex]->Stop();
+	switch (songCycles[i])
+	{
+	case 0:
+		OwningHUD->ToggleSong(i);
 
-	songPlayingIndex = 2;
-	OwningHUD->songPlaying = true;
-	OwningHUD->songPlayingIndex = songPlayingIndex;
-	songAudioComponents[2]->Play();
+		creditTextThree->SetColorAndOpacity(songTextColors[0]);
+		break;
+	case 1:
+		songAudioComponents[songPlayingIndex]->Stop();
+
+		songPlayingIndex = i;
+		OwningHUD->songPlaying = true;
+		OwningHUD->songPlayingIndex = songPlayingIndex;
+		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->Play();
+
+		creditTextThree->SetColorAndOpacity(songTextColors[1]);
+		break;
+	case 2:
+		OwningHUD->ToggleSong(i);
+		OwningHUD->songPlaying = false;
+		songAudioComponents[i]->Stop();
+
+		creditTextThree->SetColorAndOpacity(songTextColors[2]);
+		break;
+	default:
+		break;
+	}
 
 	PlayChordToActiveNote();
 }
@@ -2595,7 +2700,7 @@ void SOptions::OnSongCreditFourHovered()
 }
 void SOptions::OnSongCreditFourUnHovered()
 {
-	creditTextFour->SetColorAndOpacity(FColor::Orange);
+	creditTextFour->SetColorAndOpacity(songTextColors[songCycles[3]]);
 }
 void SOptions::OnSongCreditFourPressed()
 {
@@ -2606,14 +2711,37 @@ void SOptions::OnSongCreditFourPressed()
 }
 void SOptions::OnSongCreditFourReleased()
 {
-	creditTextFour->SetColorAndOpacity(FColor::Orange);
+	int i = 3;
+	songCycles[i] = (songCycles[i] + 1) % 3;
 
-	songAudioComponents[songPlayingIndex]->Stop();
+	switch (songCycles[i])
+	{
+	case 0:
+		OwningHUD->ToggleSong(i);
 
-	songPlayingIndex = 3;
-	OwningHUD->songPlaying = true;
-	OwningHUD->songPlayingIndex = songPlayingIndex;
-	songAudioComponents[3]->Play();
+		creditTextFour->SetColorAndOpacity(songTextColors[0]);
+		break;
+	case 1:
+		songAudioComponents[songPlayingIndex]->Stop();
+
+		songPlayingIndex = i;
+		OwningHUD->songPlaying = true;
+		OwningHUD->songPlayingIndex = songPlayingIndex;
+		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->Play();
+
+		creditTextFour->SetColorAndOpacity(songTextColors[1]);
+		break;
+	case 2:
+		OwningHUD->ToggleSong(i);
+		OwningHUD->songPlaying = false;
+		songAudioComponents[i]->Stop();
+
+		creditTextFour->SetColorAndOpacity(songTextColors[2]);
+		break;
+	default:
+		break;
+	}
 
 	PlayChordToActiveNote();
 }
@@ -2624,7 +2752,7 @@ void SOptions::OnSongCreditFiveHovered()
 }
 void SOptions::OnSongCreditFiveUnHovered()
 {
-	creditTextFive->SetColorAndOpacity(FColor::Orange);
+	creditTextFive->SetColorAndOpacity(songTextColors[songCycles[4]]);
 }
 void SOptions::OnSongCreditFivePressed()
 {
@@ -2635,14 +2763,37 @@ void SOptions::OnSongCreditFivePressed()
 }
 void SOptions::OnSongCreditFiveReleased()
 {
-	creditTextFive->SetColorAndOpacity(FColor::Orange);
+	int i = 4;
+	songCycles[i] = (songCycles[i] + 1) % 3;
 
-	songAudioComponents[songPlayingIndex]->Stop();
+	switch (songCycles[i])
+	{
+	case 0:
+		OwningHUD->ToggleSong(i);
 
-	songPlayingIndex = 4;
-	OwningHUD->songPlaying = true;
-	OwningHUD->songPlayingIndex = songPlayingIndex;
-	songAudioComponents[4]->Play();
+		creditTextFive->SetColorAndOpacity(songTextColors[0]);
+		break;
+	case 1:
+		songAudioComponents[songPlayingIndex]->Stop();
+
+		songPlayingIndex = i;
+		OwningHUD->songPlaying = true;
+		OwningHUD->songPlayingIndex = songPlayingIndex;
+		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->Play();
+
+		creditTextFive->SetColorAndOpacity(songTextColors[1]);
+		break;
+	case 2:
+		OwningHUD->ToggleSong(i);
+		OwningHUD->songPlaying = false;
+		songAudioComponents[i]->Stop();
+
+		creditTextFive->SetColorAndOpacity(songTextColors[2]);
+		break;
+	default:
+		break;
+	}
 
 	PlayChordToActiveNote();
 }
@@ -2653,7 +2804,7 @@ void SOptions::OnSongCreditSixHovered()
 }
 void SOptions::OnSongCreditSixUnHovered()
 {
-	creditTextSix->SetColorAndOpacity(FColor::Orange);
+	creditTextSix->SetColorAndOpacity(songTextColors[songCycles[5]]);
 }
 void SOptions::OnSongCreditSixPressed()
 {
@@ -2664,14 +2815,37 @@ void SOptions::OnSongCreditSixPressed()
 }
 void SOptions::OnSongCreditSixReleased()
 {
-	creditTextSix->SetColorAndOpacity(FColor::Orange);
+	int i = 5;
+	songCycles[i] = (songCycles[i] + 1) % 3;
 
-	songAudioComponents[songPlayingIndex]->Stop();
+	switch (songCycles[i])
+	{
+	case 0:
+		OwningHUD->ToggleSong(i);
 
-	songPlayingIndex = 5;
-	OwningHUD->songPlaying = true;
-	OwningHUD->songPlayingIndex = songPlayingIndex;
-	songAudioComponents[5]->Play();
+		creditTextSix->SetColorAndOpacity(songTextColors[0]);
+		break;
+	case 1:
+		songAudioComponents[songPlayingIndex]->Stop();
+
+		songPlayingIndex = i;
+		OwningHUD->songPlaying = true;
+		OwningHUD->songPlayingIndex = songPlayingIndex;
+		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->Play();
+
+		creditTextSix->SetColorAndOpacity(songTextColors[1]);
+		break;
+	case 2:
+		OwningHUD->ToggleSong(i);
+		OwningHUD->songPlaying = false;
+		songAudioComponents[i]->Stop();
+
+		creditTextSix->SetColorAndOpacity(songTextColors[2]);
+		break;
+	default:
+		break;
+	}
 
 	PlayChordToActiveNote();
 }
@@ -2682,7 +2856,7 @@ void SOptions::OnSongCreditSevenHovered()
 }
 void SOptions::OnSongCreditSevenUnHovered()
 {
-	creditTextSeven->SetColorAndOpacity(FColor::Orange);
+	creditTextSeven->SetColorAndOpacity(songTextColors[songCycles[6]]);
 }
 void SOptions::OnSongCreditSevenPressed()
 {
@@ -2693,14 +2867,37 @@ void SOptions::OnSongCreditSevenPressed()
 }
 void SOptions::OnSongCreditSevenReleased()
 {
-	creditTextSeven->SetColorAndOpacity(FColor::Orange);
+	int i = 6;
+	songCycles[i] = (songCycles[i] + 1) % 3;
 
-	songAudioComponents[songPlayingIndex]->Stop();
+	switch (songCycles[i])
+	{
+	case 0:
+		OwningHUD->ToggleSong(i);
 
-	songPlayingIndex = 6;
-	OwningHUD->songPlaying = true;
-	OwningHUD->songPlayingIndex = songPlayingIndex;
-	songAudioComponents[6]->Play();
+		creditTextSeven->SetColorAndOpacity(songTextColors[0]);
+		break;
+	case 1:
+		songAudioComponents[songPlayingIndex]->Stop();
+
+		songPlayingIndex = i;
+		OwningHUD->songPlaying = true;
+		OwningHUD->songPlayingIndex = songPlayingIndex;
+		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->Play();
+
+		creditTextSeven->SetColorAndOpacity(songTextColors[1]);
+		break;
+	case 2:
+		OwningHUD->ToggleSong(i);
+		OwningHUD->songPlaying = false;
+		songAudioComponents[i]->Stop();
+
+		creditTextSeven->SetColorAndOpacity(songTextColors[2]);
+		break;
+	default:
+		break;
+	}
 
 	PlayChordToActiveNote();
 }
@@ -2711,7 +2908,7 @@ void SOptions::OnSongCreditEightHovered()
 }
 void SOptions::OnSongCreditEightUnHovered()
 {
-	creditTextEight->SetColorAndOpacity(FColor::Orange);
+	creditTextEight->SetColorAndOpacity(songTextColors[songCycles[7]]);
 }
 void SOptions::OnSongCreditEightPressed()
 {
@@ -2722,14 +2919,37 @@ void SOptions::OnSongCreditEightPressed()
 }
 void SOptions::OnSongCreditEightReleased()
 {
-	creditTextEight->SetColorAndOpacity(FColor::Orange);
+	int i = 7;
+	songCycles[i] = (songCycles[i] + 1) % 3;
 
-	songAudioComponents[songPlayingIndex]->Stop();
+	switch (songCycles[i])
+	{
+	case 0:
+		OwningHUD->ToggleSong(i);
 
-	songPlayingIndex = 7;
-	OwningHUD->songPlaying = true;
-	OwningHUD->songPlayingIndex = songPlayingIndex;
-	songAudioComponents[7]->Play();
+		creditTextEight->SetColorAndOpacity(songTextColors[0]);
+		break;
+	case 1:
+		songAudioComponents[songPlayingIndex]->Stop();
+
+		songPlayingIndex = i;
+		OwningHUD->songPlaying = true;
+		OwningHUD->songPlayingIndex = songPlayingIndex;
+		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->Play();
+
+		creditTextEight->SetColorAndOpacity(songTextColors[1]);
+		break;
+	case 2:
+		OwningHUD->ToggleSong(i);
+		OwningHUD->songPlaying = false;
+		songAudioComponents[i]->Stop();
+
+		creditTextEight->SetColorAndOpacity(songTextColors[2]);
+		break;
+	default:
+		break;
+	}
 
 	PlayChordToActiveNote();
 }

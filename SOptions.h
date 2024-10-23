@@ -33,6 +33,8 @@ public:
 
 	SLATE_ARGUMENT(int, songPlayingIndex)
 
+	SLATE_ARGUMENT(TArray<int>, songCycles)
+
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
@@ -219,6 +221,7 @@ public:
 	UPROPERTY() TSharedPtr<class SButton> pauseMouseButton;
 	UPROPERTY() TSharedPtr<class SImage> pauseMouseBackground;
 	UPROPERTY() TSharedPtr<class SBox> pauseMouseBackgroundBox;
+	UPROPERTY() TSharedPtr<class SToolTip> songListToolTip;
 
 	UPROPERTY() FSlateFontInfo titleFont;
 	UPROPERTY() FSlateFontInfo subTitleFont;
@@ -309,4 +312,7 @@ public:
 	UPROPERTY() int keyToReplace;
 	UPROPERTY() int songPlayingIndex;
 	UPROPERTY() bool songPlaying;
+	UPROPERTY() TArray<int> songCycles;
+
+	UPROPERTY() TArray<FColor> songTextColors;
 };
