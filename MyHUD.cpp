@@ -1735,8 +1735,8 @@ you need to check if the playgame function in the gameSlateWidget works once you
 
 	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
 	{
-		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
-		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)3.0 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)3.0 * (double)sfxCoefficientTwo) - ((double)3.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)3.0));
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)3.0 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)3.0 * (double)sfxCoefficientTwo) - ((double)3.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)3.0));
 	}
 
 	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)90.0 * (double)sfxCoefficientThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)90.0));
@@ -1891,8 +1891,8 @@ void AMyHUD::CommitSFX(int newVol)
 
 	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
 	{
-		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)masterCoefficientSTwo) - (double)((double)((double)((double)7.6 * (double)masterCoefficientSTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientTwo))) * (double)i, (double)0.001, (double)7.6));
-		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)masterCoefficientSTwo) - (double)((double)((double)((double)7.6 * (double)masterCoefficientSTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientTwo))) * (double)i, (double)0.001, (double)7.6));
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)3.0 * (double)masterCoefficientSTwo) - (double)((double)((double)((double)3.0 * (double)masterCoefficientSTwo) - ((double)3.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientTwo))) * (double)i, (double)0.001, (double)3.0));
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)3.0 * (double)masterCoefficientSTwo) - (double)((double)((double)((double)3.0 * (double)masterCoefficientSTwo) - ((double)3.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientTwo))) * (double)i, (double)0.001, (double)3.0));
 	}
 
 	for (int a = 0; a < purpleLullabyAudioComponents.Num(); a++)
@@ -2135,8 +2135,8 @@ void AMyHUD::BeginPlay()
 
 	for (int a = 0; a < hoverGrowAudioComponents.Num(); a++)
 	{
-		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
-		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)7.6 * (double)sfxCoefficientTwo) - ((double)7.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)7.6));
+		hoverGrowAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)3.0 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)3.0 * (double)sfxCoefficientTwo) - ((double)3.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)3.0));
+		hoverShrinkAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)3.0 * (double)sfxCoefficientTwo) - (double)((double)((double)((double)3.0 * (double)sfxCoefficientTwo) - ((double)3.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSTwo))) * (double)i, (double)0.001, (double)3.0));
 	}
 
 	intersectionDownAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)90.0 * (double)sfxCoefficientThree) - (double)((double)((double)((double)90.0 * (double)sfxCoefficientThree) - ((double)90.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSThree))) * (double)i, (double)0.001, (double)90.0));
