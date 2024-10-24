@@ -224,10 +224,16 @@ void SOptions::Construct(const FArguments& InArgs)
 
 	songTextColors = { FColor::Orange, FColor::Red, FColor::Silver };
 
-	if (!songAudioComponents[songPlayingIndex]->IsPlaying() && songCycles[songPlayingIndex] == 1)
+	if (!songAudioComponents[songPlayingIndex]->IsPlaying() || !OwningHUD->songPlaying)
 	{
-		songCycles[songPlayingIndex] = 0;
-		OwningHUD->songCycles[songPlayingIndex] = 0;
+		for (int a = 0; a < songAudioComponents.Num(); a++)
+		{
+			if (songCycles[a] == 1)
+			{
+				songCycles[songPlayingIndex] = 0;
+				OwningHUD->songCycles[songPlayingIndex] = 0;
+			}
+		}
 	}
 
 	childrensCornerNotes = { 8, 11, 12, 13, 8, 11, 13, 12, 7, 11, 12, 14, 9, 10, 14, 13, 8, 11, 13, 15, 10, 11, 15, 14, 9, 11, 14, 16, 9, 14, 16, 15, 11, 13, 15, 18, 13, 15, 18, 19, 13, 15, 19, 18, 13, 15, 18, 17, 13, 15, 17, 16, 13, 15, 16, 15, 11, 13, 15, 14, 11, 13, 14, 13, 10, 11, 13, 12, 9, 11, 12, 15, 10, 13, 15, 16, 11, 13, 16, 13, 9, 11, 13, 12, 9, 11, 12, 11, 8, 9, 11, 10, 7, 8, 10, 0, 4, 5, 6, 7, 9, 11, 12, 13, 12, 11, 9, 7, 6, 5, 4, 0, 4, 5, 6, 7, 9, 11, 12, 13, 12, 11, 9, 7, 6, 5, 4, 0, 4, 5, 6, 7, 22, 11, 12, 13, 12, 11, 9, 7, 6, 5, 4, 0, 4, 5, 6, 7, 22, 11, 12, 13, 12, 11, 10, 7, 6, 5, 4 };
@@ -831,6 +837,59 @@ void SOptions::Construct(const FArguments& InArgs)
 			pauseMouseButton.ToSharedRef()
 		];
 
+	frameRateCapBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateLeftColumnPos(5, 11))
+		[
+			SNew(STextBlock)
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(menuFont)
+				.Text(FText::FromString("Frame Rate Cap:"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+		];
+
+	frameRateCapToolTip = SNew(SToolTip)
+		[
+			SNew(STextBlock)
+				.Text(FText::FromString("the default is 60, it is recommended, 0 is disabled"))
+				.Font(textFont)
+				.ColorAndOpacity(FColor::Silver)
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		];
+
+	frameRateCapBox->SetToolTip(frameRateCapToolTip);
+
+	frameRateCapBackgroundBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateRightColumnPos(5, 1))
+		[
+			SNew(SImage)
+			.Image(gameFrameColor_SB)
+		];
+
+	frameRateCapEditableTextBox = SNew(SEditableText)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FLinearColor::White)
+		.Font(menuFont)
+		.SelectAllTextWhenFocused(true)
+		.Text(FText::FromString(FString::SanitizeFloat(UGameUserSettings::GetGameUserSettings()->GetFrameRateLimit())))
+		.OnTextCommitted(FOnTextCommitted::CreateSP(this, &SOptions::OnFrameRateCommitted));
+
+	frameRateCapBoxOne = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateRightColumnPos(5, 1))
+		[
+			frameRateCapEditableTextBox.ToSharedRef()
+		];
+
+	frameRateCapBoxOne->SetToolTip(frameRateCapToolTip);
+
 	controlsOverlay = SNew(SOverlay);
 
 	controlsOverlay->AddSlot()
@@ -880,6 +939,27 @@ void SOptions::Construct(const FArguments& InArgs)
 		.VAlign(VAlign_Fill)
 		[
 			pauseMouseBox.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			frameRateCapBox.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			frameRateCapBackgroundBox.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			frameRateCapBoxOne.ToSharedRef()
 		];
 
 	controlsOverlay->AddSlot()
@@ -1215,7 +1295,7 @@ void SOptions::Construct(const FArguments& InArgs)
 	vsyncBoxOne = SNew(SBox)
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
-		.Padding(CalculateLeftColumnPos(-2, 1))
+		.Padding(CalculateLeftColumnPos(-3, 1))
 		[
 			SNew(STextBlock)
 				.Justification(ETextJustify::Center)
@@ -1240,7 +1320,7 @@ void SOptions::Construct(const FArguments& InArgs)
 	vsyncBoxTwo = SNew(SBox)
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
-		.Padding(CalculateCheckBoxPos(-2))
+		.Padding(CalculateCheckBoxPos(-3))
 		[
 			vsyncCheckBox.ToSharedRef()
 		];
@@ -1248,7 +1328,7 @@ void SOptions::Construct(const FArguments& InArgs)
 	VSyncCheckBoxBackground = SNew(SBox)
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
-		.Padding(CalculateCheckBoxPos(-2))
+		.Padding(CalculateCheckBoxPos(-3))
 		[
 			SNew(SImage)
 				.Image(gameFrameColor_SB)
@@ -1257,7 +1337,7 @@ void SOptions::Construct(const FArguments& InArgs)
 	gammaBox = SNew(SBox)
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
-		.Padding(CalculateLeftColumnPos(-1, 1))
+		.Padding(CalculateLeftColumnPos(-2, 1))
 		[
 			SNew(STextBlock)
 				.Justification(ETextJustify::Center)
@@ -1279,7 +1359,7 @@ void SOptions::Construct(const FArguments& InArgs)
 	gammaOptionBoxOne = SNew(SBox)
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
-		.Padding(TwinButtonsCenter(-1, 0))
+		.Padding(TwinButtonsCenter(-2, 0))
 		[
 			SNew(SButton)
 				.HAlign(HAlign_Fill)
@@ -1308,7 +1388,7 @@ void SOptions::Construct(const FArguments& InArgs)
 	gammaOptionBoxTwo = SNew(SBox)
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
-		.Padding(TwinButtonsCenter(-1, 1))
+		.Padding(TwinButtonsCenter(-2, 1))
 		[
 			SNew(SButton)
 				.HAlign(HAlign_Fill)
@@ -1337,7 +1417,7 @@ void SOptions::Construct(const FArguments& InArgs)
 	gammaResetBox = SNew(SBox)
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
-		.Padding(CalculateRightColumnPos(-1, 1))
+		.Padding(CalculateRightColumnPos(-2, 1))
 		[
 			SNew(SButton)
 				.HAlign(HAlign_Fill)
@@ -1354,6 +1434,241 @@ void SOptions::Construct(const FArguments& InArgs)
 					gammaResetText.ToSharedRef()
 				]
 		];
+
+	fullscreenBoxOne = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateLeftColumnPos(-1, 6))
+		[
+			SNew(STextBlock)
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(menuFont)
+				.Text(FText::FromString("Fullscreen"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+		];
+
+	fullscreenCheckBox = SNew(SCheckBox)
+		.HAlign(HAlign_Fill)
+		.Padding(FMargin())
+		.Type(ESlateCheckBoxType::ToggleButton)
+		.OnCheckStateChanged(this, &SOptions::OnFullscreenChecked);
+
+	enableResolution = true;
+	if (UGameUserSettings::GetGameUserSettings()->GetFullscreenMode() == EWindowMode::Fullscreen)
+	{
+		fullscreenCheckBox->SetIsChecked(ECheckBoxState::Checked);
+		enableResolution = false;
+	}
+
+	fullscreenBoxTwo = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateCheckBoxPos(-1))
+		[
+			fullscreenCheckBox.ToSharedRef()
+		];
+
+	fullscreenCheckBoxBackground = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateCheckBoxPos(-1))
+		[
+			SNew(SImage)
+				.Image(gameFrameColor_SB)
+		];
+
+	resolutionBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateLeftColumnPos(-0, 6))
+		[
+			SNew(STextBlock)
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(menuFont)
+				.Text(FText::FromString("Resolution"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+		];
+
+	resolutionToolTip = SNew(SToolTip)
+		[
+			SNew(STextBlock)
+				.Text(FText::FromString("resolution selection only enabled when fullscreen disabled"))
+				.Font(textFont)
+				.ColorAndOpacity(FColor::Silver)
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		];
+
+	resolutionBox->SetToolTip(resolutionToolTip);
+
+	resolutionTextOne = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(menuFont)
+		.Text(FText::FromString("854 x 480"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	resolutionButtonOne = SNew(SButton)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.OnPressed(this, &SOptions::OnResolutionOnePressed)
+		.OnReleased(this, &SOptions::OnResolutionOneReleased)
+		.OnHovered(this, &SOptions::OnResolutionOneHovered)
+		.OnUnhovered(this, &SOptions::OnResolutionOneUnHovered)
+		.ContentPadding(FMargin())
+		.IsEnabled(enableResolution)
+		.ButtonColorAndOpacity(FLinearColor::Transparent)
+		.ButtonStyle(transparentButtonStyle)
+		[
+			resolutionTextOne.ToSharedRef()
+		];
+
+	resolutionBoxOne = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(4))
+		[
+			resolutionButtonOne.ToSharedRef()
+		];
+
+	resolutionBoxOne->SetToolTip(resolutionToolTip);
+
+	resolutionTextTwo = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(menuFont)
+		.Text(FText::FromString("1280 x 720"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	resolutionButtonTwo = SNew(SButton)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.OnPressed(this, &SOptions::OnResolutionTwoPressed)
+		.OnReleased(this, &SOptions::OnResolutionTwoReleased)
+		.OnHovered(this, &SOptions::OnResolutionTwoHovered)
+		.OnUnhovered(this, &SOptions::OnResolutionTwoUnHovered)
+		.ContentPadding(FMargin())
+		.IsEnabled(enableResolution)
+		.ButtonColorAndOpacity(FLinearColor::Transparent)
+		.ButtonStyle(transparentButtonStyle)
+		[
+			resolutionTextTwo.ToSharedRef()
+		];
+
+	resolutionBoxTwo = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(5))
+		[
+			resolutionButtonTwo.ToSharedRef()
+		];
+
+	resolutionBoxTwo->SetToolTip(resolutionToolTip);
+
+	resolutionTextThree = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(menuFont)
+		.Text(FText::FromString("1920 x 1080"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	resolutionButtonThree = SNew(SButton)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.OnPressed(this, &SOptions::OnResolutionThreePressed)
+		.OnReleased(this, &SOptions::OnResolutionThreeReleased)
+		.OnHovered(this, &SOptions::OnResolutionThreeHovered)
+		.OnUnhovered(this, &SOptions::OnResolutionThreeUnHovered)
+		.ContentPadding(FMargin())
+		.IsEnabled(enableResolution)
+		.ButtonColorAndOpacity(FLinearColor::Transparent)
+		.ButtonStyle(transparentButtonStyle)
+		[
+			resolutionTextThree.ToSharedRef()
+		];
+
+	resolutionBoxThree = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(6))
+		[
+			resolutionButtonThree.ToSharedRef()
+		];
+
+	resolutionBoxThree->SetToolTip(resolutionToolTip);
+
+	resolutionTextFour = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(menuFont)
+		.Text(FText::FromString("2560 x 1440"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	resolutionButtonFour = SNew(SButton)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.OnPressed(this, &SOptions::OnResolutionFourPressed)
+		.OnReleased(this, &SOptions::OnResolutionFourReleased)
+		.OnHovered(this, &SOptions::OnResolutionFourHovered)
+		.OnUnhovered(this, &SOptions::OnResolutionFourUnHovered)
+		.ContentPadding(FMargin())
+		.IsEnabled(enableResolution)
+		.ButtonColorAndOpacity(FLinearColor::Transparent)
+		.ButtonStyle(transparentButtonStyle)
+		[
+			resolutionTextFour.ToSharedRef()
+		];
+
+	resolutionBoxFour = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(7))
+		[
+			resolutionButtonFour.ToSharedRef()
+		];
+
+	resolutionBoxFour->SetToolTip(resolutionToolTip);
+
+	resolutionTextFive = SNew(STextBlock)
+		.Justification(ETextJustify::Center)
+		.ColorAndOpacity(FColor::Orange)
+		.Font(menuFont)
+		.Text(FText::FromString("3840 x 2160"))
+		.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1));
+
+	resolutionButtonFive = SNew(SButton)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.OnPressed(this, &SOptions::OnResolutionFivePressed)
+		.OnReleased(this, &SOptions::OnResolutionFiveReleased)
+		.OnHovered(this, &SOptions::OnResolutionFiveHovered)
+		.OnUnhovered(this, &SOptions::OnResolutionFiveUnHovered)
+		.ContentPadding(FMargin())
+		.IsEnabled(enableResolution)
+		.ButtonColorAndOpacity(FLinearColor::Transparent)
+		.ButtonStyle(transparentButtonStyle)
+		[
+			resolutionTextFive.ToSharedRef()
+		];
+
+	resolutionBoxFive = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateMiddleColumnPos(8))
+		[
+			resolutionButtonFive.ToSharedRef()
+		];
+
+	resolutionBoxFive->SetToolTip(resolutionToolTip);
 
 	graphicsOverlay = SNew(SOverlay);
 
@@ -1404,6 +1719,69 @@ void SOptions::Construct(const FArguments& InArgs)
 		.VAlign(VAlign_Fill)
 		[
 			gammaResetBox.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			fullscreenBoxOne.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			fullscreenCheckBoxBackground.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			fullscreenBoxTwo.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			resolutionBox.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			resolutionBoxOne.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			resolutionBoxTwo.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			resolutionBoxThree.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			resolutionBoxFour.ToSharedRef()
+		];
+
+	graphicsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			resolutionBoxFive.ToSharedRef()
 		];
 
 	graphicsOverlay->AddSlot()
@@ -3181,7 +3559,6 @@ void SOptions::OnSongCreditEightReleased()
 
 void SOptions::OnVSyncChecked(ECheckBoxState InState)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "runs");
 	if (InState == ECheckBoxState::Checked)
 	{
 		UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
@@ -3192,7 +3569,35 @@ void SOptions::OnVSyncChecked(ECheckBoxState InState)
 	{
 		UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
 		Settings->SetVSyncEnabled(false);
+		Settings->ApplySettings(true);//I think this bool just checks for overrides which would mean it could be fine to set it false
+	}
+}
+
+void SOptions::OnFullscreenChecked(ECheckBoxState InState)
+{
+	if (InState == ECheckBoxState::Checked)
+	{
+		UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+		Settings->SetFullscreenMode(EWindowMode::Fullscreen);
 		Settings->ApplySettings(true);
+
+		resolutionButtonOne->SetEnabled(false);
+		resolutionButtonTwo->SetEnabled(false);
+		resolutionButtonThree->SetEnabled(false);
+		resolutionButtonFour->SetEnabled(false);
+		resolutionButtonFive->SetEnabled(false);
+	}
+	else if (InState == ECheckBoxState::Unchecked)
+	{
+		UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+		Settings->SetFullscreenMode(EWindowMode::Windowed);
+		Settings->ApplySettings(true);
+
+		resolutionButtonOne->SetEnabled(true);
+		resolutionButtonTwo->SetEnabled(true);
+		resolutionButtonThree->SetEnabled(true);
+		resolutionButtonFour->SetEnabled(true);
+		resolutionButtonFive->SetEnabled(true);
 	}
 }
 
@@ -3292,6 +3697,116 @@ void SOptions::OnResetGammaReleased()
 	UGameplayStatics::SaveGameToSlot(currentSave, TEXT("saveGameOne"), 0);
 
 	gammaResetText->SetColorAndOpacity(FColor::Orange);
+}
+
+void SOptions::OnResolutionOneHovered()
+{
+	resolutionTextOne->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnResolutionOneUnHovered()
+{
+	resolutionTextOne->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnResolutionOnePressed()
+{
+	resolutionTextOne->SetColorAndOpacity(FColor::White);
+}
+void SOptions::OnResolutionOneReleased()
+{
+	UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+	Settings->SetScreenResolution(FIntPoint(854, 480));
+	Settings->ApplyResolutionSettings(true);
+	Settings->ApplySettings(true);
+
+	resolutionTextOne->SetColorAndOpacity(FColor::Orange);
+}
+
+void SOptions::OnResolutionTwoHovered()
+{
+	resolutionTextTwo->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnResolutionTwoUnHovered()
+{
+	resolutionTextTwo->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnResolutionTwoPressed()
+{
+	resolutionTextTwo->SetColorAndOpacity(FColor::White);
+}
+void SOptions::OnResolutionTwoReleased()
+{
+	UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+	Settings->SetScreenResolution(FIntPoint(1280, 720));
+	Settings->ApplyResolutionSettings(true);
+	Settings->ApplySettings(true);
+
+	resolutionTextTwo->SetColorAndOpacity(FColor::Orange);
+}
+
+void SOptions::OnResolutionThreeHovered()
+{
+	resolutionTextThree->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnResolutionThreeUnHovered()
+{
+	resolutionTextThree->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnResolutionThreePressed()
+{
+	resolutionTextThree->SetColorAndOpacity(FColor::White);
+}
+void SOptions::OnResolutionThreeReleased()
+{
+	UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+	Settings->SetScreenResolution(FIntPoint(1920, 1080));
+	Settings->ApplyResolutionSettings(true);
+	Settings->ApplySettings(true);
+
+	resolutionTextThree->SetColorAndOpacity(FColor::Orange);
+}
+
+void SOptions::OnResolutionFourHovered()
+{
+	resolutionTextFour->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnResolutionFourUnHovered()
+{
+	resolutionTextFour->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnResolutionFourPressed()
+{
+	resolutionTextFour->SetColorAndOpacity(FColor::White);
+}
+void SOptions::OnResolutionFourReleased()
+{
+	UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+	Settings->SetScreenResolution(FIntPoint(2560, 1440));
+	Settings->ApplyResolutionSettings(true);
+	Settings->ApplySettings(true);
+
+	resolutionTextFour->SetColorAndOpacity(FColor::Orange);
+}
+
+void SOptions::OnResolutionFiveHovered()
+{
+	resolutionTextFive->SetColorAndOpacity(FColor::Yellow);
+}
+void SOptions::OnResolutionFiveUnHovered()
+{
+	resolutionTextFive->SetColorAndOpacity(FColor::Orange);
+}
+void SOptions::OnResolutionFivePressed()
+{
+	resolutionTextFive->SetColorAndOpacity(FColor::White);
+}
+void SOptions::OnResolutionFiveReleased()
+{
+	UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+	Settings->SetScreenResolution(FIntPoint(3840, 2160));
+	Settings->ApplyResolutionSettings(true);
+	Settings->ApplySettings(true);
+
+	resolutionTextFive->SetColorAndOpacity(FColor::Orange);
 }
 
 void SOptions::OnMasterCommitted(const FText& InText, const ETextCommit::Type InTextAction)
@@ -3394,6 +3909,44 @@ void SOptions::OnSFXCommitted(const FText& InText, const ETextCommit::Type InTex
 	else
 	{
 		sfxEditableTextBox->SetText(FText::FromString(FString::FromInt(currentSave->GetSFX())));
+	}
+}
+
+void SOptions::OnFrameRateCommitted(const FText& InText, const ETextCommit::Type InTextAction)
+{
+	bool textIsValid = false;
+	int newFrameRate;
+
+	if (InText.EqualTo(FText::FromString(FString::FromInt(0))))
+	{
+		UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+		Settings->SetFrameRateLimit(0);
+		Settings->ApplySettings(true);
+	}
+	else
+	{
+		for (int a = 30; a < 121; a++)
+		{
+			if (InText.EqualTo(FText::FromString(FString::FromInt(a))))
+			{
+				textIsValid = true;
+				newFrameRate = a;
+				break;
+			}
+		}
+
+		if (textIsValid)
+		{
+			UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+			Settings->SetFrameRateLimit(newFrameRate);
+			Settings->ApplySettings(true);
+
+			frameRateCapEditableTextBox->SetText(FText::FromString(FString::FromInt(newFrameRate)));
+		}
+		else
+		{
+			frameRateCapEditableTextBox->SetText(FText::FromString(FString::SanitizeFloat(UGameUserSettings::GetGameUserSettings()->GetFrameRateLimit())));
+		}
 	}
 }
 

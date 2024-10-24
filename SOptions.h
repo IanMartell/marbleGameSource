@@ -121,6 +121,7 @@ public:
 	void OnPauseMouseBindingResetReleased();
 
 	void OnVSyncChecked(ECheckBoxState InState);
+	void OnFullscreenChecked(ECheckBoxState InState);
 
 	void OnGammaOneReleased();
 	void OnGammaOnePressed();
@@ -137,10 +138,37 @@ public:
 	void OnResetGammaHovered();
 	void OnResetGammaUnHovered();
 
+	void OnResolutionOneReleased();
+	void OnResolutionOnePressed();
+	void OnResolutionOneHovered();
+	void OnResolutionOneUnHovered();
+
+	void OnResolutionTwoReleased();
+	void OnResolutionTwoPressed();
+	void OnResolutionTwoHovered();
+	void OnResolutionTwoUnHovered();
+
+	void OnResolutionThreeReleased();
+	void OnResolutionThreePressed();
+	void OnResolutionThreeHovered();
+	void OnResolutionThreeUnHovered();
+
+	void OnResolutionFourReleased();
+	void OnResolutionFourPressed();
+	void OnResolutionFourHovered();
+	void OnResolutionFourUnHovered();
+
+	void OnResolutionFiveReleased();
+	void OnResolutionFivePressed();
+	void OnResolutionFiveHovered();
+	void OnResolutionFiveUnHovered();
+
 	void OnMasterCommitted(const FText& InText, const ETextCommit::Type InTextAction);
 	void OnMusicCommitted(const FText& InText, const ETextCommit::Type InTextAction);
 	void OnAtmosphereCommitted(const FText& InText, const ETextCommit::Type InTextAction);
 	void OnSFXCommitted(const FText& InText, const ETextCommit::Type InTextAction);
+
+	void OnFrameRateCommitted(const FText& InText, const ETextCommit::Type InTextAction);
 
 	FMargin CalculateTitlePosition(FVector2D funcViewportSize);
 	FMargin CalculateMenuTextPos(int textIndex, int numberOfLetters);
@@ -165,11 +193,6 @@ public:
 	UPROPERTY() UMaterial* gameFrameColor_SMUI;
 
 	UPROPERTY() FSlateBrush* gameFrameColor_SB;
-
-	UPROPERTY() FSlateBrush* checkboxBackground_SB;
-	UPROPERTY() FSlateBrush* checkboxBackgroundHovered_SB;
-	UPROPERTY() FSlateBrush* checkboxCheckedBackground_SB;
-	UPROPERTY() FSlateBrush* checkboxCheckedBackgroundHovered_SB;
 
 	UPROPERTY() FVector2D viewportSize;
 	UPROPERTY() FVector2D adjustedViewportSize;
@@ -248,11 +271,18 @@ public:
 	UPROPERTY() TSharedPtr<class SBox> pauseMouseBackgroundBox;
 
 	UPROPERTY() TSharedPtr<class SToolTip> songListToolTip;
+	UPROPERTY() TSharedPtr<class SToolTip> resolutionToolTip;
+	UPROPERTY() TSharedPtr<class SToolTip> frameRateCapToolTip;
 
 	UPROPERTY() TSharedPtr<class SBox> vsyncBoxOne;
 	UPROPERTY() TSharedPtr<class SBox> vsyncBoxTwo;
 	UPROPERTY() TSharedPtr<class SCheckBox> vsyncCheckBox;
 	UPROPERTY() TSharedPtr<class SBox> VSyncCheckBoxBackground;
+
+	UPROPERTY() TSharedPtr<class SBox> fullscreenBoxOne;
+	UPROPERTY() TSharedPtr<class SBox> fullscreenBoxTwo;
+	UPROPERTY() TSharedPtr<class SCheckBox> fullscreenCheckBox;
+	UPROPERTY() TSharedPtr<class SBox> fullscreenCheckBoxBackground;
 
 	UPROPERTY() TSharedPtr<class SBox> gammaBox;
 	UPROPERTY() TSharedPtr<class SBox> gammaOptionBoxOne;
@@ -261,6 +291,29 @@ public:
 	UPROPERTY() TSharedPtr<class STextBlock> gammaTextOne;
 	UPROPERTY() TSharedPtr<class STextBlock> gammaTextTwo;
 	UPROPERTY() TSharedPtr<class STextBlock> gammaResetText;
+
+	UPROPERTY() TSharedPtr<class SBox> resolutionBox;
+	UPROPERTY() TSharedPtr<class SBox> resolutionBoxOne;
+	UPROPERTY() TSharedPtr<class STextBlock> resolutionTextOne;
+	UPROPERTY() TSharedPtr<class SButton> resolutionButtonOne;
+	UPROPERTY() TSharedPtr<class SBox> resolutionBoxTwo;
+	UPROPERTY() TSharedPtr<class STextBlock> resolutionTextTwo;
+	UPROPERTY() TSharedPtr<class SButton> resolutionButtonTwo;
+	UPROPERTY() TSharedPtr<class SBox> resolutionBoxThree;
+	UPROPERTY() TSharedPtr<class STextBlock> resolutionTextThree;
+	UPROPERTY() TSharedPtr<class SButton> resolutionButtonThree;
+	UPROPERTY() TSharedPtr<class SBox> resolutionBoxFour;
+	UPROPERTY() TSharedPtr<class STextBlock> resolutionTextFour;
+	UPROPERTY() TSharedPtr<class SButton> resolutionButtonFour;
+	UPROPERTY() TSharedPtr<class SBox> resolutionBoxFive;
+	UPROPERTY() TSharedPtr<class STextBlock> resolutionTextFive;
+	UPROPERTY() TSharedPtr<class SButton> resolutionButtonFive;
+
+	UPROPERTY() TSharedPtr<class SBox> frameRateCapBox;
+	UPROPERTY() TSharedPtr<class SBox> frameRateCapBoxOne;
+	UPROPERTY() TSharedPtr<class SBox> frameRateCapBackgroundBox;
+	UPROPERTY() TSharedPtr<class SEditableText> frameRateCapEditableTextBox;
+
 
 	UPROPERTY() FSlateFontInfo titleFont;
 	UPROPERTY() FSlateFontInfo subTitleFont;
@@ -351,6 +404,7 @@ public:
 	UPROPERTY() int keyToReplace;
 	UPROPERTY() int songPlayingIndex;
 	UPROPERTY() bool songPlaying;
+	UPROPERTY() bool enableResolution;
 	UPROPERTY() TArray<int> songCycles;
 
 	UPROPERTY() TArray<FColor> songTextColors;

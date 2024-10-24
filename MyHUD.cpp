@@ -1987,6 +1987,10 @@ void AMyHUD::BeginPlay()
 
 	if (UGameplayStatics::LoadGameFromSlot("saveGameOne", 0) == nullptr)//to create a save redundency Ill just create a new slotname
 	{
+		UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();// I don't think this can be null but if it can this will cause crashing
+		Settings->SetFrameRateLimit(60);
+		Settings->ApplySettings(true);
+
 		newSongIndexArr.Empty();
 		TArray<int> freshArr = { 0, 1, 2, 3, 4, 5, 6, 7 };
 		for (int a = 0; a < 8; a++)
@@ -2019,6 +2023,11 @@ void AMyHUD::BeginPlay()
 		UGameplayStatics::SaveGameToSlot(LoadGameInstance, TEXT("saveGameOne"), 0);
 	}
 
+	/*
+	UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+	Settings->SetFrameRateLimit(60);
+	Settings->ApplySettings(true);
+	
 	newSongIndexArr.Empty();
 	TArray<int> freshArr = { 0, 1, 2, 3, 4, 5, 6, 7 };
 	for (int a = 0; a < 8; a++)
@@ -2048,7 +2057,7 @@ void AMyHUD::BeginPlay()
 	adjustedSave->SetSongIndexArr(newSongIndexArr);
 	adjustedSave->SetSongCycles({ 0, 0, 0, 0, 0, 0, 0, 0 });
 	adjustedSave->SetGamma(2.2);
-	UGameplayStatics::SaveGameToSlot(adjustedSave, TEXT("saveGameOne"), 0);
+	UGameplayStatics::SaveGameToSlot(adjustedSave, TEXT("saveGameOne"), 0);*/
 	//adjustedSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(adjustedSave->SaveSlotName, 0));//is this gonna be a problem? do I need to get the actual default adjustedSave->SaveSlotName and the actual adjustedSave->UserIndex?
 
 	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
@@ -2151,10 +2160,6 @@ void AMyHUD::BeginPlay()
 	newMaxLevel = false;
 	songPlaying = false;
 	songPlayingIndex = 0;
-
-	UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
-	Settings->SetFrameRateLimit(60);
-	Settings->ApplySettings(true);
 
 	if (GEngine && GEngine->GameViewport)
 	{
