@@ -348,22 +348,26 @@ void SPauseScreen::Construct(const FArguments& InArgs)
 
 FReply SPauseScreen::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent)
 {
-	if (InKeyEvent.GetKey() == EKeys::Q)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "q");
-	}
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 
-	if (InKeyEvent.GetKey() == EKeys::Tab)
+	if (InKeyEvent.GetKey() == currentSave->GetPauseKey())
 	{
 		destroyPauseScreen = true;
-		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "tab");//why isnt this working
+		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "pauseKey");//why isnt this working
 	}
+	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "anything");
 
-	if (InKeyEvent.GetKey() == EKeys::Escape)
+	return FReply::Handled();
+}
+
+FReply SPauseScreen::OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& InMouseEvent)
+{
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	
+	if (InMouseEvent.GetEffectingButton() == currentSave->GetPauseMouse())
 	{
-		//in the final product the escape key will take the place of the tab key wherever the tab key is used
+		destroyPauseScreen = true;
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "anything");
 
 	return FReply::Handled();
 }

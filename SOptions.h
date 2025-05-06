@@ -17,6 +17,8 @@ public:
 
 	SLATE_ARGUMENT(TWeakObjectPtr<class AMyHUD>, OwningHUD)
 
+	SLATE_ARGUMENT(bool, comingFromPauseMenu)
+
 	SLATE_ARGUMENT(APlayerController*, playerOnePlayerController)
 
 	SLATE_ARGUMENT(UObject*, standardWorldContextObject)
@@ -43,6 +45,9 @@ public:
 	FReply OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& InMouseEvent);
 	FReply OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent);
 	void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime);
+
+	virtual bool IsInteractable() const override { return true; }
+	virtual bool SupportsKeyboardFocus() const override { return true; }
 
 	void OnAudioPressed();
 	void OnAudioReleased();
@@ -168,6 +173,8 @@ public:
 	void OnAtmosphereCommitted(const FText& InText, const ETextCommit::Type InTextAction);
 	void OnSFXCommitted(const FText& InText, const ETextCommit::Type InTextAction);
 
+	void OnAutoCursorChecked(ECheckBoxState InState);
+
 	void OnFrameRateCommitted(const FText& InText, const ETextCommit::Type InTextAction);
 
 	FMargin CalculateTitlePosition(FVector2D funcViewportSize);
@@ -272,6 +279,7 @@ public:
 
 	UPROPERTY() TSharedPtr<class SToolTip> songListToolTip;
 	UPROPERTY() TSharedPtr<class SToolTip> resolutionToolTip;
+	UPROPERTY() TSharedPtr<class SToolTip> autoCursorToolTip;
 	UPROPERTY() TSharedPtr<class SToolTip> frameRateCapToolTip;
 
 	UPROPERTY() TSharedPtr<class SBox> vsyncBoxOne;
@@ -308,6 +316,11 @@ public:
 	UPROPERTY() TSharedPtr<class SBox> resolutionBoxFive;
 	UPROPERTY() TSharedPtr<class STextBlock> resolutionTextFive;
 	UPROPERTY() TSharedPtr<class SButton> resolutionButtonFive;
+
+	UPROPERTY() TSharedPtr<class SBox> autoCursorBoxOne;
+	UPROPERTY() TSharedPtr<class SBox> autoCursorBoxTwo;
+	UPROPERTY() TSharedPtr<class SCheckBox> autoCursorCheckBox;
+	UPROPERTY() TSharedPtr<class SBox> autoCursorCheckBoxBackground;
 
 	UPROPERTY() TSharedPtr<class SBox> frameRateCapBox;
 	UPROPERTY() TSharedPtr<class SBox> frameRateCapBoxOne;
@@ -408,4 +421,6 @@ public:
 	UPROPERTY() TArray<int> songCycles;
 
 	UPROPERTY() TArray<FColor> songTextColors;
+
+	UPROPERTY() bool comingFromPauseMenu;
 };

@@ -8,13 +8,19 @@
 
 AMyGameModeBase::AMyGameModeBase()
 {
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("'/Game/Misc/PlayerCharacter.PlayerCharacter'"));
+	/*static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("'/Game/Misc/BP_MyCharacter.BP_MyCharacter'"));
 	if (PlayerPawnBPClass.Class != NULL)
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
 
-	PlayerControllerClass = AMyPlayerController::StaticClass();
+	static ConstructorHelpers::FClassFinder<APlayerController> PlayerControllerBPClass(TEXT("'/Game/Misc/BP_MyPlayerController.BP_MyPlayerController'"));
+	if (PlayerControllerBPClass.Class != NULL)
+	{
+		PlayerControllerClass = PlayerControllerBPClass.Class;
+	}*/
+
+	//PlayerControllerClass = AMyPlayerController::StaticClass();
 	HUDClass = AMyHUD::StaticClass();
 }
 

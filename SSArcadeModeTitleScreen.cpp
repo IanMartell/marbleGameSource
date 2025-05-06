@@ -4,6 +4,7 @@
 #include "SSArcadeModeTitleScreen.h"
 #include "Components/AudioComponent.h"
 #include "Runtime/Engine/Classes/Engine/UserInterfaceSettings.h"
+#include "Widgets/SToolTip.h"
 #include "SlateOptMacros.h"
 
 FMargin SSArcadeModeTitleScreen::CalculateTitlePosition(FVector2D funcViewportSize)
@@ -25,6 +26,18 @@ FMargin SSArcadeModeTitleScreen::CalculateMenuTextPos(int textIndex, int numberO
 	float topPad = adjustedViewportSize.Y * (0.35 + (0.15 * textIndex));
 	float rightPad = fThree - ((adjustedViewportSize.Y / 10) * fTwo);
 	float bottomPad = adjustedViewportSize.Y * (0.575 - (0.15 * textIndex));
+
+	return FMargin(leftPad, topPad, rightPad, bottomPad);
+}
+
+FMargin SSArcadeModeTitleScreen::CalculateHardModePos()
+{//since the buttons expand from the center they must be aligned from the center. this means for them to line up vertically the left and right pads need to be calculated so their centers are always equivalent
+	float fOne = (adjustedViewportSize.X - adjustedViewportSize.Y) / 2;
+	float fThree = ((adjustedViewportSize.X - adjustedViewportSize.Y) / 2) + ((adjustedViewportSize.Y / 10) * 5);
+	float leftPad = fOne + (0.667 * adjustedViewportSize.Y);
+	float topPad = adjustedViewportSize.Y * 0.333;
+	float rightPad = fOne;
+	float bottomPad = adjustedViewportSize.Y * 0.6;
 
 	return FMargin(leftPad, topPad, rightPad, bottomPad);
 }
@@ -170,9 +183,15 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 	playerOnePlayerController = InArgs._playerOnePlayerController;
 	standardWorldContextObject = InArgs._standardWorldContextObject;
 	gameFrameColor_SMUI = InArgs._gameFrameColor_SMUI;
+	emptyImg_SMUI = InArgs._emptyImg_SMUI;
 	backgroundMaterials = InArgs._backgroundMaterials;
 	backgroundIsLargeTile = InArgs._backgroundIsLargeTile;
 	displayResults = InArgs._displayResults;
+	neonAudioComponent = InArgs._neonAudioComponent;
+	neonOnOneAudioComponent = InArgs._neonOnOneAudioComponent;
+	neonOnTwoAudioComponent = InArgs._neonOnTwoAudioComponent;
+	neonOffOneAudioComponent = InArgs._neonOffOneAudioComponent;
+	neonOffTwoAudioComponent = InArgs._neonOffTwoAudioComponent;
 	hoverGrowAudioComponents = InArgs._hoverGrowAudioComponents;
 	hoverShrinkAudioComponents = InArgs._hoverShrinkAudioComponents;
 	windAudioComponents = InArgs._windAudioComponents;
@@ -181,9 +200,18 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 	waterfallAudioComponents = InArgs._waterfallAudioComponents;
 	purpleLullabyAudioComponents = InArgs._purpleLullabyAudioComponents;
 	environmentAudio = InArgs._environmentAudio;
+	neon_VMUI = InArgs._neon_VMUI;
+	neonClicked_SMUI = InArgs._neonClicked_SMUI;
+	neonHoveredLit_SMUI = InArgs._neonHoveredLit_SMUI;
+	neonHoveredUnlit_SMUI = InArgs._neonHoveredUnlit_SMUI;
+	neonLit_SMUI = InArgs._neonLit_SMUI;
+	neonUnlit_SMUI = InArgs._neonUnlit_SMUI;
+	neonBarricade_SMUI = InArgs._neonBarricade_SMUI;
 
 	gameFrameColor_SB = new FSlateBrush();
 	gameFrameColor_SB->SetResourceObject(gameFrameColor_SMUI);
+	emptyImg_SB = new FSlateBrush();
+	emptyImg_SB->SetResourceObject(emptyImg_SMUI);
 
 	background_SB_1 = new FSlateBrush();
 	background_SB_1->SetResourceObject(backgroundMaterials[0]);
@@ -204,6 +232,21 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 	background_SB_9 = new FSlateBrush();
 	background_SB_9->SetResourceObject(backgroundMaterials[8]);
 
+	neon_SB = new FSlateBrush();
+	neon_SB->SetResourceObject(neon_VMUI);
+	neonClicked_SB = new FSlateBrush();
+	neonClicked_SB->SetResourceObject(neonClicked_SMUI);
+	neonHoveredLit_SB = new FSlateBrush();
+	neonHoveredLit_SB->SetResourceObject(neonHoveredLit_SMUI);
+	neonHoveredUnlit_SB = new FSlateBrush();
+	neonHoveredUnlit_SB->SetResourceObject(neonHoveredUnlit_SMUI);
+	neonLit_SB = new FSlateBrush();
+	neonLit_SB->SetResourceObject(neonLit_SMUI);
+	neonUnlit_SB = new FSlateBrush();
+	neonUnlit_SB->SetResourceObject(neonUnlit_SMUI);
+	neonBarricade_SB = new FSlateBrush();
+	neonBarricade_SB->SetResourceObject(neonBarricade_SMUI);
+
 	backgroundStuff = { background_SB_1, background_SB_2, background_SB_3, background_SB_4, background_SB_5, background_SB_6, background_SB_7, background_SB_8, background_SB_9 };
 
 	GEngine->GameViewport->GetViewportSize(viewportSize);
@@ -223,6 +266,8 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 	levelSelectorFont.Size = 0.04 * adjustedViewportSize.Y;
 	scoreFont = FCoreStyle::Get().GetFontStyle("Roboto");
 	scoreFont.Size = 0.035 * adjustedViewportSize.Y;
+	textFont = FCoreStyle::Get().GetFontStyle("Roboto");
+	textFont.Size = 0.02 * adjustedViewportSize.Y;
 	standardShadowOffset = 0.003;
 	standardOpacity = 1.0;
 	grownOpacity = 0.6;
@@ -377,6 +422,31 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 				]
 		];
 
+	neonHoveredImg = SNew(SImage)
+		.Image(emptyImg_SB);
+
+	if (currentSave->GetHardModeOn())
+	{
+		neonImg = SNew(SImage)
+			.Image(neonLit_SB);
+	}
+	else
+	{
+		neonImg = SNew(SImage)
+			.Image(neonUnlit_SB);
+	}
+
+	neonButton = SNew(SButton)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.OnPressed(this, &SSArcadeModeTitleScreen::OnNeonPressed)
+		.OnReleased(this, &SSArcadeModeTitleScreen::OnNeonReleased)
+		.OnHovered(this, &SSArcadeModeTitleScreen::OnNeonHovered)
+		.OnUnhovered(this, &SSArcadeModeTitleScreen::OnNeonUnHovered)
+		.ContentPadding(FMargin())
+		.ButtonColorAndOpacity(FLinearColor::Transparent)
+		.ButtonStyle(transparentButtonStyle);
+
 	resultsText = SNew(STextBlock)
 		.Margin(FMargin())
 		.Justification(ETextJustify::Center)
@@ -510,6 +580,90 @@ void SSArcadeModeTitleScreen::Construct(const FArguments& InArgs)
 		[
 			quitBox.ToSharedRef()
 		];
+
+	mainMenuOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			SNew(SBox)
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			.Padding(CalculateHardModePos())
+			[
+				neonHoveredImg.ToSharedRef()
+			]
+		];
+
+	mainMenuOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			SNew(SBox)
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			.Padding(CalculateHardModePos())
+			[
+				neonImg.ToSharedRef()
+			]
+		];
+
+	mainMenuOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			SNew(SBox)
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			.Padding(CalculateHardModePos())
+			[
+				neonButton.ToSharedRef()
+			]
+		];
+
+	if (currentSave->GetMaxLevel() > 5)
+	{
+		neonToolTip = SNew(SToolTip)
+			[
+				SNew(STextBlock)
+					.Text(FText::FromString("Hard Mode increases marble quantity by 10"))
+					.Font(textFont)
+					.ColorAndOpacity(FColor::Silver)
+					.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+					.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+			];
+
+		neonButton->SetEnabled(true);
+		neonButton->SetToolTip(neonToolTip);
+	}
+	else
+	{
+		neonToolTip = SNew(SToolTip)
+			[
+				SNew(STextBlock)
+					.Text(FText::FromString("Hard Mode unlocks once level 8 is beaten!"))
+					.Font(textFont)
+					.ColorAndOpacity(FColor::Silver)
+					.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+					.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+			];
+
+		neonButton->SetEnabled(false);
+
+		mainMenuOverlay->AddSlot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			[
+				SNew(SBox)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
+				.ToolTip(neonToolTip)
+				.Padding(CalculateHardModePos())
+				[
+					SNew(SImage)
+					.Image(neonBarricade_SB)
+				]
+			];
+	}
 
 	for (int a = 0; a < 14; a++)
 	{
@@ -2078,6 +2232,75 @@ void SSArcadeModeTitleScreen::OnBackFloorOneUnHovered()
 		completedOffsets.Add(standardShadowOffset);
 
 		hoverGrowAudioComponents[childrensCornerNotes[childrensCornerIndex]]->Stop();
+	}
+}
+
+void SSArcadeModeTitleScreen::OnNeonHovered()
+{
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	if (currentSave->GetHardModeOn())
+	{
+		neonHoveredImg->SetImage(neonHoveredLit_SB);
+	}
+	else
+	{
+		neonHoveredImg->SetImage(neonHoveredUnlit_SB);
+	}
+}
+void SSArcadeModeTitleScreen::OnNeonUnHovered()
+{
+	neonHoveredImg->SetImage(emptyImg_SB);
+}
+void SSArcadeModeTitleScreen::OnNeonPressed()
+{
+	neonImg->SetImage(neonClicked_SB);
+
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	if (currentSave->GetHardModeOn())
+	{
+		neonOnTwoAudioComponent->Stop();
+		neonOffOneAudioComponent->Play();
+	}
+	else
+	{
+		neonOnOneAudioComponent->Play();
+	}
+}
+void SSArcadeModeTitleScreen::OnNeonReleased()
+{
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	if (currentSave->GetHardModeOn())
+	{
+		neonImg->SetImage(neonUnlit_SB);
+		OwningHUD->SwitchHardMode(false);
+
+		neonOffTwoAudioComponent->Play();
+	}
+	else
+	{
+		neonImg->SetImage(neon_SB);
+		OwningHUD->SwitchHardMode(true);
+
+		neonOnTwoAudioComponent->Play();
+
+		/*if (neonOnTwoAudioComponent->GetSound() == nullptr)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "null");
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "maybe not null");
+		}
+
+		if (neonOnTwoAudioComponent->IsPlaying())
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "playing");
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "not playing");
+		}*/
+		//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, FString::SanitizeFloat(neonOnTwoAudioComponent->VolumeMultiplier));
 	}
 }
 

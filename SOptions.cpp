@@ -179,6 +179,7 @@ void SOptions::Construct(const FArguments& InArgs)
 	makeSave = false;
 
 	OwningHUD = InArgs._OwningHUD;
+	comingFromPauseMenu = InArgs._comingFromPauseMenu;
 	playerOnePlayerController = InArgs._playerOnePlayerController;
 	standardWorldContextObject = InArgs._standardWorldContextObject;
 	hoverGrowAudioComponents = InArgs._hoverGrowAudioComponents;
@@ -837,6 +838,64 @@ void SOptions::Construct(const FArguments& InArgs)
 			pauseMouseButton.ToSharedRef()
 		];
 
+	autoCursorBoxOne = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateLeftColumnPos(4, 6))
+		[
+			SNew(STextBlock)
+				.Justification(ETextJustify::Center)
+				.ColorAndOpacity(FColor::Orange)
+				.Font(menuFont)
+				.Text(FText::FromString("Auto Cursor"))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+		];// I will need to also create a save file variable and then display the setting according to what the save file is set to.
+
+	autoCursorCheckBox = SNew(SCheckBox)
+		.HAlign(HAlign_Fill)
+		.Padding(FMargin())
+		.Type(ESlateCheckBoxType::ToggleButton)
+		.OnCheckStateChanged(this, &SOptions::OnAutoCursorChecked);
+
+	if (currentSave->GetAutoCursorOn())
+	{
+		autoCursorCheckBox->SetIsChecked(true);
+	}
+	else
+	{
+		autoCursorCheckBox->SetIsChecked(false);
+	}
+
+	autoCursorBoxTwo = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateCheckBoxPos(4))
+		[
+			autoCursorCheckBox.ToSharedRef()
+		];
+
+	autoCursorCheckBoxBackground = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		.Padding(CalculateCheckBoxPos(4))
+		[
+			SNew(SImage)
+			.Image(gameFrameColor_SB)
+		];
+
+	autoCursorToolTip = SNew(SToolTip)
+		[
+			SNew(STextBlock)
+				.Text(FText::FromString("Enables secondary cursor which snaps to the closest intersection to the primary cursor"))
+				.Font(textFont)
+				.ColorAndOpacity(FColor::Silver)
+				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
+				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
+		];
+
+	autoCursorBoxTwo->SetToolTip(autoCursorToolTip);
+
 	frameRateCapBox = SNew(SBox)
 		.HAlign(HAlign_Fill)
 		.VAlign(VAlign_Fill)
@@ -846,7 +905,7 @@ void SOptions::Construct(const FArguments& InArgs)
 				.Justification(ETextJustify::Center)
 				.ColorAndOpacity(FColor::Orange)
 				.Font(menuFont)
-				.Text(FText::FromString("Frame Rate Cap:"))
+				.Text(FText::FromString("Frame Rate Cap"))
 				.ShadowOffset(FVector2D(adjustedViewportSize.Y * 0.003, adjustedViewportSize.Y * 0.003))
 				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
 		];
@@ -854,7 +913,7 @@ void SOptions::Construct(const FArguments& InArgs)
 	frameRateCapToolTip = SNew(SToolTip)
 		[
 			SNew(STextBlock)
-				.Text(FText::FromString("the default is 60, it is recommended, 0 is disabled"))
+				.Text(FText::FromString("The default is 60, it is recommended, 0 is disabled"))
 				.Font(textFont)
 				.ColorAndOpacity(FColor::Silver)
 				.ShadowColorAndOpacity(FLinearColor(0, 0, 0, 1))
@@ -939,6 +998,27 @@ void SOptions::Construct(const FArguments& InArgs)
 		.VAlign(VAlign_Fill)
 		[
 			pauseMouseBox.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			autoCursorBoxOne.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			autoCursorCheckBoxBackground.ToSharedRef()
+		];
+
+	controlsOverlay->AddSlot()
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			autoCursorBoxTwo.ToSharedRef()
 		];
 
 	controlsOverlay->AddSlot()
@@ -1476,7 +1556,7 @@ void SOptions::Construct(const FArguments& InArgs)
 		.Padding(CalculateCheckBoxPos(-1))
 		[
 			SNew(SImage)
-				.Image(gameFrameColor_SB)
+			.Image(gameFrameColor_SB)
 		];
 
 	resolutionBox = SNew(SBox)
@@ -1815,11 +1895,12 @@ void SOptions::Construct(const FArguments& InArgs)
 
 FReply SOptions::OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& InMouseEvent)
 {//when I calculate the pause mouse in the saveFile creation in the hud i will not need to double check if the users mouse even has that button. just set it to scroll wheel by default then give them the ability to change it in the settings
+
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	FKey inButton = InMouseEvent.GetEffectingButton();
+
 	if (replaceKey)
 	{
-		currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
-		FKey inButton = InMouseEvent.GetEffectingButton();
-
 		switch (keyToReplace)
 		{
 		case 0:
@@ -1852,17 +1933,28 @@ FReply SOptions::OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEv
 
 		replaceKey = false;
 	}
+	else
+	{
+		if (comingFromPauseMenu)
+		{
+			if (inButton == currentSave->GetPauseMouse())
+			{
+				OwningHUD->PrepDestroyPauseScreen();
+				OwningHUD->DestroyOptionsMenu();
+			}
+		}
+	}
 
 	return FReply::Handled();
 }
 
 FReply SOptions::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent)
 {
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	FKey inKey = InKeyEvent.GetKey();
+
 	if (replaceKey)
 	{
-		currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
-		FKey inKey = InKeyEvent.GetKey();
-
 		switch (keyToReplace)
 		{
 		case 0:
@@ -1894,6 +1986,19 @@ FReply SOptions::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEv
 		}
 
 		replaceKey = false;
+	}
+	else
+	{
+		if (comingFromPauseMenu)
+		{
+			currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+
+			if (inKey == currentSave->GetPauseKey())
+			{
+				OwningHUD->PrepDestroyPauseScreen();
+				OwningHUD->DestroyOptionsMenu();
+			}
+		}
 	}
 
 	return FReply::Handled();
@@ -3171,11 +3276,52 @@ void SOptions::OnSongCreditOneReleased()
 	case 1:
 		songAudioComponents[songPlayingIndex]->Stop();
 
+		for (int a = 0; a < songAudioComponents.Num(); a++)
+		{
+			if (songCycles[a] == 1 && a != 0)
+			{
+				switch (a)
+				{
+				case 0:
+					creditTextOne->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 1:
+					creditTextTwo->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 2:
+					creditTextThree->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 3:
+					creditTextFour->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 4:
+					creditTextFive->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 5:
+					creditTextSix->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 6:
+					creditTextSeven->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 7:
+					creditTextEight->SetColorAndOpacity(songTextColors[0]);
+					break;
+				default:
+					break;
+				}
+
+				OwningHUD->songCycles[a] = 0;
+				songCycles[a] = 0;
+			}
+		}
+
 		songPlayingIndex = i;
 		OwningHUD->songPlaying = true;
 		OwningHUD->songPlayingIndex = songPlayingIndex;
 		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->SetPaused(false);
 		songAudioComponents[i]->Play();
+		OwningHUD->UpdateGameSongInfo(i);
 
 		creditTextOne->SetColorAndOpacity(songTextColors[1]);
 		break;
@@ -3223,11 +3369,52 @@ void SOptions::OnSongCreditTwoReleased()
 	case 1:
 		songAudioComponents[songPlayingIndex]->Stop();
 
+		for (int a = 0; a < songAudioComponents.Num(); a++)
+		{
+			if (songCycles[a] == 1 && a != 1)
+			{
+				switch (a)
+				{
+				case 0:
+					creditTextOne->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 1:
+					creditTextTwo->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 2:
+					creditTextThree->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 3:
+					creditTextFour->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 4:
+					creditTextFive->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 5:
+					creditTextSix->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 6:
+					creditTextSeven->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 7:
+					creditTextEight->SetColorAndOpacity(songTextColors[0]);
+					break;
+				default:
+					break;
+				}
+
+				OwningHUD->songCycles[a] = 0;
+				songCycles[a] = 0;
+			}
+		}
+
 		songPlayingIndex = i;
 		OwningHUD->songPlaying = true;
 		OwningHUD->songPlayingIndex = songPlayingIndex;
 		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->SetPaused(false);
 		songAudioComponents[i]->Play();
+		OwningHUD->UpdateGameSongInfo(i);
 
 		creditTextTwo->SetColorAndOpacity(songTextColors[1]);
 		break;
@@ -3275,11 +3462,52 @@ void SOptions::OnSongCreditThreeReleased()
 	case 1:
 		songAudioComponents[songPlayingIndex]->Stop();
 
+		for (int a = 0; a < songAudioComponents.Num(); a++)
+		{
+			if (songCycles[a] == 1 && a != 2)
+			{
+				switch (a)
+				{
+				case 0:
+					creditTextOne->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 1:
+					creditTextTwo->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 2:
+					creditTextThree->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 3:
+					creditTextFour->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 4:
+					creditTextFive->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 5:
+					creditTextSix->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 6:
+					creditTextSeven->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 7:
+					creditTextEight->SetColorAndOpacity(songTextColors[0]);
+					break;
+				default:
+					break;
+				}
+
+				OwningHUD->songCycles[a] = 0;
+				songCycles[a] = 0;
+			}
+		}
+
 		songPlayingIndex = i;
 		OwningHUD->songPlaying = true;
 		OwningHUD->songPlayingIndex = songPlayingIndex;
 		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->SetPaused(false);
 		songAudioComponents[i]->Play();
+		OwningHUD->UpdateGameSongInfo(i);
 
 		creditTextThree->SetColorAndOpacity(songTextColors[1]);
 		break;
@@ -3327,11 +3555,52 @@ void SOptions::OnSongCreditFourReleased()
 	case 1:
 		songAudioComponents[songPlayingIndex]->Stop();
 
+		for (int a = 0; a < songAudioComponents.Num(); a++)
+		{
+			if (songCycles[a] == 1 && a != 3)
+			{
+				switch (a)
+				{
+				case 0:
+					creditTextOne->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 1:
+					creditTextTwo->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 2:
+					creditTextThree->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 3:
+					creditTextFour->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 4:
+					creditTextFive->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 5:
+					creditTextSix->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 6:
+					creditTextSeven->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 7:
+					creditTextEight->SetColorAndOpacity(songTextColors[0]);
+					break;
+				default:
+					break;
+				}
+
+				OwningHUD->songCycles[a] = 0;
+				songCycles[a] = 0;
+			}
+		}
+
 		songPlayingIndex = i;
 		OwningHUD->songPlaying = true;
 		OwningHUD->songPlayingIndex = songPlayingIndex;
 		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->SetPaused(false);
 		songAudioComponents[i]->Play();
+		OwningHUD->UpdateGameSongInfo(i);
 
 		creditTextFour->SetColorAndOpacity(songTextColors[1]);
 		break;
@@ -3379,11 +3648,52 @@ void SOptions::OnSongCreditFiveReleased()
 	case 1:
 		songAudioComponents[songPlayingIndex]->Stop();
 
+		for (int a = 0; a < songAudioComponents.Num(); a++)
+		{
+			if (songCycles[a] == 1 && a != 4)
+			{
+				switch (a)
+				{
+				case 0:
+					creditTextOne->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 1:
+					creditTextTwo->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 2:
+					creditTextThree->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 3:
+					creditTextFour->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 4:
+					creditTextFive->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 5:
+					creditTextSix->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 6:
+					creditTextSeven->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 7:
+					creditTextEight->SetColorAndOpacity(songTextColors[0]);
+					break;
+				default:
+					break;
+				}
+
+				OwningHUD->songCycles[a] = 0;
+				songCycles[a] = 0;
+			}
+		}
+
 		songPlayingIndex = i;
 		OwningHUD->songPlaying = true;
 		OwningHUD->songPlayingIndex = songPlayingIndex;
 		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->SetPaused(false);
 		songAudioComponents[i]->Play();
+		OwningHUD->UpdateGameSongInfo(i);
 
 		creditTextFive->SetColorAndOpacity(songTextColors[1]);
 		break;
@@ -3431,11 +3741,52 @@ void SOptions::OnSongCreditSixReleased()
 	case 1:
 		songAudioComponents[songPlayingIndex]->Stop();
 
+		for (int a = 0; a < songAudioComponents.Num(); a++)
+		{
+			if (songCycles[a] == 1 && a != 5)
+			{
+				switch (a)
+				{
+				case 0:
+					creditTextOne->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 1:
+					creditTextTwo->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 2:
+					creditTextThree->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 3:
+					creditTextFour->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 4:
+					creditTextFive->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 5:
+					creditTextSix->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 6:
+					creditTextSeven->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 7:
+					creditTextEight->SetColorAndOpacity(songTextColors[0]);
+					break;
+				default:
+					break;
+				}
+
+				OwningHUD->songCycles[a] = 0;
+				songCycles[a] = 0;
+			}
+		}
+
 		songPlayingIndex = i;
 		OwningHUD->songPlaying = true;
 		OwningHUD->songPlayingIndex = songPlayingIndex;
 		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->SetPaused(false);
 		songAudioComponents[i]->Play();
+		OwningHUD->UpdateGameSongInfo(i);
 
 		creditTextSix->SetColorAndOpacity(songTextColors[1]);
 		break;
@@ -3483,11 +3834,52 @@ void SOptions::OnSongCreditSevenReleased()
 	case 1:
 		songAudioComponents[songPlayingIndex]->Stop();
 
+		for (int a = 0; a < songAudioComponents.Num(); a++)
+		{
+			if (songCycles[a] == 1 && a != 6)
+			{
+				switch (a)
+				{
+				case 0:
+					creditTextOne->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 1:
+					creditTextTwo->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 2:
+					creditTextThree->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 3:
+					creditTextFour->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 4:
+					creditTextFive->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 5:
+					creditTextSix->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 6:
+					creditTextSeven->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 7:
+					creditTextEight->SetColorAndOpacity(songTextColors[0]);
+					break;
+				default:
+					break;
+				}
+
+				OwningHUD->songCycles[a] = 0;
+				songCycles[a] = 0;
+			}
+		}
+
 		songPlayingIndex = i;
 		OwningHUD->songPlaying = true;
 		OwningHUD->songPlayingIndex = songPlayingIndex;
 		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->SetPaused(false);
 		songAudioComponents[i]->Play();
+		OwningHUD->UpdateGameSongInfo(i);
 
 		creditTextSeven->SetColorAndOpacity(songTextColors[1]);
 		break;
@@ -3535,13 +3927,55 @@ void SOptions::OnSongCreditEightReleased()
 	case 1:
 		songAudioComponents[songPlayingIndex]->Stop();
 
+		for (int a = 0; a < songAudioComponents.Num(); a++)
+		{
+			if (songCycles[a] == 1 && a != 7)
+			{
+				switch (a)
+				{
+				case 0:
+					creditTextOne->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 1:
+					creditTextTwo->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 2:
+					creditTextThree->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 3:
+					creditTextFour->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 4:
+					creditTextFive->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 5:
+					creditTextSix->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 6:
+					creditTextSeven->SetColorAndOpacity(songTextColors[0]);
+					break;
+				case 7:
+					creditTextEight->SetColorAndOpacity(songTextColors[0]);
+					break;
+				default:
+					break;
+				}
+
+				OwningHUD->songCycles[a] = 0;
+				songCycles[a] = 0;
+			}
+		}
+
 		songPlayingIndex = i;
 		OwningHUD->songPlaying = true;
 		OwningHUD->songPlayingIndex = songPlayingIndex;
 		OwningHUD->songCycles[i] = 1;
+		songAudioComponents[i]->SetPaused(false);
 		songAudioComponents[i]->Play();
+		OwningHUD->UpdateGameSongInfo(i);
 
 		creditTextEight->SetColorAndOpacity(songTextColors[1]);
+
 		break;
 	case 2:
 		OwningHUD->ToggleSong(i);
@@ -3909,6 +4343,32 @@ void SOptions::OnSFXCommitted(const FText& InText, const ETextCommit::Type InTex
 	else
 	{
 		sfxEditableTextBox->SetText(FText::FromString(FString::FromInt(currentSave->GetSFX())));
+	}
+}
+
+void SOptions::OnAutoCursorChecked(ECheckBoxState InState)
+{
+	if (InState == ECheckBoxState::Checked)
+	{
+		currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+		currentSave->SetAutoCursorOn(true);
+		UGameplayStatics::SaveGameToSlot(currentSave, TEXT("saveGameOne"), 0);
+
+		if (comingFromPauseMenu)
+		{
+			OwningHUD->EngageAutoCursorInGame(true);
+		}
+	}
+	else if (InState == ECheckBoxState::Unchecked)
+	{
+		currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+		currentSave->SetAutoCursorOn(false);
+		UGameplayStatics::SaveGameToSlot(currentSave, TEXT("saveGameOne"), 0);
+
+		if (comingFromPauseMenu)
+		{
+			OwningHUD->EngageAutoCursorInGame(false);
+		}
 	}
 }
 

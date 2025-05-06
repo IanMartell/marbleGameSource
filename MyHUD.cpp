@@ -17,6 +17,11 @@
 #include "SPauseScreen.h"
 #include "SResultsBlur.h"
 #include "STestWidgetThree.h"
+#include "SMediaPrecacheOperation.h"
+#include "SLoadingSplash.h"
+#include "MyPlayerController.h"
+
+//D:\epicGames\UE_5.4\Engine\Source\ThirdParty\Steamworks\Steamv157\sdk\public\steam\steam_api.h
 //#include "Engine/Classes/Materials/Material.h"
 
 FVector2D GetGameViewportSize()
@@ -1541,10 +1546,10 @@ AMyHUD::AMyHUD()
 	}
 }
 
-void AMyHUD::PreLoadCurtains()
+/*void AMyHUD::PreLoadCurtains()
 {
 	curtains_MP->OpenSource(curtains_IS);
-}
+}*/
 
 void AMyHUD::SaveGame(int maxLevel, TArray <int> highscores, int highscoreDataOne, int highscoreDataTwo, int scoreThisGame)
 {
@@ -1637,6 +1642,15 @@ void AMyHUD::UpdateSongArr()
 	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
 }
 
+void AMyHUD::UpdateGameSongInfo(int song)
+{
+	if (inGame)
+	{
+		gameSlateWidget->songPlaying = true;
+		gameSlateWidget->songPlayingIndex = song;
+	}
+}
+
 void AMyHUD::ToggleSong(int songToToggle)
 {
 	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
@@ -1663,6 +1677,30 @@ void AMyHUD::ToggleSong(int songToToggle)
 	saveFile->SetSongIndexArr(tempSongIndexArr);
 
 	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
+}
+
+void AMyHUD::MakeAchievement(int maxLevel)
+{
+	AMyPlayerController* myPlayer = Cast<AMyPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	myPlayer->CauseAchievement(maxLevel);
+}
+
+void AMyHUD::SwitchHardMode(bool newBool)
+{
+	USaveGameOne* saveFile = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	saveFile->SetHardModeOn(newBool);
+	UGameplayStatics::SaveGameToSlot(saveFile, TEXT("saveGameOne"), 0);
+	
+	if (newBool)
+	{
+		quantityOfMarblesToSpawn = 40;
+		neon_MP->OpenSource(neon_IS);
+	}
+	else 
+	{
+		neon_MP->Close();
+		quantityOfMarblesToSpawn = 30;
+	}
 }
 
 void AMyHUD::CommitMaster(int newVol)/*so the only math i havent vetted is how the masterCoefficient is going to interact with the subCoefficients.when masters 50 will changing sfx from 100 to 50 halve the volume by ear similarly enough to how setting master as 50 from 100 did ? should do, needs testing
@@ -1721,10 +1759,10 @@ you need to check if the playgame function in the gameSlateWidget works once you
 
 	songOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.6 * (double)musicCoefficient) - (double)((double)((double)((double)0.6 * (double)musicCoefficient) - ((double)0.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.6));
 	songTwoAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.6 * (double)musicCoefficient) - (double)((double)((double)((double)0.6 * (double)musicCoefficient) - ((double)0.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.6));
-	songThreeAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.2 * (double)musicCoefficient) - (double)((double)((double)((double)0.2 * (double)musicCoefficient) - ((double)0.2 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.2));
+	songThreeAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)musicCoefficient) - (double)((double)((double)((double)1.0 * (double)musicCoefficient) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)1.0));
 	songFourAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)musicCoefficient) - (double)((double)((double)((double)1.0 * (double)musicCoefficient) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)1.0));
-	songFiveAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)musicCoefficient) - (double)((double)((double)((double)1.0 * (double)musicCoefficient) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)1.0));
-	songSixAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)musicCoefficient) - (double)((double)((double)((double)0.5 * (double)musicCoefficient) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.5));
+	songFiveAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)musicCoefficient) - (double)((double)((double)((double)0.5 * (double)musicCoefficient) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.5));
+	songSixAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.3 * (double)musicCoefficient) - (double)((double)((double)((double)0.3 * (double)musicCoefficient) - ((double)0.3 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.3));
 	songSevenAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.8 * (double)musicCoefficient) - (double)((double)((double)((double)0.8 * (double)musicCoefficient) - ((double)0.8 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.8));
 	songEightAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.2 * (double)musicCoefficient) - (double)((double)((double)((double)0.2 * (double)musicCoefficient) - ((double)0.2 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.2));
 
@@ -1748,6 +1786,12 @@ you need to check if the playgame function in the gameSlateWidget works once you
 	curtainOpeningAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)4.0 * (double)sfxCoefficientFive) - (double)((double)((double)((double)4.0 * (double)sfxCoefficientFive) - ((double)4.0 * (double)destinationCoefficient)) * (double)((double)1 - (double)masterCoefficientSFive))) * (double)i, (double)0.001, (double)4.0));
 
 	missAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.6 * (double)sfxCoefficientSix) - (double)((double)((double)((double)1.6 * (double)sfxCoefficientSix) - ((double)1.6 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientSSix))) * (double)i, (double)0.001, (double)1.6));
+
+	neonAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOnOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOnTwoAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOffOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOffTwoAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
 
 	for (int a = 0; a < 3; a++)
 	{
@@ -1803,10 +1847,10 @@ void AMyHUD::CommitMusic(int newVol)
 
 	songOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.6 * (double)masterCoefficientM) - (double)((double)((double)((double)0.6 * (double)masterCoefficientM) - ((double)0.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)musicCoefficient))) * (double)g, (double)0.001, (double)0.6));
 	songTwoAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.6 * (double)masterCoefficientM) - (double)((double)((double)((double)0.6 * (double)masterCoefficientM) - ((double)0.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)musicCoefficient))) * (double)g, (double)0.001, (double)0.6));
-	songThreeAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.2 * (double)masterCoefficientM) - (double)((double)((double)((double)0.2 * (double)masterCoefficientM) - ((double)0.2 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)musicCoefficient))) * (double)g, (double)0.001, (double)0.2));
+	songThreeAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)masterCoefficientM) - (double)((double)((double)((double)1.0 * (double)masterCoefficientM) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)musicCoefficient))) * (double)g, (double)0.001, (double)1.0));
 	songFourAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)masterCoefficientM) - (double)((double)((double)((double)1.0 * (double)masterCoefficientM) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)musicCoefficient))) * (double)g, (double)0.001, (double)1.0));
-	songFiveAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)masterCoefficientM) - (double)((double)((double)((double)1.0 * (double)masterCoefficientM) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)musicCoefficient))) * (double)g, (double)0.001, (double)1.0));
-	songSixAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)masterCoefficientM) - (double)((double)((double)((double)0.5 * (double)masterCoefficientM) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)musicCoefficient))) * (double)g, (double)0.001, (double)0.5));
+	songFiveAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)masterCoefficientM) - (double)((double)((double)((double)0.5 * (double)masterCoefficientM) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)musicCoefficient))) * (double)g, (double)0.001, (double)0.5));
+	songSixAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.3 * (double)masterCoefficientM) - (double)((double)((double)((double)0.3 * (double)masterCoefficientM) - ((double)0.3 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)musicCoefficient))) * (double)g, (double)0.001, (double)0.3));
 	songSevenAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.8 * (double)masterCoefficientM) - (double)((double)((double)((double)0.8 * (double)masterCoefficientM) - ((double)0.8 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)musicCoefficient))) * (double)g, (double)0.001, (double)0.8));
 	songEightAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.2 * (double)masterCoefficientM) - (double)((double)((double)((double)0.2 * (double)masterCoefficientM) - ((double)0.2 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)musicCoefficient))) * (double)g, (double)0.001, (double)0.2));
 
@@ -1910,6 +1954,12 @@ void AMyHUD::CommitSFX(int newVol)
 
 	missAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.6 * (double)masterCoefficientSSix) - (double)((double)((double)((double)1.6 * (double)masterCoefficientSSix) - ((double)1.6 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)sfxCoefficientSix))) * (double)i, (double)0.001, (double)1.6));
 
+	neonAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)masterCoefficientSOne) - (double)((double)((double)((double)1.0 * (double)masterCoefficientSOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOnOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)masterCoefficientSOne) - (double)((double)((double)((double)1.0 * (double)masterCoefficientSOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOnTwoAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)masterCoefficientSOne) - (double)((double)((double)((double)1.0 * (double)masterCoefficientSOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOffOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)masterCoefficientSOne) - (double)((double)((double)((double)1.0 * (double)masterCoefficientSOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOffTwoAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)masterCoefficientSOne) - (double)((double)((double)((double)1.0 * (double)masterCoefficientSOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)sfxCoefficientOne))) * (double)i, (double)0.001, (double)1.0));
+
 	for (int a = 0; a < 3; a++)
 	{
 		scoringAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)3.0 * (double)sfxCoefficientSeven) - (double)((double)((double)((double)3.0 * (double)sfxCoefficientSeven) - ((double)3.0 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientSSeven))) * (double)i, (double)0.001, (double)3.0));
@@ -1930,6 +1980,52 @@ void AMyHUD::CommitSFX(int newVol)
 void AMyHUD::BeginPlay()
 {
 	Super::BeginPlay();
+
+	playerOnePlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	AMyPlayerController* myPlayer = Cast<AMyPlayerController>(playerOnePlayerController);
+
+	neon_MP = myPlayer->GetNeon_MP();
+	neon_IS = myPlayer->GetNeon_IS();
+	neon_VMUI = myPlayer->GetNeon_VMUI();
+	neonClicked_SMUI = myPlayer->GetNeonClicked_SMUI();
+	neonHoveredLit_SMUI = myPlayer->GetNeonHoveredLit_SMUI();
+	neonHoveredUnlit_SMUI = myPlayer->GetNeonHoveredUnlit_SMUI();
+	neonLit_SMUI = myPlayer->GetNeonLit_SMUI();
+	neonUnlit_SMUI = myPlayer->GetNeonUnlit_SMUI();
+	neonAudioComponent = myPlayer->GetNeonAudioComponent();
+	neonOnOneAudioComponent = myPlayer->GetNeonOnOneAudioComponent();
+	neonOnTwoAudioComponent = myPlayer->GetNeonOnTwoAudioComponent();
+	neonOffOneAudioComponent = myPlayer->GetNeonOffOneAudioComponent();
+	neonOffTwoAudioComponent = myPlayer->GetNeonOffTwoAudioComponent();
+	neonBarricade_SMUI = myPlayer->GetNeonBarricade_SMUI();
+	focusCursor_SMUI = myPlayer->GetFocusCursor_SMUI();
+	logo_SMUI = myPlayer->GetLogo_SMUI();
+	neon = myPlayer->GetNeon();
+	neonOnOne = myPlayer->GetNeonOnOne();
+	neonOnTwo = myPlayer->GetNeonOnTwo();
+	neonOffOne = myPlayer->GetNeonOffOne();
+	neonOffTwo = myPlayer->GetNeonOffTwo();
+
+	neonAudioComponent->SetVolumeMultiplier(0);
+	neonAudioComponent->bAutoDestroy = false;
+	neonAudioComponent->SetSound(neon);
+
+	neonOnOneAudioComponent->SetVolumeMultiplier(0);
+	neonOnOneAudioComponent->bAutoDestroy = false;
+	neonOnOneAudioComponent->SetSound(neonOnOne);
+
+	neonOnTwoAudioComponent->SetVolumeMultiplier(0);
+	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, FString::SanitizeFloat(neonOnTwoAudioComponent->VolumeMultiplier));
+	neonOnTwoAudioComponent->bAutoDestroy = false;
+	neonOnTwoAudioComponent->SetSound(neonOnTwo);
+
+	neonOffOneAudioComponent->SetVolumeMultiplier(0);
+	neonOffOneAudioComponent->bAutoDestroy = false;
+	neonOffOneAudioComponent->SetSound(neonOffOne);
+
+	neonOffTwoAudioComponent->SetVolumeMultiplier(0);
+	neonOffTwoAudioComponent->bAutoDestroy = false;
+	neonOffTwoAudioComponent->SetSound(neonOffTwo);
 
 	missAudioComponent->Stop();
 
@@ -1970,6 +2066,12 @@ void AMyHUD::BeginPlay()
 	rainstickAudioComponent->Stop();
 
 	shovelingDirtAudioComponent->Stop();
+
+	neonAudioComponent->Stop();
+	neonOnOneAudioComponent->Stop();
+	neonOnTwoAudioComponent->Stop();
+	neonOffOneAudioComponent->Stop();
+	neonOffTwoAudioComponent->Stop();
 
 	for (int a = 0; a < 8; a++)
 	{
@@ -2020,11 +2122,17 @@ void AMyHUD::BeginPlay()
 		LoadGameInstance->SetSongIndexArr(newSongIndexArr);
 		LoadGameInstance->SetSongCycles({ 0, 0, 0, 0, 0, 0, 0, 0 });
 		LoadGameInstance->SetGamma(2.2);
+		LoadGameInstance->SetHardModeOn(false);
+		LoadGameInstance->SetAutoCursorOn(true);
 		UGameplayStatics::SaveGameToSlot(LoadGameInstance, TEXT("saveGameOne"), 0);
 	}
 
-	/*
-	UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
+	//I need to test what happens if I add a new variable to my save file and then try to access it without initializing it. This is what the consumers will experience unless you add additional architecture to check if the new variables have been initialized in their system everytime the game opens. Maybe such a thing is necessary
+	// in my tests adding a new variable to my save file and then try to access it without initializing it from an existing load does not cause an error. maybe this is only my machine but doing so seems to cause the compiler to assign an arbitrary default value even for an FString. maybe this only works with certain data types, and maybe this will not work for the consumers fully built packages, but it may not be necessary to instigate safety measures
+	//so your thinking you should write a new variable into the saveGameOne object and then check your current loadGameFromSlot against a newly generate createSaveGameObject to see if variables written into ancestor classes penetrate already extant desendant objects and if so to what extent. 
+	//noticed a glitch in my current project where the neon sound effects aren't playing properly
+	
+	/*UGameUserSettings* Settings = UGameUserSettings::GetGameUserSettings();
 	Settings->SetFrameRateLimit(60);
 	Settings->ApplySettings(true);
 	
@@ -2038,7 +2146,7 @@ void AMyHUD::BeginPlay()
 	}
 
 	USaveGameOne* adjustedSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
-	adjustedSave->SetMaxLevel(8);
+	adjustedSave->SetMaxLevel(5);
 	adjustedSave->SetHighscores({ 0, 0, 0 });
 	adjustedSave->SetHighscoreDataOne(0);
 	adjustedSave->SetHighscoreDataTwo(0);
@@ -2057,6 +2165,8 @@ void AMyHUD::BeginPlay()
 	adjustedSave->SetSongIndexArr(newSongIndexArr);
 	adjustedSave->SetSongCycles({ 0, 0, 0, 0, 0, 0, 0, 0 });
 	adjustedSave->SetGamma(2.2);
+	adjustedSave->SetHardModeOn(false);
+	adjustedSave->SetAutoCursorOn(true);
 	UGameplayStatics::SaveGameToSlot(adjustedSave, TEXT("saveGameOne"), 0);*/
 	//adjustedSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(adjustedSave->SaveSlotName, 0));//is this gonna be a problem? do I need to get the actual default adjustedSave->SaveSlotName and the actual adjustedSave->UserIndex?
 
@@ -2121,10 +2231,10 @@ void AMyHUD::BeginPlay()
 
 	songOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.6 * (double)musicCoefficient) - (double)((double)((double)((double)0.6 * (double)musicCoefficient) - ((double)0.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.6));
 	songTwoAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.6 * (double)musicCoefficient) - (double)((double)((double)((double)0.6 * (double)musicCoefficient) - ((double)0.6 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.6));
-	songThreeAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.2 * (double)musicCoefficient) - (double)((double)((double)((double)0.2 * (double)musicCoefficient) - ((double)0.2 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.2));
+	songThreeAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)musicCoefficient) - (double)((double)((double)((double)1.0 * (double)musicCoefficient) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)1.0));
 	songFourAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)musicCoefficient) - (double)((double)((double)((double)1.0 * (double)musicCoefficient) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)1.0));
-	songFiveAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)musicCoefficient) - (double)((double)((double)((double)1.0 * (double)musicCoefficient) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)1.0));
-	songSixAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)musicCoefficient) - (double)((double)((double)((double)0.5 * (double)musicCoefficient) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.5));
+	songFiveAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.5 * (double)musicCoefficient) - (double)((double)((double)((double)0.5 * (double)musicCoefficient) - ((double)0.5 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.5));
+	songSixAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.3 * (double)musicCoefficient) - (double)((double)((double)((double)0.3 * (double)musicCoefficient) - ((double)0.3 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.3));
 	songSevenAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.8 * (double)musicCoefficient) - (double)((double)((double)((double)0.8 * (double)musicCoefficient) - ((double)0.8 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.8));
 	songEightAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)0.2 * (double)musicCoefficient) - (double)((double)((double)((double)0.2 * (double)musicCoefficient) - ((double)0.2 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientM))) * (double)g, (double)0.001, (double)0.2));
 
@@ -2149,6 +2259,12 @@ void AMyHUD::BeginPlay()
 
 	missAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.6 * (double)sfxCoefficientSix) - (double)((double)((double)((double)1.6 * (double)sfxCoefficientSix) - ((double)1.6 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientSSix))) * (double)i, (double)0.001, (double)1.6));
 
+	neonAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOnOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOnTwoAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOffOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOffTwoAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+
 	for (int a = 0; a < 3; a++)
 	{
 		scoringAudioComponents[a]->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)3.0 * (double)sfxCoefficientSeven) - (double)((double)((double)((double)3.0 * (double)sfxCoefficientSeven) - ((double)3.0 * (double)destinationCoefficientThree)) * (double)((double)1 - (double)masterCoefficientSSeven))) * (double)i, (double)0.001, (double)3.0));
@@ -2161,45 +2277,603 @@ void AMyHUD::BeginPlay()
 	songPlaying = false;
 	songPlayingIndex = 0;
 
+	if (referenceInstance->GetHardModeOn())
+	{
+		quantityOfMarblesToSpawn = 42;
+	}
+	else
+	{
+		quantityOfMarblesToSpawn = 30;
+	}
+
+	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "from code");
+
 	if (GEngine && GEngine->GameViewport)
 	{
-		playerOnePlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
 		if (GetWorld() != NULL) // is this going to create a crash?
 		{
 			standardWorldContextObject = GetWorld();//do I actually need this?! its being used before its being initialized wtf?
 		} // if it is null then what would happen??
 
-		/*UGameUserSettings* MyGameSettings = GEngine->GetGameUserSettings();
-		MyGameSettings->SetFullscreenMode(EWindowMode::Fullscreen);
-		MyGameSettings->ApplySettings(true);*/
-
-		splashScreenSlateWidget = SNew(SCompanySplash)
+		loadingSlateWidget = SNew(SLoadingSplash)
 			.OwningHUD(this)
-			.goodUseSplashBootNoGrass_SMUI(goodUseSplashBootNoGrass_SMUI)
-			.goodUseSplashGrass_SMUI(goodUseSplashGrass_SMUI)
-			.goodUseDigitalText_SMUI(goodUseDigitalText_SMUI)
-			.splashGrassArr(splashGrassArr)
-			.splashBootArr(splashBootArr)
 			.black_SMUI(black_SMUI)
-			.shovelingDirtAudioComponent(shovelingDirtAudioComponent);
+			.logo_SMUI(logo_SMUI);
 
-		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerSeven, SWeakWidget).PossiblyNullContent(splashScreenSlateWidget.ToSharedRef()));
-
-		FInputModeUIOnly splashScreenInputMode = FInputModeUIOnly();//Im getting an error in the unreal engine log. do I need to set canSupportFocus within the widget before calling this? whichever one of these is causing the error I might as well just comment it out for the time being
-		splashScreenInputMode.SetWidgetToFocus(splashScreenSlateWidget);
-		splashScreenInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
-		//mainMenuInputMode.SetHideCursorDuringCapture(false);
-		playerOnePlayerController->SetInputMode(splashScreenInputMode);
-		playerOnePlayerController->SetShowMouseCursor(true);
-		FSlateApplication::Get().SetKeyboardFocus(splashScreenSlateWidget);
+		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerTen, SWeakWidget));
+		GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerEleven, SWeakWidget).PossiblyNullContent(loadingSlateWidget.ToSharedRef()));
 	}
+}
+
+void AMyHUD::HideLogoSplash()
+{
+	loadingSlateWidget->SetOperateFour(true);
+}
+
+void AMyHUD::EngageMediaPrecacheOperation()
+{
+	precacheSlateWidget = SNew(SMediaPrecacheOperation)
+		.OwningHUD(this)
+		/*.grass_IS_1(grass_IS_1)
+		.grass_IS_2(grass_IS_2)
+		.grass_IS_3(grass_IS_3)
+		.pondHorizontal_IS(pondHorizontal_IS)
+		.pondVerticleFlowingLeft_IS(pondVerticleFlowingLeft_IS)
+		.pondVerticleFlowingRight_IS(pondVerticleFlowingRight_IS)
+		.riverFlowingDown_IS_1(riverFlowingDown_IS_1)
+		.riverFlowingDown_IS_2(riverFlowingDown_IS_2)
+		.riverFlowingDown_IS_3(riverFlowingDown_IS_3)
+		.riverFlowingLeft_IS_1(riverFlowingLeft_IS_1)
+		.riverFlowingLeft_IS_2(riverFlowingLeft_IS_2)
+		.riverFlowingLeft_IS_3(riverFlowingLeft_IS_3)
+		.riverFlowingRight_IS_1(riverFlowingRight_IS_1)
+		.riverFlowingRight_IS_2(riverFlowingRight_IS_2)
+		.riverFlowingRight_IS_3(riverFlowingRight_IS_3)
+		.tree_IS_1(tree_IS_1)
+		.tree_IS_2(tree_IS_2)
+		.tree_IS_3(tree_IS_3)
+		.tree_IS_4(tree_IS_4)
+		.tree_IS_5(tree_IS_5)
+		.waterfall_IS(waterfall_IS)
+		.riverTurning_IS_1(riverTurning_IS_1)
+		.riverTurning_IS_2(riverTurning_IS_2)
+		.riverTurning_IS_3(riverTurning_IS_3)
+		.riverTurning_IS_4(riverTurning_IS_4)
+		.mountain_IS_1(mountain_IS_1)
+		.holeFromDown_IS(holeFromDown_IS)
+		.holeFromLeft_IS(holeFromLeft_IS)
+		.holeFromRight_IS(holeFromRight_IS)
+		.holeFromUp_IS(holeFromUp_IS)
+		.flag_IS_1(flag_IS_1)
+		.flag_IS_2(flag_IS_2)
+		.flag_IS_3(flag_IS_3)
+		.flag_IS_4(flag_IS_4)
+		.flag_IS_5(flag_IS_5)
+		.flag_IS_6(flag_IS_6)
+		.flag_IS_7(flag_IS_7)
+		.flag_IS_8(flag_IS_8)
+		.flag_IS_9(flag_IS_9)
+		.flag_IS_10(flag_IS_10)
+		.flag_IS_11(flag_IS_11)
+		.flag_IS_12(flag_IS_12)
+		.flag_IS_13(flag_IS_13)
+		.flag_IS_14(flag_IS_14)
+		.flag_IS_15(flag_IS_15)
+		.flag_IS_16(flag_IS_16)
+		.curtains_IS(curtains_IS)
+		.neon_IS(neon_IS)
+		.grass_MP_1(grass_MP_1)
+		.grass_MP_2(grass_MP_2)
+		.grass_MP_3(grass_MP_3)
+		.pondHorizontal_MP(pondHorizontal_MP)
+		.pondVerticleFlowingLeft_MP(pondVerticleFlowingLeft_MP)
+		.pondVerticleFlowingRight_MP(pondVerticleFlowingRight_MP)
+		.riverFlowingDown_MP_1(riverFlowingDown_MP_1)
+		.riverFlowingDown_MP_2(riverFlowingDown_MP_2)
+		.riverFlowingDown_MP_3(riverFlowingDown_MP_3)
+		.riverFlowingLeft_MP_1(riverFlowingLeft_MP_1)
+		.riverFlowingLeft_MP_2(riverFlowingLeft_MP_2)
+		.riverFlowingLeft_MP_3(riverFlowingLeft_MP_3)
+		.riverFlowingRight_MP_1(riverFlowingRight_MP_1)
+		.riverFlowingRight_MP_2(riverFlowingRight_MP_2)
+		.riverFlowingRight_MP_3(riverFlowingRight_MP_3)
+		.tree_MP_1(tree_MP_1)
+		.tree_MP_2(tree_MP_2)
+		.tree_MP_3(tree_MP_3)
+		.tree_MP_4(tree_MP_4)
+		.tree_MP_5(tree_MP_5)
+		.waterfall_MP(waterfall_MP)
+		.riverTurning_MP_1(riverTurning_MP_1)
+		.riverTurning_MP_2(riverTurning_MP_2)
+		.riverTurning_MP_3(riverTurning_MP_3)
+		.riverTurning_MP_4(riverTurning_MP_4)
+		.mountain_MP_1(mountain_MP_1)
+		.holeFromDown_MP(holeFromDown_MP)
+		.holeFromLeft_MP(holeFromLeft_MP)
+		.holeFromRight_MP(holeFromRight_MP)
+		.holeFromUp_MP(holeFromUp_MP)
+		.flag_MP_1(flag_MP_1)
+		.flag_MP_2(flag_MP_2)
+		.flag_MP_3(flag_MP_3)
+		.flag_MP_4(flag_MP_4)
+		.flag_MP_5(flag_MP_5)
+		.flag_MP_6(flag_MP_6)
+		.flag_MP_7(flag_MP_7)
+		.flag_MP_8(flag_MP_8)
+		.flag_MP_9(flag_MP_9)
+		.flag_MP_10(flag_MP_10)
+		.flag_MP_11(flag_MP_11)
+		.flag_MP_12(flag_MP_12)
+		.flag_MP_13(flag_MP_13)
+		.flag_MP_14(flag_MP_14)
+		.flag_MP_15(flag_MP_15)
+		.flag_MP_16(flag_MP_16)
+		.curtains_MP(curtains_MP)
+		.neon_MP(neon_MP)*/
+		.grass_VMUI_1(grass_VMUI_1)
+		.grass_VMUI_2(grass_VMUI_2)
+		.grass_VMUI_3(grass_VMUI_3)
+		.pondHorizontal_VMUI(pondHorizontal_VMUI)
+		.pondVerticleFlowingLeft_VMUI(pondVerticleFlowingLeft_VMUI)
+		.pondVerticleFlowingRight_VMUI(pondVerticleFlowingRight_VMUI)
+		.riverFlowingDown_VMUI_1(riverFlowingDown_VMUI_1)
+		.riverFlowingDown_VMUI_2(riverFlowingDown_VMUI_2)
+		.riverFlowingDown_VMUI_3(riverFlowingDown_VMUI_3)
+		.riverFlowingLeft_VMUI_1(riverFlowingLeft_VMUI_1)
+		.riverFlowingLeft_VMUI_2(riverFlowingLeft_VMUI_2)
+		.riverFlowingLeft_VMUI_3(riverFlowingLeft_VMUI_3)
+		.riverFlowingRight_VMUI_1(riverFlowingRight_VMUI_1)
+		.riverFlowingRight_VMUI_2(riverFlowingRight_VMUI_2)
+		.riverFlowingRight_VMUI_3(riverFlowingRight_VMUI_3)
+		.tree_VMUI_1(tree_VMUI_1)
+		.tree_VMUI_2(tree_VMUI_2)
+		.tree_VMUI_3(tree_VMUI_3)
+		.tree_VMUI_4(tree_VMUI_4)
+		.tree_VMUI_5(tree_VMUI_5)
+		.waterfall_VMUI(waterfall_VMUI)
+		.riverTurning_VMUI_1(riverTurning_VMUI_1)
+		.riverTurning_VMUI_2(riverTurning_VMUI_2)
+		.riverTurning_VMUI_3(riverTurning_VMUI_3)
+		.riverTurning_VMUI_4(riverTurning_VMUI_4)
+		.mountain_VMUI_1(mountain_VMUI_1)
+		.holeFromDown_VMUI(holeFromDown_VMUI)
+		.holeFromLeft_VMUI(holeFromLeft_VMUI)
+		.holeFromRight_VMUI(holeFromRight_VMUI)
+		.holeFromUp_VMUI(holeFromUp_VMUI)
+		.flag_VMUI_1(flag_VMUI_1)
+		.flag_VMUI_2(flag_VMUI_2)
+		.flag_VMUI_3(flag_VMUI_3)
+		.flag_VMUI_4(flag_VMUI_4)
+		.flag_VMUI_5(flag_VMUI_5)
+		.flag_VMUI_6(flag_VMUI_6)
+		.flag_VMUI_7(flag_VMUI_7)
+		.flag_VMUI_8(flag_VMUI_8)
+		.flag_VMUI_9(flag_VMUI_9)
+		.flag_VMUI_10(flag_VMUI_10)
+		.flag_VMUI_11(flag_VMUI_11)
+		.flag_VMUI_12(flag_VMUI_12)
+		.flag_VMUI_13(flag_VMUI_13)
+		.flag_VMUI_14(flag_VMUI_14)
+		.flag_VMUI_15(flag_VMUI_15)
+		.flag_VMUI_16(flag_VMUI_16)
+		.curtains_VMUI(curtains_VMUI)
+		.neon_VMUI(neon_VMUI)
+		.buttonFromDownTurningRightZero_SMUI(buttonFromDownTurningRightZero_SMUI)
+		.buttonFromDownTurningRightOne_SMUI(buttonFromDownTurningRightOne_SMUI)
+		.buttonFromDownTurningRightTwo_SMUI(buttonFromDownTurningRightTwo_SMUI)
+		.buttonFromDownTurningRightThree_SMUI(buttonFromDownTurningRightThree_SMUI)
+		.buttonFromDownTurningLeftZero_SMUI(buttonFromDownTurningLeftZero_SMUI)
+		.buttonFromDownTurningLeftOne_SMUI(buttonFromDownTurningLeftOne_SMUI)
+		.buttonFromDownTurningLeftTwo_SMUI(buttonFromDownTurningLeftTwo_SMUI)
+		.buttonFromDownTurningLeftThree_SMUI(buttonFromDownTurningLeftThree_SMUI)
+		.buttonFromLeftTurningRightZero_SMUI(buttonFromLeftTurningRightZero_SMUI)
+		.buttonFromLeftTurningRightOne_SMUI(buttonFromLeftTurningRightOne_SMUI)
+		.buttonFromLeftTurningRightTwo_SMUI(buttonFromLeftTurningRightTwo_SMUI)
+		.buttonFromLeftTurningRightThree_SMUI(buttonFromLeftTurningRightThree_SMUI)
+		.buttonFromLeftTurningLeftZero_SMUI(buttonFromLeftTurningLeftZero_SMUI)
+		.buttonFromLeftTurningLeftOne_SMUI(buttonFromLeftTurningLeftOne_SMUI)
+		.buttonFromLeftTurningLeftTwo_SMUI(buttonFromLeftTurningLeftTwo_SMUI)
+		.buttonFromLeftTurningLeftThree_SMUI(buttonFromLeftTurningLeftThree_SMUI)
+		.buttonFromRightTurningRightZero_SMUI(buttonFromRightTurningRightZero_SMUI)
+		.buttonFromRightTurningRightOne_SMUI(buttonFromRightTurningRightOne_SMUI)
+		.buttonFromRightTurningRightTwo_SMUI(buttonFromRightTurningRightTwo_SMUI)
+		.buttonFromRightTurningRightThree_SMUI(buttonFromRightTurningRightThree_SMUI)
+		.buttonFromRightTurningLeftZero_SMUI(buttonFromRightTurningLeftZero_SMUI)
+		.buttonFromRightTurningLeftOne_SMUI(buttonFromRightTurningLeftOne_SMUI)
+		.buttonFromRightTurningLeftTwo_SMUI(buttonFromRightTurningLeftTwo_SMUI)
+		.buttonFromRightTurningLeftThree_SMUI(buttonFromRightTurningLeftThree_SMUI)
+		.buttonFromUpTurningRightZero_SMUI(buttonFromUpTurningRightZero_SMUI)
+		.buttonFromUpTurningRightOne_SMUI(buttonFromUpTurningRightOne_SMUI)
+		.buttonFromUpTurningRightTwo_SMUI(buttonFromUpTurningRightTwo_SMUI)
+		.buttonFromUpTurningRightThree_SMUI(buttonFromUpTurningRightThree_SMUI)
+		.buttonFromUpTurningLeftZero_SMUI(buttonFromUpTurningLeftZero_SMUI)
+		.buttonFromUpTurningLeftOne_SMUI(buttonFromUpTurningLeftOne_SMUI)
+		.buttonFromUpTurningLeftTwo_SMUI(buttonFromUpTurningLeftTwo_SMUI)
+		.buttonFromUpTurningLeftThree_SMUI(buttonFromUpTurningLeftThree_SMUI)
+		.verticleRail_SMUI(verticleRail_SMUI)
+		.horizontalRail_SMUI(horizontalRail_SMUI)
+		.railTurningOne_SMUI(railTurningOne_SMUI)
+		.railTurningTwo_SMUI(railTurningTwo_SMUI)
+		.railTurningThree_SMUI(railTurningThree_SMUI)
+		.railTurningFour_SMUI(railTurningFour_SMUI)
+		.marble_SMUI_1(marble_SMUI_1)
+		.marble_SMUI_2(marble_SMUI_2)
+		.marble_SMUI_3(marble_SMUI_3)
+		.marble_SMUI_4(marble_SMUI_4)
+		.marble_SMUI_5(marble_SMUI_5)
+		.marble_SMUI_6(marble_SMUI_6)
+		.marble_SMUI_7(marble_SMUI_7)
+		.marble_SMUI_8(marble_SMUI_8)
+		.marble_SMUI_9(marble_SMUI_9)
+		.marble_SMUI_10(marble_SMUI_10)
+		.marble_SMUI_11(marble_SMUI_11)
+		.marble_SMUI_12(marble_SMUI_12)
+		.marble_SMUI_13(marble_SMUI_13)
+		.marble_SMUI_14(marble_SMUI_14)
+		.marble_SMUI_15(marble_SMUI_15)
+		.marble_SMUI_16(marble_SMUI_16)
+		.focusCursor_SMUI(focusCursor_SMUI)
+		.gameFrameColor_SMUI(gameFrameColor_SMUI)
+		.emptyImg_SMUI(emptyImg_SMUI)
+		.goodUseSplashBootNoGrass_SMUI(goodUseSplashBootNoGrass_SMUI)
+		.goodUseSplashGrass_SMUI(goodUseSplashGrass_SMUI)
+		.goodUseDigitalText_SMUI(goodUseDigitalText_SMUI)
+		.splashGrassArr(splashGrassArr)
+		.splashBootArr(splashBootArr);
+
+
+	slateWidgetContainerTen->SetContent(precacheSlateWidget.ToSharedRef());
+}
+
+void AMyHUD::ExecutePrecache(int inInt)
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, FString::FromInt(inInt));
+	/*grass_IS_1->FrameRateOverride = FFrameRate(180, 1);
+	grass_IS_2->FrameRateOverride = FFrameRate(180, 1);
+	grass_IS_3->FrameRateOverride = FFrameRate(180, 1);
+	pondHorizontal_IS->FrameRateOverride = FFrameRate(180, 1);
+	pondVerticleFlowingLeft_IS->FrameRateOverride = FFrameRate(180, 1);
+	pondVerticleFlowingRight_IS->FrameRateOverride = FFrameRate(180, 1);
+	riverFlowingDown_IS_1->FrameRateOverride = FFrameRate(180, 1);
+	riverFlowingDown_IS_2->FrameRateOverride = FFrameRate(180, 1);
+	riverFlowingDown_IS_3->FrameRateOverride = FFrameRate(180, 1);
+	riverFlowingLeft_IS_1->FrameRateOverride = FFrameRate(180, 1);
+	riverFlowingLeft_IS_2->FrameRateOverride = FFrameRate(180, 1);
+	riverFlowingLeft_IS_3->FrameRateOverride = FFrameRate(180, 1);
+	riverFlowingRight_IS_1->FrameRateOverride = FFrameRate(180, 1);
+	riverFlowingRight_IS_2->FrameRateOverride = FFrameRate(180, 1);
+	riverFlowingRight_IS_3->FrameRateOverride = FFrameRate(180, 1);
+	tree_IS_1->FrameRateOverride = FFrameRate(180, 1);
+	tree_IS_2->FrameRateOverride = FFrameRate(180, 1);
+	tree_IS_3->FrameRateOverride = FFrameRate(180, 1);
+	tree_IS_4->FrameRateOverride = FFrameRate(180, 1);
+	tree_IS_5->FrameRateOverride = FFrameRate(180, 1);
+	waterfall_IS->FrameRateOverride = FFrameRate(180, 1);
+	riverTurning_IS_1->FrameRateOverride = FFrameRate(180, 1);
+	riverTurning_IS_2->FrameRateOverride = FFrameRate(180, 1);
+	riverTurning_IS_3->FrameRateOverride = FFrameRate(180, 1);
+	riverTurning_IS_4->FrameRateOverride = FFrameRate(180, 1);
+	mountain_IS_1->FrameRateOverride = FFrameRate(180, 1);
+	holeFromDown_IS->FrameRateOverride = FFrameRate(180, 1);
+	holeFromLeft_IS->FrameRateOverride = FFrameRate(180, 1);
+	holeFromRight_IS->FrameRateOverride = FFrameRate(180, 1);
+	holeFromUp_IS->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_1->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_2->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_3->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_4->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_5->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_6->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_7->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_8->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_9->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_10->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_11->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_12->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_13->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_14->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_15->FrameRateOverride = FFrameRate(180, 1);
+	flag_IS_16->FrameRateOverride = FFrameRate(180, 1);
+	curtains_IS->FrameRateOverride = FFrameRate(180, 1);
+	neon_IS->FrameRateOverride = FFrameRate(180, 1);*/
+
+	switch (inInt) {
+	case 0:
+		neon_MP->OpenSource(neon_IS);
+		break;
+	case 1:
+		curtains_MP->OpenSource(curtains_IS);
+		break;
+	case 2:
+		grass_MP_1->OpenSource(grass_IS_1);
+		break;
+	case 3:
+		grass_MP_2->OpenSource(grass_IS_2);
+		break;
+	case 4:
+		grass_MP_3->OpenSource(grass_IS_3);
+		break;
+	case 5:
+		pondHorizontal_MP->OpenSource(pondHorizontal_IS);
+		break;
+	case 6:
+		pondVerticleFlowingLeft_MP->OpenSource(pondVerticleFlowingLeft_IS);
+		break;
+	case 7:
+		pondVerticleFlowingRight_MP->OpenSource(pondVerticleFlowingRight_IS);
+		break;
+	case 8:
+		riverFlowingDown_MP_1->OpenSource(riverFlowingDown_IS_1);
+		break;
+	case 9:
+		riverFlowingDown_MP_2->OpenSource(riverFlowingDown_IS_2);
+		break;
+	case 10:
+		riverFlowingDown_MP_3->OpenSource(riverFlowingDown_IS_3);
+		break;
+	case 11:
+		riverFlowingLeft_MP_1->OpenSource(riverFlowingLeft_IS_1);
+		break;
+	case 12:
+		riverFlowingLeft_MP_2->OpenSource(riverFlowingLeft_IS_2);
+		break;
+	case 13:
+		riverFlowingLeft_MP_3->OpenSource(riverFlowingLeft_IS_3);
+		break;
+	case 14:
+		riverFlowingRight_MP_1->OpenSource(riverFlowingRight_IS_1);
+		break;
+	case 15:
+		riverFlowingRight_MP_2->OpenSource(riverFlowingRight_IS_2);
+		break;
+	case 16:
+		riverFlowingRight_MP_3->OpenSource(riverFlowingRight_IS_3);
+		break;
+	case 17:
+		tree_MP_1->OpenSource(tree_IS_1);
+		break;
+	case 18:
+		tree_MP_2->OpenSource(tree_IS_2);
+		break;
+	case 19:
+		tree_MP_3->OpenSource(tree_IS_3);
+		break;
+	case 20:
+		tree_MP_4->OpenSource(tree_IS_4);
+		break;
+	case 21:
+		tree_MP_5->OpenSource(tree_IS_5);
+		break;
+	case 22:
+		waterfall_MP->OpenSource(waterfall_IS);
+		break;
+	case 23:
+		riverTurning_MP_1->OpenSource(riverTurning_IS_1);
+		break;
+	case 24:
+		riverTurning_MP_2->OpenSource(riverTurning_IS_2);
+		break;
+	case 25:
+		riverTurning_MP_3->OpenSource(riverTurning_IS_3);
+		break;
+	case 26:
+		riverTurning_MP_4->OpenSource(riverTurning_IS_4);
+		break;
+	case 27:
+		mountain_MP_1->OpenSource(mountain_IS_1);
+		break;
+	case 28:
+		holeFromDown_MP->OpenSource(holeFromDown_IS);
+		break;
+	case 29:
+		holeFromLeft_MP->OpenSource(holeFromLeft_IS);
+		break;
+	case 30:
+		holeFromRight_MP->OpenSource(holeFromRight_IS);
+		break;
+	case 31:
+		holeFromUp_MP->OpenSource(holeFromUp_IS);
+		break;
+	case 32:
+		flag_MP_1->OpenSource(flag_IS_1);
+		break;
+	case 33:
+		flag_MP_2->OpenSource(flag_IS_2);
+		break;
+	case 34:
+		flag_MP_3->OpenSource(flag_IS_3);
+		break;
+	case 35:
+		flag_MP_4->OpenSource(flag_IS_4);
+		break;
+	case 36:
+		flag_MP_5->OpenSource(flag_IS_5);
+		break;
+	case 37:
+		flag_MP_6->OpenSource(flag_IS_6);
+		break;
+	case 38:
+		flag_MP_7->OpenSource(flag_IS_7);
+		break;
+	case 39:
+		flag_MP_8->OpenSource(flag_IS_8);
+		break;
+	case 40:
+		flag_MP_9->OpenSource(flag_IS_9);
+		break;
+	case 41:
+		flag_MP_10->OpenSource(flag_IS_10);
+		break;
+	case 42:
+		flag_MP_11->OpenSource(flag_IS_11);
+		break;
+	case 43:
+		flag_MP_12->OpenSource(flag_IS_12);
+		break;
+	case 44:
+		flag_MP_13->OpenSource(flag_IS_13);
+		break;
+	case 45:
+		flag_MP_14->OpenSource(flag_IS_14);
+		break;
+	case 46:
+		flag_MP_15->OpenSource(flag_IS_15);
+		break;
+	case 47:
+		flag_MP_16->OpenSource(flag_IS_16);
+		break;
+	default:
+		break;
+	}
+}
+
+void AMyHUD::DestroyMediaPrecacheOperation()
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "disengage");
+
+	/*grass_IS_1->FrameRateOverride = FFrameRate(60, 1);
+	grass_IS_2->FrameRateOverride = FFrameRate(60, 1);
+	grass_IS_3->FrameRateOverride = FFrameRate(60, 1);
+	pondHorizontal_IS->FrameRateOverride = FFrameRate(60, 1);
+	pondVerticleFlowingLeft_IS->FrameRateOverride = FFrameRate(60, 1);
+	pondVerticleFlowingRight_IS->FrameRateOverride = FFrameRate(60, 1);
+	riverFlowingDown_IS_1->FrameRateOverride = FFrameRate(60, 1);
+	riverFlowingDown_IS_2->FrameRateOverride = FFrameRate(60, 1);
+	riverFlowingDown_IS_3->FrameRateOverride = FFrameRate(60, 1);
+	riverFlowingLeft_IS_1->FrameRateOverride = FFrameRate(60, 1);
+	riverFlowingLeft_IS_2->FrameRateOverride = FFrameRate(60, 1);
+	riverFlowingLeft_IS_3->FrameRateOverride = FFrameRate(60, 1);
+	riverFlowingRight_IS_1->FrameRateOverride = FFrameRate(60, 1);
+	riverFlowingRight_IS_2->FrameRateOverride = FFrameRate(60, 1);
+	riverFlowingRight_IS_3->FrameRateOverride = FFrameRate(60, 1);
+	tree_IS_1->FrameRateOverride = FFrameRate(60, 1);
+	tree_IS_2->FrameRateOverride = FFrameRate(60, 1);
+	tree_IS_3->FrameRateOverride = FFrameRate(60, 1);
+	tree_IS_4->FrameRateOverride = FFrameRate(60, 1);
+	tree_IS_5->FrameRateOverride = FFrameRate(60, 1);
+	waterfall_IS->FrameRateOverride = FFrameRate(60, 1);
+	riverTurning_IS_1->FrameRateOverride = FFrameRate(60, 1);
+	riverTurning_IS_2->FrameRateOverride = FFrameRate(60, 1);
+	riverTurning_IS_3->FrameRateOverride = FFrameRate(60, 1);
+	riverTurning_IS_4->FrameRateOverride = FFrameRate(60, 1);
+	mountain_IS_1->FrameRateOverride = FFrameRate(60, 1);
+	holeFromDown_IS->FrameRateOverride = FFrameRate(60, 1);
+	holeFromLeft_IS->FrameRateOverride = FFrameRate(60, 1);
+	holeFromRight_IS->FrameRateOverride = FFrameRate(60, 1);
+	holeFromUp_IS->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_1->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_2->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_3->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_4->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_5->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_6->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_7->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_8->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_9->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_10->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_11->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_12->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_13->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_14->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_15->FrameRateOverride = FFrameRate(60, 1);
+	flag_IS_16->FrameRateOverride = FFrameRate(60, 1);
+	curtains_IS->FrameRateOverride = FFrameRate(60, 1);
+	neon_IS->FrameRateOverride = FFrameRate(60, 1);*/
+	neon_MP->Close();
+	curtains_MP->Close();
+	grass_MP_1->Close();
+	grass_MP_2->Close();
+	grass_MP_3->Close();
+	pondHorizontal_MP->Close();
+	pondVerticleFlowingLeft_MP->Close();
+	pondVerticleFlowingRight_MP->Close();
+	riverFlowingDown_MP_1->Close();
+	riverFlowingDown_MP_2->Close();
+	riverFlowingDown_MP_3->Close();
+	riverFlowingLeft_MP_1->Close();
+	riverFlowingLeft_MP_2->Close();
+	riverFlowingLeft_MP_3->Close();
+	riverFlowingRight_MP_1->Close();
+	riverFlowingRight_MP_2->Close();
+	riverFlowingRight_MP_3->Close();
+	tree_MP_1->Close();
+	tree_MP_2->Close();
+	tree_MP_3->Close();
+	tree_MP_4->Close();
+	tree_MP_5->Close();
+	waterfall_MP->Close();
+	riverTurning_MP_1->Close();
+	riverTurning_MP_2->Close();
+	riverTurning_MP_3->Close();
+	riverTurning_MP_4->Close();
+	mountain_MP_1->Close();
+	holeFromDown_MP->Close();
+	holeFromLeft_MP->Close();
+	holeFromRight_MP->Close();
+	holeFromUp_MP->Close();
+	flag_MP_1->Close();
+	flag_MP_2->Close();
+	flag_MP_3->Close();
+	flag_MP_4->Close();
+	flag_MP_5->Close();
+	flag_MP_6->Close();
+	flag_MP_7->Close();
+	flag_MP_8->Close();
+	flag_MP_9->Close();
+	flag_MP_10->Close();
+	flag_MP_11->Close();
+	flag_MP_12->Close();
+	flag_MP_13->Close();
+	flag_MP_14->Close();
+	flag_MP_15->Close();
+	flag_MP_16->Close();
+
+	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerTen.ToSharedRef());
+	GEngine->GameViewport->RemoveViewportWidgetContent(slateWidgetContainerEleven.ToSharedRef());
+
+
+	splashScreenSlateWidget = SNew(SCompanySplash)
+		.OwningHUD(this)
+		.goodUseSplashBootNoGrass_SMUI(goodUseSplashBootNoGrass_SMUI)
+		.goodUseSplashGrass_SMUI(goodUseSplashGrass_SMUI)
+		.goodUseDigitalText_SMUI(goodUseDigitalText_SMUI)
+		.splashGrassArr(splashGrassArr)
+		.splashBootArr(splashBootArr)
+		.black_SMUI(black_SMUI)
+		.shovelingDirtAudioComponent(shovelingDirtAudioComponent);
+
+	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerSeven, SWeakWidget).PossiblyNullContent(splashScreenSlateWidget.ToSharedRef()));
+
+	//FSlateApplication::Get().SetUserFocus(0, splashScreenSlateWidget); //this actually causes the cursor to not be visible 
+	FInputModeUIOnly splashScreenInputMode = FInputModeUIOnly();
+	splashScreenInputMode.SetWidgetToFocus(splashScreenSlateWidget); //this seems to be the way, but always throughs an error
+	splashScreenInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	//mainMenuInputMode.SetHideCursorDuringCapture(false); //this hasn't been necessary in the past
+	playerOnePlayerController->SetInputMode(splashScreenInputMode);
+	playerOnePlayerController->SetShowMouseCursor(true);
+	//FSlateApplication::Get().SetKeyboardFocus(splashScreenSlateWidget); //I don't know what this does, doesn't seem to do anything
+}
+
+void AMyHUD::EngageAutoCursorInGame(bool inBool)
+{
+	gameSlateWidget->EnableAutoCursor(inBool);
+}
+
+void AMyHUD::FocusSplash()
+{
+	FInputModeUIOnly splashScreenInputMode = FInputModeUIOnly();
+	//splashScreenInputMode.SetWidgetToFocus(splashScreenSlateWidget);
+	splashScreenInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	playerOnePlayerController->SetInputMode(splashScreenInputMode);
+	playerOnePlayerController->SetShowMouseCursor(true);
 }
 
 /*RELEASE NOTES*/
 /*
 can you exit the game by pressing esc in the wrong place in the packaged version?
 */
+
 
 void AMyHUD::DestroySplash()
 {
@@ -2218,6 +2892,12 @@ void AMyHUD::DestroySplash()
 		.backgroundIsLargeTile(backgroundIsLargeTile)
 		.displayResults(false)
 		.gameFrameColor_SMUI(gameFrameColor_SMUI)
+		.emptyImg_SMUI(emptyImg_SMUI)
+		.neonAudioComponent(neonAudioComponent)
+		.neonOnOneAudioComponent(neonOnOneAudioComponent)
+		.neonOnTwoAudioComponent(neonOnTwoAudioComponent)
+		.neonOffOneAudioComponent(neonOffOneAudioComponent)
+		.neonOffTwoAudioComponent(neonOffTwoAudioComponent)
 		.hoverGrowAudioComponents(hoverGrowAudioComponents)
 		.hoverShrinkAudioComponents(hoverShrinkAudioComponents)
 		.windAudioComponents(windAudioComponents)
@@ -2225,28 +2905,41 @@ void AMyHUD::DestroySplash()
 		.riverAudioComponents(riverAudioComponents)
 		.waterfallAudioComponents(waterfallAudioComponents)
 		.purpleLullabyAudioComponents(purpleLullabyAudioComponents)
-		.environmentAudio(environmentAudio);
+		.environmentAudio(environmentAudio)
+		.neon_VMUI(neon_VMUI)
+		.neonClicked_SMUI(neonClicked_SMUI)
+		.neonHoveredLit_SMUI(neonHoveredLit_SMUI)
+		.neonHoveredUnlit_SMUI(neonHoveredUnlit_SMUI)
+		.neonLit_SMUI(neonLit_SMUI)
+		.neonUnlit_SMUI(neonUnlit_SMUI)
+		.neonBarricade_SMUI(neonBarricade_SMUI);
 
 	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerThree, SWeakWidget).PossiblyNullContent(mainMenuSlateWidget.ToSharedRef()));
 
-	//FSlateApplication::SetUserFocus(0, loadingSlateWidget);
-
-	//FInputModeGameAndUI mainMenuInputMode = FInputModeGameAndUI();
-	FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();//Im getting an error in the unreal engine log. do I need to set canSupportFocus within the widget before calling this?
+	FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();
 	mainMenuInputMode.SetWidgetToFocus(mainMenuSlateWidget);
 	mainMenuInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
-	//mainMenuInputMode.SetHideCursorDuringCapture(false);
 	playerOnePlayerController->SetInputMode(mainMenuInputMode);
 	playerOnePlayerController->SetShowMouseCursor(true);
-	FSlateApplication::Get().SetKeyboardFocus(mainMenuSlateWidget);
 
 	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
 	double h = 1;
+	double i = 1;
 
 	if (referenceInstance->GetMaster() == 0 || referenceInstance->GetAtmosphere() == 0)
 	{
 		h = 0.001;
 	}
+	if (referenceInstance->GetMaster() == 0 || referenceInstance->GetSFX() == 0)
+	{
+		i = 0.001;
+	}
+
+	neonAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOnOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOnTwoAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOffOneAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
+	neonOffTwoAudioComponent->SetVolumeMultiplier(FMath::Clamp((double)((double)((double)1.0 * (double)sfxCoefficientOne) - (double)((double)((double)((double)1.0 * (double)sfxCoefficientOne) - ((double)1.0 * (double)destinationCoefficientTwo)) * (double)((double)1 - (double)masterCoefficientSOne))) * (double)i, (double)0.001, (double)1.0));
 
 	for (int a = 0; a < 2; a++)
 	{
@@ -2629,6 +3322,7 @@ void AMyHUD::DisplayOptionsMenu(bool cameFromGame)
 
 	optionsMenuSlateWidget = SNew(SOptions)
 		.OwningHUD(this)
+		.comingFromPauseMenu(fromGame)
 		.playerOnePlayerController(playerOnePlayerController)
 		.standardWorldContextObject(standardWorldContextObject)
 		.hoverGrowAudioComponents(hoverGrowAudioComponents)
@@ -2641,13 +3335,11 @@ void AMyHUD::DisplayOptionsMenu(bool cameFromGame)
 
 	GEngine->GameViewport->AddViewportWidgetContent(SAssignNew(slateWidgetContainerNine, SWeakWidget).PossiblyNullContent(optionsMenuSlateWidget.ToSharedRef()));
 
-	FInputModeUIOnly optionsInputMode = FInputModeUIOnly();//Im getting an error in the unreal engine log. do I need to set canSupportFocus within the widget before calling this?
+	FInputModeUIOnly optionsInputMode = FInputModeUIOnly();
 	optionsInputMode.SetWidgetToFocus(optionsMenuSlateWidget);
 	optionsInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
-	//mainMenuInputMode.SetHideCursorDuringCapture(false);
 	playerOnePlayerController->SetInputMode(optionsInputMode);
 	playerOnePlayerController->SetShowMouseCursor(true);
-	FSlateApplication::Get().SetKeyboardFocus(optionsMenuSlateWidget);
 }
 
 void AMyHUD::DestroyOptionsMenu()
@@ -2661,10 +3353,8 @@ void AMyHUD::DestroyOptionsMenu()
 		FInputModeUIOnly pauseScreenInputMode = FInputModeUIOnly();
 		pauseScreenInputMode.SetWidgetToFocus(pauseScreenSlateWidget);
 		pauseScreenInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
-		//mainMenuInputMode.SetHideCursorDuringCapture(false);
 		playerOnePlayerController->SetInputMode(pauseScreenInputMode);
 		playerOnePlayerController->SetShowMouseCursor(true);
-		FSlateApplication::Get().SetKeyboardFocus(pauseScreenSlateWidget);
 	}
 	else
 	{
@@ -2675,7 +3365,6 @@ void AMyHUD::DestroyOptionsMenu()
 		mainMenuInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 		playerOnePlayerController->SetInputMode(mainMenuInputMode);
 		playerOnePlayerController->SetShowMouseCursor(true);
-		FSlateApplication::Get().SetKeyboardFocus(mainMenuSlateWidget);
 	}
 }
 
@@ -2860,10 +3549,8 @@ void AMyHUD::DisplayPauseScreen()// if there is a faulty asset file path in the 
 	FInputModeUIOnly pauseScreenInputMode = FInputModeUIOnly();
 	pauseScreenInputMode.SetWidgetToFocus(pauseScreenSlateWidget);
 	pauseScreenInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
-	//mainMenuInputMode.SetHideCursorDuringCapture(false);
 	playerOnePlayerController->SetInputMode(pauseScreenInputMode);
 	playerOnePlayerController->SetShowMouseCursor(true);
-	FSlateApplication::Get().SetKeyboardFocus(pauseScreenSlateWidget);
 }
 
 void AMyHUD::PrepDestroyPauseScreen()
@@ -2882,7 +3569,6 @@ void AMyHUD::DestroyPauseScreen()
 	gameInWidgetInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 	playerOnePlayerController->SetInputMode(gameInWidgetInputMode);
 	playerOnePlayerController->SetShowMouseCursor(true);
-	FSlateApplication::Get().SetKeyboardFocus(gameSlateWidget);
 
 	for (int a = 0; a < numberOfHoles; a++)
 	{
@@ -3111,6 +3797,12 @@ void AMyHUD::ReturnToMainMenu()
 		.backgroundIsLargeTile(backgroundIsLargeTile)
 		.displayResults(goToResults)
 		.gameFrameColor_SMUI(gameFrameColor_SMUI)
+		.emptyImg_SMUI(emptyImg_SMUI)
+		.neonAudioComponent(neonAudioComponent)
+		.neonOnOneAudioComponent(neonOnOneAudioComponent)
+		.neonOnTwoAudioComponent(neonOnTwoAudioComponent)
+		.neonOffOneAudioComponent(neonOffOneAudioComponent)
+		.neonOffTwoAudioComponent(neonOffTwoAudioComponent)
 		.hoverGrowAudioComponents(hoverGrowAudioComponents)
 		.hoverShrinkAudioComponents(hoverShrinkAudioComponents)
 		.windAudioComponents(windAudioComponents)
@@ -3118,7 +3810,14 @@ void AMyHUD::ReturnToMainMenu()
 		.riverAudioComponents(riverAudioComponents)
 		.waterfallAudioComponents(waterfallAudioComponents)
 		.purpleLullabyAudioComponents(purpleLullabyAudioComponents)
-		.environmentAudio(environmentAudio);
+		.environmentAudio(environmentAudio)
+		.neon_VMUI(neon_VMUI)
+		.neonClicked_SMUI(neonClicked_SMUI)
+		.neonHoveredLit_SMUI(neonHoveredLit_SMUI)
+		.neonHoveredUnlit_SMUI(neonHoveredUnlit_SMUI)
+		.neonLit_SMUI(neonLit_SMUI)
+		.neonUnlit_SMUI(neonUnlit_SMUI)
+		.neonBarricade_SMUI(neonBarricade_SMUI);
 
 	slateWidgetContainerThree->SetContent(mainMenuSlateWidget.ToSharedRef());
 
@@ -3161,10 +3860,8 @@ void AMyHUD::RemoveResultsBlur()
 	FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();
 	mainMenuInputMode.SetWidgetToFocus(mainMenuSlateWidget);
 	mainMenuInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
-	//mainMenuInputMode.SetHideCursorDuringCapture(false);
 	playerOnePlayerController->SetInputMode(mainMenuInputMode);
 	playerOnePlayerController->SetShowMouseCursor(true);
-	FSlateApplication::Get().SetKeyboardFocus(mainMenuSlateWidget);
 }
 
 void AMyHUD::HideCurtains(bool toGame)
@@ -3186,20 +3883,16 @@ void AMyHUD::HideCurtains(bool toGame)
 			FInputModeUIOnly resultsInputMode = FInputModeUIOnly();
 			resultsInputMode.SetWidgetToFocus(resultsBlurSlateWidget);
 			resultsInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
-			//mainMenuInputMode.SetHideCursorDuringCapture(false);
 			playerOnePlayerController->SetInputMode(resultsInputMode);
 			playerOnePlayerController->SetShowMouseCursor(true);
-			FSlateApplication::Get().SetKeyboardFocus(resultsBlurSlateWidget);
 		}
 		else
 		{
 			FInputModeUIOnly mainMenuInputMode = FInputModeUIOnly();
 			mainMenuInputMode.SetWidgetToFocus(mainMenuSlateWidget);
 			mainMenuInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
-			//mainMenuInputMode.SetHideCursorDuringCapture(false);
 			playerOnePlayerController->SetInputMode(mainMenuInputMode);
 			playerOnePlayerController->SetShowMouseCursor(true);
-			FSlateApplication::Get().SetKeyboardFocus(mainMenuSlateWidget);
 		}
 	}
 }
@@ -3224,7 +3917,7 @@ void AMyHUD::MasterGenerateLevel(int numHoles)
 		ResetRegenLevel();
 	}
 
-	inGame = true;
+	inGame = true;//does this need to be lower? specifically after the game widget is generated?
 
 	for (int a = 0; a < 2; a++)
 	{
@@ -3297,7 +3990,7 @@ void AMyHUD::GenerateHolePositions() //this function appears to function as expe
 
 		int currentHolePositionCoordinateIndex = (FMath::RandRange(0, ((firstIndexOfCurrentPortionOfViableHolePositionsTempVar - firstIndexOfCurrentPortionOfViableHolePositions) / evenHoleRowCorrectionFigure) - 1) * evenHoleRowCorrectionFigure) + firstIndexOfCurrentPortionOfViableHolePositions;
 
-		test.Add(currentHolePositionCoordinateIndex);
+		//test.Add(currentHolePositionCoordinateIndex);
 
 		holePositions.Add(arrOfViableHoleCoordinates[currentHolePositionCoordinateIndex]);
 
@@ -11910,6 +12603,7 @@ void AMyHUD::BuildLevel()
 			.railTurningTwo_SMUI(railTurningTwo_SMUI)
 			.railTurningThree_SMUI(railTurningThree_SMUI)
 			.railTurningFour_SMUI(railTurningFour_SMUI)
+			.focusCursor_SMUI(focusCursor_SMUI)
 			.emptyImg_SMUI(emptyImg_SMUI)
 			.gameFrameColor_SMUI(gameFrameColor_SMUI)
 			.marble_SMUI_1(marble_SMUI_1)
@@ -11938,7 +12632,8 @@ void AMyHUD::BuildLevel()
 			.songAudioComponents(songAudioComponents)
 			.environmentAudio(environmentAudio)
 			.songPlaying(songPlaying)
-			.songPlayingIndex(songPlayingIndex);
+			.songPlayingIndex(songPlayingIndex)
+			.quantityOfMarblesToSpawn(quantityOfMarblesToSpawn);
 
 		slateWidgetContainerTwo->SetContent(gameSlateWidget.ToSharedRef());
 
@@ -11947,7 +12642,6 @@ void AMyHUD::BuildLevel()
 		gameInWidgetInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 		playerOnePlayerController->SetInputMode(gameInWidgetInputMode);
 		playerOnePlayerController->SetShowMouseCursor(true);
-		FSlateApplication::Get().SetKeyboardFocus(gameSlateWidget);
 	}
 
 	USaveGameOne* referenceInstance = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
@@ -11982,7 +12676,6 @@ void AMyHUD::SetFocusToGame()
 	gameInWidgetInputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
 	playerOnePlayerController->SetInputMode(gameInWidgetInputMode);
 	playerOnePlayerController->SetShowMouseCursor(true);
-	FSlateApplication::Get().SetKeyboardFocus(gameSlateWidget);
 }
 
 void AMyHUD::HouseKeeping()

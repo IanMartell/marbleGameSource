@@ -8,7 +8,7 @@
 #include "Widgets/SCompoundWidget.h"
 
 /**
- * 
+ *
  */
 class SSArcadeModeTitleScreen : public SCompoundWidget
 {
@@ -29,6 +29,18 @@ public:
 
 		SLATE_ARGUMENT(UMaterial*, gameFrameColor_SMUI)
 
+		SLATE_ARGUMENT(UMaterial*, emptyImg_SMUI)
+
+		SLATE_ARGUMENT(UAudioComponent*, neonAudioComponent)
+
+		SLATE_ARGUMENT(UAudioComponent*, neonOnOneAudioComponent)
+
+		SLATE_ARGUMENT(UAudioComponent*, neonOnTwoAudioComponent)
+
+		SLATE_ARGUMENT(UAudioComponent*, neonOffOneAudioComponent)
+
+		SLATE_ARGUMENT(UAudioComponent*, neonOffTwoAudioComponent)
+
 		SLATE_ARGUMENT(TArray<UAudioComponent*>, hoverGrowAudioComponents)
 
 		SLATE_ARGUMENT(TArray<UAudioComponent*>, hoverShrinkAudioComponents)
@@ -45,6 +57,20 @@ public:
 
 		SLATE_ARGUMENT(int, environmentAudio)
 
+		SLATE_ARGUMENT(UMaterial*, neon_VMUI)
+
+		SLATE_ARGUMENT(UMaterial*, neonClicked_SMUI)
+
+		SLATE_ARGUMENT(UMaterial*, neonHoveredLit_SMUI)
+
+		SLATE_ARGUMENT(UMaterial*, neonHoveredUnlit_SMUI)
+
+		SLATE_ARGUMENT(UMaterial*, neonLit_SMUI)
+
+		SLATE_ARGUMENT(UMaterial*, neonUnlit_SMUI)
+
+		SLATE_ARGUMENT(UMaterial*, neonBarricade_SMUI)
+
 	SLATE_END_ARGS()
 
 	/** Constructs this widget with InArgs */
@@ -52,10 +78,18 @@ public:
 
 	void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime);
 
+	virtual bool IsInteractable() const override { return true; }
+	virtual bool SupportsKeyboardFocus() const override { return true; }
+
 	void OnPlayPressed();
 	void OnPlayReleased();
 	void OnPlayHovered();
 	void OnPlayUnHovered();
+
+	void OnNeonPressed();
+	void OnNeonReleased();
+	void OnNeonHovered();
+	void OnNeonUnHovered();
 
 	void OnResultsPressed();
 	void OnResultsReleased();
@@ -146,6 +180,7 @@ public:
 	UPROPERTY() FMargin GrowMargin(FMargin inMargin);
 	UPROPERTY() FMargin GrownMargin(FMargin inMargin);
 	UPROPERTY() FMargin ShrinkMargin(FMargin inMargin, int marginIndex);
+	UPROPERTY() FMargin CalculateHardModePos();
 
 	UPROPERTY() TWeakObjectPtr<class AMyHUD> OwningHUD;
 	UPROPERTY() APlayerController* playerOnePlayerController;
@@ -157,8 +192,18 @@ public:
 	UPROPERTY() bool backgroundIsLargeTile;
 
 	UPROPERTY() UMaterial* gameFrameColor_SMUI;
+	UPROPERTY() UMaterial* emptyImg_SMUI;
+
+	UPROPERTY() UMaterial* neon_VMUI;
+	UPROPERTY() UMaterial* neonClicked_SMUI;
+	UPROPERTY() UMaterial* neonLit_SMUI;
+	UPROPERTY() UMaterial* neonUnlit_SMUI;
+	UPROPERTY() UMaterial* neonHoveredLit_SMUI;
+	UPROPERTY() UMaterial* neonHoveredUnlit_SMUI;
+	UPROPERTY() UMaterial* neonBarricade_SMUI;
 
 	UPROPERTY() FSlateBrush* gameFrameColor_SB;
+	UPROPERTY() FSlateBrush* emptyImg_SB;
 	UPROPERTY() FSlateBrush* background_SB_1;
 	UPROPERTY() FSlateBrush* background_SB_2;
 	UPROPERTY() FSlateBrush* background_SB_3;
@@ -168,6 +213,14 @@ public:
 	UPROPERTY() FSlateBrush* background_SB_7;
 	UPROPERTY() FSlateBrush* background_SB_8;
 	UPROPERTY() FSlateBrush* background_SB_9;
+
+	UPROPERTY() FSlateBrush* neon_SB;
+	UPROPERTY() FSlateBrush* neonClicked_SB;
+	UPROPERTY() FSlateBrush* neonHoveredLit_SB;
+	UPROPERTY() FSlateBrush* neonHoveredUnlit_SB;
+	UPROPERTY() FSlateBrush* neonLit_SB;
+	UPROPERTY() FSlateBrush* neonUnlit_SB;
+	UPROPERTY() FSlateBrush* neonBarricade_SB;
 
 	UPROPERTY() TSharedPtr< class SOverlay> backgroundOverlay;
 	UPROPERTY() TSharedPtr< class SOverlay> frameColorOverlay;
@@ -185,6 +238,8 @@ public:
 	UPROPERTY() FSlateFontInfo menuFont;
 	UPROPERTY() FSlateFontInfo levelSelectorFont;
 	UPROPERTY() FSlateFontInfo scoreFont;
+
+	UPROPERTY() FSlateFontInfo textFont;
 	UPROPERTY() FText titleText;
 
 	UPROPERTY() TSharedPtr<class SBox> playBox;
@@ -198,6 +253,12 @@ public:
 	UPROPERTY() TSharedPtr<class STextBlock> optionsText;
 	UPROPERTY() TSharedPtr<class STextBlock> quitText;
 	UPROPERTY() TSharedPtr<class STextBlock> backText;
+
+	UPROPERTY() TSharedPtr<class SImage> neonHoveredImg;
+	UPROPERTY() TSharedPtr<class SImage> neonImg;
+	UPROPERTY() TSharedPtr<class SButton> neonButton;
+
+	UPROPERTY() TSharedPtr<class SToolTip> neonToolTip;
 
 	UPROPERTY() FButtonStyle* transparentButtonStyle;
 
@@ -274,6 +335,12 @@ public:
 	UPROPERTY() int environmentAudio;
 	UPROPERTY() float audioTimer;
 	UPROPERTY() int audioCycleTracker;
+
+	UPROPERTY() UAudioComponent* neonAudioComponent;
+	UPROPERTY() UAudioComponent* neonOffOneAudioComponent;
+	UPROPERTY() UAudioComponent* neonOffTwoAudioComponent;
+	UPROPERTY() UAudioComponent* neonOnOneAudioComponent;
+	UPROPERTY() UAudioComponent* neonOnTwoAudioComponent;
 
 	UPROPERTY() TArray<UAudioComponent*> hoverGrowAudioComponents;
 	UPROPERTY() TArray<UAudioComponent*> hoverShrinkAudioComponents;

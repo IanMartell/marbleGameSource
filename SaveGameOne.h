@@ -37,6 +37,11 @@ protected:
 	UPROPERTY(SaveGame) TArray<int> songIndexArr;
 	UPROPERTY(SaveGame) TArray<int> songCycles;
 	UPROPERTY(SaveGame) float gamma;
+	UPROPERTY(SaveGame) bool hardModeOn;
+	UPROPERTY(SaveGame) bool autoCursorOn;
+	/*UPROPERTY(SaveGame) bool testBool;
+	UPROPERTY(SaveGame) int testInt;
+	UPROPERTY(SaveGame) FString testString;*/
 
 public:
 	TArray<int> GetHighscores();
@@ -58,6 +63,11 @@ public:
 	TArray<int> GetSongIndexArr();
 	TArray<int> GetSongCycles();
 	float GetGamma();
+	bool GetHardModeOn();
+	bool GetAutoCursorOn();
+	/*bool GetTestBool();
+	int GetTestInt();
+	FString GetTestString();*/
 
 	void SetHighscores(TArray<int> newHighscores);
 	void SetHighscoreDataOne(int newHighscoreData);
@@ -78,4 +88,6 @@ public:
 	void SetSongIndexArr(TArray<int> newArr);
 	void SetSongCycles(TArray<int> newArr);
 	void SetGamma(float newGamma);
+	void SetHardModeOn(bool newBool);
+	void SetAutoCursorOn(bool newBool);
 };

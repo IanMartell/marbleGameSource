@@ -202,6 +202,8 @@ void SCompanySplash::Tick(const FGeometry& AllottedGeometry, const double InCurr
 			imageBoxOne->SetPadding(CalculateSplashMarginOne());
 			imageBoxOne->SetContent(imageOne.ToSharedRef());
 
+			//OwningHUD->FocusSplash();
+
 			canTick = true;
 		}
 	}

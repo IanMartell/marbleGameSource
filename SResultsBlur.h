@@ -30,6 +30,8 @@ public:
 	void Released();
 	void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime);
 	FReply OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent);
+	virtual bool IsInteractable() const override { return true; }
+	virtual bool SupportsKeyboardFocus() const override { return true; }
 	FMargin CalculateHighscorePos(int textIndex, int numberOfLetters);
 
 	TWeakObjectPtr<class AMyHUD> OwningHUD;

@@ -252,6 +252,8 @@ public:
 
 	SLATE_ARGUMENT(UMaterial*, marble_SMUI_16)
 
+	SLATE_ARGUMENT(UMaterial*, focusCursor_SMUI)
+
 	SLATE_ARGUMENT(UMaterial*, gameFrameColor_SMUI)
 
 	SLATE_ARGUMENT(UMaterial*, emptyImg_SMUI)
@@ -278,6 +280,8 @@ public:
 
 	SLATE_ARGUMENT(int, songPlayingIndex)
 
+	SLATE_ARGUMENT(int, quantityOfMarblesToSpawn)
+
 	//SLATE_ARGUMENT(FVector2D, viewportSize)
 
 	SLATE_END_ARGS()
@@ -288,6 +292,7 @@ public:
 	void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime);
 
 	FReply OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent);
+	FReply OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& InMouseEvent);
 
 	virtual bool IsInteractable() const override { return true; };
 	virtual bool SupportsKeyboardFocus() const override { return true; };
@@ -327,6 +332,9 @@ public:
 	void OnIntersectionPressedSeventeen();
 	void OnIntersectionReleasedSeventeen();
 
+	void OnAutoIntersectionPressed();
+	void OnAutoIntersectionReleased();
+
 	//float CalculateGrownMarginX(FMargin inMargin);
 	float CalculateAdjustedCountdownMargin(FMargin inMargin);
 	FMargin GrowCountdownMargin(FMargin inMargin);
@@ -339,6 +347,7 @@ public:
 	FVector2D PrepTurnMarble(int currentMarble, FVector2d marblePosition, int dirOfMarble, bool isIntersection, int trackArrValue);
 	FVector2D TurnMarble(int currentMarble, FVector2D marblePosition);
 	FMargin ShrinkMarble(FMargin inPadding, double factorOfShrinkage);
+	void EnableAutoCursor(bool inBool);
 
 	// constructor variables
 
@@ -462,6 +471,8 @@ public:
 	UPROPERTY() UMaterial* marble_SMUI_15;
 	UPROPERTY() UMaterial* marble_SMUI_16;
 
+	UPROPERTY() UMaterial* focusCursor_SMUI;
+
 	UPROPERTY() UMaterial* gameFrameColor_SMUI;
 
 	UPROPERTY() UMaterial* emptyImg_SMUI;
@@ -578,6 +589,8 @@ public:
 	UPROPERTY() FSlateBrush* marble_SB_15;
 	UPROPERTY() FSlateBrush* marble_SB_16;
 
+	UPROPERTY() FSlateBrush* focusCursor_SB;
+
 	UPROPERTY() FSlateBrush* gameFrameColor_SB;
 
 	UPROPERTY() FSlateBrush* emptyImg_SB;
@@ -633,6 +646,12 @@ public:
 	UPROPERTY() int startingDir;
 
 	// misc variables and data structures
+
+	UPROPERTY() TArray <TSharedPtr <class SButton> > intersectionButtonsArray;
+
+	UPROPERTY() TSharedPtr <class SButton> autoIntersectionButton;
+
+	UPROPERTY() TSharedPtr<class SBox> focusCursorBox;
 
 	UPROPERTY() FString materialPath = FPaths::ProjectContentDir() / TEXT("/Game/Movies/videoMaterialsForUI/grass_VMUI_1");
 
@@ -759,4 +778,20 @@ public:
 
 	UPROPERTY() bool paused;
 	UPROPERTY() int songPlayingIndex;
+
+	UPROPERTY() int quantityOfMarblesToSpawn;
+
+	UPROPERTY() bool autoCursorModeOn;
+	UPROPERTY() double mouseX;
+	UPROPERTY() double mouseY;
+	UPROPERTY() TArray <int> intersectionTileIndices;
+	UPROPERTY() TArray <FVector2D> intersectionTileLocations;
+	UPROPERTY() TArray <float> intersectionDistancesFromMouse;
+	UPROPERTY() int tempIndexOfIntersectionInFocus;
+	UPROPERTY() int indexOfIntersectionInFocus;
+	UPROPERTY() bool indexOfIntersectionInFocusSafety;
+	UPROPERTY() float distanceBetweenMouseAndIntersectionFloatOne;
+
+
+	UPROPERTY() TArray<double> speedsOfMarbles;
 };

@@ -31,6 +31,10 @@ public:
 	void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime);
 
 	FReply OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent);
+	FReply OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& InMouseEvent);
+
+	virtual bool IsInteractable() const override { return true; }
+	virtual bool SupportsKeyboardFocus() const override { return true; }
 
 	void OnResumePressed();
 	void OnResumeReleased();

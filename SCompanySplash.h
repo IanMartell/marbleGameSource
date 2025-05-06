@@ -34,8 +34,11 @@ public:
 
 	/** Constructs this widget with InArgs */
 	void Construct(const FArguments& InArgs);
-	void Released();
 	void Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime);
+	virtual bool IsInteractable() const override { return true; }
+	virtual bool SupportsKeyboardFocus() const override { return true; }
+
+	void Released();
 	FMargin CalculateSplashMarginOne();
 	FMargin CalculateSplashMarginTwo();
 	FMargin CalculateStartingTextMargin();

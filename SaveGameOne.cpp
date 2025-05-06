@@ -95,6 +95,29 @@ float USaveGameOne::GetGamma()
 	return gamma;
 }
 
+bool USaveGameOne::GetHardModeOn()
+{
+	return hardModeOn;
+}
+
+bool USaveGameOne::GetAutoCursorOn()
+{
+	return autoCursorOn;
+}
+
+/*bool USaveGameOne::GetTestBool()
+{
+	return testBool;
+}
+int USaveGameOne::GetTestInt()
+{
+	return testInt;
+}
+FString USaveGameOne::GetTestString()
+{
+	return testString;
+}*/
+
 //Setters
 
 void USaveGameOne::SetHighscores(TArray<int> newHighscores)
@@ -180,4 +203,14 @@ void USaveGameOne::SetSongCycles(TArray<int> newArr)
 void USaveGameOne::SetGamma(float newGamma)
 {
 	gamma = newGamma;
+}
+
+void USaveGameOne::SetHardModeOn(bool newBool)
+{
+	hardModeOn = newBool;
+}
+
+void USaveGameOne::SetAutoCursorOn(bool newBool)
+{
+	autoCursorOn = newBool;
 }

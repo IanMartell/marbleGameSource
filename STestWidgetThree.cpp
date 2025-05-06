@@ -41,7 +41,7 @@ FMargin STestWidgetThree::ShrinkMarble(FMargin inPadding, double factorOfShrinka
 }
 
 const FMargin CalculateLargeTilePosition(FVector2D tileCoords, FVector2D adjustedViewportSize)
-{
+{// this functions calculates the large tile positions correctly when the coordinates of the top left nineth of the large tile are used to calculate it's postion. e.g tileCoords = (0, 0) places a large tile in the top left of the screen fully display while tileCoords = (14, 14) places a large tile in the bottom right mostly off screen
 	float viewportX = adjustedViewportSize.X;
 	float viewportY = adjustedViewportSize.Y;
 	float fOne = (viewportX - viewportY) / 2;
@@ -233,6 +233,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	railTurningOne_SMUI = InArgs._railTurningOne_SMUI;
 	railTurningTwo_SMUI = InArgs._railTurningTwo_SMUI;
 	railTurningThree_SMUI = InArgs._railTurningThree_SMUI;
+	focusCursor_SMUI = InArgs._focusCursor_SMUI;
 	railTurningFour_SMUI = InArgs._railTurningFour_SMUI;
 	gameFrameColor_SMUI = InArgs._gameFrameColor_SMUI;
 	emptyImg_SMUI = InArgs._emptyImg_SMUI;
@@ -263,6 +264,7 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	environmentAudio = InArgs._environmentAudio;
 	songPlaying = InArgs._songPlaying;
 	songPlayingIndex = InArgs._songPlayingIndex;
+	quantityOfMarblesToSpawn = InArgs._quantityOfMarblesToSpawn;
 
 	grass_SB_1 = new FSlateBrush();
 	grass_SB_1->SetResourceObject(grass_VMUI_1);
@@ -470,11 +472,19 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	marble_SB_15->SetResourceObject(marble_SMUI_15);
 	marble_SB_16->SetResourceObject(marble_SMUI_16);
 
+	focusCursor_SB = new FSlateBrush();
+	focusCursor_SB->SetResourceObject(focusCursor_SMUI);
+
 	gameFrameColor_SB = new FSlateBrush();
 	gameFrameColor_SB->SetResourceObject(gameFrameColor_SMUI);
 
 	emptyImg_SB = new FSlateBrush();
 	emptyImg_SB->SetResourceObject(emptyImg_SMUI);
+
+	if (maxLevel == 0 && highscores[0] == 0)
+	{
+		OwningHUD->MakeAchievement(0);
+	}
 
 	landscapeStuff = { grass_SB_1, holeFromDown_SB, holeFromLeft_SB, holeFromRight_SB, holeFromUp_SB, grass_SB_2, grass_SB_3, pondHorizontal_SB, pondVerticleFlowingLeft_SB, pondVerticleFlowingRight_SB, waterfall_SB, riverFlowingDown_SB_1, riverFlowingDown_SB_2, riverFlowingDown_SB_3, riverFlowingLeft_SB_1, riverFlowingLeft_SB_2, riverFlowingLeft_SB_3, riverFlowingRight_SB_1, riverFlowingRight_SB_2, riverFlowingRight_SB_3, tree_SB_1, tree_SB_2, tree_SB_3, tree_SB_4, tree_SB_5, riverTurning_SB_1, riverTurning_SB_2, riverTurning_SB_3, riverTurning_SB_4, emptyImg_SB, grass_SB_1, grass_SB_2, grass_SB_3, mountain_SB_1 };
 	trackStuff = { emptyImg_SB, verticleRail_SB, horizontalRail_SB, railTurningOne_SB, railTurningTwo_SB, railTurningThree_SB, railTurningFour_SB, buttonFromDownTurningRightZero_SB, buttonFromDownTurningLeftZero_SB, buttonFromLeftTurningRightZero_SB, buttonFromLeftTurningLeftZero_SB, buttonFromRightTurningRightZero_SB, buttonFromRightTurningLeftZero_SB, buttonFromUpTurningRightZero_SB, buttonFromUpTurningLeftZero_SB };//the first element for this arr is an empty image ALSO I should change this to an array of fully assembled widget structures with the intersection having their logic built in
@@ -582,9 +592,12 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 	}
 
 	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "startingPos two: " + startingPos.ToString() + " | startingDir two: " + FString::FromInt(startingDir));
+	speedsOfMarbles = { 0.8, 0.8533, 0.8976, 0.9337, 0.9625, 0.9846,
+					   1.0009, 1.0119, 1.0179, 1.0199, 1.0181,
+					   1.0129, 1.0047, 0.9943 };
 
-	quantityOfMarbles = 30 + holePositions.Num();
-	speedMultiplier = 0.8 * (1 + (0.023 * (holePositions.Num() - 3)));
+	quantityOfMarbles = quantityOfMarblesToSpawn + ((holePositions.Num() - 2) * 4);//check
+	speedMultiplier = speedsOfMarbles[holePositions.Num() - 3];
 	// s = 0.8 and i = 33 is 0.0242424
 	//see desmos and notes for breakdown of equation, but C = i/i^2 * 1/s  C is concentration, i is interval of marble spawn, s is speed of marble. when i increases from 33 marbles over 120 seconds by 1 marble s needs to grow at a linear rate to maintain the same C but that rate varies by intended C and starting s
 
@@ -770,18 +783,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[0].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedOne)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedOne)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedOne)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedOne)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[0].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -801,18 +816,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[1].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTwo)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTwo)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTwo)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTwo)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[1].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -832,18 +849,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[2].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedThree)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedThree)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedThree)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedThree)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[2].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -863,18 +882,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[3].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFour)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFour)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFour)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFour)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[3].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -894,18 +915,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[4].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFive)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFive)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFive)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFive)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[4].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -925,18 +948,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[5].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSix)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSix)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSix)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSix)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[5].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -956,18 +981,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[6].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSeven)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSeven)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSeven)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSeven)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[6].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -987,18 +1014,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[7].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedEight)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedEight)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedEight)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedEight)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[7].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1018,18 +1047,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[8].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedNine)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedNine)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedNine)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedNine)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[8].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1049,18 +1080,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[9].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTen)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTen)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[9].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1080,18 +1113,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[10].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedEleven)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedEleven)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedEleven)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedEleven)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[10].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1111,18 +1146,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[11].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTwelve)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTwelve)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedTwelve)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedTwelve)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[11].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1142,18 +1179,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[12].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedThirteen)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedThirteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedThirteen)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedThirteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[12].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1173,18 +1212,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[13].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFourteen)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFourteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFourteen)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFourteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[13].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1204,18 +1245,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[14].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFifteen)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFifteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedFifteen)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedFifteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[14].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1235,18 +1278,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[15].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSixteen)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSixteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSixteen)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSixteen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[15].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1266,18 +1311,20 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 						intersectionImages[16].ToSharedRef()
 					];
 
+				intersectionButtonsArray.Add(SNew(SButton)
+					.ContentPadding(FMargin())
+					.ButtonStyle(masterButtonStyle)
+					.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSeventeen)
+					.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSeventeen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
+					.ButtonColorAndOpacity(FLinearColor::Transparent)
+					.IsEnabled(true));
+
 				intersectionButtonsOverlay->AddSlot()
 					.HAlign(HAlign_Fill)
 					.VAlign(VAlign_Fill)
 					.Padding(CalculateTilePosition(FVector2D(a % 15, FMath::DivideAndRoundDown(a, 15)), adjustedViewportSize))
 					[
-						SNew(SButton)
-							.ContentPadding(FMargin())
-							.ButtonStyle(masterButtonStyle)
-							.OnPressed(this, &STestWidgetThree::OnIntersectionPressedSeventeen)
-							.OnReleased(this, &STestWidgetThree::OnIntersectionReleasedSeventeen)//OnClicked only takes FReply functions, OnReleased and OnPressed only take void functions
-							.ButtonColorAndOpacity(FLinearColor::Transparent)
-							.IsEnabled(true)
+						intersectionButtonsArray[16].ToSharedRef()
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
@@ -1288,7 +1335,75 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			}
 
 			currentIntersection += 1;
+			intersectionTileIndices.Add(a);//so the first solution I can imagine is to translate the indices into vector2D locations, then every frame measure the distance between the cursor and every intersection and whichevers shortest gets highlighted. Second I could store positional data on how each intersections positions relate to eachother at init, then record how the mouse position changed from the last frame. If I know intersection 1 is at 0,0 and intersection 2 is at 5, 0 and the prior highlighted intersection was 1 and the mouse moved + 2, 0 I know it was moving toward intersection 2 and away from 1. this would be probably faster to process but signifigantly harder to execute. I'm going option 1.
 		}
+	}
+
+	for (int a = 0; a < intersectionTileIndices.Num(); a++)
+	{
+		intersectionTileLocations.Add(FVector2D(((viewportSize.X - viewportSize.Y) / 2) + (viewportSize.Y / 30) + ((viewportSize.Y / 15) * (intersectionTileIndices[a] % 15)), (viewportSize.Y / 30) + ((viewportSize.Y / 15) * FMath::RoundToZero((float)(intersectionTileIndices[a] / 15)))));
+	}
+
+	autoIntersectionButton = SNew(SButton)
+		.ContentPadding(FMargin())
+		.ButtonStyle(masterButtonStyle)
+		.OnPressed(this, &STestWidgetThree::OnAutoIntersectionPressed)
+		.OnReleased(this, &STestWidgetThree::OnAutoIntersectionReleased)
+		.ButtonColorAndOpacity(FLinearColor::Transparent)
+		.IsEnabled(true);
+
+	focusCursorBox = SNew(SBox)
+		.HAlign(HAlign_Fill)
+		.VAlign(VAlign_Fill)
+		[
+			SNew(SImage)
+				.Image(focusCursor_SB)
+		];
+
+	autoCursorModeOn = currentSave->GetAutoCursorOn();//this will be set to the value retrieved from the save file when testing completes
+	indexOfIntersectionInFocusSafety = false;
+	tempIndexOfIntersectionInFocus = 0;
+
+	if (autoCursorModeOn)
+	{
+		for (int a = 0; a < intersectionButtonsArray.Num(); a++)
+		{
+			intersectionButtonsArray[a]->SetEnabled(false);
+		}
+
+		intersectionButtonsOverlay->AddSlot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			.Padding(FMargin())//this should make the button the size of the entire screen. Bigger even than the game display. it does not? this must mean the overlay is restricted to the game board somewhere.
+			[
+				autoIntersectionButton.ToSharedRef()
+			];
+
+		trackOverlay->AddSlot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			[
+				focusCursorBox.ToSharedRef()
+			];
+
+		playerOnePlayerController->GetMousePosition(mouseX, mouseY);
+
+		for (int a = 0; a < intersectionTileLocations.Num(); a++)
+		{
+			intersectionDistancesFromMouse.Add(pow(0.5, pow(2, intersectionTileLocations[a].X - mouseX) + pow(2, intersectionTileLocations[a].Y - mouseY)));
+		}
+
+		distanceBetweenMouseAndIntersectionFloatOne = intersectionDistancesFromMouse[0];
+		for (int a = 1; a < intersectionDistancesFromMouse.Num(); a++)
+		{
+			if (intersectionDistancesFromMouse[a] < distanceBetweenMouseAndIntersectionFloatOne)
+			{
+				distanceBetweenMouseAndIntersectionFloatOne = intersectionDistancesFromMouse[a];
+				indexOfIntersectionInFocus = a;
+			}
+		}
+
+		focusCursorBox->SetPadding(CalculateLargeTilePosition(FVector2D(intersectionPositions[indexOfIntersectionInFocus].X - 1, intersectionPositions[indexOfIntersectionInFocus].Y - 1), adjustedViewportSize));
 	}
 
 	pauseOverlay = SNew(SOverlay);
@@ -1421,7 +1536,7 @@ void STestWidgetThree::OnIntersectionReleasedOne()
 	intersectionCycle[0] = (intersectionCycle[0] + 1) % 4;
 	intersectionImages[0]->SetImage(intersections[intersectionsKeys[0]][intersectionCycle[0]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedTwo()
@@ -1435,7 +1550,7 @@ void STestWidgetThree::OnIntersectionReleasedTwo()
 	intersectionCycle[1] = (intersectionCycle[1] + 1) % 4;
 	intersectionImages[1]->SetImage(intersections[intersectionsKeys[1]][intersectionCycle[1]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedThree()
@@ -1449,7 +1564,7 @@ void STestWidgetThree::OnIntersectionReleasedThree()
 	intersectionCycle[2] = (intersectionCycle[2] + 1) % 4;
 	intersectionImages[2]->SetImage(intersections[intersectionsKeys[2]][intersectionCycle[2]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedFour()
@@ -1463,7 +1578,7 @@ void STestWidgetThree::OnIntersectionReleasedFour()
 	intersectionCycle[3] = (intersectionCycle[3] + 1) % 4;
 	intersectionImages[3]->SetImage(intersections[intersectionsKeys[3]][intersectionCycle[3]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedFive()
@@ -1477,7 +1592,7 @@ void STestWidgetThree::OnIntersectionReleasedFive()
 	intersectionCycle[4] = (intersectionCycle[4] + 1) % 4;
 	intersectionImages[4]->SetImage(intersections[intersectionsKeys[4]][intersectionCycle[4]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedSix()
@@ -1491,7 +1606,7 @@ void STestWidgetThree::OnIntersectionReleasedSix()
 	intersectionCycle[5] = (intersectionCycle[5] + 1) % 4;
 	intersectionImages[5]->SetImage(intersections[intersectionsKeys[5]][intersectionCycle[5]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedSeven()
@@ -1505,7 +1620,7 @@ void STestWidgetThree::OnIntersectionReleasedSeven()
 	intersectionCycle[6] = (intersectionCycle[6] + 1) % 4;
 	intersectionImages[6]->SetImage(intersections[intersectionsKeys[6]][intersectionCycle[6]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedEight()
@@ -1519,7 +1634,7 @@ void STestWidgetThree::OnIntersectionReleasedEight()
 	intersectionCycle[7] = (intersectionCycle[7] + 1) % 4;
 	intersectionImages[7]->SetImage(intersections[intersectionsKeys[7]][intersectionCycle[7]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedNine()
@@ -1533,7 +1648,7 @@ void STestWidgetThree::OnIntersectionReleasedNine()
 	intersectionCycle[8] = (intersectionCycle[8] + 1) % 4;
 	intersectionImages[8]->SetImage(intersections[intersectionsKeys[8]][intersectionCycle[8]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedTen()
@@ -1547,7 +1662,7 @@ void STestWidgetThree::OnIntersectionReleasedTen()
 	intersectionCycle[9] = (intersectionCycle[9] + 1) % 4;
 	intersectionImages[9]->SetImage(intersections[intersectionsKeys[9]][intersectionCycle[9]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedEleven()
@@ -1561,7 +1676,7 @@ void STestWidgetThree::OnIntersectionReleasedEleven()
 	intersectionCycle[10] = (intersectionCycle[10] + 1) % 4;
 	intersectionImages[10]->SetImage(intersections[intersectionsKeys[10]][intersectionCycle[10]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedTwelve()
@@ -1575,7 +1690,7 @@ void STestWidgetThree::OnIntersectionReleasedTwelve()
 	intersectionCycle[11] = (intersectionCycle[11] + 1) % 4;
 	intersectionImages[11]->SetImage(intersections[intersectionsKeys[11]][intersectionCycle[11]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedThirteen()
@@ -1589,7 +1704,7 @@ void STestWidgetThree::OnIntersectionReleasedThirteen()
 	intersectionCycle[12] = (intersectionCycle[12] + 1) % 4;
 	intersectionImages[12]->SetImage(intersections[intersectionsKeys[12]][intersectionCycle[12]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedFourteen()
@@ -1603,7 +1718,7 @@ void STestWidgetThree::OnIntersectionReleasedFourteen()
 	intersectionCycle[13] = (intersectionCycle[13] + 1) % 4;
 	intersectionImages[13]->SetImage(intersections[intersectionsKeys[13]][intersectionCycle[13]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedFifteen()
@@ -1617,7 +1732,7 @@ void STestWidgetThree::OnIntersectionReleasedFifteen()
 	intersectionCycle[14] = (intersectionCycle[14] + 1) % 4;
 	intersectionImages[14]->SetImage(intersections[intersectionsKeys[14]][intersectionCycle[14]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedSixteen()
@@ -1631,7 +1746,7 @@ void STestWidgetThree::OnIntersectionReleasedSixteen()
 	intersectionCycle[15] = (intersectionCycle[15] + 1) % 4;
 	intersectionImages[15]->SetImage(intersections[intersectionsKeys[15]][intersectionCycle[15]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
 }
 
 void STestWidgetThree::OnIntersectionPressedSeventeen()
@@ -1645,7 +1760,141 @@ void STestWidgetThree::OnIntersectionReleasedSeventeen()
 	intersectionCycle[16] = (intersectionCycle[16] + 1) % 4;
 	intersectionImages[16]->SetImage(intersections[intersectionsKeys[16]][intersectionCycle[16]]);
 	intersectionUpAudioComponent->Play();
-	OwningHUD->SetFocusToGame();
+	//OwningHUD->SetFocusToGame();
+}
+
+void STestWidgetThree::OnAutoIntersectionPressed()
+{
+	//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "auto intersection pressed");
+	indexOfIntersectionInFocusSafety = true;
+
+	intersectionCycle[indexOfIntersectionInFocus] = (intersectionCycle[indexOfIntersectionInFocus] + 1) % 4;
+	intersectionImages[indexOfIntersectionInFocus]->SetImage(intersections[intersectionsKeys[indexOfIntersectionInFocus]][intersectionCycle[indexOfIntersectionInFocus]]);
+	intersectionDownAudioComponent->Play();
+}
+void STestWidgetThree::OnAutoIntersectionReleased()
+{
+	intersectionCycle[indexOfIntersectionInFocus] = (intersectionCycle[indexOfIntersectionInFocus] + 1) % 4;
+	intersectionImages[indexOfIntersectionInFocus]->SetImage(intersections[intersectionsKeys[indexOfIntersectionInFocus]][intersectionCycle[indexOfIntersectionInFocus]]);
+	intersectionUpAudioComponent->Play();
+	//OwningHUD->SetFocusToGame();// are we sure this should be called every button press?? !!! TESTING REQUIRED !!!
+
+	indexOfIntersectionInFocusSafety = false;
+}
+
+void STestWidgetThree::EnableAutoCursor(bool inBool)
+{
+	if (inBool)
+	{
+		for (int a = 0; a < intersectionButtonsArray.Num(); a++)
+		{
+			intersectionButtonsArray[a]->SetEnabled(false);
+		}
+
+		intersectionButtonsOverlay->AddSlot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			.Padding(FMargin())//this should make the button the size of the entire screen. Bigger even than the game display.
+			[
+				autoIntersectionButton.ToSharedRef()
+			];
+
+		trackOverlay->AddSlot()
+			.HAlign(HAlign_Fill)
+			.VAlign(VAlign_Fill)
+			[
+				focusCursorBox.ToSharedRef()
+			];
+
+		autoCursorModeOn = true;
+
+		intersectionDistancesFromMouse.Empty();
+
+		playerOnePlayerController->GetMousePosition(mouseX, mouseY);
+
+		for (int a = 0; a < intersectionTileLocations.Num(); a++)
+		{
+			intersectionDistancesFromMouse.Add(FMath::Sqrt(FMath::Abs((intersectionTileLocations[a].X - mouseX) * (intersectionTileLocations[a].X - mouseX)) + FMath::Abs((intersectionTileLocations[a].Y - mouseY) * (intersectionTileLocations[a].Y - mouseY))));
+		}
+
+		distanceBetweenMouseAndIntersectionFloatOne = intersectionDistancesFromMouse[0];
+		tempIndexOfIntersectionInFocus = 0;
+		for (int a = 1; a < intersectionDistancesFromMouse.Num(); a++)
+		{
+			if (distanceBetweenMouseAndIntersectionFloatOne > intersectionDistancesFromMouse[a])
+			{
+				distanceBetweenMouseAndIntersectionFloatOne = intersectionDistancesFromMouse[a];
+				tempIndexOfIntersectionInFocus = a;
+			}
+		}
+
+		if (!indexOfIntersectionInFocusSafety)
+		{
+			indexOfIntersectionInFocus = tempIndexOfIntersectionInFocus;
+		}
+
+		focusCursorBox->SetPadding(CalculateLargeTilePosition(FVector2D(intersectionPositions[indexOfIntersectionInFocus].X - 1, intersectionPositions[indexOfIntersectionInFocus].Y - 1), adjustedViewportSize));
+	}
+	else
+	{
+		intersectionButtonsOverlay->RemoveSlot(autoIntersectionButton.ToSharedRef());
+		trackOverlay->RemoveSlot(focusCursorBox.ToSharedRef());
+
+		for (int a = 0; a < intersectionButtonsArray.Num(); a++)
+		{
+			intersectionButtonsArray[a]->SetEnabled(true);
+		}
+
+		autoCursorModeOn = false;
+	}
+}
+
+FReply STestWidgetThree::OnMouseButtonDown(const FGeometry& MyGeometry, const FPointerEvent& InMouseEvent)
+{
+	currentSave = Cast<USaveGameOne>(UGameplayStatics::LoadGameFromSlot(TEXT("saveGameOne"), 0));
+	FKey inButton = InMouseEvent.GetEffectingButton();
+
+	if (inButton == currentSave->GetPauseMouse())
+	{// I should test this if (!paused) conditional to make sure the else block is not running. If the else block is running I'll need to double check it is functioning properly
+		if (!paused)
+		{
+			OwningHUD->DisplayPauseScreen();
+			paused = true;
+
+			switch (environmentAudio)
+			{
+			case 0:
+				windAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+
+				riverAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+				break;
+			case 1:
+				windAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+
+				waterfallAudioComponents[audioCycleTracker % 2]->SetPaused(true);
+				break;
+			default:
+				break;
+			}
+
+			if (songAudioComponents[songPlayingIndex]->IsPlaying())//this conditional here is a little concerning
+			{
+				songAudioComponents[songPlayingIndex]->SetPaused(true);
+			}
+		}
+		else
+		{
+			OwningHUD->PrepDestroyPauseScreen();
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "tabFromSTestWidget");
+		}
+	}
+
+	/*if (inButton == EKeys::LeftMouseButton)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "click");
+	}*/
+
+	return FReply::Handled();
 }
 
 FReply STestWidgetThree::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent& InKeyEvent)
@@ -1679,7 +1928,7 @@ FReply STestWidgetThree::OnKeyDown(const FGeometry& MyGeometry, const FKeyEvent&
 				break;
 			}
 
-			if (songAudioComponents[songPlayingIndex]->IsPlaying())
+			if (songAudioComponents[songPlayingIndex]->IsPlaying())//this conditional here is a little concerning
 			{
 				songAudioComponents[songPlayingIndex]->SetPaused(true);
 			}
@@ -1959,10 +2208,42 @@ void STestWidgetThree::PlayGame()
 	}
 }
 
+//okay. Now, here in this tick create a new partition in which you will check if autoCursorModeOn, if it is find the mouse screen position, find the nearest intersection to the current mouse position, and if that intersection is different than the one last frame move the auto cursor to the new location, recording the new location 
+
 void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCurrentTime, const float InDeltaTime)
 {
 	//the quantity of ticks that happen per second directly factors into the turning process, you need to know it and it needs to be stable. adendum: Needs?
 	SCompoundWidget::Tick(AllottedGeometry, InCurrentTime, InDeltaTime);
+
+	if (autoCursorModeOn)
+	{
+		intersectionDistancesFromMouse.Empty();
+
+		playerOnePlayerController->GetMousePosition(mouseX, mouseY);//my tests prove mouseX and mouseY are in relation to viewportSize as defined above. note mouseX works from left to right, but mouse y works from top to bottom
+		//so now convert mouseX and Y positions into tile coords. the same format of tileCoords which the intersectionCycle indices are based on.
+		for (int a = 0; a < intersectionTileLocations.Num(); a++)
+		{
+			intersectionDistancesFromMouse.Add(FMath::Sqrt(FMath::Abs((intersectionTileLocations[a].X - mouseX) * (intersectionTileLocations[a].X - mouseX)) + FMath::Abs((intersectionTileLocations[a].Y - mouseY) * (intersectionTileLocations[a].Y - mouseY))));
+		}
+
+		distanceBetweenMouseAndIntersectionFloatOne = intersectionDistancesFromMouse[0];
+		tempIndexOfIntersectionInFocus = 0;
+		for (int a = 1; a < intersectionDistancesFromMouse.Num(); a++)
+		{
+			if (distanceBetweenMouseAndIntersectionFloatOne > intersectionDistancesFromMouse[a])
+			{
+				distanceBetweenMouseAndIntersectionFloatOne = intersectionDistancesFromMouse[a];
+				tempIndexOfIntersectionInFocus = a;
+			}
+		}
+
+		if (!indexOfIntersectionInFocusSafety)
+		{
+			indexOfIntersectionInFocus = tempIndexOfIntersectionInFocus;
+		}
+
+		focusCursorBox->SetPadding(CalculateLargeTilePosition( FVector2D(intersectionPositions[indexOfIntersectionInFocus].X -1, intersectionPositions[indexOfIntersectionInFocus].Y - 1), adjustedViewportSize)); //if an intersection is ever on the edge of the screen on the top or left of the screen the focusCursor should display partly off screen with this operation
+	}
 
 	if (paused == false)
 	{
@@ -1999,21 +2280,27 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 				{
 					if (!songAudioComponents[songPlayingIndex]->IsPlaying())//I need to check if this works as expected but Im guessing it does
 					{//to test if all of this song credits programming complexity actually worked go into credits, play song. go into game, keep restarting until song ends. then see if new song picks up 
-						songPlayingIndex = currentSave->GetSongIndexArr().Last();
-						songAudioComponents[songPlayingIndex]->Play();
-						OwningHUD->songPlayingIndex = songPlayingIndex;
-						OwningHUD->songPlaying = false;
+						if (currentSave->GetSongIndexArr().Num() > 0)
+						{
+							songPlayingIndex = currentSave->GetSongIndexArr().Last();
+							songAudioComponents[songPlayingIndex]->Play();
+							OwningHUD->songPlayingIndex = songPlayingIndex;
+							OwningHUD->songPlaying = false;
 
-						OwningHUD->UpdateSongArr();
+							OwningHUD->UpdateSongArr();
+						}
 					}
 				}
 				else
 				{
-					songPlayingIndex = currentSave->GetSongIndexArr().Last();
-					songAudioComponents[songPlayingIndex]->Play();
-					OwningHUD->songPlayingIndex = songPlayingIndex;
+					if (currentSave->GetSongIndexArr().Num() > 0)//not only do I have to fix this, but also I have to fix what happens if songs settings are altered during the game. what happens if I deactivate the song currently playing in game for instance?
+					{
+						songPlayingIndex = currentSave->GetSongIndexArr().Last();
+						songAudioComponents[songPlayingIndex]->Play();
+						OwningHUD->songPlayingIndex = songPlayingIndex;
 
-					OwningHUD->UpdateSongArr();
+						OwningHUD->UpdateSongArr();
+					}
 				}
 
 				songBool = true;
@@ -2150,6 +2437,7 @@ void STestWidgetThree::Tick(const FGeometry& AllottedGeometry, const double InCu
 							{
 								maxLevel += 1;
 								OwningHUD->newMaxLevel = true;
+								OwningHUD->MakeAchievement(maxLevel);
 							}
 						}
 

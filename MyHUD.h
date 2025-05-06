@@ -123,6 +123,9 @@ public:
 	UPROPERTY() UMaterial* curtains_VMUI;
 	UPROPERTY() UMediaPlayer* curtains_MP;
 
+	UPROPERTY() UMaterial* neon_VMUI;
+	UPROPERTY() UMediaPlayer* neon_MP;
+
 	UPROPERTY() UImgMediaSource* grass_IS_1;
 	UPROPERTY() UImgMediaSource* grass_IS_2;
 	UPROPERTY() UImgMediaSource* grass_IS_3;
@@ -173,6 +176,8 @@ public:
 	UPROPERTY() UImgMediaSource* flag_IS_16;
 
 	UPROPERTY() UImgMediaSource* curtains_IS;
+
+	UPROPERTY() UImgMediaSource* neon_IS;
 
 	UPROPERTY() UMaterial* buttonFromDownTurningRightZero_SMUI;
 	UPROPERTY() UMaterial* buttonFromDownTurningRightOne_SMUI;
@@ -238,14 +243,23 @@ public:
 	UPROPERTY() UMaterial* goodUseSplashGrass_SMUI;
 	UPROPERTY() UMaterial* goodUseDigitalText_SMUI;
 
+	UPROPERTY() UMaterial* neonClicked_SMUI;
+	UPROPERTY() UMaterial* neonLit_SMUI;
+	UPROPERTY() UMaterial* neonUnlit_SMUI;
+	UPROPERTY() UMaterial* neonHoveredLit_SMUI;
+	UPROPERTY() UMaterial* neonHoveredUnlit_SMUI;
+	UPROPERTY() UMaterial* neonBarricade_SMUI;
+	UPROPERTY() UMaterial* focusCursor_SMUI;
+
 	UPROPERTY() TArray <UMaterial*> splashGrassArr;
 	UPROPERTY() TArray <UMaterial*> splashBootArr;
 
 	UPROPERTY() UMaterial* placeholderTrash;
+	UPROPERTY() UMaterial* logo_SMUI;
 	UPROPERTY() UMaterial* emptyImg_SMUI;
 	UPROPERTY() UMaterial* black_SMUI;
 
-	//sound effects stuff
+	//sound effects variables
 
 	UPROPERTY() USoundBase* intersectionButtonPressed;
 	UPROPERTY() USoundBase* intersectionButtonReleased;
@@ -260,6 +274,11 @@ public:
 	UPROPERTY() USoundBase* waterfall;
 	UPROPERTY() USoundBase* shovelingDirt;
 	UPROPERTY() USoundBase* miss;
+	UPROPERTY() USoundBase* neon;
+	UPROPERTY() USoundBase* neonOffOne;
+	UPROPERTY() USoundBase* neonOffTwo;
+	UPROPERTY() USoundBase* neonOnOne;
+	UPROPERTY() USoundBase* neonOnTwo;
 	UPROPERTY() TArray <USoundBase*> scoring;
 	UPROPERTY() TArray <USoundBase*> victory;
 
@@ -276,6 +295,11 @@ public:
 	UPROPERTY() UAudioComponent* rainstickAudioComponent;
 	UPROPERTY() UAudioComponent* shovelingDirtAudioComponent;
 	UPROPERTY() UAudioComponent* missAudioComponent;
+	UPROPERTY() UAudioComponent* neonAudioComponent;
+	UPROPERTY() UAudioComponent* neonOffOneAudioComponent;
+	UPROPERTY() UAudioComponent* neonOffTwoAudioComponent;
+	UPROPERTY() UAudioComponent* neonOnOneAudioComponent;
+	UPROPERTY() UAudioComponent* neonOnTwoAudioComponent;
 	UPROPERTY() TArray <UAudioComponent*> scoringAudioComponents;
 	UPROPERTY() TArray <UAudioComponent*> victoryAudioComponents;
 
@@ -325,6 +349,12 @@ protected:
 
 	TSharedPtr<class SOptions> optionsMenuSlateWidget;
 	TSharedPtr<class SWidget> slateWidgetContainerNine;
+
+	TSharedPtr<class SMediaPrecacheOperation> precacheSlateWidget;
+	TSharedPtr<class SWeakWidget> slateWidgetContainerTen;
+
+	TSharedPtr<class SLoadingSplash> loadingSlateWidget;
+	TSharedPtr<class SWeakWidget> slateWidgetContainerEleven;
 
 	virtual void BeginPlay() override;
 
@@ -398,6 +428,7 @@ public:
 	UPROPERTY() bool newMaxLevel;
 	UPROPERTY() bool songPlaying;
 	UPROPERTY() int songPlayingIndex;
+	UPROPERTY() int quantityOfMarblesToSpawn;
 	UPROPERTY() TArray<int> songCycles;
 	//UPROPERTY() int audioCycleTrackerFromGame;
 	//UPROPERTY() int audioCycleTrackerFromMenu;
@@ -1755,7 +1786,7 @@ public:
 
 	void HideCurtains(bool toGame = true);
 
-	void PreLoadCurtains();
+	//void PreLoadCurtains();
 
 	void ReturnToMainMenu();
 
@@ -1785,6 +1816,22 @@ public:
 	void CommitKey(int keyToReplace, FKey newKey);
 
 	void UpdateSongArr();
-
+	void UpdateGameSongInfo(int song);
 	void ToggleSong(int songToToggle);
+
+	void MakeAchievement(int maxLevel);
+
+	void SwitchHardMode(bool newBool);
+
+	void FocusSplash();
+
+	void EngageAutoCursorInGame(bool inBool);
+
+	void EngageMediaPrecacheOperation();
+
+	void ExecutePrecache(int inInt);
+
+	void DestroyMediaPrecacheOperation();
+
+	void HideLogoSplash();
 };
