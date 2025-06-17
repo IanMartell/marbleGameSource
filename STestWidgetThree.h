@@ -348,6 +348,8 @@ public:
 	FVector2D TurnMarble(int currentMarble, FVector2D marblePosition);
 	FMargin ShrinkMarble(FMargin inPadding, double factorOfShrinkage);
 	void EnableAutoCursor(bool inBool);
+	void AlterMarbleTurn(int originatingIntersection, int currentMarbleIndex);
+	FVector2D EnactAlteration(int currentMarble, FVector2D marblePosition);
 
 	// constructor variables
 
@@ -721,12 +723,13 @@ public:
 	UPROPERTY() TArray<FVector2D> previousTickMarblePositionsCenters;
 	UPROPERTY() int currentIntersection = 1;
 	UPROPERTY() TArray<int> startingMarbleMovementTracker = { { 0, 0 } };
-	UPROPERTY() TArray<TArray<int> > marbleMovementTracker;
+	UPROPERTY() TArray<TArray<int> > marbleMovementTracker; // [0] is x axis, [1] y. y axis is inverted so up is negative.
 	UPROPERTY() TArray<TArray<int> > marblesToBeDestroyedMovementTracker;
 	UPROPERTY() TArray<bool> marbleIsTurning;
+	UPROPERTY() TArray<bool> marbleTurnAltering;
 	UPROPERTY() TArray<int> turnToExecute;
 	UPROPERTY() TArray<int> dirOfMarbles;
-	UPROPERTY() TArray<FVector2D> deltaMarblePos;
+	UPROPERTY() TArray<FVector2D> marblePosAtArcInvo;
 	UPROPERTY() int quantityOfMarbles;
 
 	UPROPERTY() int timeOfGame = 120;
@@ -792,6 +795,31 @@ public:
 	UPROPERTY() bool indexOfIntersectionInFocusSafety;
 	UPROPERTY() float distanceBetweenMouseAndIntersectionFloatOne;
 
-
 	UPROPERTY() TArray<double> speedsOfMarbles;
+	UPROPERTY() TArray<int> quantitiesOfMarbles;
+
+	UPROPERTY() TArray <int> marblesInsideIntersections;
+	UPROPERTY() TArray <int> intersectionsContainingMarbles;
+	UPROPERTY() TArray <int> intersectionLocations;
+	UPROPERTY() TArray <bool> marblesTurnAlterationToStraight;
+	UPROPERTY() TArray <FVector2D> absDistancesToCorrection;
+	UPROPERTY() TArray<int> alterationToExecute;
+	UPROPERTY() TArray <FVector2D> marblesPosStorage;
+	UPROPERTY() TArray <FVector2D> marblesActualPosAtArcInvo;
+	UPROPERTY() TArray<double> arcLengthOfAlterations;
+
+	UPROPERTY() double coefA;
+	UPROPERTY() double coefB;
+	UPROPERTY() double coefF;
+	UPROPERTY() double coefFTwo;
+	UPROPERTY() double coefH;
+	UPROPERTY() double coefI;
+	UPROPERTY() double coefJ;
+	UPROPERTY() double coefV;
+	UPROPERTY() double coefX;
+
+	UPROPERTY() TArray<TArray<double>> coefficientsA;
+
+	UPROPERTY() double distA;
+	UPROPERTY() double distB;
 };
