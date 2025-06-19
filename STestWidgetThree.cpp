@@ -800,7 +800,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 2:
@@ -834,7 +833,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 3:
@@ -868,7 +866,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 4:
@@ -902,7 +899,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 5:
@@ -936,7 +932,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 6:
@@ -970,7 +965,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 7:
@@ -1004,7 +998,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 8:
@@ -1038,7 +1031,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 9:
@@ -1072,7 +1064,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 10:
@@ -1106,7 +1097,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 11:
@@ -1140,7 +1130,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 12:
@@ -1174,7 +1163,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 13:
@@ -1208,7 +1196,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 14:
@@ -1242,7 +1229,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 15:
@@ -1276,7 +1262,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 16:
@@ -1310,7 +1295,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			case 17:
@@ -1344,7 +1328,6 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 					];
 
 				intersectionsKeys.Add(trackArr[a]);
-				intersectionLocations.Add(a);
 
 				break;
 			default:
@@ -1352,13 +1335,35 @@ void STestWidgetThree::Construct(const FArguments& InArgs)//at some point I will
 			}
 
 			currentIntersection += 1;
-			intersectionTileIndices.Add(a);//so the first solution I can imagine is to translate the indices into vector2D locations, then every frame measure the distance between the cursor and every intersection and whichevers shortest gets highlighted. Second I could store positional data on how each intersections positions relate to eachother at init, then record how the mouse position changed from the last frame. If I know intersection 1 is at 0,0 and intersection 2 is at 5, 0 and the prior highlighted intersection was 1 and the mouse moved + 2, 0 I know it was moving toward intersection 2 and away from 1. this would be probably faster to process but signifigantly harder to execute. I'm going option 1.
+			intersectionLocations.Add(a);//so the first solution I can imagine is to translate the indices into vector2D locations, then every frame measure the distance between the cursor and every intersection and whichevers shortest gets highlighted. Second I could store positional data on how each intersections positions relate to eachother at init, then record how the mouse position changed from the last frame. If I know intersection 1 is at 0,0 and intersection 2 is at 5, 0 and the prior highlighted intersection was 1 and the mouse moved + 2, 0 I know it was moving toward intersection 2 and away from 1. this would be probably faster to process but signifigantly harder to execute. I'm going option 1.
 		}
 	}
 
-	for (int a = 0; a < intersectionTileIndices.Num(); a++)
+	for (int a = 0; a < intersectionLocations.Num(); a++)
 	{
-		intersectionTileLocations.Add(FVector2D(((viewportSize.X - viewportSize.Y) / 2) + (viewportSize.Y / 30) + ((viewportSize.Y / 15) * (intersectionTileIndices[a] % 15)), (viewportSize.Y / 30) + ((viewportSize.Y / 15) * FMath::RoundToZero((float)(intersectionTileIndices[a] / 15)))));
+		intersectionTileLocations.Add(FVector2D(((viewportSize.X - viewportSize.Y) / 2) + (viewportSize.Y / 30) + ((viewportSize.Y / 15) * (intersectionLocations[a] % 15)), (viewportSize.Y / 30) + ((viewportSize.Y / 15) * FMath::RoundToZero((float)(intersectionLocations[a] / 15)))));
+	}
+
+	for (int a = 0; a < intersectionLocations.Num(); a++)
+	{
+		switch (FMath::DivideAndRoundDown(trackArr[a], 2)) // pi/8 = 0.3927f
+		{
+		case 0: // intersection dir 3
+			intersectionAlterationBoundaries.Add(FMath::DivideAndRoundDown(intersectionLocations[a], 15) + 0.1073);
+			break;
+		case 1: // intersection dir 4
+			intersectionAlterationBoundaries.Add((intersectionLocations[a] % 15) - 0.1073);
+			break;
+		case 2: // intersection dir 2
+			intersectionAlterationBoundaries.Add((intersectionLocations[a] % 15) + 0.1073);
+			break;
+		case 3: // intersection dir 1
+			intersectionAlterationBoundaries.Add(FMath::DivideAndRoundDown(intersectionLocations[a], 15) - 0.1073);
+			break;
+		default:
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "faulty intersection boundary calculation");
+			break;
+		}
 	}
 
 	autoIntersectionButton = SNew(SButton)
@@ -2286,10 +2291,11 @@ FVector2D STestWidgetThree::TurnMarble(int currentMarble, FVector2D marblePositi
 		break;
 	}
 
+	marblesPosStorage[currentMarble] = convertedMarblePos;
 	return convertedMarblePos;
 }// to find the halfway point of a turn all you need to do is figure out which direction the marbles are coming from, and then once the marble has passed through 1 quarter of the length of the tile along the axis on which it was originally traveling the marble would be past halfway through a turn. This means also you will need to limit the marbles continuing straight through an intersection to only be allowed to convert to turning within the same window of time, which is not 25% or 50%, it is in fact 39% of the tile.
 
-void STestWidgetThree::AlterMarbleTurn(int originatingIntersection, int currentMarbleIndex)
+void STestWidgetThree::AlterMarbleTurn(int originatingIntersection, int currentMarbleIndex) // maybe I should add a sound effect for when a turn correction works, and one for when it doesn't
 {
 	currentMarbleIndex = marblesInsideIntersections[currentMarbleIndex];
 
@@ -2299,32 +2305,21 @@ void STestWidgetThree::AlterMarbleTurn(int originatingIntersection, int currentM
 	{
 	case 0: // button from down turning right
 
-		if (marblePositions[currentMarbleIndex].Y > FMath::RoundFromZero(marblePositions[currentMarbleIndex].Y - 0.5) + 0.5 - 0.3927f)//REMEMBER: the y axis is inverted so the marble moving down the screen means going up the Y coordinates, and when a marble enters a tile when it's moving straight along a cardinal direction it enters halfway between integers, ie 4.5, 5.5
+		if (marblePositions[currentMarbleIndex].Y > intersectionAlterationBoundaries[originatingIntersection])//REMEMBER: the y axis is inverted so the marble moving down the screen means going up the Y coordinates, and when a marble enters a tile when it's moving straight along a cardinal direction it enters halfway between integers, ie 4.5, 5.5
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "alterTurn Engaged | int orientation: " + FString::FromInt(intersectionsKeys[originatingIntersection]) + " | currentMarble: " + FString::FromInt(currentMarbleIndex));
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "alterTurn Engaged | int orientation: " + FString::FromInt(intersectionsKeys[originatingIntersection]) + " | currentMarble: " + FString::FromInt(currentMarbleIndex) + " | marblePosition: " + marblePositions[currentMarbleIndex].ToString() + " | intersectionAlterationBoundary: " + FString::SanitizeFloat(intersectionAlterationBoundaries[originatingIntersection]));
 
 			marblePosAtArcInvo[currentMarbleIndex] = marblePositions[currentMarbleIndex];
 
 			if (intersectionCycle[originatingIntersection] < 2) // this would mean the intersection was turned at time of pressing
 			{
-				if (marbleTurnAltering[currentMarbleIndex])
-				{
-					absDistancesToCorrection[currentMarbleIndex].X = marblesPosStorage[currentMarbleIndex].X - marblePositions[currentMarbleIndex].X;
-					absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - (FMath::RoundToZero(marblesPosStorage[currentMarbleIndex].Y) - 0.5);
-				}
-				else 
-				{
-					marblesPosStorage[currentMarbleIndex] = TurnMarble(currentMarbleIndex, marblePositions[currentMarbleIndex]);//is the current marble index truly the correct value here? should be right
+				absDistancesToCorrection[currentMarbleIndex].X = marblesPosStorage[currentMarbleIndex].X - marblePositions[currentMarbleIndex].X;
+				absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - (FMath::RoundToZero(marblesPosStorage[currentMarbleIndex].Y) - 0.5);
 
-					absDistancesToCorrection[currentMarbleIndex].X = marblesPosStorage[currentMarbleIndex].X - marblePositions[currentMarbleIndex].X;
-					absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - (FMath::RoundToZero(marblesPosStorage[currentMarbleIndex].Y) - 0.5);
-				}
-				
-
-				coefA = (1 - absDistancesToCorrection[currentMarbleIndex].Y) / 5;
+				coefA = absDistancesToCorrection[currentMarbleIndex].Y / 5;
 				coefB = coefA * 4;
-				coefF = absDistancesToCorrection[currentMarbleIndex].X / 2;
-				coefF = (absDistancesToCorrection[currentMarbleIndex].X / (coefF * sin( ( (1 / coefB) * 3.1416) * (0 + ( (coefB / 2) - coefA) ) ) + coefF) ) * absDistancesToCorrection[currentMarbleIndex].X;
+				coefF = absDistancesToCorrection[currentMarbleIndex].X;
+				coefF = ((coefF / ((coefF / 2) * sin(((1 / coefB) * 3.1416) * (0 + ((coefB / 2) - coefA))) + (coefF / 2))) * coefF) / 2;
 				coefH = coefA * 5;
 				arcLengthOfAlterations[currentMarbleIndex] = 0;
 				distA = (coefB + coefA) / 12;
@@ -2347,19 +2342,14 @@ void STestWidgetThree::AlterMarbleTurn(int originatingIntersection, int currentM
 			}
 			else 
 			{
-				if (marbleTurnAltering[currentMarbleIndex])
-				{
-					absDistancesToCorrection[currentMarbleIndex].X = FMath::RoundFromZero(marblePositions[currentMarbleIndex].X) - marblesPosStorage[currentMarbleIndex].X;
-					absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - FMath::RoundToZero(marblesPosStorage[currentMarbleIndex].Y);
-				}
-				else
+				if (!marbleTurnAltering[currentMarbleIndex])
 				{
 					marblesPosStorage[currentMarbleIndex] = marblePositions[currentMarbleIndex];
 					marbleIsTurning[currentMarbleIndex] = true;
-
-					absDistancesToCorrection[currentMarbleIndex].X = 0.5f;
-					absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - FMath::RoundToZero(marblesPosStorage[currentMarbleIndex].Y);
 				}
+
+				absDistancesToCorrection[currentMarbleIndex].X = (marblePositions[currentMarbleIndex].X + 0.5) - marblesPosStorage[currentMarbleIndex].X;
+				absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - FMath::RoundToZero(marblesPosStorage[currentMarbleIndex].Y);
 
 				coefF = absDistancesToCorrection[currentMarbleIndex].Y;
 				coefB = coefF * 3.1416;
@@ -2384,33 +2374,24 @@ void STestWidgetThree::AlterMarbleTurn(int originatingIntersection, int currentM
 		break;
 	case 1: // button from down turning left
 
-		if (marblePositions[currentMarbleIndex].Y > FMath::RoundFromZero(marblePositions[currentMarbleIndex].Y - 0.5) + 0.5 - 0.3927f)//REMEMBER: the y axis is inverted so the marble moving down the screen means going up the Y coordinates, and when a marble enters a tile when it's moving straight along a cardinal direction it enters halfway between integers, ie 4.5, 5.5
+		if (marblePositions[currentMarbleIndex].Y > intersectionAlterationBoundaries[originatingIntersection])//REMEMBER: the y axis is inverted so the marble moving down the screen means going up the Y coordinates, and when a marble enters a tile when it's moving straight along a cardinal direction it enters halfway between integers, ie 4.5, 5.5
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "alterTurn Engaged | int orientation: " + FString::FromInt(intersectionsKeys[originatingIntersection]) + " | currentMarble: " + FString::FromInt(currentMarbleIndex));
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "alterTurn Engaged | int orientation: " + FString::FromInt(intersectionsKeys[originatingIntersection]) + " | currentMarble: " + FString::FromInt(currentMarbleIndex) + " | marblePosition: " + marblePositions[currentMarbleIndex].ToString() + " | intersectionAlterationBoundary: " + FString::SanitizeFloat(intersectionAlterationBoundaries[originatingIntersection]));
 
 			marblePosAtArcInvo[currentMarbleIndex] = marblePositions[currentMarbleIndex];
 
 			if (intersectionCycle[originatingIntersection] < 2) // this would mean the intersection was turned at time of pressing
 			{
-				if (marbleTurnAltering[currentMarbleIndex])
-				{
-					absDistancesToCorrection[currentMarbleIndex].X = marblePositions[currentMarbleIndex].X - marblesPosStorage[currentMarbleIndex].X;
-					absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - (FMath::RoundToZero(marblesPosStorage[currentMarbleIndex].Y) - 0.5);
-				}
-				else
-				{
-					marblesPosStorage[currentMarbleIndex] = TurnMarble(currentMarbleIndex, marblePositions[currentMarbleIndex]);//is the current marble index truly the correct value here? should be right
+				absDistancesToCorrection[currentMarbleIndex].X = marblePositions[currentMarbleIndex].X - marblesPosStorage[currentMarbleIndex].X;
+				absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - (FMath::RoundToZero(marblesPosStorage[currentMarbleIndex].Y) - 0.5);
 
-					absDistancesToCorrection[currentMarbleIndex].X = marblePositions[currentMarbleIndex].X - marblesPosStorage[currentMarbleIndex].X;
-					absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - (FMath::RoundToZero(marblesPosStorage[currentMarbleIndex].Y) - 0.5);
-				}
 				GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "marblePosStorage.Y: " + FString::SanitizeFloat(marblesPosStorage[currentMarbleIndex].Y) + " | absoluteDistanceToCorrection.Y: " + FString::SanitizeFloat(absDistancesToCorrection[currentMarbleIndex].Y) + " | marblePosStorage.X: " + FString::SanitizeFloat(marblesPosStorage[currentMarbleIndex].X) + " | absoluteDistanceToCorrection.X : " + FString::SanitizeFloat(absDistancesToCorrection[currentMarbleIndex].X));
 
 
-				coefA = (1 - absDistancesToCorrection[currentMarbleIndex].Y) / 5;
+				coefA = absDistancesToCorrection[currentMarbleIndex].Y / 5;
 				coefB = coefA * 4;
-				coefF = absDistancesToCorrection[currentMarbleIndex].X / 2;
-				coefF = (absDistancesToCorrection[currentMarbleIndex].X / (coefF * sin(((1 / coefB) * 3.1416) * (0 + ((coefB / 2) - coefA))) + coefF)) * absDistancesToCorrection[currentMarbleIndex].X;
+				coefF = absDistancesToCorrection[currentMarbleIndex].X;
+				coefF = ((coefF / ((coefF / 2) * sin(((1 / coefB) * 3.1416) * (0 + ((coefB / 2) - coefA))) + (coefF / 2))) * coefF) / 2;
 				coefH = coefA * 5;
 				arcLengthOfAlterations[currentMarbleIndex] = 0;
 				distA = (coefB + coefA) / 12;
@@ -2427,25 +2408,22 @@ void STestWidgetThree::AlterMarbleTurn(int originatingIntersection, int currentM
 				coefV = coefH / (-1 * (((coefF / 2) * sin((1 / (coefI / 2)) * 3.1416 * (arcLengthOfAlterations[currentMarbleIndex] + (coefI / 4))) + (coefF / 2)) - arcLengthOfAlterations[currentMarbleIndex] - coefF));
 				coefFTwo = coefF * sin(((1 / coefI) * 3.1416) * (0 + ((coefI / 2) - coefJ)));
 
+				//GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "A: " + FString::SanitizeFloat(coefA) + " | B: " + FString::SanitizeFloat(coefB) + " | F: " + FString::SanitizeFloat(coefF) + " | H: " + FString::SanitizeFloat(coefH) + " | arc: " + FString::SanitizeFloat(arcLengthOfAlterations[currentMarbleIndex]) + " | I: " + FString::SanitizeFloat(coefI) + " | J: " + FString::SanitizeFloat(coefJ) + " | V: " + FString::SanitizeFloat(coefV) + " | F2: " + FString::SanitizeFloat(coefFTwo));
+
 				coefficientsA[currentMarbleIndex] = { coefF, coefFTwo, coefI, coefJ, coefV };
 
 				marblesTurnAlterationToStraight[currentMarbleIndex] = true;
 			}
 			else
 			{
-				if (marbleTurnAltering[currentMarbleIndex])
-				{
-					absDistancesToCorrection[currentMarbleIndex].X = marblesPosStorage[currentMarbleIndex].X - (marblePositions[currentMarbleIndex].X - 0.5);
-					absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - FMath::RoundToZero(marblesPosStorage[currentMarbleIndex].Y);
-				}
-				else
+				if (!marbleTurnAltering[currentMarbleIndex])
 				{
 					marblesPosStorage[currentMarbleIndex] = marblePositions[currentMarbleIndex];
 					marbleIsTurning[currentMarbleIndex] = true;
-
-					absDistancesToCorrection[currentMarbleIndex].X = 0.5f;
-					absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - FMath::RoundToZero(marblesPosStorage[currentMarbleIndex].Y);
 				}
+
+				absDistancesToCorrection[currentMarbleIndex].X = marblesPosStorage[currentMarbleIndex].X - (marblePositions[currentMarbleIndex].X - 0.5);
+				absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - FMath::RoundToZero(marblesPosStorage[currentMarbleIndex].Y);
 
 				coefF = absDistancesToCorrection[currentMarbleIndex].Y;
 				coefB = coefF * 3.1416;
@@ -2468,6 +2446,72 @@ void STestWidgetThree::AlterMarbleTurn(int originatingIntersection, int currentM
 
 		break;
 	case 2: // button from left turning right
+
+		if (marblePositions[currentMarbleIndex].X < intersectionAlterationBoundaries[originatingIntersection])//REMEMBER: the y axis is inverted so the marble moving down the screen means going up the Y coordinates, and when a marble enters a tile when it's moving straight along a cardinal direction it enters halfway between integers, ie 4.5, 5.5
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "alterTurn Engaged | int orientation: " + FString::FromInt(intersectionsKeys[originatingIntersection]) + " | currentMarble: " + FString::FromInt(currentMarbleIndex) + " | marblePosition: " + marblePositions[currentMarbleIndex].ToString() + " | intersectionAlterationBoundary: " + FString::SanitizeFloat(intersectionAlterationBoundaries[originatingIntersection]));
+
+			marblePosAtArcInvo[currentMarbleIndex] = marblePositions[currentMarbleIndex];
+
+			if (intersectionCycle[originatingIntersection] < 2) // this would mean the intersection was turned at time of pressing
+			{
+				absDistancesToCorrection[currentMarbleIndex].X = (FMath::RoundFromZero(marblesPosStorage[currentMarbleIndex].X) + 0.5) - marblesPosStorage[currentMarbleIndex].X;
+				absDistancesToCorrection[currentMarbleIndex].Y = marblesPosStorage[currentMarbleIndex].Y - marblePositions[currentMarbleIndex].Y;
+
+				coefA = absDistancesToCorrection[currentMarbleIndex].X / 5;
+				coefB = coefA * 4;
+				coefF = absDistancesToCorrection[currentMarbleIndex].Y;
+				coefF = ((coefF / ((coefF / 2) * sin(((1 / coefB) * 3.1416) * (0 + ((coefB / 2) - coefA))) + (coefF / 2))) * coefF) / 2;
+				coefH = coefA * 5;
+				arcLengthOfAlterations[currentMarbleIndex] = 0;
+				distA = (coefB + coefA) / 12;
+				distB = coefF;
+
+				for (int a = 1; a <= 12; a++)
+				{
+					distB = FMath::Abs(distB - (coefF * sin((1 / coefB) * 3.1416 * ((a * distA) + ((0.5 * coefB) - coefA))) + coefF));// is coefF correct here or does it need to be doubled?
+					arcLengthOfAlterations[currentMarbleIndex] += FMath::Sqrt((distA * distA) + (distB * distB));
+				}
+
+				coefI = arcLengthOfAlterations[currentMarbleIndex] * 0.8;
+				coefJ = arcLengthOfAlterations[currentMarbleIndex] * 0.2;
+				coefV = coefH / (-1 * (((coefF / 2) * sin((1 / (coefI / 2)) * 3.1416 * (arcLengthOfAlterations[currentMarbleIndex] + (coefI / 4))) + (coefF / 2)) - arcLengthOfAlterations[currentMarbleIndex] - coefF));
+				coefFTwo = coefF * sin(((1 / coefI) * 3.1416) * (0 + ((coefI / 2) - coefJ)));
+
+				coefficientsA[currentMarbleIndex] = { coefF, coefFTwo, coefI, coefJ, coefV };
+
+				marblesTurnAlterationToStraight[currentMarbleIndex] = true;
+			}
+			else
+			{
+				if (!marbleTurnAltering[currentMarbleIndex])
+				{
+					marblesPosStorage[currentMarbleIndex] = marblePositions[currentMarbleIndex];
+					marbleIsTurning[currentMarbleIndex] = true;
+				}
+
+				absDistancesToCorrection[currentMarbleIndex].X = FMath::RoundFromZero(marblesPosStorage[currentMarbleIndex].X) - marblesPosStorage[currentMarbleIndex].X;
+				absDistancesToCorrection[currentMarbleIndex].Y = (marblePositions[currentMarbleIndex].Y + 0.5) - marblesPosStorage[currentMarbleIndex].Y;
+
+				coefF = absDistancesToCorrection[currentMarbleIndex].X;
+				coefB = coefF * 3.1416;
+				arcLengthOfAlterations[currentMarbleIndex] = 0.5 * coefB;
+				coefV = (absDistancesToCorrection[currentMarbleIndex].Y - (coefF * sin((3.1416 / coefB) * arcLengthOfAlterations[currentMarbleIndex]))) + arcLengthOfAlterations[currentMarbleIndex];
+
+				coefficientsA[currentMarbleIndex] = { coefB, coefF, coefV };
+
+				marblesTurnAlterationToStraight[currentMarbleIndex] = false;
+			}
+
+			alterationToExecute[currentMarbleIndex] = 0;
+			// marbleIsTurning[currentMarbleIndex] = true; this shouldn't be needed here
+			marbleTurnAltering[currentMarbleIndex] = true;
+			marblesActualPosAtArcInvo[currentMarbleIndex] = marblesPosStorage[currentMarbleIndex];
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "alterTurn disengaged");
+		}
 		break;
 	case 3: // button from left turning left
 		break;
@@ -2543,6 +2587,27 @@ FVector2D STestWidgetThree::EnactAlteration(int currentMarble, FVector2D marbleP
 
 			break;
 		case 2: // button from left turning right
+			coefX = marblePosition.X - marblePosAtArcInvo[currentMarble].X;
+
+			if (coefX > arcLengthOfAlterations[currentMarble])
+			{
+				marbleIsTurning[currentMarble] = false;
+				marbleTurnAltering[currentMarble] = false;
+				dirOfMarbles[currentMarble] = 2;
+				marbleMovementTracker[currentMarble][0] = 1;
+				marbleMovementTracker[currentMarble][1] = 0;
+				marblePositions[currentMarble].X = FMath::RoundFromZero(marblePosAtArcInvo[currentMarble].X) + 0.5;
+				//marblePositions[currentMarble].Y = FMath::RoundToZero(marblePosAtArcInvo[currentMarble].Y) - 0.5;
+				convertedMarblePos = marblePositions[currentMarble];
+
+				GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "currentMarble at termination: " + FString::FromInt(currentMarble) + " | marblePos.Y: " + FString::SanitizeFloat(FMath::RoundToZero(marblePosAtArcInvo[currentMarble].Y) - 0.5));
+
+				break;
+			}
+
+			//{ coefF 0, coefFTwo 1, coefI 2, coefJ 3, coefV 4 }
+			convertedMarblePos.X = marblesActualPosAtArcInvo[currentMarble].X + (-1 * (((coefficientsA[currentMarble][0] / 2) * sin(((1 / (.5 * coefficientsA[currentMarble][2])) * 3.1416) * (coefX + (coefficientsA[currentMarble][2] / 4))) + (coefficientsA[currentMarble][0] / 2)) - (coefficientsA[currentMarble][4] * coefX) - coefficientsA[currentMarble][0]));
+			convertedMarblePos.Y = marblesActualPosAtArcInvo[currentMarble].Y + ((coefficientsA[currentMarble][0] * sin(((1 / coefficientsA[currentMarble][2]) * 3.1416) * (coefX + ((0.5 * coefficientsA[currentMarble][2]) - coefficientsA[currentMarble][3])))) - coefficientsA[currentMarble][1]);
 			break;
 		case 3: // button from left turning left
 			break;
@@ -2625,6 +2690,36 @@ FVector2D STestWidgetThree::EnactAlteration(int currentMarble, FVector2D marbleP
 			}
 			break;
 		case 2: // button from left turning right
+
+			coefX = marblePosition.X - marblePosAtArcInvo[currentMarble].X;
+
+			if (coefX > arcLengthOfAlterations[currentMarble])
+			{
+				if (coefX > coefficientsA[currentMarble][2])
+				{
+					marbleIsTurning[currentMarble] = false;
+					marbleTurnAltering[currentMarble] = false;
+					dirOfMarbles[currentMarble] = 3;
+					marbleMovementTracker[currentMarble][0] = 0;
+					marbleMovementTracker[currentMarble][1] = 1;
+					marblePositions[currentMarble].X = FMath::RoundFromZero(marblePosAtArcInvo[currentMarble].X);
+					marblePositions[currentMarble].Y += 0.5;
+					convertedMarblePos = marblePositions[currentMarble];
+
+					GEngine->AddOnScreenDebugMessage(-1, 2000.0, FColor::Blue, "currentMarble at termination: " + FString::FromInt(currentMarble));
+
+					break;
+				}
+
+				//{ coefB 0, coefF 1, coefV 2 }
+				convertedMarblePos.X = FMath::RoundFromZero(marblePosAtArcInvo[currentMarble].Y);
+				convertedMarblePos.Y = marblesActualPosAtArcInvo[currentMarble].Y + coefficientsA[currentMarble][1] + (coefX - arcLengthOfAlterations[currentMarble]);
+			}
+			else
+			{
+				convertedMarblePos.X = marblesActualPosAtArcInvo[currentMarble].X + (coefficientsA[currentMarble][1] * sin((3.1416 / coefficientsA[currentMarble][0]) * coefX));
+				convertedMarblePos.Y = marblesActualPosAtArcInvo[currentMarble].Y + ((coefficientsA[currentMarble][1] * sin((3.1416 / coefficientsA[currentMarble][0]) * (coefX - (coefficientsA[currentMarble][0] / 2)))) + coefficientsA[currentMarble][1]);
+			}
 			break;
 		case 3: // button from left turning left
 			break;

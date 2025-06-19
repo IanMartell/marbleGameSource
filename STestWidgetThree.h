@@ -787,7 +787,6 @@ public:
 	UPROPERTY() bool autoCursorModeOn;
 	UPROPERTY() double mouseX;
 	UPROPERTY() double mouseY;
-	UPROPERTY() TArray <int> intersectionTileIndices;
 	UPROPERTY() TArray <FVector2D> intersectionTileLocations;
 	UPROPERTY() TArray <float> intersectionDistancesFromMouse;
 	UPROPERTY() int tempIndexOfIntersectionInFocus;
@@ -807,6 +806,7 @@ public:
 	UPROPERTY() TArray <FVector2D> marblesPosStorage;
 	UPROPERTY() TArray <FVector2D> marblesActualPosAtArcInvo;
 	UPROPERTY() TArray<double> arcLengthOfAlterations;
+	UPROPERTY() TArray<double> intersectionAlterationBoundaries;
 
 	UPROPERTY() double coefA;
 	UPROPERTY() double coefB;
